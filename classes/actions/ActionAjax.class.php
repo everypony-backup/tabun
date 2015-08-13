@@ -341,6 +341,13 @@ class ActionAjax extends Action {
 		} elseif ($iValue==0) {
 			$oTopic->setCountVoteAbstain($oTopic->getCountVoteAbstain()+1);
 		}
+		/**
+		 * Orhideous
+		 * Если рейтинг поста меньше определённого значения, он автоматически переносится в специальный блог
+		 */
+		if ($oTopic->getRating() < Config::Get('module.blog.index_display_good')) {
+			$oTopic->setBlogId('5036');
+		}
 		if ($this->Vote_AddVote($oTopicVote) and $this->Topic_UpdateTopic($oTopic)) {
 			if ($iValue) {
 				$this->Message_AddNoticeSingle($this->Lang_Get('topic_vote_ok'),$this->Lang_Get('attention'));
