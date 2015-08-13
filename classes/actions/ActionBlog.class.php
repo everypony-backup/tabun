@@ -966,6 +966,20 @@ class ActionBlog extends Action {
 			return;
 		}
 		/**
+		 * Определяем права на отображение записи из закрытого блога
+		 */
+		if($oTopic->getBlog()->getType()=='close'
+			and (!$this->oUserCurrent
+				|| !in_array(
+					$oTopic->getBlog()->getId(),
+					$this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent)
+				)
+			)
+		) {
+			$this->Message_AddErrorSingle($this->Lang_Get('blog_close_show'),$this->Lang_Get('not_access'));
+			return;
+		}
+		/**
 		 * Возможность постить коммент в топик в черновиках
 		 */
 		if (!$oTopic->getPublish() and $this->oUserCurrent->getId()!=$oTopic->getUserId() and !$this->oUserCurrent->isAdministrator()) {
@@ -997,7 +1011,7 @@ class ActionBlog extends Action {
 		 * Проверяем текст комментария
 		 */
 		$sText=$this->Text_Parser(getRequestStr('comment_text'));
-		if (!func_check($sText,'text',2,10000)) {
+		if (!func_check($sText,'text',2,64000)) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_add_text_error'),$this->Lang_Get('error'));
 			return;
 		}
@@ -1130,7 +1144,23 @@ class ActionBlog extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
 			return;
 		}
-
+		/**
+		 * Определяем права на отображение записи из закрытого блога
+		 */
+		if($oTopic->getBlog()->getType()=='close'
+			and (!$this->oUserCurrent
+				|| !in_array(
+					$oTopic->getBlog()->getId(),
+					$this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent)
+				)
+			)
+		) {
+			$this->Message_AddErrorSingle($this->Lang_Get('blog_close_show'),$this->Lang_Get('not_access'));
+			return;
+		}
+		/**
+		 * Пользователь состоит в блоге?
+		 */
 		$idCommentLast=getRequestStr('idCommentLast',null,'post');
 		$selfIdComment=getRequestStr('selfIdComment',null,'post');
 		$aComments=array();
@@ -1709,12 +1739,13 @@ class ActionBlog extends Action {
 				if($oBlogUser) {
 					$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
 					$bResult = $this->Blog_UpdateRelationBlogUser($oBlogUser);
-				} elseif($oBlog->getType()=='open') {
-					$oBlogUserNew=Engine::GetEntity('Blog_BlogUser');
-					$oBlogUserNew->setBlogId($oBlog->getId());
-					$oBlogUserNew->setUserId($this->oUserCurrent->getId());
-					$oBlogUserNew->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
-					$bResult = $this->Blog_AddRelationBlogUser($oBlogUserNew);
+				} elseif($oBlog->getType()=='open' || in_array($oBlog->getId(), Config::Get('module.blog.semi_closed_id'))  ) {
+                    // Orhideous Semi-close blogs
+                    $oBlogUserNew=Engine::GetEntity('Blog_BlogUser');
+                    $oBlogUserNew->setBlogId($oBlog->getId());
+                    $oBlogUserNew->setUserId($this->oUserCurrent->getId());
+                    $oBlogUserNew->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
+                    $bResult = $this->Blog_AddRelationBlogUser($oBlogUserNew);
 				}
 				if ($bResult) {
 					$this->Message_AddNoticeSingle($this->Lang_Get('blog_join_ok'),$this->Lang_Get('attention'));
