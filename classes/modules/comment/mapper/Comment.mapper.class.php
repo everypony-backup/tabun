@@ -169,18 +169,23 @@ class ModuleComment_MapperComment extends Mapper {
 	 * @return array
 	 */
 	public function GetCommentsOnline($sTargetType,$aExcludeTargets,$iLimit) {
-		$sql = "SELECT 					
-					comment_id	
-				FROM 
-					".Config::Get('db.table.comment_online')." 
-				WHERE 												
+		$sql = "SELECT
+					co.comment_id
+				FROM
+					".Config::Get('db.table.comment_online')." co
+				JOIN
+				    ".Config::Get('db.table.topic')." AS t ON t.topic_id = co.target_id
+				WHERE
 					target_type = ?
+				AND
+				    t.topic_rating > ?d
 				{ AND target_parent_id NOT IN(?a) }
 				ORDER by comment_online_id desc limit 0, ?d ; ";
 
 		$aComments=array();
 		if ($aRows=$this->oDb->select(
 			$sql,$sTargetType,
+			Config::Get('module.blog.index_comment_good'),
 			(count($aExcludeTargets)?$aExcludeTargets:DBSIMPLE_SKIP),
 			$iLimit
 		)
