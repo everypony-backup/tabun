@@ -301,6 +301,41 @@ class ModuleFavourite extends Module {
 	 * @return bool
 	 */
 	public function AddFavourite(ModuleFavourite_EntityFavourite $oFavourite) {
+		//Проверка приватности
+		$tType = $oFavourite->getTargetType();
+		$oUser = $this->User_GetUserCurrent();
+
+		if($tType == 'topic') {
+			$oTopic = $this->Topic_GetTopicById($oFavourite->getTargetId());
+			$oBlog = $this->Blog_getBlogById($oTopic->getBlogId());
+			if($oBlog->getType() == 'invite' || $oBlog->getType() == 'close') {
+				if( is_null( $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId()) ))
+					return false;
+			}
+		}
+		if($tType == 'comment') {
+			$oComment = $this->Comment_GetCommentById($oFavourite->getTargetId());
+
+			if($oComment->getTargetType() == 'topic') {
+				$oTopic =       $this->Topic_GetTopicById($oComment->getTargetId());
+                        	$oBlog =        $this->Blog_getBlogById($oTopic->getBlogId());
+                        	if($oBlog->getType() == 'invite' || $oBlog->getType() == 'close') {
+                                	if( is_null( $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId()) ))
+                                        	return false;
+                        	}
+			}
+			if($oComment->getTargetType() == 'talk') {
+				$oTalk = $this->Talk_GetTalkById($oFavourite->getTargetId());
+				if( is_null( $this->Talk_GetTalkUser($oTalk->getId(), $oUser->getId()) ))
+					return false;
+			}
+		}
+		if($tType == 'talk') {
+			$oTalk = $this->Talk_GetTalkById($oFavourite->getTargetId());
+                        	if( is_null( $this->Talk_GetTalkUser($oTalk->getId(), $oUser->getId()) ))
+                                	return false;
+		}
+
 		if (!$oFavourite->getTags()) {
 			$oFavourite->setTags('');
 		}
