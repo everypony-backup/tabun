@@ -118,15 +118,33 @@ class ModuleStream_MapperStream extends Mapper {
 	 * @return int
 	 */
 	public function GetCount($aEventTypes, $aUserId) {
+		$aDelaultEventTypes = array(
+			'add_wall',
+			'add_topic',
+			'add_comment',
+			'add_blog',
+			'vote_topic',
+			'vote_comment',
+			'vote_blog',
+			'vote_user',
+			'add_friend',
+			'join_blog'
+		);
+		$not_skipped = count(array_diff_key($aDelaultEventTypes,$aEventTypes));
+
 		if (!is_null($aUserId) and !is_array($aUserId)) {
 			$aUserId=array($aUserId);
 		}
 		$sql = 'SELECT count(*) as c FROM ' . Config::Get('db.table.stream_event'). '
 				WHERE
-					event_type IN (?a)
+					publish = 1
+					{ event_type IN (?a) }
 					{ AND user_id IN (?a) }
-					AND publish = 1 ';
-		if ($aRow=$this->oDb->selectRow($sql,$aEventTypes,(!is_null($aUserId) and count($aUserId)) ? $aUserId : DBSIMPLE_SKIP)) {
+		';
+		if ($aRow=$this->oDb->selectRow($sql,
+					($not_skipped) ? $aEventTypes : DBSIMPLE_SKIP,
+					(!is_null($aUserId) and count($aUserId)) ? $aUserId : DBSIMPLE_SKIP)
+		) {
 			return $aRow['c'];
 		}
 		return 0;
