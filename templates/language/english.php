@@ -226,7 +226,6 @@ return array(
 	'topic_menu_add_topic' => 'Post',
 	'topic_menu_add_question' => 'Question',
 	'topic_menu_add_link' => 'Link',
-	'topic_menu_add_photoset' => 'Photoset',
 	'topic_menu_saved' => 'Drafts',
 	'topic_menu_published' => 'Published',
 	/**
@@ -326,34 +325,6 @@ return array(
 	'topic_vote_ok' => 'Your vote counted',
 	'topic_vote_ok_abstain' => 'You\'ve abstained in order to view topic raiting',
 	'topic_vote_count' => 'All votes',
-	/**
-	 * Photoset
-	 */
-	'topic_photoset_create' => 'Create a photoset',
-	'topic_photoset_edit' => 'Update a photoset',
-	'topic_photoset_upload_title' => 'Upload images',
-	'topic_photoset_upload_choose' => 'Upload photo',
-	'topic_photoset_upload_close' => 'Close',
-	'topic_photoset_upload_rules' => 'Download images available in format JPG, PNG, GIF <br/> Image size should not exceed %%SIZE%% Kb <br /> Maximum number of uploaded images: %%COUNT%%',
-	'topic_photoset_choose_image' => 'Select the image to download',
-	'topic_photoset_is_preview' => 'Marked as a preview to topic',
-	'topic_photoset_mark_as_preview' => 'Mark as preview',
-	'topic_photoset_show_all' => 'Display all %%COUNT%% count',
-	'topic_photoset_count_images' => 'image;images;images',
-	'topic_photoset_show_more' => 'View more photos',
-	'topic_photoset_error_count_photos' => 'In the topic can be from %%MIN%% to %%MAX%% count',
-	'topic_photoset_error_size' => 'The image resolution is too large',
-	'topic_photoset_title' => 'Photoset',
-	'topic_photoset_photo_deleted' => 'Photo removed',
-	'topic_photoset_photo_deleted_error_last' => 'You can not delete the last photo',
-	'topic_photoset_photo_delete' => 'Delete',
-	'topic_photoset_photo_delete_confirm' => 'Delete photo?',
-	'topic_photoset_photo_added' => 'Photo added',
-	'topic_photoset_error_too_much_photos' => 'Topic can contain no more than %%MAX%% count',
-	'topic_photoset_title_edit' => 'Edit photoset',
-	'topic_photoset_title_create' => 'Create a photoset',
-	'topic_photoset_error_bad_filesize' => 'Photo size must be less than %%MAX%% Kb',
-	'topic_photoset_photos' => 'photos',
 	/**
 	 * Comments
 	 */
@@ -526,7 +497,6 @@ return array(
 	 */
 	'user_menu_profile' => 'Profile',
 	'user_menu_profile_whois' => 'Whois',
-	'user_menu_profile_wall' => 'Wall',
 	'user_menu_profile_friends' => 'Friends',
 	'user_menu_profile_stream' => 'Stream',
 	'user_menu_profile_notes' => 'Notes',
@@ -597,22 +567,6 @@ return array(
 	'user_note_save_error' => 'Error on save',
 	'user_note_target_error' => 'Bad user for note',
 	'user_note_list_empty' => 'Empty list',
-	/**
-	 * Wall
-	 */
-	'wall_add_pid_error' => 'At this message can not be reply',
-	'wall_add_error' => 'Error adding a post to the wall',
-	'wall_add_time_limit' => 'You can\'t send post on wall a frequent rate',
-	'wall_add_title' => 'Write',
-	'wall_add_submit' => 'Submit',
-	'wall_add_quest' => 'To be able to post a entries on the wall need to register.',
-	'wall_list_empty' => 'On the wall there are no entries, you can be the first!',
-	'wall_load_more' => 'Load more',
-	'wall_load_reply_more' => 'Show all',
-	'wall_action_delete' => 'Delete',
-	'wall_action_reply' => 'Reply',
-	'wall_reply_placeholder' => 'Reply...',
-	'wall_reply_submit' => 'Submit',
 	/**
 	 * Configs.
 	 */
@@ -876,7 +830,6 @@ return array(
 	'stream_subscribes_already_subscribed' => 'You are already subscribed to this member',
 	'stream_subscribes_updated' => 'Settings saved',
 	'stream_get_more' => 'Get more events',
-	'stream_event_type_add_wall' => 'Add post on wall',
 	'stream_event_type_add_topic' => 'Add a topic',
 	'stream_event_type_add_comment' => 'Add comment',
 	'stream_event_type_add_blog' => 'Adding a blog',
@@ -891,7 +844,6 @@ return array(
 	'stream_error_subscribe_to_yourself' => 'You can not sign up for yourself',
 	'stream_list_user' => 'User',
 
-	'stream_list_event_add_wall' => 'added a post on wall',
 	'stream_list_event_add_topic' => 'added a new topic',
 	'stream_list_event_add_blog' => 'added a new blog',
 	'stream_list_event_add_comment' => 'commented on the topic',
@@ -902,7 +854,6 @@ return array(
 	'stream_list_event_join_blog' => 'join to blog',
 	'stream_list_event_add_friend' => 'add to friends',
 
-	'stream_list_event_add_wall_female' => 'added a post on wall',
 	'stream_list_event_add_topic_female' => 'added a new topic',
 	'stream_list_event_add_blog_female' => 'added a new blog',
 	'stream_list_event_add_comment_female' => 'commented on the topic',
@@ -986,8 +937,6 @@ return array(
 	'notify_subject_blog_invite_new' => 'You\'ve got a blog membership offer',
 	'notify_subject_reminder_code' => 'Password reminder',
 	'notify_subject_reminder_password' => 'New password',
-	'notify_subject_wall_reply' => 'You\'ve recieved reply to your post on wall',
-	'notify_subject_wall_new' => 'You\'ve recieved new post on your wall',
 	'notify_subject_reactvation' => 'Re-activation request',
 	'notify_subject_user_changemail' => 'Confirmation of change email',
 	/**
@@ -1088,7 +1037,6 @@ return array(
 	'block_create_topic_topic' => 'Post',
 	'block_create_topic_question' => 'Poll',
 	'block_create_topic_link' => 'Link',
-	'block_create_topic_photoset' => 'Photoset',
 	'block_create_blog' => 'Blog',
 	'block_create_talk' => 'Message',
 	/**

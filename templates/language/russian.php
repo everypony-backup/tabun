@@ -226,7 +226,6 @@ return array(
 	'topic_menu_add_topic' => 'Текстовый',
 	'topic_menu_add_question' => 'Опрос',
 	'topic_menu_add_link' => 'Ссылка',
-	'topic_menu_add_photoset' => 'Галерея',
 	'topic_menu_saved' => 'Черновики',
 	'topic_menu_published' => 'Опубликованные',
 	/**
@@ -326,34 +325,6 @@ return array(
 	'topic_vote_ok' => 'Ваш голос учтен',
 	'topic_vote_ok_abstain' => 'Вы воздержались для просмотра рейтинга поста',
 	'topic_vote_count' => 'всего проголосовало',
-	/**
-	 * Галерея
-	 */
-	'topic_photoset_create' => 'Создание галереи',
-	'topic_photoset_edit' => 'Редактирование галереи',
-	'topic_photoset_upload_title' => 'Загрузка изображений',
-	'topic_photoset_upload_choose' => 'Загрузить фото',
-	'topic_photoset_upload_close' => 'Закрыть',
-	'topic_photoset_upload_rules' => 'Доступна загрузка изображений в формат JPG, PNG, GIF<br />Размер изображений не должен превышать %%SIZE%% Kб<br />Максимальное число загружаемых изображений: %%COUNT%%',
-	'topic_photoset_choose_image' => 'Выберите изображение для загрузки',
-	'topic_photoset_is_preview' => 'Отмечено как превью к посту',
-	'topic_photoset_mark_as_preview' => 'Отметить как превью',
-	'topic_photoset_show_all' => 'Показать все %%COUNT%% фото',
-	'topic_photoset_count_images' => 'изображение;изображения;изображений',
-	'topic_photoset_show_more' => 'Показать ещё фото',
-	'topic_photoset_error_count_photos' => 'В посте может быть от %%MIN%% до %%MAX%% фото',
-	'topic_photoset_error_size' => 'У изображения слишком большое разрешение',
-	'topic_photoset_title' => 'Галерея',
-	'topic_photoset_photo_deleted' => 'Фото удалено',
-	'topic_photoset_photo_deleted_error_last' => 'Нельзя удалить последню фотографию',
-	'topic_photoset_photo_delete' => 'Удалить',
-	'topic_photoset_photo_delete_confirm' => 'Удалить фото?',
-	'topic_photoset_photo_added' => 'Фото добавлено',
-	'topic_photoset_error_too_much_photos' => 'Пост может содержать не более %%MAX%% фото',
-	'topic_photoset_title_edit' => 'Редактирование галереи',
-	'topic_photoset_title_create' => 'Создание галереи',
-	'topic_photoset_error_bad_filesize' => 'Размер фото должен быть не более %%MAX%% Кб',
-	'topic_photoset_photos' => 'фото',
 	/**
 	 * Комментарии
 	 */
@@ -599,22 +570,6 @@ return array(
 	'user_note_save_error' => 'Ошибка сохранения заметки',
 	'user_note_target_error' => 'Неверный пользователь для заметки',
 	'user_note_list_empty' => 'Тут ничего нет',
-	/**
-	 * Стена
-	 */
-	'wall_add_pid_error' => 'На данное сообщение невозможно ответить',
-	'wall_add_error' => 'Ошибка добавления записи на стены',
-	'wall_add_time_limit' => 'Вам нельзя слишком часто писать на стене',
-	'wall_add_title' => 'Написать на стене',
-	'wall_add_submit' => 'Отправить',
-	'wall_add_quest' => 'Для возможности оставлять записи на стене необходимо зарегистрироваться.',
-	'wall_list_empty' => 'Записей на стене нет, вы можете стать первым!',
-	'wall_load_more' => 'К предыдущим записям',
-	'wall_load_reply_more' => 'Показать все',
-	'wall_action_delete' => 'Удалить',
-	'wall_action_reply' => 'Ответить',
-	'wall_reply_placeholder' => 'Ответить...',
-	'wall_reply_submit' => 'Отправить',
 	/**
 	 * Настройки
 	 */
@@ -1089,7 +1044,6 @@ return array(
 	'block_create_topic_topic' => 'Пост',
 	'block_create_topic_question' => 'Опрос',
 	'block_create_topic_link' => 'Ссылка',
-	'block_create_topic_photoset' => 'Галерея',
 	'block_create_blog' => 'Блог',
 	'block_create_talk' => 'Сообщение',
 	/**
