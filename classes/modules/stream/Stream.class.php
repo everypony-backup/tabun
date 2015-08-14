@@ -482,15 +482,6 @@ class ModuleStream extends Module {
 		$this->oMapper->unsubscribeUser($iUserId, $iTargetUserId);
 	}
 	/**
-	 * Получает список записей на стене
-	 *
-	 * @param array $aIds	Список  ID записей на стене
-	 * @return array
-	 */
-	protected function loadRelatedWall($aIds) {
-		return $this->Wall_GetWallAdditionalData($aIds);
-	}
-	/**
 	 * Получает список топиков
 	 *
 	 * @param array $aIds	Список  ID топиков
