@@ -364,7 +364,7 @@ class ModuleUser_EntityUser extends Entity {
 	 */
 	public function getProfileAvatarPath($iSize=100) {
 		if ($sPath=$this->getProfileAvatar()) {
-			return str_replace('_100x100',(($iSize==0)?"":"_{$iSize}x{$iSize}"),$sPath."?".date('His',strtotime($this->getProfileDate())));
+			return str_replace('_100x100',(($iSize==0)?"":"_{$iSize}x{$iSize}"),$sPath);
 		} else {
 			return Config::Get('path.static.skin').'/images/avatar_'.($this->getProfileSex()=='woman' ? 'female' : 'male').'_'.$iSize.'x'.$iSize.'.png';
 		}
