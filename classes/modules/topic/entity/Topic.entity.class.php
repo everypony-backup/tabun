@@ -34,15 +34,15 @@ class ModuleTopic_EntityTopic extends Entity {
 	 */
 	public function Init() {
 		parent::Init();
-		$this->aValidateRules[]=array('topic_title','string','max'=>200,'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_title'),'on'=>array('topic','link','photoset'));
+		$this->aValidateRules[]=array('topic_title','string','max'=>200,'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_title'),'on'=>array('topic','link'));
 		$this->aValidateRules[]=array('topic_title','string','max'=>200,'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_question_create_title'),'on'=>array('question'));
-		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.max_length'),'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('topic','photoset'));
+		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.max_length'),'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('topic'));
 		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.link_max_length'),'min'=>10,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('link'));
 		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.question_max_length'),'allowEmpty'=>true,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('question'));
-		$this->aValidateRules[]=array('topic_tags','tags','count'=>15,'label'=>$this->Lang_Get('topic_create_tags'),'allowEmpty'=>Config::Get('module.topic.allow_empty_tags'),'on'=>array('topic','link','question','photoset'));
-		$this->aValidateRules[]=array('blog_id','blog_id','on'=>array('topic','link','question','photoset'));
-		$this->aValidateRules[]=array('topic_text_source','topic_unique','on'=>array('topic','link','question','photoset'));
-		$this->aValidateRules[]=array('topic_type','topic_type','on'=>array('topic','link','question','photoset'));
+		$this->aValidateRules[]=array('topic_tags','tags','count'=>15,'label'=>$this->Lang_Get('topic_create_tags'),'allowEmpty'=>Config::Get('module.topic.allow_empty_tags'),'on'=>array('topic','link','question'));
+		$this->aValidateRules[]=array('blog_id','blog_id','on'=>array('topic','link','question'));
+		$this->aValidateRules[]=array('topic_text_source','topic_unique','on'=>array('topic','link','question'));
+		$this->aValidateRules[]=array('topic_type','topic_type','on'=>array('topic','link','question'));
 		$this->aValidateRules[]=array('link_url','url','allowEmpty'=>false,'label'=>$this->Lang_Get('topic_link_create_url'),'on'=>array('link'));
 	}
 	/**
@@ -684,50 +684,6 @@ class ModuleTopic_EntityTopic extends Entity {
 		}
 		$this->setExtraValue('count_vote_abstain',$data);
 	}
-
-	/**
-	 * Возвращает фотографии из топика-фотосета
-	 *
-	 * @param int|null $iFromId	ID с которого начинать  выборку
-	 * @param int|null $iCount	Количество
-	 * @return array
-	 */
-	public function getPhotosetPhotos($iFromId = null, $iCount = null) {
-		return $this->Topic_getPhotosByTopicId($this->getId(), $iFromId, $iCount);
-	}
-	/**
-	 * Возвращает количество фотографий в топике-фотосете
-	 *
-	 * @return int|null
-	 */
-	public function getPhotosetCount() {
-		return $this->getExtraValue('count_photo');
-	}
-	/**
-	 * Возвращает ID главной фото в топике-фотосете
-	 *
-	 * @return int|null
-	 */
-	public function getPhotosetMainPhotoId() {
-		return $this->getExtraValue('main_photo_id');
-	}
-	/**
-	 * Устанавливает ID главной фото в топике-фотосете
-	 *
-	 * @param int $data
-	 */
-	public function setPhotosetMainPhotoId($data) {
-		$this->setExtraValue('main_photo_id',$data);
-	}
-	/**
-	 * Устанавливает количество фотографий в топике-фотосете
-	 *
-	 * @param int $data
-	 */
-	public function setPhotosetCount($data) {
-		$this->setExtraValue('count_photo',$data);
-	}
-
 
 	//*************************************************************************************************************************************************
 
