@@ -40,7 +40,7 @@ class ModuleTopic extends Module {
 	 * @var array
 	 */
 	protected $aTopicTypes=array(
-		'topic','link','question'
+		'topic','question'
 	);
 
 	/**

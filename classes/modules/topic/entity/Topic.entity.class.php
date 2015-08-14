@@ -34,16 +34,14 @@ class ModuleTopic_EntityTopic extends Entity {
 	 */
 	public function Init() {
 		parent::Init();
-		$this->aValidateRules[]=array('topic_title','string','max'=>200,'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_title'),'on'=>array('topic','link'));
+		$this->aValidateRules[]=array('topic_title','string','max'=>200,'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_title'),'on'=>array('topic'));
 		$this->aValidateRules[]=array('topic_title','string','max'=>200,'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_question_create_title'),'on'=>array('question'));
 		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.max_length'),'min'=>2,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('topic'));
-		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.link_max_length'),'min'=>10,'allowEmpty'=>false,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('link'));
 		$this->aValidateRules[]=array('topic_text_source','string','max'=>Config::Get('module.topic.question_max_length'),'allowEmpty'=>true,'label'=>$this->Lang_Get('topic_create_text'),'on'=>array('question'));
-		$this->aValidateRules[]=array('topic_tags','tags','count'=>15,'label'=>$this->Lang_Get('topic_create_tags'),'allowEmpty'=>Config::Get('module.topic.allow_empty_tags'),'on'=>array('topic','link','question'));
-		$this->aValidateRules[]=array('blog_id','blog_id','on'=>array('topic','link','question'));
-		$this->aValidateRules[]=array('topic_text_source','topic_unique','on'=>array('topic','link','question'));
-		$this->aValidateRules[]=array('topic_type','topic_type','on'=>array('topic','link','question'));
-		$this->aValidateRules[]=array('link_url','url','allowEmpty'=>false,'label'=>$this->Lang_Get('topic_link_create_url'),'on'=>array('link'));
+		$this->aValidateRules[]=array('topic_tags','tags','count'=>15,'label'=>$this->Lang_Get('topic_create_tags'),'allowEmpty'=>Config::Get('module.topic.allow_empty_tags'),'on'=>array('topic','question'));
+		$this->aValidateRules[]=array('blog_id','blog_id','on'=>array('topic','question'));
+		$this->aValidateRules[]=array('topic_text_source','topic_unique','on'=>array('topic','question'));
+		$this->aValidateRules[]=array('topic_type','topic_type','on'=>array('topic','question'));
 	}
 	/**
 	 * Проверка типа топика
@@ -483,71 +481,6 @@ class ModuleTopic_EntityTopic extends Entity {
 			return $this->aExtra[$sName];
 		}
 		return null;
-	}
-
-	/**
-	 * Возвращает URL для топика-ссылки
-	 *
-	 * @param bool $bShort	Укарачивать урл или нет
-	 * @return null|string
-	 */
-	public function getLinkUrl($bShort=false) {
-		if ($this->getType()!='link') {
-			return null;
-		}
-
-		if ($this->getExtraValue('url')) {
-			if ($bShort) {
-				$sUrl=htmlspecialchars($this->getExtraValue('url'));
-				if (preg_match("/^https?:\/\/(.*)$/i",$sUrl,$aMatch)) {
-					$sUrl=$aMatch[1];
-				}
-				$sUrlShort=substr($sUrl,0,30);
-				if (strlen($sUrlShort)!=strlen($sUrl)) {
-					return $sUrlShort.'...';
-				}
-				return $sUrl;
-			}
-			$sUrl=$this->getExtraValue('url');
-			if (!preg_match("/^https?:\/\/(.*)$/i",$sUrl,$aMatch)) {
-				$sUrl='http://'.$sUrl;
-			}
-			return $sUrl;
-		}
-		return null;
-	}
-	/**
-	 * Устанавливает URL для топика-ссылки
-	 *
-	 * @param string $data
-	 */
-	public function setLinkUrl($data) {
-		if ($this->getType()!='link') {
-			return;
-		}
-		$this->setExtraValue('url',$data);
-	}
-	/**
-	 * Возвращает количество переходов по ссылке в топике-ссылке
-	 *
-	 * @return int|null
-	 */
-	public function getLinkCountJump() {
-		if ($this->getType()!='link') {
-			return null;
-		}
-		return (int)$this->getExtraValue('count_jump');
-	}
-	/**
-	 * Устанавливает количество переходов по ссылке в топике-ссылке
-	 *
-	 * @param string $data
-	 */
-	public function setLinkCountJump($data) {
-		if ($this->getType()!='link') {
-			return;
-		}
-		$this->setExtraValue('count_jump',$data);
 	}
 
 	/**
