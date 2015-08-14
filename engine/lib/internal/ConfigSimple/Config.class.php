@@ -360,5 +360,30 @@ class Config {
 		}
 		return $aRes;
 	}
+	/**
+	 * Система флагов by Orhideous
+	 */
+	static public function isProbable($iProb=50) {
+		if ($iProb == 0) {
+			return false;
+		}
+		if ($iProb == 100) {
+			return true;
+		}
+		return rand(0, 100) < $iProb;
+	}
+
+	static public function isEnabledFor($sFlag, $oUser=null) {
+		$aFlag = self::Get('flags')[$sFlag];
+
+		if ($oUser) {
+			$iUserId = $oUser->getId();
+			if (array_key_exists($iUserId, $aFlag['user_ids'])) {
+	    			return self::isProbable($aFlag['user_ids'][$iUserId]);
+			}
+		}
+		return self::isProbable($aFlag['probability']);
+	}
+
 }
 ?>
