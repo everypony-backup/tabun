@@ -28,7 +28,6 @@ ls.comments = (function ($) {
 			comment_goto_parent: 'goto-comment-parent',
 			comment_goto_child: 'goto-comment-child'
 		},
-		wysiwyg: null,
 		folding: true
 	};
 
@@ -38,9 +37,6 @@ ls.comments = (function ($) {
 
 	// Добавляет комментарий
 	this.add = function(formObj, targetId, targetType) {
-		if (this.options.wysiwyg) {
-			$('#'+formObj+' textarea').val(tinyMCE.activeEditor.getContent());
-		}
 		formObj = $('#'+formObj);
 
 		$('#form_comment_text').addClass(this.options.classes.form_loader).attr('readonly',true);
@@ -86,23 +82,12 @@ ls.comments = (function ($) {
 			reply.hide();
 			return;
 		}
-		if (this.options.wysiwyg) {
-			tinyMCE.execCommand('mceRemoveControl',true,'form_comment_text');
-		}
 		reply.insertAfter('#comment_id_'+idComment).show();
 		$('#form_comment_text').val('');
 		$('#form_comment_reply').val(idComment);
 		
 		this.iCurrentShowFormComment = idComment;
-		if (this.options.wysiwyg) {
-			tinyMCE.execCommand('mceAddControl',true,'form_comment_text');
-		}
 		if (!bNoFocus) $('#form_comment_text').focus();
-		
-		if ($('html').hasClass('ie7')) {
-			var inputs = $('input.input-text, textarea');
-			ls.ie.bordersizing(inputs);
-		}
 	};
 
 
@@ -223,9 +208,6 @@ ls.comments = (function ($) {
 
 	// Предпросмотр комментария
 	this.preview = function(divPreview) {
-		if (this.options.wysiwyg) {
-			$("#form_comment_text").val(tinyMCE.activeEditor.getContent());
-		}
 		if ($("#form_comment_text").val() == '') return;
 		$("#comment_preview_" + this.iCurrentShowFormComment).remove();
 		$('#reply').before('<div id="comment_preview_' + this.iCurrentShowFormComment +'" class="comment-preview text"></div>');
@@ -332,10 +314,6 @@ ls.comments = (function ($) {
 		this.calcNewComments();
 		this.checkFolding();
 		this.toggleCommentForm(this.iCurrentShowFormComment);
-		
-		if (typeof(this.options.wysiwyg)!='number') {
-			this.options.wysiwyg = Boolean(BLOG_USE_TINYMCE && tinyMCE);
-		}
 		ls.hook.run('ls_comments_init_after',[],this);
 	};
 	
