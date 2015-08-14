@@ -16,8 +16,6 @@
 */
 
 require_once(Config::Get('path.root.engine').'/lib/external/Smarty/libs/Smarty.class.php');
-require_once(Config::Get('path.root.engine').'/lib/external/CSSTidy-1.3/class.csstidy.php');
-require_once(Config::Get('path.root.engine').'/lib/external/JSMin-1.1.1/jsmin.php');
 
 /**
  * Модуль обработки шаблонов используя шаблонизатор Smarty
@@ -92,12 +90,6 @@ class ModuleViewer extends Module {
 	 * @var string
 	 */
 	protected $sCacheDir='';
-	/**
-	 * Объект CSSTidy для компрессии css-файлов
-	 *
-	 * @var csstidy
-	 */
-	protected $oCssCompressor = null;
 	/**
 	 * Заголовок HTML страницы
 	 *
@@ -763,33 +755,6 @@ class ModuleViewer extends Module {
 		}
 	}
 	/**
-	 * Создает css-компрессор и инициализирует его конфигурацию
-	 *
-	 * @return bool
-	 */
-	protected function InitCssCompressor() {
-		/**
-		 * Получаем параметры из конфигурации
-		 */
-		$aParams = Config::Get('compress.css');
-		$this->oCssCompressor =($aParams['use']) ? new csstidy() : null;
-		/**
-		 * Если компрессор не создан, завершаем работу инициализатора
-		 */
-		if(!$this->oCssCompressor) return false;
-		/**
-		 * Устанавливаем параметры
-		 */
-		$this->oCssCompressor->set_cfg('case_properties',     $aParams['case_properties']);
-		$this->oCssCompressor->set_cfg('merge_selectors',     $aParams['merge_selectors']);
-		$this->oCssCompressor->set_cfg('optimise_shorthands', $aParams['optimise_shorthands']);
-		$this->oCssCompressor->set_cfg('remove_last_;',       $aParams['remove_last_;']);
-		$this->oCssCompressor->set_cfg('css_level',           $aParams['css_level']);
-		$this->oCssCompressor->load_template($aParams['template']);
-
-		return true;
-	}
-	/**
 	 * Добавляет js файл в конец списка
 	 *
 	 * @param $sJs	Файл js
@@ -1065,9 +1030,6 @@ class ModuleViewer extends Module {
 				if($sFileContent = @file_get_contents($sFile)) {
 					if($sType=='css'){
 						$sFileContent = $this->ConvertPathInCss($sFileContent,$sFile);
-						$sFileContent = $this->CompressCss($sFileContent);
-					} elseif($sType=='js') {
-						$sFileContent = $this->CompressJs($sFileContent);
 					}
 					print $sFileContent;
 				}
@@ -1085,21 +1047,6 @@ class ModuleViewer extends Module {
 		 * Возвращаем имя файла, заменяя адрес сервера на веб-адрес
 		 */
 		return $this->GetWebPath($sCacheName);
-	}
-	/**
-	 * Выполняет преобразование CSS файлов
-	 *
-	 * @param  string $sContent
-	 * @return string
-	 */
-	protected function CompressCss($sContent) {
-		$this->InitCssCompressor();
-		if(!$this->oCssCompressor) return $sContent;
-		/**
-		 * Парсим css и отдаем обработанный результат
-		 */
-		$this->oCssCompressor->parse($sContent);
-		return $this->oCssCompressor->print->plain();
 	}
 	/**
 	 * Конвертирует относительные пути в css файлах в абсолютные
@@ -1142,22 +1089,6 @@ class ModuleViewer extends Module {
 			$sContent = str_replace($sFilePath,$sFilePathAbsolute,$sContent);
 		}
 		return $sContent;
-	}
-	/**
-	 * Выполняет преобразование JS файла
-	 *
-	 * @param  string $sContent
-	 * @return string
-	 */
-	protected function CompressJs($sContent) {
-		$sContent = (Config::Get('compress.js.use'))
-			? JSMin::minify($sContent)
-			: $sContent;
-		/**
-		 * Добавляем разделитель в конце файла
-		 * с расчетом на возможное их слияние в будущем
-		 */
-		return rtrim($sContent,";").";".PHP_EOL;
 	}
 	/**
 	 * Аналог realpath + обработка URL
