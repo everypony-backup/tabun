@@ -225,7 +225,6 @@ return array(
 	'topic_menu_add' => 'Пост',
 	'topic_menu_add_topic' => 'Текстовый',
 	'topic_menu_add_question' => 'Опрос',
-	'topic_menu_add_link' => 'Ссылка',
 	'topic_menu_saved' => 'Черновики',
 	'topic_menu_published' => 'Опубликованные',
 	/**
@@ -268,22 +267,6 @@ return array(
 	'topic_preview' => 'Предпросмотр',
 	'topic_delete' => 'Удалить',
 	'topic_delete_confirm' => 'Вы действительно хотите удалить пост?',
-	/**
-	 * Топик-ссылка
-	 */
-	'topic_link' => 'пост-ссылка',
-	'topic_link_title' => 'Ссылки',
-	'topic_link_title_edit' => 'Редактирование ссылки',
-	'topic_link_title_create' => 'Добавление ссылки',
-	'topic_link_create' => 'Создание поста-ссылки',
-	'topic_link_edit' => 'Редактирование поста-ссылки',
-	'topic_link_count_jump' => 'переходов по ссылке',
-	'topic_link_create_url' => 'Ссылка',
-	'topic_link_create_url_notice' => 'Например, http://livestreet.ru/blog/dev_livestreet/113.html',
-	'topic_link_create_url_error' => 'Ссылка должна быть от 2 до 200 символов',
-	'topic_link_create_text' => 'Краткое описание (максимум 500 символов)',
-	'topic_link_create_text_notice' => 'HTML-теги запрещены',
-	'topic_link_create_text_error' => 'Описание ссылки должно быть от 10 до 500 символов',
 	/**
 	 * пост-опрос
 	 */

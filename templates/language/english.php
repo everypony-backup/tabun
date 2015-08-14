@@ -225,7 +225,6 @@ return array(
 	'topic_menu_add' => 'Topic',
 	'topic_menu_add_topic' => 'Post',
 	'topic_menu_add_question' => 'Question',
-	'topic_menu_add_link' => 'Link',
 	'topic_menu_saved' => 'Drafts',
 	'topic_menu_published' => 'Published',
 	/**
@@ -268,22 +267,6 @@ return array(
 	'topic_preview' => 'Preview',
 	'topic_delete' => 'Delete',
 	'topic_delete_confirm' => 'Do you really want to delete this topic?',
-	/**
-	 * Link-topic
-	 */
-	'topic_link' => 'Link-topic',
-	'topic_link_title' => 'Links',
-	'topic_link_title_edit' => 'Edit link',
-	'topic_link_title_create' => 'Add link',
-	'topic_link_create' => 'Create link-topic',
-	'topic_link_edit' => 'Edit link-topic',
-	'topic_link_count_jump' => 'Go to link',
-	'topic_link_create_url' => "Link's URL",
-	'topic_link_create_url_notice' => 'E.g., http://livestreet.ru/blog/dev_livestreet/113.html',
-	'topic_link_create_url_error' => 'Link should consist of 2 upto 200 chars',
-	'topic_link_create_text' => 'Short description (500 chars at max.)',
-	'topic_link_create_text_notice' => 'HTML tags forbidden',
-	'topic_link_create_text_error' => 'Link description should consist of 10 upto 500 chars',
 	/**
 	 * Poll-topic
 	 */
@@ -1036,7 +1019,6 @@ return array(
 	'block_create' => 'Create',
 	'block_create_topic_topic' => 'Post',
 	'block_create_topic_question' => 'Poll',
-	'block_create_topic_link' => 'Link',
 	'block_create_blog' => 'Blog',
 	'block_create_talk' => 'Message',
 	/**
