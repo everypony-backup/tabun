@@ -15,10 +15,11 @@
 ---------------------------------------------------------
 */
 
-require_once(Config::Get('path.root.engine').'/lib/external/phpMailer/class.phpmailer.php');
+require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/vendor/autoload.php');
+require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/celery.php');
 
 /**
- * Модуль для отправки почты(e-mail) через phpMailer
+ * Модуль для отправки почты(e-mail) через Celery
  * <pre>
  * $this->Mail_SetAdress('claus@mail.ru','Claus');
  * $this->Mail_SetSubject('Hi!');
@@ -36,72 +37,13 @@ class ModuleMail extends Module {
 	 *
 	 * @var phpmailer
 	 */
-	protected $oMailer;
-	/**
-	 * Настройки SMTP сервера для отправки писем
-	 *
-	 */
-	/**
-	 * Хост smtp
-	 *
-	 * @var string
-	 */
-	protected $sHost;
-	/**
-	 * Порт smtp
-	 *
-	 * @var int
-	 */
-	protected $iPort;
-	/**
-	 * Логин smtp
-	 *
-	 * @var string
-	 */
-	protected $sUsername;
-	/**
-	 * Пароль smtp
-	 *
-	 * @var string
-	 */
-	protected $sPassword;
-	/**
-	 * Треубется или нет авторизация на smtp
-	 *
-	 * @var bool
-	 */
-	protected $bSmtpAuth;
-	/**
-	 * Префикс соединения к smtp - "", "ssl" или "tls"
-	 *
-	 * @var string
-	 */
-	protected $sSmtpSecure;
-	/**
-	 * Метод отправки почты
-	 *
-	 * @var string
-	 */
-	protected $sMailerType;
-	/**
-	 * Кодировка писем
-	 *
-	 * @var string
-	 */
-	protected $sCharSet;
-	/**
-	 * Делать или нет перенос строк в письме
-	 *
-	 * @var int
-	 */
-	protected $iWordWrap=0;
-
+	protected $oCeleryClient;
 	/**
 	 * Мыло от кого отправляется вся почта
 	 *
 	 * @var string
 	 */
-	protected $sFrom;
+	protected $sFromEmail;
 	/**
 	 * Имя от кого отправляется вся почта
 	 *
@@ -121,59 +63,41 @@ class ModuleMail extends Module {
 	 */
 	protected $sBody='';
 	/**
-	 * Строка последней ошибки
-	 * 
-	 * @var string
+	 * Использовать ли HTML
+	 *
 	 */
-	protected $sError;
-	
+	protected $bIsHtml=true;
+	/**
+	 * Адреса получателей
+         *
+	 */
+	protected $aRecipients = [];
 	/**
 	 * Инициализация модуля
 	 *
 	 */
 	public function Init() {
 		/**
-		 * Настройки SMTP сервера для отправки писем
+		 * Настройки Celery клиента для отправки писем
 		 */
-		$this->sHost     = Config::Get('sys.mail.smtp.host');
-		$this->iPort     = Config::Get('sys.mail.smtp.port');
-		$this->sUsername = Config::Get('sys.mail.smtp.user');
-		$this->sPassword = Config::Get('sys.mail.smtp.password');
-		$this->bSmtpAuth = Config::Get('sys.mail.smtp.auth');
-		$this->sSmtpSecure = Config::Get('sys.mail.smtp.secure');
-		/**
-		 * Метод отправки почты
-		 */
-		$this->sMailerType=Config::Get('sys.mail.type');
-		/**
-		 * Кодировка писем
-		 */
-		$this->sCharSet=Config::Get('sys.mail.charset');
+		$this->oCeleryClient = new Celery(
+			Config::Get('sys.celery.host'),
+			Config::Get('sys.celery.login'),
+			Config::Get('sys.celery.password'),
+			Config::Get('sys.celery.db'),
+			Config::Get('sys.celery.exchange'),
+			Config::Get('sys.celery.binding'),
+			Config::Get('sys.celery.port'),
+			Config::Get('sys.celery.backend')
+		);
 		/**
 		 * Мыло от кого отправляется вся почта
 		 */
-		$this->sFrom=Config::Get('sys.mail.from_email');
+		$this->sFromEmail=Config::Get('sys.mail.from_email');
 		/**
 		 * Имя от кого отправляется вся почта
 		 */
 		$this->sFromName=Config::Get('sys.mail.from_name');
-
-		/**
-		 * Создаём объект phpMailer и устанвливаем ему необходимые настройки
-		 */
-		$this->oMailer = new phpmailer();
-		$this->oMailer->Host=$this->sHost;
-		$this->oMailer->Port=$this->iPort;
-		$this->oMailer->Username=$this->sUsername;
-		$this->oMailer->Password=$this->sPassword;
-		$this->oMailer->SMTPAuth=$this->bSmtpAuth;
-		$this->oMailer->SMTPSecure=$this->sSmtpSecure;
-		$this->oMailer->Mailer=$this->sMailerType;
-		$this->oMailer->WordWrap=$this->iWordWrap;
-		$this->oMailer->CharSet=$this->sCharSet;
-
-		$this->oMailer->From=$this->sFrom;
-		$this->oMailer->FromName=$this->sFromName;
 	}
 	/**
 	 * Устанавливает тему сообщения
@@ -197,10 +121,8 @@ class ModuleMail extends Module {
 	 * @param string $sMail	Емайл
 	 * @param string $sName	Имя
 	 */
-	public function AddAdress($sMail,$sName=null) {
-		ob_start();
-		$this->oMailer->AddAddress($sMail,$sName);
-		$this->sError = ob_get_clean();
+	public function AddAdress($sMail,$sName='') {
+		array_push($this->aRecipients, [$sName, $sMail]);
 	}
 	/**
 	 * Отправляет сообщение(мыло)
@@ -208,19 +130,24 @@ class ModuleMail extends Module {
 	 * @return bool
 	 */
 	public function Send() {
-		$this->oMailer->Subject=$this->sSubject;
-		$this->oMailer->Body=$this->sBody;
-		ob_start();
-		$bResult = $this->oMailer->Send();
-		$this->sError = ob_get_clean();
-		return $bResult;
+		$this->oCeleryClient->PostTask(
+			'tasks.send_mail',
+			[
+				'from_email' => $this->sFromEmail,
+				'from_name' => $this->sFromName,
+				'recipients' => $this->aRecipients,
+				'subject' => $this->sSubject,
+				'body' => $this->sBody,
+				'is_html' => $this->bIsHtml,
+			]
+		);
 	}
 	/**
 	 * Очищает все адреса получателей
 	 *
 	 */
 	public function ClearAddresses() {
-		$this->oMailer->ClearAddresses();
+		$this->aRecipients = [];
 	}
 	/**
 	 * Устанавливает единственный адрес получателя
@@ -230,32 +157,29 @@ class ModuleMail extends Module {
 	 */
 	public function SetAdress($sMail,$sName=null) {
 		$this->ClearAddresses();
-		ob_start();
-		$this->oMailer->AddAddress($sMail,$sName);
-		$this->sError = ob_get_clean();
+		$this->AddAdress($sMail, $sName);
 	}
 	/**
 	 * Устанавливает режим отправки письма как HTML
 	 *
 	 */
 	public function setHTML() {
-		$this->oMailer->IsHTML(true);
+		$this->bIsHtml = true;
 	}
 	/**
 	 * Устанавливает режим отправки письма как Text(Plain)
 	 *
 	 */
 	public function setPlain() {
-		$this->oMailer->IsHTML(false);
+		$this->bIsHtml = false;
 	}
-	
 	/**
 	 * Возвращает строку последней ошибки
-	 * 
+	 *
 	 * @return string
 	 */
 	public function GetError(){
-		return $this->sError;
+		return '';
 	}
 }
 ?>
