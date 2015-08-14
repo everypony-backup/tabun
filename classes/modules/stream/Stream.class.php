@@ -42,7 +42,6 @@ class ModuleStream extends Module {
 	 * @var array
 	 */
 	protected $aEventTypes = array(
-		'add_wall' => array('related' => 'wall','unique'=>true),
 		'add_topic' => array('related' => 'topic','unique'=>true),
 		'add_comment' => array('related' => 'comment','unique'=>true),
 		'add_blog' => array('related' => 'blog','unique'=>true),
