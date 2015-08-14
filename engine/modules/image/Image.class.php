@@ -405,25 +405,11 @@ class ModuleImage extends Module {
 	 * @return string
 	 */
 	public function BuildHTML($sPath,$aParams) {
-		$sText='<img src="'.$sPath.'" ';
+		$sText='<img src="'.$sPath.'"';
 		if (isset($aParams['title']) and $aParams['title']!='') {
-			$sText.=' title="'.htmlspecialchars($aParams['title']).'" ';
-			/**
-			 * Если не определен ALT заполняем его тайтлом
-			 */
-			if(!isset($aParams['alt'])) $aParams['alt']=$aParams['title'];
+			$sText.=' title="'.htmlspecialchars($aParams['title']).'"';
 		}
-		if (isset($aParams['align']) and in_array($aParams['align'],array('left','right','center'))) {
-			if ($aParams['align'] == 'center') {
-				$sText.=' class="image-center"';
-			} else {
-				$sText.=' align="'.htmlspecialchars($aParams['align']).'" ';
-			}
-		}
-		$sAlt = isset($aParams['alt'])
-			? ' alt="'.htmlspecialchars($aParams['alt']).'"'
-			: ' alt=""';
-		$sText.=$sAlt.' />';
+		$sText .= ' />';
 
 		return $sText;
 	}
