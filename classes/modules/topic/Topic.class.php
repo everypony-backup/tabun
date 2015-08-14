@@ -575,7 +575,6 @@ class ModuleTopic extends Module {
 	public function GetTopicsGood($iPage,$iPerPage,$bAddAccessible=true) {
 		$aFilter=array(
 			'blog_type' => array(
-				'personal',
 				'open'
 			),
 			'topic_publish' => 1,
@@ -583,7 +582,9 @@ class ModuleTopic extends Module {
 				'value' => Config::Get('module.blog.index_good'),
 				'type'  => 'top',
 				'publish_index'  => 1,
-			)
+			),
+			// Orhideous mod by selective filtering
+			'blog_filter' => Config::Get('module.blog.selective_filter'),
 		);
 		/**
 		 * Если пользователь авторизирован, то добавляем в выдачу

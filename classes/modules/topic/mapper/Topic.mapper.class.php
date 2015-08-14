@@ -543,7 +543,17 @@ class ModuleTopic_MapperTopic extends Mapper {
 				$sPublishIndex=" or topic_publish_index=1 ";
 			}
 			if ($aFilter['topic_rating']['type']=='top') {
-				$sWhere.=" AND ( t.topic_rating >= ".(float)$aFilter['topic_rating']['value']." {$sPublishIndex} ) ";
+				// Orhideous' mod for filtering topic per blogs
+				if (isset($aFilter['blog_filter'])) {
+					$BlogSelective = '';
+					foreach ($aFilter['blog_filter'] as $blog_id => $filter_rating) {
+						$BlogSelective.=" OR ( t.blog_id = $blog_id AND t.topic_rating >= $filter_rating )";
+					}
+				} else {
+					$BlogSelective = '';
+				}
+				$sWhere.=" AND ( t.topic_rating >= ".(float)$aFilter['topic_rating']['value']." {$sPublishIndex} {$BlogSelective} ) ";
+				// End of mod
 			} else {
 				$sWhere.=" AND ( t.topic_rating < ".(float)$aFilter['topic_rating']['value']."  ) ";
 			}
