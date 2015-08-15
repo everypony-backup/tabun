@@ -65,21 +65,21 @@
 															{if ($oUserCurrent && $oUserOwner->getId() == $oUserCurrent->getId())}
 																vote-nobuttons
 															{/if}">
-		<a href="#" class="vote-item vote-down" onclick="return ls.vote.vote({$oBlog->getId()},this,-1,'blog');"><span><i></i></span></a>
-		<div class="vote-item vote-count" title="{$aLang.blog_vote_count}: {$oBlog->getCountVote()}"><span id="vote_total_blog_{$oBlog->getId()}">{if $oBlog->getRating() > 0}+{/if}{$oBlog->getRating()}</span></div>
 		<a href="#" class="vote-item vote-up" onclick="return ls.vote.vote({$oBlog->getId()},this,1,'blog');"><span><i></i></span></a>
+		<div class="vote-item vote-count" title="{$aLang.blog_vote_count}: {$oBlog->getCountVote()}"><span id="vote_total_blog_{$oBlog->getId()}">{if $oBlog->getRating() > 0}+{/if}{$oBlog->getRating()}</span></div>
+		<a href="#" class="vote-item vote-down" onclick="return ls.vote.vote({$oBlog->getId()},this,-1,'blog');"><span><i></i></span></a>
 	</div>
 </div>
 
 <div class="blog-mini" id="blog-mini">
+		{if $oUserCurrent and $oUserCurrent->getId()!=$oBlog->getOwnerId()}
+			<button type="submit"  class="button button-small" id="button-blog-join-first-{$oBlog->getId()}" data-button-additional="button-blog-join-second-{$oBlog->getId()}" data-only-text="1" onclick="ls.blog.toggleJoin(this, {$oBlog->getId()}); return false;">{if $oBlog->getUserIsJoin()}{$aLang.blog_leave}{else}{$aLang.blog_join}{/if}</button>
+		{/if}
 	<span id="blog_user_count_{$oBlog->getId()}">{$iCountBlogUsers}</span> {$iCountBlogUsers|declension:$aLang.reader_declension:'russian'},
 	{$oBlog->getCountTopic()} {$oBlog->getCountTopic()|declension:$aLang.topic_declension:'russian'}
 	<div class="fl-r" id="blog-mini-header">
 		<a href="#" class="link-dotted" onclick="ls.blog.toggleInfo(); return false;">{$aLang.blog_expand_info}</a>
 		<a href="{router page='rss'}blog/{$oBlog->getUrl()}/">RSS</a>
-		{if $oUserCurrent and $oUserCurrent->getId()!=$oBlog->getOwnerId()}
-			<button type="submit"  class="button button-small" id="button-blog-join-first-{$oBlog->getId()}" data-button-additional="button-blog-join-second-{$oBlog->getId()}" data-only-text="1" onclick="ls.blog.toggleJoin(this, {$oBlog->getId()}); return false;">{if $oBlog->getUserIsJoin()}{$aLang.blog_leave}{else}{$aLang.blog_join}{/if}</button>
-		{/if}
 	</div>
 </div>
 
@@ -93,8 +93,8 @@
 		</header>
 
 		
-		<div class="blog-content">
-			<p class="blog-description">{$oBlog->getDescription()}</p>
+		<div class="blog-content text">
+			<div class="blog-description">{$oBlog->getDescription()}</div>
 		
 			
 			<ul class="blog-info">
