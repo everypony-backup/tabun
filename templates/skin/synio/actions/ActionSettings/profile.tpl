@@ -46,7 +46,7 @@
 				<div class="modal-content">
 					<div class="clearfix">
 						<div class="image-border">
-							<img src="" alt="" id="avatar-resize-original-img">
+							<img src=""  id="avatar-resize-original-img">
 						</div>
 					</div>
 					<button type="submit"  class="button button-primary" onclick="return ls.user.resizeAvatar();">{$aLang.settings_profile_avatar_resize_apply}</button>

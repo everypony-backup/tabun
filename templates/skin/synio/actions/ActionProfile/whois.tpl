@@ -14,7 +14,7 @@
 
 
 <div class="profile-info-about">
-	<a href="{$oUserProfile->getUserWebPath()}" class="avatar"><img src="{$oUserProfile->getProfileAvatarPath(100)}" alt="avatar" itemprop="photo" /></a>
+	<a href="{$oUserProfile->getUserWebPath()}" class="avatar"><img src="{$oUserProfile->getProfileAvatarPath(100)}"  itemprop="photo" /></a>
 
 	<h3>{$aLang.profile_about}</h3>
 	{if $oUserProfile->getProfileAbout()}	

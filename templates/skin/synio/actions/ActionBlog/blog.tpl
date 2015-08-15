@@ -88,7 +88,7 @@
 <div class="blog" id="blog" style="display: none">
 	<div class="blog-inner">
 		<header class="blog-header">
-			<img src="{$oBlog->getAvatarPath(48)}" alt="avatar" class="avatar" />
+			<img src="{$oBlog->getAvatarPath(48)}"  class="avatar" />
 			<span class="close" onclick="ls.blog.toggleInfo(); return false;"><a href="#" class="link-dotted">{$aLang.blog_fold_info}</a><i class="icon-synio-close"></i></span>
 		</header>
 
@@ -108,14 +108,14 @@
 			{hook run='blog_info_begin' oBlog=$oBlog}
 			<strong>{$aLang.blog_user_administrators} ({$iCountBlogAdministrators})</strong><br />
 			<span class="user-avatar">
-				<a href="{$oUserOwner->getUserWebPath()}"><img src="{$oUserOwner->getProfileAvatarPath(24)}" alt="avatar" /></a>		
+				<a href="{$oUserOwner->getUserWebPath()}"><img src="{$oUserOwner->getProfileAvatarPath(24)}"  /></a>
 				<a href="{$oUserOwner->getUserWebPath()}">{$oUserOwner->getLogin()}</a>
 			</span>
 			{if $aBlogAdministrators}			
 				{foreach from=$aBlogAdministrators item=oBlogUser}
 					{assign var="oUser" value=$oBlogUser->getUser()}  
 					<span class="user-avatar">
-						<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(24)}" alt="avatar" /></a>		
+						<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(24)}"  /></a>
 						<a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
 					</span>
 				{/foreach}	
@@ -127,7 +127,7 @@
 				{foreach from=$aBlogModerators item=oBlogUser}  
 					{assign var="oUser" value=$oBlogUser->getUser()}							
 					<span class="user-avatar">
-						<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(24)}" alt="avatar" /></a>		
+						<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(24)}"  /></a>
 						<a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
 					</span>
 				{/foreach}							
@@ -162,7 +162,7 @@
 		
 		<div class="admin">
 			{$aLang.blogs_owner} —
-			<a href="{$oUserOwner->getUserWebPath()}"><img src="{$oUserOwner->getProfileAvatarPath(24)}" alt="avatar" class="avatar" /></a>
+			<a href="{$oUserOwner->getUserWebPath()}"><img src="{$oUserOwner->getProfileAvatarPath(24)}"  class="avatar" /></a>
 			<a href="{$oUserOwner->getUserWebPath()}">{$oUserOwner->getLogin()}</a>
 		</div>
 	</footer>

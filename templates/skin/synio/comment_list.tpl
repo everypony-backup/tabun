@@ -16,7 +16,7 @@
                 <ul class="comment-info">
                     <li class="comment-author">
                         <a href="{$oUser->getUserWebPath()}">
-					<img src="{$oUser->getProfileAvatarPath(24)}" alt="{$oUser->getLogin()}" class="comment-avatar" />
+					<img src="{$oUser->getProfileAvatarPath(24)}"  class="comment-avatar" />
                         </a>
                         <a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
                     </li>

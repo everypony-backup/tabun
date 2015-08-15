@@ -12,7 +12,7 @@
             <li class="comment-author {if $iAuthorId == $oUser->getId()}comment-topic-author{/if}"
                 title="{if $iAuthorId == $oUser->getId() and $sAuthorNotice}{$sAuthorNotice}{/if}">
                 <a href="{$oUser->getUserWebPath()}">
-                    <img src="{$oUser->getProfileAvatarPath(24)}" alt="{$oUser->getLogin()}" class="comment-avatar"/>
+                    <img src="{$oUser->getProfileAvatarPath(24)}"  class="comment-avatar"/>
                 </a>
                 <a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
             </li>

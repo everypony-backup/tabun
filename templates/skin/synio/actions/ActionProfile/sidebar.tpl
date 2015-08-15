@@ -14,7 +14,7 @@
 
 <section class="block block-type-profile">
 	<div class="profile-photo-wrapper">
-		<a href="{$oUserProfile->getUserWebPath()}"><img src="{$oUserProfile->getProfileFotoPath()}" alt="photo" class="profile-photo" id="foto-img" /></a>
+		<a href="{$oUserProfile->getUserWebPath()}"><img src="{$oUserProfile->getProfileFotoPath()}"  class="profile-photo" id="foto-img" /></a>
 	</div>
 	
 	{if $sAction=='settings' and $oUserCurrent and $oUserCurrent->getId() == $oUserProfile->getId()}
@@ -39,7 +39,7 @@
 			<div class="modal-content">
 				<div class="clearfix">
 					<div class="image-border">
-						<img src="" alt="" id="foto-resize-original-img">
+						<img src=""  id="foto-resize-original-img">
 					</div>
 				</div>
 				
