@@ -4,35 +4,17 @@ jQuery(document).ready(function($){
 
 	$('html').removeClass('no-js');
 
-	// Определение браузера
-	if ($.browser.opera) {
-		$('body').addClass('opera opera' + parseInt($.browser.version));
-	}
-	if ($.browser.mozilla) {
-		$('body').addClass('mozilla mozilla' + parseInt($.browser.version));
-	}
-	if ($.browser.webkit) {
-		$('body').addClass('webkit webkit' + parseInt($.browser.version));
-	}
-	if ($.browser.msie) {
-		$('body').addClass('ie');
-		if (parseInt($.browser.version) > 8) {
-			$('body').addClass('ie' + parseInt($.browser.version));
-		}
-	}
-
 	// Всплывающие окна
 	$('#window_login_form').jqm();
-	$('#blog_delete_form').jqm({trigger: '#blog_delete_show'});
-	$('#add_friend_form').jqm({trigger: '#add_friend_show'});
+	$('#blog_delete_form').jqm({trigger: '#blog_delete_show', toTop: true});
+	$('#add_friend_form').jqm({trigger: '#add_friend_show', toTop: true});
 	$('#window_upload_img').jqm();
 	$('#userfield_form').jqm();
 	$('#favourite-form-tags').jqm();
 	$('#modal_write').jqm({trigger: '.js-write-window-show'});
-	$('#foto-resize').jqm({modal: true});
-	$('#avatar-resize').jqm({modal: true});
+	$('#foto-resize').jqm({modal: true, toTop: true});
+	$('#avatar-resize').jqm({modal: true, toTop: true});
 	$('#userfield_form').jqm({toTop: true});
-	$('#photoset-upload-form').jqm({trigger: '#photoset-start-upload'});
 
 	$('.js-registration-form-show').click(function(){
 		if (ls.blocks.switchTab('registration','popup-login')) {
@@ -118,16 +100,6 @@ jQuery(document).ready(function($){
 			showTimeout: 1000
 		});
 	}
-	$('.js-title-talk').poshytip({
-		className: 'infobox-yellow',
-		alignTo: 'target',
-		alignX: 'left',
-		alignY: 'center',
-		offsetX: 10,
-		liveEvents: true,
-		showTimeout: 1000
-	});
-
 
 	$('.js-infobox-vote-topic').poshytip({
 		content: function() {
@@ -164,16 +136,6 @@ jQuery(document).ready(function($){
 		showTimeout: 300
 	});
 
-	// подсветка кода
-	prettyPrint();
-
-	// эмуляция border-sizing в IE
-	var inputs = $('input.input-text, textarea');
-	ls.ie.bordersizing(inputs);
-
-	// эмуляция placeholder'ов в IE
-	inputs.placeholder();
-
 	// блоки
 	ls.hook.add('ls_blocks_init_navigation_after',function(block,count){
 		if ($('.js-block-'+block+'-nav').find('li').length >= count) {
@@ -194,7 +156,9 @@ jQuery(document).ready(function($){
 
 	// избранное
 	ls.hook.add('ls_favourite_toggle_after',function(idTarget,objFavourite,type,params,result){
-		$('#fav_count_'+type+'_'+idTarget).text((result.iCount>0) ? result.iCount : '');
+		var favCount = $('#fav_count_'+type+'_'+idTarget);
+		favCount.text(result.iCount);
+		result.iCount > 0 ? favCount.show() : favCount.hide();
 	});
 
 	// вступление в блог
@@ -216,30 +180,9 @@ jQuery(document).ready(function($){
 	// лента активности
 	ls.hook.add('ls_stream_append_user_after',function(length,data){
 		if (length==0) {
-			$('#strm_u_'+data.uid).parent().find('a').before('<a href="'+data.user_web_path+'"><img src="'+data.user_avatar_48+'" alt="avatar" class="avatar" /></a> ');
+			$('#strm_u_'+data.uid).parent().find('a').before('<a href="'+data.user_web_path+'"><img src="'+data.user_avatar_48+'"  class="avatar" /></a> ');
 		}
 	});
-
-	// стена
-	ls.hook.add('ls_wall_loadreplynew_after',function(iPid, idMore, result){
-		if (result.iCountWall) {
-			if ($('#wall-reply-container-'+iPid).length == 0) {
-				$('#wall-item-'+iPid).find('.wall-item').after('<div class="wall-item-replies"><div id="wall-reply-container-'+iPid+'" class="wall-item-container"></div></div>');
-				$('#wall-reply-container-'+iPid).append(result.sText);
-			}
-		}
-	});
-	ls.hook.add('ls_wall_remove_reply_item_fade',function(iId, result){
-		var rpls = $(this).parent('.wall-item-container').parent();
-		$(this).remove();
-		if (rpls.children().find('.wall-item-reply').length == 0) {
-			rpls.remove();
-		}
-	});
-	ls.hook.add('ls_wall_remove_item_fade',function(iId, result){
-		$(this).remove();
-	});
-
 	// опрос
 	ls.hook.add('ls_pool_add_answer_after',function(removeAnchor){
 		var removeAnchor = $('<a href="#" class="icon-synio-remove" />').attr('title', ls.lang.get('delete')).click(function(e){
@@ -364,15 +307,6 @@ jQuery(document).ready(function($){
 	});
 
 
-	$('.topic').each(function(i){
-		var share=$(this).find('.topic-info-share');
-		if (share.length) {
-			var left = $(this).find('.topic-info-share').position().left;
-			$(this).find('.topic-share .arrow').css('left', left + 1);
-		}
-	});
-
-
 	// Фикс бага с z-index у встроенных видео
 	$("iframe").each(function(){
 		var ifr_source = $(this).attr('src');
@@ -386,80 +320,6 @@ jQuery(document).ready(function($){
 				$(this).attr('src',ifr_source+'?'+wmode);
 		}
 	});
-
-	// Меню
-	(function(){
-		var trigger = $('#dropdown-mainmenu-trigger');
-
-		if (!trigger.length) {
-			return;
-		}
-
-		var menu 	= $('#dropdown-mainmenu-menu');
-		menu.appendTo('body').css('display', 'none');
-
-		trigger.click(function(){
-			var pos = trigger.offset();
-			menu.css({ 'left': pos.left, 'top': pos.top + trigger.height() + 10, 'min-width': trigger.outerWidth() });
-			menu.slideToggle();
-			trigger.toggleClass('opened');
-			return false;
-		});
-
-		// Hide menu
-		$(document).click(function(){
-			trigger.removeClass('opened');
-			menu.slideUp();
-		});
-
-		$('body').on('click', '#dropdown-mainmenu-trigger, #dropdown-mainmenu-menu', function(e) {
-			e.stopPropagation();
-		});
-
-		$(window).resize(function(){
-			menu.css({ 'left': $('#dropdown-mainmenu-trigger').offset().left });
-		});
-	})();
-
-	// Меню пользователя в шапке
-	(function(){
-		// Dropdown
-		var dp 		= $('#dropdown-user');
-		if (!dp.length) {
-			return;
-		}
-		var trigger = $('#dropdown-user-trigger');
-		var menu 	= $('#dropdown-user-menu');
-		var pos 	= $('#dropdown-user').offset();
-
-		menu.appendTo('body').css({ 'left': pos.left, 'top': $('#dropdown-user').height() - 1, 'min-width': $('#dropdown-user').outerWidth(), 'display': 'none' });
-
-		trigger.click(function(){
-			menu.slideToggle();
-			dp.toggleClass('opened');
-			return false;
-		});
-
-		menu.find('a').click(function(){
-			dp.removeClass('opened');
-			trigger.find('a').text( $(this).text() );
-			menu.slideToggle();
-		});
-
-		// Hide menu
-		$(document).click(function(){
-			dp.removeClass('opened');
-			menu.slideUp();
-		});
-
-		$('body').on('click', '#dropdown-user-trigger, #dropdown-user-menu', function(e) {
-			e.stopPropagation();
-		});
-
-		$(window).resize(function(){
-			menu.css({ 'left': $('#dropdown-user').offset().left });
-		});
-	})();
 
 	// Инициализация строчки поиска
 	(function(){
@@ -529,48 +389,11 @@ function toolbarPos() {
 			if (!$('#container').hasClass('no-resize')) {
 				$('#container').addClass('toolbar-margin');
 			}
-			$('#toolbar').css({'position': 'absolute', 'left': $('#wrapper').offset().left + $('#wrapper').outerWidth() + 7, 'top' : $(document).scrollTop() + 136, 'display': 'block'});
+			$('#toolbar').css({'position': 'absolute', 'right': 0, 'top' : $(document).scrollTop() + 175, 'display': 'block'});
 		} else {
 			$('#container').removeClass('toolbar-margin');
-			$('#toolbar').css({'position': 'fixed', 'left': $('#wrapper').offset().left + $('#wrapper').outerWidth() + 7, 'top': 136, 'display': 'block'});
+			$('#toolbar').css({'position': 'fixed', 'right': 0, 'top': 175, 'display': 'block'});
 		}
 	}
 };
 
-
-// Группировка не влезающих пунктов в главном меню
-jQuery(window).load(function () {
-	navMainGroup();
-});
-
-jQuery(window).resize(function () {
-	navMainGroup();
-});
-
-function navMainGroup() {
-	var $ 			  = jQuery;
-	var more_li       = $('#nav-main li.nav-main-more');
-	var li            = $('#nav-main li:not(.nav-main-more)');
-	var width_lis     = 0;
-	var vis_count     = 0;
-	var is_outofbox   = false;
-
-	$('#dropdown-mainmenu-menu').hide();
-
-	li.each(function(i){
-		if (!is_outofbox && $(this).offset().top < 10) {
-			width_lis += $(this).outerWidth(true);
-			vis_count++;
-		} else {
-			is_outofbox = true;
-			$(this).appendTo('#dropdown-mainmenu-menu');
-		}
-	});
-
-	if ($('#dropdown-mainmenu-menu li').length > 0) {
-		if ($('#nav-main').width() - width_lis < more_li.width()) {
-			$( li[vis_count - 1] ).prependTo('#dropdown-mainmenu-menu');
-		}
-		more_li.show();
-	}
-}
