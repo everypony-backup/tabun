@@ -998,9 +998,9 @@ class Jevix{
 						continue;
 					}
 					$bOK=false;
-					foreach ($paramAllowedValues['#domain'] as $sDomain) {
-						$sDomain=preg_quote($sDomain);						
-						if (preg_match("@^(http|https|ftp)://([\w\d]+\.)?{$sDomain}/@ui",$value)) {							
+					foreach ($paramAllowedValues['#domain'] as $sDomain => $sPathRegex) {
+						$sDomain=preg_quote($sDomain);
+						if (preg_match("@^((http|https|ftp):)?//([\w\d]+\.)?{$sDomain}/{$sPathRegex}@ui",$value)) {
 							$bOK=true;
 							break;
 						}
