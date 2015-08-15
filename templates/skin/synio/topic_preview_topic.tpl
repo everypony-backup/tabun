@@ -24,18 +24,18 @@
 	</div>
 
 	<footer class="topic-footer">
-		<ul class="topic-tags">
-			<li>{$aLang.block_tags}:</li>
+		<p class="topic-tags">
+			{$aLang.block_tags}:
 			{strip}
 				{if $oTopic->getTagsArray()}
 					{foreach from=$oTopic->getTagsArray() item=sTag name=tags_list}
-						<li>{if !$smarty.foreach.tags_list.first}, {/if}<a rel="tag" href="{router page='tag'}{$sTag|escape:'url'}/">{$sTag|escape:'html'}</a></li>
+						{if !$smarty.foreach.tags_list.first}, {/if}<a rel="tag" href="{router page='tag'}{$sTag|escape:'url'}/">{$sTag|escape:'html'}</a>
 					{/foreach}
 				{else}
-					<li>{$aLang.topic_tags_empty}</li>
+					{$aLang.topic_tags_empty}
 				{/if}
 			{/strip}
-		</ul>
+		</p>
 
 		<ul class="topic-info">
 			<li class="topic-info-author"><a rel="author" href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a></li>
