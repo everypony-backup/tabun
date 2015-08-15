@@ -60,16 +60,6 @@
 					<a href="{$oTarget->getUserWebPath()}"><img src="{$oTarget->getProfileAvatarPath(24)}"  /></a>
 					<a href="{$oTarget->getUserWebPath()}">{$oTarget->getLogin()}</a>
 				</span>
-			{elseif $oStreamEvent->getEventType() == 'add_wall'}
-				{if $oUser->getProfileSex() != 'woman'} {$aLang.stream_list_event_add_wall} {else} {$aLang.stream_list_event_add_wall_female} {/if}
-				<span class="user-avatar user-avatar-n">
-					<a href="{$oTarget->getWallUser()->getUserWebPath()}"><img src="{$oTarget->getWallUser()->getProfileAvatarPath(24)}"  /></a>
-					<a href="{$oTarget->getUrlWall()}">{$oTarget->getWallUser()->getLogin()}</a>
-				</span>
-				{assign var=sTextEvent value=$oTarget->getText()|strip_tags|truncate:200}
-				{if trim($sTextEvent)}
-					<div class="stream-comment-preview">{$sTextEvent}</div>
-				{/if}
 			{else}
 				{hook run="stream_list_event_`$oStreamEvent->getEventType()`" oStreamEvent=$oStreamEvent}
 			{/if}
