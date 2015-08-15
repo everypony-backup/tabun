@@ -1,5 +1,5 @@
 {if $sMenuItemSelect=='index'}
-	<ul class="nav nav-pills mb-30">
+	<ul class="nav nav-pills">
 		<li {if $sMenuSubItemSelect=='good'}class="active"{/if}><a href="{cfg name='path.root.web'}/">{$aLang.blog_menu_all_good}</a></li>
 		<li {if $sMenuSubItemSelect=='new'}class="active"{/if}>
 			<a href="{router page='index'}newall/" title="{$aLang.blog_menu_top_period_all}">{$aLang.blog_menu_all_new}</a>
@@ -12,7 +12,7 @@
 {/if}
 
 {if $sMenuItemSelect=='blog'}
-	<ul class="nav nav-pills mb-30">
+	<ul class="nav nav-pills">
 		<li {if $sMenuSubItemSelect=='good'}class="active"{/if}><a href="{$sMenuSubBlogUrl}">{$aLang.blog_menu_collective_good}</a></li>
 		<li {if $sMenuSubItemSelect=='new'}class="active"{/if}>
 			<a href="{$sMenuSubBlogUrl}newall/" title="{$aLang.blog_menu_top_period_all}">{$aLang.blog_menu_collective_new}</a>
@@ -25,7 +25,7 @@
 {/if}
 
 {if $sMenuItemSelect=='log'}
-	<ul class="nav nav-pills mb-30">
+	<ul class="nav nav-pills">
 		<li {if $sMenuSubItemSelect=='good'}class="active"{/if}><a href="{router page='personal_blog'}">{$aLang.blog_menu_personal_good}</a></li>
 		<li {if $sMenuSubItemSelect=='new'}class="active"{/if}>
 			<a href="{router page='personal_blog'}newall/" title="{$aLang.blog_menu_top_period_all}">{$aLang.blog_menu_personal_new}</a>
@@ -38,7 +38,7 @@
 {/if}
 
 {if $sPeriodSelectCurrent}
-	<ul class="nav nav-pills nav-pills-dropdown mb-30">
+	<ul class="nav nav-pills nav-pills-dropdown">
 		<li {if $sPeriodSelectCurrent=='1'}class="active"{/if}><a href="{$sPeriodSelectRoot}?period=1">{$aLang.blog_menu_top_period_24h}</a></li>
 		<li {if $sPeriodSelectCurrent=='7'}class="active"{/if}><a href="{$sPeriodSelectRoot}?period=7">{$aLang.blog_menu_top_period_7d}</a></li>
 		<li {if $sPeriodSelectCurrent=='30'}class="active"{/if}><a href="{$sPeriodSelectRoot}?period=30">{$aLang.blog_menu_top_period_30d}</a></li>
