@@ -44,12 +44,10 @@
 	<label for="topic_text">{$aLang.topic_create_text}:</label>
 	<textarea name="topic_text" id="topic_text" class="mce-editor markitup-editor input-width-full" rows="20">{$_aRequest.topic_text}</textarea>
 
-	{if !$oConfig->GetValue('view.tinymce')}
-		{include file='tags_help.tpl' sTagsTargetId="topic_text"}
-		<br />
-		<br />
-	{/if}
-	
+	{include file='tags_help.tpl' sTagsTargetId="topic_text"}
+	<br />
+	<br />
+
 	<p><label for="topic_tags">{$aLang.topic_create_tags}:</label>
 	<input type="text" id="topic_tags" name="topic_tags" value="{$_aRequest.topic_tags}" class="input-text input-width-full autocomplete-tags-sep" />
 	<small class="note">{$aLang.topic_create_tags_notice}</small></p>
