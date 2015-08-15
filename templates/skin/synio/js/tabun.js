@@ -69,8 +69,15 @@ $(function(){
         $("#down-switch").click(function(){
                 $("body,html").animate({"scrollTop":$(document).height()},1000);
         });
-	// Табуняша
-	$(".nya-text").click(function(){
-		$('.nya-foot').animate({ opacity: 1}, 3500, function(){$('.nya-foot').animate({ opacity: 0}, 3500)});
-	});
+});
+// Despoil-link
+$(function(){
+    $("#despoil").click(function(){
+        $(".spoiler-body").each(function(){
+            var el=$(this);
+            if(el.css('display') == 'none'){
+                el.css('display', 'block');
+            }
+        })
+    });
 });
