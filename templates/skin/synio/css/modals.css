@@ -1,22 +1,17 @@
-/* --------------------------------------------
-	MODALS
--------------------------------------------- */
+/* MODALS */
 
 .modal {
-    display: none;
-    
-    position: fixed;
-    top: 25%;
-    left: 50%;
-    
-    width: 300px;
-    margin-left: -150px;
-	
-    color: #333;
-    background-color: #fbfcfc;
-	border-radius: 10px;
-	-webkit-box-shadow: 0 0 15px rgba(0,0,0,.5); box-shadow: 0 0 15px rgba(0,0,0,.5);
-	overflow: hidden;
+display: none;
+position: fixed;
+top: 25%;
+left: 50%;
+width: 300px;
+margin-left: -150px;
+color: #333;
+background-color: #fbfcfc;
+border-radius: 10px;
+-webkit-box-shadow: 0 0 15px rgba(0,0,0,.5); box-shadow: 0 0 15px rgba(0,0,0,.5);
+overflow: hidden;
 }
 .modal .close { 
 	position: absolute; 
@@ -47,14 +42,12 @@
 .modal.modal-login .icon-question-sign { position: relative; top: -3px; }
 .modal.modal-login .icon-ok-green { position: relative; top: -1px; }
 .modal.modal-login .js-block-popup-login-content .button { position: relative; top: -1px; margin-left: 1px; }
-.ie .modal.modal-login .js-block-popup-login-content .button { margin-left: 1px; }
-
 
 /* Write */
 .modal.modal-write { width: 620px; margin-left: -310px; top: 70px; background: #e0eff9; }
 .modal.modal-write .modal-content { padding: 20px 10px 20px; *padding: 20px 10px 25px; }
 .modal.modal-write .write-list { *overflow: hidden; *zoom: 1; }
-.modal.modal-write .write-list li { width: 125px; margin: 0 10px 20px; font-size: 19px; font-family: 'PT Sans', sans-serif; text-align: center; overflow: hidden; display: inline-table; *float: left; }
+.modal.modal-write .write-list li { width: 125px; margin: 0 10px 20px; font-size: 19px; text-align: center; overflow: hidden; display: inline-table; *float: left; }
 .modal.modal-write .write-list li a { color: #727a90; }
 .modal.modal-write .write-list li:hover a { color: #275ec2; }
 .modal.modal-write .write-list li .write-item-image { display: block; margin: 0 auto; width: 115px; height: 115px; border-radius: 3px; text-align: center; background: url(../images/write.png) no-repeat; margin-bottom: 0; }

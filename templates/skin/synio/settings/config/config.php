@@ -1,41 +1,57 @@
 <?php
 
-$config = array();
+$config = [];
 
-// Максимальная вложенность комментов при отображении
-$config['module']['comment']['max_tree'] = 5;
+$config['head']['default']['js'] = [
+	"___path.static.skin___/js/vendor/jquery.js",
+	"___path.static.skin___/js/vendor/jquery-ui.js",
+	"___path.static.skin___/js/vendor/jquery.notifier.js",
+	"___path.static.skin___/js/vendor/jquery.jqmodal.js",
+	"___path.static.skin___/js/vendor/jquery.scrollto.js",
+	"___path.static.skin___/js/vendor/jquery.rich-array.min.js",
+	"___path.static.skin___/js/vendor/markitup/jquery.markitup.js",
+	"___path.static.skin___/js/vendor/jquery.form.js",
+	"___path.static.skin___/js/vendor/jquery.cookie.js",
+	"___path.static.skin___/js/vendor/jquery.serializejson.js",
+	"___path.static.skin___/js/vendor/jquery.file.js",
+	"___path.static.skin___/js/vendor/jcrop/jquery.Jcrop.js",
+	"___path.static.skin___/js/vendor/poshytip/jquery.poshytip.js",
+	"___path.static.skin___/js/vendor/jquery.placeholder.min.js",
+	"___path.static.skin___/js/vendor/jquery.charcount.js",
+	"___path.static.skin___/js/main.js",
+	"___path.static.skin___/js/favourite.js",
+	"___path.static.skin___/js/blocks.js",
+	"___path.static.skin___/js/talk.js",
+	"___path.static.skin___/js/vote.js",
+	"___path.static.skin___/js/poll.js",
+	"___path.static.skin___/js/subscribe.js",
+	"___path.static.skin___/js/infobox.js",
+	"___path.static.skin___/js/geo.js",
+	"___path.static.skin___/js/usernote.js",
+	"___path.static.skin___/js/comments.js",
+	"___path.static.skin___/js/blog.js",
+	"___path.static.skin___/js/user.js",
+	"___path.static.skin___/js/userfeed.js",
+	"___path.static.skin___/js/userfield.js",
+	"___path.static.skin___/js/stream.js",
+	"___path.static.skin___/js/toolbar.js",
+	"___path.static.skin___/js/settings.js",
+	"___path.static.skin___/js/topic.js",
+	"___path.static.skin___/js/hook.js",
+	"___path.static.skin___/js/template.js",
+	"___path.static.skin___/js/tabun.js",
+	"___path.static.skin___/js/hidecomments.js",
+];
 
-// Ограничение на вывод числа друзей пользователя на странице его профиля
-$config['module']['user']['friend_on_profile']    = 18;
-
-$config['view']['theme'] = 'default';
-
-
-/* Grid type:
- * 
- * fluid - резина
- * fixed - фиксированная ширина
- */
-$config['view']['grid']['type'] = 'fixed';
-
-/* Fluid settings */
-$config['view']['grid']['fluid_min_width'] = 976; // Min - 976px
-$config['view']['grid']['fluid_max_width'] = 1300;
-
-/* Fixed settings */
-$config['view']['grid']['fixed_width'] = 976;
-
-
-$config['head']['default']['js'] = Config::Get('head.default.js');
-$config['head']['default']['js'][] = '___path.static.skin___/js/template.js';
-
-$config['head']['default']['css'] = array(
+$config['head']['default']['css'] = [
+	"___path.static.skin___/css/temp/helpers.css",
+	"___path.static.skin___/css/temp/text.css",
+	"___path.static.skin___/css/temp/buttons.css",
 	"___path.static.skin___/css/reset.css",
 	"___path.static.skin___/css/base.css",
-	"___path.root.engine_lib___/external/jquery/markitup/skins/synio/style.css",
-	"___path.root.engine_lib___/external/jquery/markitup/sets/synio/style.css",
-	"___path.root.engine_lib___/external/jquery/jcrop/jquery.Jcrop.css",
-	"___path.root.engine_lib___/external/prettify/prettify.css",
+	"___path.static.skin___/js/vendor/markitup/skins/synio/style.css",
+	"___path.static.skin___/js/vendor/markitup/sets/synio/style.css",
+	"___path.static.skin___/js/vendor/jcrop/jquery.Jcrop.css",
 	"___path.static.skin___/css/grid.css",
 	"___path.static.skin___/css/common.css",
 	"___path.static.skin___/css/text.css",
@@ -50,14 +66,13 @@ $config['head']['default']['css'] = array(
 	"___path.static.skin___/css/modals.css",
 	"___path.static.skin___/css/blog.css",
 	"___path.static.skin___/css/profile.css",
-	"___path.static.skin___/css/wall.css",
 	"___path.static.skin___/css/infobox.css",
 	"___path.static.skin___/css/jquery.notifier.css",
 	"___path.static.skin___/css/smoothness/jquery-ui.css",
-	"___path.static.skin___/themes/___view.theme___/style.css",
+	"___path.static.skin___/css/style.css",
 	"___path.static.skin___/css/print.css",
-);
-
+	"___path.static.skin___/css/mobile-styles.css",
+];
 
 return $config;
 ?>

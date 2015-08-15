@@ -1,16 +1,5 @@
-/* -------------------------------------------------------------------
-
-	ИКОНКИ 
-	
-	Иконки Glyphicons
-	http://glyphicons.com/
-
-	
-	Пример использования:
-	
-	<a href="#"><i class="icon icon-remove"></i> Remove</a>
-
-------------------------------------------------------------------- */
+/*  Иконки Glyphicons - http://glyphicons.com/	
+	Пример использования: <a href="#"><i class="icon icon-remove"></i> Remove</a> */
 
 [class^="icon-"],
 [class*=" icon-"]  { 
@@ -96,7 +85,6 @@
 .icon-adjust             { background-position: -48px  -72px; }
 .icon-tint               { background-position: -72px  -72px; }
 .icon-edit               { background-position: -96px  -72px; }
-.icon-share              { background-position: -120px -72px; }
 .icon-check              { background-position: -144px -72px; }
 .icon-move               { background-position: -168px -72px; }
 .icon-step-backward      { background-position: -192px -72px; }
@@ -126,7 +114,6 @@
 .icon-arrow-right        { background-position: -264px -96px; }
 .icon-arrow-up           { background-position: -289px -96px; }
 .icon-arrow-down         { background-position: -312px -96px; }
-.icon-share-alt          { background-position: -336px -96px; }
 .icon-resize-full        { background-position: -360px -96px; }
 .icon-resize-small       { background-position: -384px -96px; }
 .icon-plus               { background-position: -408px -96px; }
@@ -224,16 +211,5 @@
 .icon-synio-vote-info-zero			{ width: 16px; height: 16px; background-position: -99px -71px; }
 .icon-synio-vote-info-view			{ width: 16px; height: 16px; background-position: -179px -39px; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+.semi-private { display:inline-block; width: 23px; height: 23px; background:transparent url('../images/half-lock.png') no-repeat 0 0; position: relative; top: -1px; vertical-align: middle;}
+i.icon-synio-topic-private {background:transparent url('../images/lock.png') no-repeat 0 0;}

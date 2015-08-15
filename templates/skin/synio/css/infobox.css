@@ -1,6 +1,4 @@
-/* --------------------------------------------
-	ВСПЛЫВАЮЩИЕ ПОДСКАЗКИ
--------------------------------------------- */
+/* ВСПЛЫВАЮЩИЕ ПОДСКАЗКИ */
 
 .infobox {
 	visibility: hidden;
@@ -32,7 +30,7 @@
 .infobox.infobox-standart .tip-arrow 	{ border-color: rgba(0,0,0,.8); }
 
 /* Yellow */
-.infobox.infobox-yellow 				{ background: #fffea8; color: #3e3e16; border-radius: 10px; padding: 15px 20px; font-size: 11px; line-height: 16px; -webkit-box-shadow: 0 0 15px rgba(0,0,0,.3); box-shadow: 0 0 15px rgba(0,0,0,.3); }
+.infobox.infobox-yellow 				{ background: #fffea8; color: #3e3e16; border-radius: 10px; padding: 15px 20px; font-size: 11px; line-height: 16px;}
 .infobox.infobox-yellow .tip-arrow 		{ border-color: #fffea8; }
 
 /* Topic */
@@ -51,9 +49,3 @@
 .infobox.infobox-help .blog-info li strong 			{ background: #fff; }
 .infobox.infobox-help .infobox-topic 				{ color: #727a90; font-size: 11px; }
 .infobox.infobox-help .infobox-actions 				{ font-size: 11px; }
-
-/* Share */
-.infobox.infobox-share 								{ background: #fff; width: 300px; border: 3px solid #edf8fd; color: #000; border-radius: 10px; padding: 10px 15px; font-size: 12px; line-height: 18px; -webkit-box-shadow: 0 0 15px rgba(0,0,0,.3); box-shadow: 0 0 15px rgba(0,0,0,.3); }
-.infobox.infobox-share .tip-arrow 					{ border: none; width: 15px; height: 11px; background: url(../images/icons-synio.png) no-repeat; }
-.infobox.infobox-share .tip-arrow.tip-arrow-top 	{ background-position: -38px -107px; top: -11px; left: 50%; margin-left: -7px;  }
-.infobox.infobox-share .tip-arrow.tip-arrow-bottom 	{ background-position: -53px -107px; bottom: -11px; left: 50%; margin-left: -7px;  }

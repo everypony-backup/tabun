@@ -1,6 +1,11 @@
-/* -------------------------------------------------------------------
-	ФОРМЫ
-------------------------------------------------------------------- */
+/* ФОРМЫ */
+
+button,
+input,
+select,
+textarea {
+	font-family: Verdana, sans-serif;
+}
 
 .input-text {
 	width: 150px;
@@ -61,16 +66,19 @@ dl.form-item dd { float: left; width: 250px; }
 .form-profile .avatar-change img { width: 80px; vertical-align: top; }
 .form-profile .avatar-change a { color: #727a90; border-color: #727a90; }
 
+
 /* Placeholder */
-:-moz-placeholder { color: #aaa; }
-.placeholder { color: #aaa; }
+:-moz-placeholder           { color: #aaa; }
+::-webkit-input-placeholder { color: #aaa; }
+
+/* IE placeholder */
+.placeholder                { color: #aaa; }
 
 
 .mceEditor { display: block; margin-bottom: 20px; }
 
 
-/* Registration form
----------------------------------------------------- */
+/* Registration form */
 .registration-form .form-item:last-child 							{ margin-bottom: 0; }
 .registration-form dl.form-item dd									{ position: relative; width: 355px; }
 .registration-form dl.form-item dd .form-item-help 					{ width: 100px; height: 20px; position: absolute; top: 1px; right: 0; }
@@ -79,8 +87,7 @@ dl.form-item dd { float: left; width: 250px; }
 .registration-form dl.form-item dd .form-item-help i.icon-ok-green 	{ position: absolute; top: 3px; right: 0; }
 
 
-/* Валидатор 
----------------------------------------------------------------*/
+/* Валидатор */
 .validate-error-hide { display: none; }
 .validate-error-show { 	
 	display: block;
@@ -95,4 +102,3 @@ dl.form-item dd { float: left; width: 250px; }
 	-webkit-box-shadow: 0 1px 5px #e8e8c0 inset; box-shadow: 0 1px 5px #e8e8c0 inset; 
 }
 .validate-error-show:before 	{ display: block; content: ""; position: absolute; top: -12px; left: 15px; width: 0; height: 0; border-width: 6px; border-color: transparent transparent #F2F2DD transparent; border-style: solid; }
-
