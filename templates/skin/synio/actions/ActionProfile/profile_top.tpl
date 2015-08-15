@@ -26,13 +26,13 @@
 																	{if ($oUserCurrent && $oUserProfile->getId() == $oUserCurrent->getId()) || !$oUserCurrent}
 																		vote-nobuttons
 																	{/if}">
-			<div class="vote-item vote-down" onclick="return ls.vote.vote({$oUserProfile->getId()},this,-1,'user');"><span><i></i></span></div>
-			<div class="vote-item vote-count" title="{$aLang.user_vote_count}: {$oUserProfile->getCountVote()}">
+			<div class="vote-item vote-up" onclick="return ls.vote.vote({$oUserProfile->getId()},this,1,'user');"><span><i></i></span></div>
+			<div class="vote-item vote-count">
 				<span id="vote_total_user_{$oUserProfile->getId()}">{if $oUserProfile->getRating() > 0}+{/if}{$oUserProfile->getRating()}</span>
 			</div>
-			<div class="vote-item vote-up" onclick="return ls.vote.vote({$oUserProfile->getId()},this,1,'user');"><span><i></i></span></div>
+			<div class="vote-item vote-down" onclick="return ls.vote.vote({$oUserProfile->getId()},this,-1,'user');"><span><i></i></span></div>
 		</div>
-		<div class="vote-label">{$aLang.user_rating}</div>
+		<div class="vote-label">{$aLang.user_vote_count}: {$oUserProfile->getCountVote()}</div>
 	</div>
 	
 	<div class="strength">
