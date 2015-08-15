@@ -1070,7 +1070,7 @@ return array(
 	'system_error' => 'Системная ошибка, повторите позже',
 	'exit' => 'Выход',
 	'need_authorization' => 'Необходимо авторизоваться!',
-	'or' => 'или',
+	'or_' => 'или',
 	'window_close' => 'закрыть',
 	'not_access' => 'Нет доступа',
 	'install_directory_exists' => 'Для работы с сайтом удалите директорию /install.',

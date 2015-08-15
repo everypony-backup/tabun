@@ -1062,7 +1062,7 @@ return array(
 	'system_error' => 'System error. Please try later.',
 	'exit' => 'Exit',
 	'need_authorization' => 'Please login!',
-	'or' => 'or',
+	'or_' => 'or',
 	'window_close' => 'close',
 	'not_access' => 'No access',
 	'install_directory_exists' => 'To continue your work with portal please delete /install directory.',
