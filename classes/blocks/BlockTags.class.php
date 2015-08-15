@@ -34,7 +34,7 @@ class BlockTags extends Block {
 		 * Расчитываем логарифмическое облако тегов
 		 */
 		if ($aTags) {
-			$this->Tools_MakeCloud($aTags);
+			$aTags = func_make_cloud($aTags);
 			/**
 			 * Устанавливаем шаблон вывода
 			 */
@@ -49,7 +49,7 @@ class BlockTags extends Block {
 			 * Расчитываем логарифмическое облако тегов
 			 */
 			if ($aTags) {
-				$this->Tools_MakeCloud($aTags);
+				$aTags = func_make_cloud($aTags);
 				/**
 				 * Устанавливаем шаблон вывода
 				 */

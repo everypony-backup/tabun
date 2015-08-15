@@ -40,7 +40,7 @@ class BlockTagsFavouriteTopic extends Block {
 			/**
 			 * Расчитываем логарифмическое облако тегов
 			 */
-			$this->Tools_MakeCloud($aTags);
+			$aTags = func_make_cloud($aTags);
 			/**
 			 * Устанавливаем шаблон вывода
 			 */
@@ -52,7 +52,7 @@ class BlockTagsFavouriteTopic extends Block {
 			/**
 			 * Расчитываем логарифмическое облако тегов
 			 */
-			$this->Tools_MakeCloud($aTags);
+			$aTags = func_make_cloud($aTags);
 			/**
 			 * Устанавливаем шаблон вывода
 			 */

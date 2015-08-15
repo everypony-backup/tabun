@@ -33,7 +33,7 @@ class BlockTagsCountry extends Block {
 		/**
 		 * Формируем облако тегов
 		 */
-		$this->Tools_MakeCloud($aCountries);
+		$aCountries = func_make_cloud($aCountries);
 		/**
 		 * Выводим в шаблон
 		 */
