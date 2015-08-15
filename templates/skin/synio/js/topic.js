@@ -20,9 +20,8 @@ ls.topic = (function ($) {
 		});
 	};
 
-	this.insertImageToEditor = function(sUrl,sAlign,sTitle) {
-		sAlign=sAlign=='center' ? 'class="image-center"' : 'align="'+sAlign+'"';
-		$.markItUp({replaceWith: '<img src="'+sUrl+'" title="'+sTitle+'" '+sAlign+' />'} );
+	this.insertImageToEditor = function(sUrl,sTitle) {
+		$.markItUp({replaceWith: '<img src="'+sUrl+'" title="'+sTitle+'" />'} );
 		$('#window_upload_img').find('input[type="text"]').val('');
 		$('#window_upload_img').jqmHide();
 		return false;
