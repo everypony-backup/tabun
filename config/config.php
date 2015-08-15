@@ -68,7 +68,7 @@ $config['path']['smarty']['template'] = '___path.root.server___/templates/skin/_
 $config['path']['smarty']['compiled'] = '___path.root.server___/templates/compiled';
 $config['path']['smarty']['cache'] = '___path.root.server___/templates/cache';
 $config['path']['smarty']['plug'] = '___path.root.engine___/modules/viewer/plugs';
-$config['smarty']['compile_check'] = false; // Проверять или нет файлы шаблона на изменения перед компиляцией, false может значительно увеличить быстродействие, но потребует ручного удаления кеша при изменения шаблона
+$config['smarty']['compile_check'] = true; // Проверять или нет файлы шаблона на изменения перед компиляцией, false может значительно увеличить быстродействие, но потребует ручного удаления кеша при изменения шаблона
 /**
  * Настройки плагинов
  */
@@ -351,7 +351,6 @@ $config['block']['rule_index_blog'] = [
     'action' => ['index', 'blog' => ['{topics}', '{topic}', '{blog}']],
     'blocks' => [
         'right' => ['sidetop', 'search', 'stream', 'donate', 'herdmind', 'blogs'],
-        'clear' => false,
     ]
 ];
 $config['block']['rule_topic_type'] = [
@@ -392,7 +391,6 @@ $config['block']['userfeedUsers'] = [
 $config['block']['rule_blog_info'] = [
     'action' => ['blog' => ['{topic}']],
     'blocks' => ['right' => ['blog']],
-    'clear' => false,
 ];
 
 /**

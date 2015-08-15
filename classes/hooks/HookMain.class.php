@@ -46,10 +46,6 @@ class HookMain extends Hook {
 		if (!$oUserCurrent and Config::Get('general.close') and Router::GetAction()!='registration' and Router::GetAction()!='login') {
 			Router::Action('login');
 		}
-		/**
-		 * Запуск обработки сборщика
-		 */
-		$this->Ls_SenderRun();
 	}
 }
 ?>
