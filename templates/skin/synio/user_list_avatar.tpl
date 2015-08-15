@@ -4,7 +4,7 @@
 			{assign var="oSession" value=$oUserList->getSession()}
 			
 			<li>
-				<a href="{$oUserList->getUserWebPath()}"><img src="{$oUserList->getProfileAvatarPath(48)}" alt="{$oUserList->getLogin()}" class="avatar" />{$oUserList->getLogin()}</a>
+				<a href="{$oUserList->getUserWebPath()}"><img src="{$oUserList->getProfileAvatarPath(48)}" class="avatar" />{$oUserList->getLogin()}</a>
 			</li>
 		{/foreach}
 	</ul>
