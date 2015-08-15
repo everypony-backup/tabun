@@ -21,7 +21,7 @@
 			{assign var="oTalkUserAuthor" value=$oTalk->getTalkUser()}
 			<tr>
 				<td class="cell-favourite">
-					<a href="#" onclick="return ls.favourite.toggle({$oTalk->getId()},this,'talk');" class="favourite {if $oTalk->getIsFavourite()}active{/if}"></a>
+					<a href="#" onclick="return ls.favourite.toggle({$oTalk->getId()},this,'talk');" class="favourite {if $oTalk->getIsFavourite()}active{/if}">В избранное</a>
 				</td>
 				<td>
 					{foreach from=$oTalk->getTalkUsers() item=oTalkUser name=users}

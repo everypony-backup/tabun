@@ -17,7 +17,6 @@
 				<tr>
 					<th class="cell-checkbox"><input type="checkbox" name="" class="input-checkbox" onclick="ls.tools.checkAll('form_talks_checkbox', this, true);"></th>
 					<th class="cell-recipients">{$aLang.talk_inbox_target}</th>
-					<th class="cell-favourite">&nbsp;</th>
 					<th class="cell-title">{$aLang.talk_inbox_title}</th>
 					<th class="cell-date ta-r">{$aLang.talk_inbox_date}</th>
 				</tr>
@@ -42,9 +41,6 @@
 								{/foreach}
 							{/strip}
 						</td>
-						<td class="cell-favourite">
-							<a href="#" onclick="return ls.favourite.toggle({$oTalk->getId()},this,'talk');" class="favourite {if $oTalk->getIsFavourite()}active{/if}"></a>
-						</td>
 						<td class="cell-title">
 							{strip}
 								<a href="{router page='talk'}read/{$oTalk->getId()}/" class="js-title-talk" title="{$oTalk->getTextLast()|strip_tags|truncate:100:'...'|escape:'html'}">
@@ -66,7 +62,9 @@
 								<i class="icon-synio-arrow-left"></i>
 							{/if}
 						</td>
-						<td class="cell-date ta-r">{date_format date=$oTalk->getDate() format="j F Y"}</td>
+						<td class="cell-date ta-r">
+						{date_format date=$oTalk->getDate() format="j F Y"}<br/>
+						<a href="#" onclick="return ls.favourite.toggle({$oTalk->getId()},this,'talk');" class="favourite {if $oTalk->getIsFavourite()}active{/if}">{if $oTalk->getIsFavourite()}Удалить из избранного{else}В избранное{/if}</a></td>
 					</tr>
 				{/foreach}
 			</tbody>
