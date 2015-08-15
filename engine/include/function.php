@@ -499,15 +499,13 @@ function func_make_cloud($aCollection,$iMinSize=1,$iMaxSize=10) {
  * Преобразует спец символы в html последовательнось, поведение
  * аналогично htmlspecialchars, кроме преобразования амперсанта "&"
  *
- * @param string|array $data
+ * @param string $data
  * @return string
  */
-function func_urlspecialchars(&$data) {
+function func_urlspecialchars($data) {
     if (is_string($data)) {
         $aTable = get_html_translation_table();
         unset($aTable['&']);
-        $data = strtr($data, $aTable);
-    } elseif (is_array($data)) {
-        array_walk($data, __FUNCTION__);
+        return strtr($data, $aTable);
     }
 }
