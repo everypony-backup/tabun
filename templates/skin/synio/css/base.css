@@ -102,7 +102,7 @@ vertical-align:bottom;
 display:inline-block;
 bottom:-3px;
 position:relative;
-background:url("http://tabun.everypony.ru/templates/skin/synio/images/icons-synio.png") no-repeat scroll -294px -23px transparent;
+background:url("../images/icons-synio.png") no-repeat scroll -294px -23px transparent;
 }
 #down-switch { background-position:-294px -148px; }
 #down-switch:hover { background-position:-294px -123px; }

@@ -69,10 +69,8 @@ $config['head']['default']['css'] = [
 	"___path.static.skin___/css/infobox.css",
 	"___path.static.skin___/css/jquery.notifier.css",
 	"___path.static.skin___/css/smoothness/jquery-ui.css",
-	"___path.static.skin___/css/style.css",
 	"___path.static.skin___/css/print.css",
 	"___path.static.skin___/css/mobile-styles.css",
 ];
 
 return $config;
-?>
