@@ -23,12 +23,11 @@ module.exports =
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
       {test: /.*\.(gif|png|jpg|jpeg|svg)$/, loaders: ['file?name=img/[hash:4].[ext]', 'image-webpack?optimizationLevel=7&interlaced=false']}
-      {test: /.*\.(eot|woff2|woff|ttf)/, loader: 'file?font/[hash:8].[ext]'}
     ]
 
   resolve:
     alias:
-      jquery: './jquery.coffee'
+      jquery: path.join __dirname, 'frontend', 'scripts', 'jquery.coffee'
     extensions: ['', '.coffee', '.js', '.styl', '.css']
 
   plugins: [
