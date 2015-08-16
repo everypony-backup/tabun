@@ -9,7 +9,19 @@
  * 
  * $Version: 03/01/2009 +r14
  */
-(function ($) {
+
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // Node/CommonJS
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     $.fn.jqm = function (o) {
         var p = {
             overlay: 50,
@@ -140,7 +152,7 @@
     var s = 0,
         H = $.jqm.hash,
         A = [],
-        ie6 = $.browser.msie && ($.browser.version == "6.0"),
+        ie6 = false,
         F = false,
         i = $('<iframe src="javascript:false;document.write(\'\');" class="jqm"></iframe>').css({
             opacity: 0
@@ -182,4 +194,4 @@
                 });
             });
         };
-})(jQuery);
+}));
