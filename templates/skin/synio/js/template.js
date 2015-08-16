@@ -1,20 +1,4 @@
 jQuery(document).ready(function($){
-	// Хук начала инициализации javascript-составляющих шаблона
-	ls.hook.run('ls_template_init_start',[],window);
-
-	$('html').removeClass('no-js');
-
-	// Всплывающие окна
-	$('#window_login_form').jqm();
-	$('#blog_delete_form').jqm({trigger: '#blog_delete_show', toTop: true});
-	$('#add_friend_form').jqm({trigger: '#add_friend_show', toTop: true});
-	$('#window_upload_img').jqm();
-	$('#userfield_form').jqm();
-	$('#favourite-form-tags').jqm();
-	$('#modal_write').jqm({trigger: '.js-write-window-show'});
-	$('#foto-resize').jqm({modal: true, toTop: true});
-	$('#avatar-resize').jqm({modal: true, toTop: true});
-	$('#userfield_form').jqm({toTop: true});
 
 	$('.js-registration-form-show').click(function(){
 		if (ls.blocks.switchTab('registration','popup-login')) {
@@ -54,14 +38,6 @@ jQuery(document).ready(function($){
 		}
 		return false;
 	});
-
-
-	// Автокомплит
-	ls.autocomplete.add($(".autocomplete-tags-sep"), aRouter['ajax']+'autocompleter/tag/', true);
-	ls.autocomplete.add($(".autocomplete-tags"), aRouter['ajax']+'autocompleter/tag/', false);
-	ls.autocomplete.add($(".autocomplete-users-sep"), aRouter['ajax']+'autocompleter/user/', true);
-	ls.autocomplete.add($(".autocomplete-users"), aRouter['ajax']+'autocompleter/user/', false);
-
 
 	// Скролл
 	$(window)._scrollable();
@@ -142,14 +118,6 @@ jQuery(document).ready(function($){
 			$('.js-block-'+block+'-dropdown-items').css({ 'top': $('.js-block-'+block+'-dropdown-trigger').offset().top + 25 });
 		}
 	});
-
-	// инизиализация блоков
-	ls.blocks.init('stream',{group_items: true, group_min: 3});
-	ls.blocks.init('blogs');
-	ls.blocks.initSwitch('tags');
-	ls.blocks.initSwitch('upload-img');
-	ls.blocks.initSwitch('favourite-topic-tags');
-	ls.blocks.initSwitch('popup-login');
 
 	// комментарии
 	ls.comments.init();
@@ -355,8 +323,6 @@ jQuery(document).ready(function($){
 		$('.talk-search').toggleClass('opened'); return false;
 	};
 
-	ls.blocks.options.loader = DIR_STATIC_SKIN + '/images/loader-circle.gif';
-
 	ls.blog.toggleInfo = function() {
 		if ($('#blog-mini').is(':visible')) {
 			$('#blog-mini').hide();
@@ -374,11 +340,7 @@ jQuery(document).ready(function($){
 		className: 'infobox-help',
 		offsetX: -16
 	});
-	ls.infobox.sTemplateProcess=['<div class="infobox-process"><img src="'+DIR_STATIC_SKIN+'/images/loader-circle.gif" />', '</div>'].join('');
-
-
-	// Хук конца инициализации javascript-составляющих шаблона
-	ls.hook.run('ls_template_init_end',[],window);
+	//ls.infobox.sTemplateProcess=['<div class="infobox-process"><img src="'+DIR_STATIC_SKIN+'/images/loader-circle.gif" />', '</div>'].join('');
 });
 
 

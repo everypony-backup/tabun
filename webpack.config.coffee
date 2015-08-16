@@ -4,13 +4,18 @@ webpack = require 'webpack'
 pkginfo = require "./package.json"
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 
+aliases =
+  "jquery.jqmodal": path.join __dirname, 'frontend', 'vendor', 'jquery.jqmodal.js'
+  "jquery.ui": path.join __dirname, 'frontend', 'vendor', 'jquery.ui.js'
+  "jquery.form": path.join __dirname, 'frontend', 'vendor', 'jquery.form.js'
+
 module.exports =
   context: path.join __dirname, 'frontend'
   cache: true
 
   entry:
     main: "./main"
-    vendor: keys(pkginfo.dependencies)
+    vendor: keys(aliases).concat keys(pkginfo.dependencies)
 
   output:
     path: path.join __dirname, 'static'
@@ -26,8 +31,7 @@ module.exports =
     ]
 
   resolve:
-    alias:
-      jquery: path.join __dirname, 'frontend', 'scripts', 'jquery.coffee'
+    alias: aliases
     extensions: ['', '.coffee', '.js', '.styl', '.css']
 
   plugins: [
