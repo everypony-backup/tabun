@@ -1,0 +1,579 @@
+body
+  min-width 800px
+  font-size 12px
+  font-family Arial, sans-serif
+  line-height 18px
+  color #333
+  background url(images/body-bg.png) repeat scroll 0 0 #FFFFFF
+
+br
+  &.clear
+    clear both
+
+a
+  color #0099FF
+  &:hover
+    color #f00
+
+.text
+  a
+    &:visited
+      color #1D2273
+
+.spoiler-body
+  display none
+  padding 5px
+
+.spoiler-title
+  background #F7F7F7
+  border 1px solid #E6E6E6
+  border-radius 3px
+  padding 3px
+  cursor pointer
+  display inline-block
+
+.spoiler
+  display block
+  padding 5px
+  & + br
+    display none
+
+.spoiler-gray
+  background-color #CCC
+  color #CCC
+  &:hover
+    background-color transparent
+    color #666
+    a
+      background-color transparent
+      color #0099FF
+
+.spoiler-gray a, .spoiler-gray a:visited
+  color #ccc
+
+h1, h2, h3, h4, h5, h6
+  color #444
+
+textarea
+  &.markItUpEditor
+    height 300px
+
+div
+  &.markItUpHeader
+    padding 5px 0
+
+.markItUpFooter
+  padding 0
+  height 100%
+
+.comment-content
+  .text
+    img
+      vertical-align bottom
+
+.generator
+  .list
+    .list-item
+      padding-left 0
+
+#popup-password
+  margin-bottom 12px
+
+#running_ponies
+  max-height 60px
+  overflow hidden
+  width 100%
+  margin-bottom 10px
+
+#widemode
+  background-color #FFFFFF
+  border-radius 10px 0 0 0
+  bottom 0
+  padding 7px 1px 10px 18px
+  position fixed
+  right 0
+  z-index 100
+  border 1px solid #CCCCCC
+  a
+    text-decoration underline
+    cursor pointer
+    margin-right 10px
+    &:hover
+      text-decoration none
+
+a[title="Читать дальше"]
+    background-color #EEEEEE
+    border 1px dashed #999999
+    display inline-block
+    padding 6px 10px
+
+#up-switch, #down-switch
+  display inline-block
+  width 25px
+  height 25px
+  vertical-align bottom
+  bottom -3px
+  position relative
+  background url(images/icons-synio.png) no-repeat scroll -294px -23px transparent
+
+#down-switch
+  background-position -294px -148px
+  &:hover
+    background-position -294px -123px
+
+#up-switch
+  &:hover
+    background-position -294px -48px
+
+h2
+  &.page-header
+    color #333
+    font-size 27px
+    line-height 1em
+    font-weight normal
+    margin-bottom 10px
+    span
+      color #aaa
+    i
+      vertical-align middle
+  &.header-table
+    margin-bottom 10px
+    font-size 22px
+    font-weight normal
+    a
+      color #275ec2
+    span
+      color #949aa1
+
+#header
+  .site-name
+    font-size 25px
+    line-height 1em
+    float left
+    padding-top 11px
+    margin-right 30px
+    margin-left 18px
+    a
+      color #fff
+      text-decoration none
+      &:hover
+        color #eee
+  .new-messages
+    position relative
+    top -3px
+    color #fff
+    padding 3px
+    border-radius 50%
+    background-color green
+    font-weight bold
+    font-size 14px
+    text-decoration none
+    i
+      position relative
+      top -1px
+  .dropdown-user
+    line-height 22px
+    padding-right 74px
+    text-align right
+    float right
+    margin-top -42px
+    &.opened
+      background #1d1d1d
+    .dropdown-user-trigger
+      text-decoration underline
+      cursor pointer
+    .username
+      font-size 15px
+      text-decoration underline
+      white-space nowrap
+      display inline-block
+      font-weight bold
+      &:hover
+        color #aaa
+    .avatar
+      border 1px solid #CCC
+      border-radius 5px
+      width 64px
+      height 64px
+      margin 0 -74px 0 0
+      float right
+  .auth
+    float right
+    height 28px
+    font-size 18px
+    margin-top -35px
+    li
+      float left
+      margin-left 23px
+
+.mozilla
+  #header
+    .new-messages
+      i
+        top 0
+
+.dropdown-user-menu
+  list-style-type none
+  li
+    display inline-block
+    margin-left 5px
+    &.item-stat
+      .rating
+        &.negative
+          color #666
+        i
+          position relative
+          top 2px
+      .strength
+        color #666
+        margin-right 8px
+      .arrow
+        position relative
+        top 3px
+      .icon-synio-star-small
+        position relative
+        top 2px
+      .icon-synio-strength
+        position relative
+        top 1px
+
+  .dropdown-user-menu
+    li
+      &.item-stat
+        .rating
+          color #666
+      &.item-messages
+        .new
+          position absolute
+          top 15px
+          right 7px
+          cursor pointer
+          color #fff
+          border-radius 15px
+          border 2px solid #eabe21
+          line-height 1em
+          padding 2px 7px 3px
+
+#footer
+  .copyright
+    float right
+    width 255px
+    .design-by
+      overflow hidden
+      line-height 15px
+      margin-top 30px
+      img
+        float left
+        margin-right 10px
+        margin-top 3px
+      div
+        font-size 10px
+        color #8b9191
+        margin-top 1px
+  a
+    color #000
+    &:hover
+      color #333
+  .footer-list
+    float left
+    width 138px
+    padding-right 20px
+    li
+      margin-bottom 3px
+    .footer-list-header
+      font-size 12px
+      font-weight bold
+      margin-bottom 11px
+    a
+      color #4c4c4c
+
+.button-write
+  color #DA5252
+
+.block-type-pseudomenu
+  margin-bottom 0!important
+  ul
+    font-size 18px
+    list-style-type none
+    li
+      padding-right 12px
+      display inline-block
+
+.block
+  &.block-type-search
+    margin-bottom 0
+    padding 8px
+
+.search-header
+  display inline-block
+  width 100%
+  .search-header-form
+    position relative
+    .input-text
+      padding 4px 25px 4px 5px
+      width 100%
+    .input-submit
+      position absolute
+      top 5px
+      right 5px
+      width 16px
+      height 16px
+      border none
+      background url(images/icons-synio.png) -115px -55px no-repeat
+
+.stat-performance
+  width 910px
+  margin 0 auto 20px
+  padding 15px 20px
+  background #fff
+  border-top 1px solid #eee
+  border-bottom 1px solid #eee
+  table
+    td
+      width 200px
+      vertical-align top
+  h4
+    font-weight bold
+
+.userfeed-get-more
+  display block
+  width 90%
+  margin 0 auto
+  text-align center
+  height 2.5em
+  padding-top 1em
+  &:hover
+    background #f0f7fd
+
+.userfeed_loading
+  background #F7F7F7 url(images/loader.gif) no-repeat center
+
+.stream-get-more
+  margin-top 50px
+  border-radius 5px
+  display block
+  text-align center
+  padding 12px 0
+  color #258fa7
+  text-decoration none
+  background #eefbfc
+  background -moz-linear-gradient(top,  #eefbfc 0%, #d3edf8 100%)
+  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eefbfc), color-stop(100%,#d3edf8))
+  background -webkit-linear-gradient(top,  #eefbfc 0%,#d3edf8 100%)
+  background -o-linear-gradient(top,  #eefbfc 0%,#d3edf8 100%)
+  background -ms-linear-gradient(top,  #eefbfc 0%,#d3edf8 100%)
+  background linear-gradient(top,  #eefbfc 0%,#d3edf8 100%)
+  &:hover
+    background #eefbfc
+    color #258fa7
+  &.loader
+    background-image url(images/loader.gif)
+    background-repeat no-repeat
+    background-position 50% 50%
+
+.stream_loading
+  background #f7f7f7 url(images/loader.gif) no-repeat center
+
+.stream-comment-preview
+  position relative
+  padding 5px 10px 6px
+  background #fefef1
+  color #363636
+  margin-top 13px
+  font-size 11px
+  border-radius 3px
+  -webkit-box-shadow 0 2px 4px #e8e8c0 inset
+  box-shadow 0 2px 4px #e8e8c0 inset
+  &:after
+    display block
+    content ""
+    position absolute
+    top -12px
+    left 15px
+    width 0
+    height 0
+    border-width 6px
+    border-color transparent transparent #e8e8c0 transparent
+    border-style solid
+
+.stream-list
+  margin 0 0 20px
+  li
+    &.stream-item
+      min-height 36px
+      _height 36px
+      padding 0 0 16px 46px
+      position relative
+      font-size 14px
+      &:last-child
+        border none
+      .info
+        color #b9c2c2
+        font-size 11px
+        line-height 1em
+        margin-bottom 5px
+        a
+          color #275ec2
+        .date
+          color #818189
+      .avatar
+        position absolute
+        top 0
+        left 0
+        width 36px
+        height 36px
+      .user-avatar
+        margin-left 3px
+    &.stream-header-date
+      font-size 16px
+      color #999
+      margin-top 10px
+      margin-bottom 4px
+      padding-bottom 5px
+
+.content
+  h2
+    font-size 2em
+
+.userfield-list
+  width 450px
+  li
+    background #eee
+    margin-bottom 1px
+    padding 10px 10px
+    overflow hidden
+    zoom 1
+    line-height 12px
+    color #777
+    .userfield-actions
+      float right
+    .userfield_admin_name
+      font-weight bold
+      color #333
+
+.userfield-add
+  text-decoration none
+  border-bottom 1px dashed #70AAE0
+  &:hover
+    color #333
+    border-color #333
+
+.talk-search
+  padding 8px 15px
+  background #f8fbfe url(images/message-search.png) no-repeat 96% 180px
+  border-radius 5px
+  margin-bottom 15px
+  header
+    position relative
+    min-height 27px
+    .close
+      position absolute
+      top 3px
+      right 0
+      font-size 11px
+      cursor pointer
+  .talk-search-content
+    display none
+    padding-top 15px
+    border-top 1px solid #fff
+    p
+      margin-bottom 25px
+  &.opened
+    header
+      border-bottom 1px solid #e8eef5
+      padding-bottom 15px
+    .talk-search-content
+      display block
+  &.talk-friends
+    header
+      .close
+        left 0
+        right auto
+    .friend-list
+      margin-bottom 15px
+      font-weight bold
+      li
+        margin-bottom 5px
+
+.talk-blacklist-form
+  padding 15px
+  background #f8fbfe
+  border-radius 5px
+  margin-bottom 15px
+
+.avatar-edit
+  margin-bottom 15px
+  img
+    vertical-align bottom
+  label
+    margin-top 10px
+
+.drafts
+  float right
+  color #275ec2
+
+.content-error
+  h2
+    &.page-header
+      font-weight bold
+      font-size 30px
+      margin-bottom 35px
+  a
+    color #727a90
+    &:hover
+      color #f00
+
+.help
+  display none
+  position relative
+  padding 10px 7px 13px
+  background #fefef1
+  color #363636
+  margin-top 13px
+  font-size 11px
+  border-radius 3px
+  -webkit-box-shadow 0 0 5px #e8e8c0 inset
+  box-shadow 0 0 5px #e8e8c0 inset
+  &:before
+    display block
+    content ""
+    position absolute
+    top -12px
+    left 15px
+    width 0
+    height 0
+    border-width 6px
+    border-color transparent transparent #F2F2DD transparent
+    border-style solid
+  .help-col
+    float left
+    width 230px
+    padding 0 10px
+    &.help-wide
+      float none
+      width 96%
+  .help-item
+    margin-bottom 20px
+    &:last-child
+      margin-bottom 0
+    h4
+      font-family Verdana, sans-serif
+      font-size 11px
+      color #727a90
+      font-weight bold
+      a
+        color #727a90
+        border-bottom 1px dotted #727a90
+
+.link-dotted
+  &.help-link
+    font-size 11px
+    color #000
+    border-color #000
+
+.donate
+  text-align center
+  margin-bottom 22px
+  img
+    opacity 1
+

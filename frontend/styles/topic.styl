@@ -1,0 +1,208 @@
+.topic
+  margin-bottom 50px
+  &:last-child
+    margin-bottom 0
+
+.topic-info
+  .avatar
+    width 20px
+    height 20px
+    margin-bottom -5px
+
+.private-blog
+  background transparent url(images/lock.png) no-repeat 100% 0
+  padding-right 20px
+
+.topic-header
+  margin-bottom 8px
+  .topic-title
+    font-size 23px
+    line-height 1.1em
+    font-weight normal
+    a
+      &:hover
+        color #f00
+    i
+      position relative
+      top 9px
+      cursor help
+      margin-right 5px
+    .topic-info-vote
+      i
+        margin-right 0
+        top 0
+  .topic-info
+    color #777
+    time
+      margin-right 15px
+    .topic-blog
+      color #999
+      &:hover
+        color #666
+    .blog-list-info
+      position relative
+      top 5px
+  .topic-actions
+    padding 5px 10px
+    font-size 13px
+    overflow hidden
+    li
+      float left
+      margin-right 18px
+      &.draft
+        a
+          color #27964c
+      &.delete
+        a
+          color #da4242
+      i
+        margin-right 3px
+
+.topic-actions
+  .edit
+    margin-right 10px
+
+.topic-content
+  margin-bottom 8px
+  .topic-header
+    display none
+  &.text
+    color #333
+
+.topic-tags, .topic-tags a
+  margin 0
+  color #999
+
+.topic-tags
+  a
+    text-decoration underline
+    &:hover
+      text-decoration none
+    &.link-dotted
+      text-decoration none
+      &:hover
+        color #333
+        border-color #333
+  .topic-tags-edit
+    margin-left 20px
+  .topic-tags-user
+    a
+      color #139643
+
+.topic-footer
+  .topic-info
+    overflow hidden
+    line-height 11px
+    li
+      float left
+      padding 6px 11px 6px 0
+    .topic-info-author
+      padding-left 24px
+  .topic-info-author
+    .avatar
+      position absolute
+      margin -4px 0 0 0
+      left 0
+
+.topic-info-vote
+  padding 0
+  margin-right 0
+  overflow hidden
+  display inline-block
+  vertical-align bottom
+
+li
+  &.topic-info-date
+    color #7b848d
+  &.topic-info-comments
+    a
+      color #727fa0
+      float left
+      &:hover
+        color #f00
+      &.new
+        color #000
+    span
+      text-decoration underline
+      font-weight bold
+      &.count
+        color #27a736
+        text-decoration none
+    i
+      float left
+      margin-right 7px
+  &.topic-info-favourite
+    color #828a93
+    cursor pointer
+    .favourite
+      float left
+      text-decoration underline
+      font-style normal
+      &:hover
+        text-decoration none
+
+.poll
+  margin-bottom 15px
+  .poll-vote
+    margin-bottom 20px
+    margin-left 0
+    list-style-type none
+    li
+      margin-bottom 10px
+      &:last-child
+        margin-bottom 0
+      label
+        display inline
+      input
+        position relative
+        top 1px
+        margin-right 2px
+  .poll-result
+    list-style-type none
+    overflow hidden
+    li
+      margin-bottom 15px
+      dl
+        overflow hidden
+        zoom 1
+        dt
+          float left
+          width 80px
+          span
+            font-size 11px
+            color #aaa
+        dd
+          padding-left 80px
+          div
+            height 21px
+            overflow hidden
+            background #ccc url(images/poll.jpg) no-repeat 0 0
+  .poll-total
+    position relative
+    color #818189
+    font-size 11px
+    line-height 16px
+    padding-left 80px
+    margin-bottom 20px
+    .poll-sort
+      position absolute
+      top 2px
+      left 0
+      width 23px
+      height 23px
+      background url(images/icons-synio.png) -161px 0 no-repeat
+      cursor pointer
+      &.active
+        background-position -184px 0
+
+.topic-preview
+  margin-top 30px
+  .profile-page-header
+    border-top 1px solid #ddd
+  .topic
+    margin-bottom 20px
+
+.vote-topic-info
+  li
+    margin-bottom 3px
+

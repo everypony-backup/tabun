@@ -1,0 +1,30 @@
+{
+  "name": "tabun",
+  "version": "1.0.0",
+  "license": "GPLv3",
+  "author": "Andriy Kushnir (Orhideous)",
+  "description": "CMS for tabun.everypony.ru",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/Orhideous/tabun.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "~1.10.5",
+    "extract-text-webpack-plugin": "~0.8.2",
+    "coffee-script": "~1.9.3",
+    "coffee-loader": "~0.7.2",
+    "loader-utils": "~0.2.11",
+    "style-loader": "~0.12.3",
+    "css-loader": "~0.15.6",
+    "stylus-loader": "~1.2.1",
+    "file-loader": "~0.8.4",
+    "image-webpack-loader": "~1.6.1",
+    "path": "~0.11.14",
+    "lodash": "~3.10.1"
+  },
+  "scripts": {
+    "webpack": "webpack --config webpack.config.coffee --progress --profile --colors",
+    "clean": "rm -rf static/*"
+  }
+}

@@ -1,0 +1,284 @@
+.comments-header
+  margin-bottom 10px
+  position relative
+  h3
+    font-size 20px
+    margin-bottom 5px
+  .subscribe
+    position absolute
+    top 15px
+    right 0
+    font-size 11px
+    color #7b848d
+    input
+      top 2px
+
+.comments
+  margin-bottom 30px
+  &.comment-list
+    .comment
+      margin-bottom 12px
+      padding-left 0
+      .comment-content
+        margin-bottom 5px
+        &:after
+          top -12px
+          left 25px
+          border-color transparent transparent #e7ebed
+        &:before
+          top -11px
+          left 25px
+          border-color transparent transparent #fff
+      .comment-info
+        li
+          &.vote
+            .vote-count
+              margin-right 0
+    .comment-path
+      font-size 11px
+      color #a2b6cd
+      .comment-path-topic
+        color #275ec2
+
+.comment-wrapper
+  position relative
+  .comment-wrapper
+    padding-left 16px
+  .reply
+    margin-left 40px
+
+.comment-preview
+  padding 5px 10px 6px
+  margin-bottom 10px
+  background #fafafa
+  border 1px solid #eee
+  border-radius 3px
+  font-size 13px
+  line-height 1.6em
+
+#form_comment
+  margin-bottom 16px
+
+.comment
+  min-height 48px
+  padding 0 0 6px
+  position relative
+  background #fff
+  .deleted
+    padding 5px 10px
+    color #777
+    background #f4f4f4
+  .comment-avatar
+    position absolute
+    top 0
+    left 5px
+    width 20px
+    height 20px
+  .folding
+    width 13px
+    height 13px
+    position absolute
+    top 8px
+    left -16px
+    background url(images/icons-synio.png) 0 -94px no-repeat
+    cursor pointer
+    &.folded
+      background-position -13px -94px
+  &.comment-deleted
+    .comment-content
+      background #c5c5c5
+      border-color #C8A8A8
+      &:after
+        border-color #C8A8A8 transparent transparent
+      &:before
+        border-color #c5c5c5 transparent transparent
+  &.comment-self
+    .comment-content
+      background #fff
+      &:after
+        border-color #e6e6bd transparent transparent
+      &:before
+        border-color #fefef1 transparent transparent
+  &.comment-new
+    .comment-content
+      background #edf7ed
+      &:after
+        border-color #dddb5c transparent transparent
+      &:before
+        border-color #fff transparent transparent
+  &.comment-current
+    .comment-content
+      background #ffebeb
+      border-color #B17979
+      &:after
+        border-color #bae48e transparent transparent
+      &:before
+        border-color #cdf5a6 transparent transparent
+  .comment-info
+    li
+      &.comment-hide
+        a
+          color #CCC
+          cursor pointer
+  &.comment-hidden
+    .comment-info
+      .edit
+        display none
+  .comment-actions
+    li
+      display inline
+      margin-right 10px
+
+.comments.comment-list .comment-path .blog-name,
+.comments.comment-list .comment-path .comment-path-comments
+  color #000
+
+  .comment
+    &.comment-hidden
+      .comment-info
+        li
+          &.comment-hide
+            display none
+
+.ls-user-role-not-admin
+  .comment
+    &.comment-deleted
+      display none
+
+.comment-info
+  padding 0 70px 7px 0
+  line-height 12px
+  position relative
+  top -2px
+  overflow hidden
+  zoom 1
+  font-size 11px
+  li
+    float left
+    height 18px
+    padding-top 3px
+    margin-right 13px
+    &.comment-author
+      padding-left 30px
+      a
+        font-weight bold
+        color #444
+      &.comment-topic-author
+        a
+          color #4b5468
+    a
+      &.delete
+        color #ccc
+      &.link-dotted
+        color #09f
+        text-decoration none
+        border-bottom 1px dotted #09f
+        &:hover
+          color #f00
+          border-color #f00
+    &.comment-date
+      color #999
+    &.goto
+      a
+        color #a2b6cd
+        text-decoration none
+    .favourite-count
+      font-size 10px
+      color #a2b6cd
+      position relative
+      top -2px
+    &.vote
+      position absolute
+      top 0
+      right 0
+      margin 0
+      .vote-count
+        float left
+        color #949aa1
+        font-weight bold
+        font-size 12px
+        margin 0
+        padding 0
+        line-height 18px
+      .vote-down
+        float left
+        width 20px
+        height 20px
+        background url(images/down.png) 0 1px no-repeat
+        cursor pointer
+        margin-left 4px
+      .vote-up
+        float left
+        width 15px
+        height 20px
+        background url(images/up.png) 0 0 no-repeat
+        cursor pointer
+        margin-left 4px
+      &.vote-count-positive
+        .vote-count
+          color #51983c
+      &.vote-count-negative
+        .vote-count
+          color #da4242
+    &.goto-comment-child
+      display none
+
+div
+  &.favourite
+    text-decoration underline
+    color #999
+    &:hover
+      text-decoration none
+
+.comment-content
+  background-color #f7f7f7
+  margin-bottom 5px
+  border 1px solid #e7ebed
+  padding 5px 10px
+  border-radius 5px
+  position relative
+  &.text
+    font-size 13px
+    blockquote
+      background #fff
+      border-color #ccc
+      padding 5px 10px
+      margin 5px 0 5px 0
+      & + br
+        display none
+  &:after
+    display block
+    position absolute
+    bottom -12px
+    left 10px
+    width 0
+    height 0
+    border-width 6px
+    border-color #e7ebed transparent transparent
+    border-style solid
+  &:before
+    display block
+    position absolute
+    bottom -11px
+    left 10px
+    width 0
+    height 0
+    border-width 6px
+    border-color #fff transparent transparent
+    border-style solid
+    z-index 10
+
+.reply-header
+  font-size 20px
+  line-height 1.3em
+  margin-bottom 15px
+
+.reply
+  textarea
+    height 100px
+    &.loader
+      background #f7f7f7 url(images/loader.gif) no-repeat center
+  .mceEditor
+    display block
+    margin-bottom 10px
+

@@ -1,0 +1,151 @@
+.modal
+  display none
+  position fixed
+  top 25%
+  left 50%
+  width 300px
+  margin-left -150px
+  color #333
+  background-color #fbfcfc
+  border-radius 10px
+  -webkit-box-shadow 0 0 15px rgba(0,0,0,.5)
+  box-shadow 0 0 15px rgba(0,0,0,.5)
+  overflow hidden
+  .close
+    position absolute
+    top 7px
+    right 8px
+    width 16px
+    height 16px
+    background url(images/icons-synio.png) no-repeat -131px -39px
+    &:hover
+      background-position -131px -55px
+  .modal-header
+    padding 15px 30px 0
+    h3
+      font-size 20px
+      font-weight bold
+      margin-right 20px
+  .modal-content
+    padding 30px 30px
+  &.modal-login
+    width 450px
+    margin-left -225px
+    top 50px
+    .nav
+      margin-bottom 30px
+    .modal-header
+      margin-bottom 0
+    .modal-content
+      padding-top 15px
+    .remember-label
+      font-size 11px
+      color #6c7272
+      input
+        top 2px
+    .icon-question-sign
+      position relative
+      top -3px
+    .icon-ok-green
+      position relative
+      top -1px
+    .js-block-popup-login-content
+      .button
+        position relative
+        top -1px
+        margin-left 1px
+  &.modal-write
+    width 620px
+    margin-left -310px
+    top 70px
+    background #e0eff9
+    .modal-content
+      padding 20px 10px 20px
+    .write-list
+      overflow hidden
+      zoom 1
+      li
+        width 125px
+        margin 0 10px 20px
+        font-size 19px
+        text-align center
+        overflow hidden
+        display inline-table
+        *float left
+        a
+          color #727a90
+        &:hover
+          a
+            color #275ec2
+        .write-item-image
+          display block
+          margin 0 auto
+          width 115px
+          height 115px
+          border-radius 3px
+          text-align center
+          background url(images/write.png) no-repeat
+        &.write-item-type-draft
+          padding-right 20px
+          margin-right 0
+          border-right 1px dotted #aac6d9
+          .write-item-image
+            background-position -578px 0
+          &:hover
+            .write-item-image
+              background-position -578px -115px
+        &.write-item-type-topic
+          .write-item-image
+            background-position 0 0
+          &:hover
+            .write-item-image
+              background-position 0 -115px
+        &.write-item-type-poll
+          .write-item-image
+            background-position -115px 0
+          &:hover
+            .write-item-image
+              background-position -115px -115px
+        &.write-item-type-link
+          .write-item-image
+            background-position -230px 0
+          &:hover
+            .write-item-image
+              background-position -230px -115px
+        &.write-item-type-message
+          .write-item-image
+            background-position -345px 0
+          &:hover
+            .write-item-image
+              background-position -345px -115px
+        &.write-item-type-blog
+          .write-item-image
+            background-position -115px 0
+          &:hover
+            .write-item-image
+              background-position -115px -115px
+  &.modal-image-upload
+    width 500px
+    margin-left -250px
+
+.jqmOverlay
+  background-color #000
+
+*
+  html
+    .modal
+      position absolute
+
+.modal.modal-upload-photo .image-border, .modal.modal-upload-avatar .image-border
+  float left
+  border-radius 5px
+  background #fff
+  padding 5px
+  margin-bottom 15px
+  -webkit-box-shadow 0 0 5px rgba(0,0,0,.2)
+  box-shadow 0 0 5px rgba(0,0,0,.2)
+
+#avatar-resize-original-img
+  max-width 200px
+  width 100%
+

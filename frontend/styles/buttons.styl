@@ -1,0 +1,115 @@
+.button
+  display inline-block
+  padding 4px 12px
+  margin 0
+  text-align center
+  vertical-align middle
+  text-decoration none
+  font-size 14px
+  line-height 20px
+  text-shadow 0 1px 1px rgba(255, 255, 255, 0.75)
+  border 1px solid #ddd
+  border-radius 4px
+  color #333
+  background #fafafa
+  background -moz-linear-gradient(top,  #fff 0%, #e6e6e6 100%)
+  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(100%,#e6e6e6))
+  background -webkit-linear-gradient(top,  #fff 0%,#e6e6e6 100%)
+  background -o-linear-gradient(top,  #fff 0%,#e6e6e6 100%)
+  background -ms-linear-gradient(top,  #fff 0%,#e6e6e6 100%)
+  background linear-gradient(top,  #fff 0%,#e6e6e6 100%)
+  -webkit-box-shadow 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05)
+  -moz-box-shadow 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05)
+  box-shadow 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05)
+  cursor pointer
+  &:hover
+    text-decoration none
+    background #eee
+  &.button-primary
+    color #fff
+    text-shadow 0 -1px 0 rgba(0, 0, 0, 0.25)
+    border-color rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
+    background #006DCC
+    background -moz-linear-gradient(top,  #0088cc 0%, #0044cc 100%)
+    background -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0088cc), color-stop(100%,#0044cc))
+    background -webkit-linear-gradient(top,  #0088cc 0%,#0044cc 100%)
+    background -o-linear-gradient(top,  #0088cc 0%,#0044cc 100%)
+    background -ms-linear-gradient(top,  #0088cc 0%,#0044cc 100%)
+    background linear-gradient(top,  #0088cc 0%,#0044cc 100%)
+    &:hover
+      background #0044cc
+    &.active
+      background #006DCC
+  &.button-small
+    font-size 11px
+    padding 1px 7px 3px
+  &.button-action
+    border none
+    padding 4px 4px 3px
+    background #c8f5ff
+    span
+      display none
+    &:hover
+      span
+        display inline
+        padding 0 5px 0 5px
+        position relative
+        top -2px
+        color #fff
+      i
+        vertical-align top
+        position relative
+        top -1px
+    &.button-action-add-friend
+      &:hover
+        i
+          background-position -147px -39px
+    &.button-action-send-message
+      &:hover
+        i
+          background-position -163px -39px
+    &.button-action-note
+      background #ccf4d0
+      padding 6px 6px 6px 7px
+      &:hover
+        background #4ace56
+        border none
+        box-shadow none
+        padding 6px 6px 6px 7px
+        cursor default
+        i
+          top 0
+          background-position -46px -65px
+      i
+        display block
+
+#form_comment
+  .button
+    margin-top 2px
+
+.button.button-action.active,
+.button.button-action:hover
+  border 1px solid #2770e8
+  box-shadow 0 -1px 0 #128af3 inset, 0 2px 2px #ddd
+  color #fff
+  padding 3px 3px 2px
+  background #228dfa
+
+.button.button-action.button-action-join.active i,
+.button.button-action.button-action-join:hover i
+  background-position -179px -39px
+
+.button.disabled, .button.disabled:hover
+  cursor default
+  text-shadow none
+  background-color #f5f5f5
+  color #ccc
+  border-color #eee
+
+.button:active,
+.button.active
+  background #eaeaea
+  border-color #ccc
+  -webkit-box-shadow 0 0 5px rgba(0, 0, 0, .2) inset
+  -moz-box-shadow 0 0 5px rgba(0, 0, 0, .2) inset
+  box-shadow 0 0 5px rgba(0, 0, 0, .2) inset

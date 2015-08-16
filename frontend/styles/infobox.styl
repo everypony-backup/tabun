@@ -1,0 +1,112 @@
+.infobox
+  visibility hidden
+  position absolute
+  top 0
+  left 0
+  z-index 3500
+  text-align left
+  padding 15px
+  min-width 50px
+  max-width 300px
+  color #fff
+  background rgba(0,0,0,.8)
+  border-radius 5px
+  .tip-arrow
+    position absolute
+    width 0
+    height 0
+    border-width 6px
+    border-style solid
+    border-color rgba(0,0,0,.8)
+    &.tip-arrow-top
+      top -12px
+      left 15px
+      border-top-color transparent !important
+      border-left-color transparent !important
+      border-right-color transparent !important
+    &.tip-arrow-bottom
+      bottom -12px
+      left 15px
+      border-bottom-color transparent !important
+      border-left-color transparent !important
+      border-right-color transparent !important
+    &.tip-arrow-right
+      top 50%
+      margin-top -6px
+      right -12px
+      border-bottom-color transparent !important
+      border-top-color transparent !important
+      border-right-color transparent !important
+    &.tip-arrow-left
+      top 50%
+      margin-top -6px
+      left -12px
+      border-bottom-color transparent !important
+      border-top-color transparent !important
+      border-left-color transparent !important
+  a
+    color #B4B8ED
+    &:hover
+      color #999DDB
+  &.infobox-standart
+    background rgba(0,0,0,.8)
+    .tip-arrow
+      border-color rgba(0,0,0,.8)
+  &.infobox-yellow
+    background #fffea8
+    color #3e3e16
+    border-radius 10px
+    padding 15px 20px
+    font-size 11px
+    line-height 16px
+    .tip-arrow
+      border-color #fffea8
+  &.infobox-topic
+    font-size 11px
+    -webkit-box-shadow 0 0 10px rgba(0,0,0,.5)
+    box-shadow 0 0 10px rgba(0,0,0,.5)
+    background #1d1d1d
+    border-radius 10px
+    i
+      margin-right 5px
+    .tip-arrow
+      left 50%
+      margin-left -5px
+      border-color #1d1d1d
+  &.infobox-help
+    background #fff
+    width 300px
+    border 3px solid #edf8fd
+    color #000
+    border-radius 10px
+    padding 25px 30px
+    font-size 12px
+    line-height 18px
+    -webkit-box-shadow 0 0 15px rgba(0,0,0,.3)
+    box-shadow 0 0 15px rgba(0,0,0,.3)
+    .tip-arrow
+      border none
+      width 15px
+      height 11px
+      background url(images/icons-synio.png) no-repeat
+      &.tip-arrow-top
+        background-position -38px -107px
+        top -11px
+      &.tip-arrow-bottom
+        background-position -53px -107px
+        bottom -11px
+    a
+      color #3f8ad7
+    .blog-info
+      margin-bottom 30px
+      li
+        span
+          background #fff
+        strong
+          background #fff
+    .infobox-topic
+      color #727a90
+      font-size 11px
+    .infobox-actions
+      font-size 11px
+

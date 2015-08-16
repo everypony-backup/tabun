@@ -1,0 +1,166 @@
+.blog-top
+  position relative
+  padding-right 150px
+  .vote-topic
+    position absolute
+    top 3px
+    right 15px
+
+.blog-mini
+  padding 15px
+  margin-bottom 17px
+  font-size 14px
+  overflow hidden
+  zoom 1
+  border-radius 5px
+  background #ffffff
+  button
+    margin-right 12px
+  .fl-r
+    a
+      margin-left 14px
+      color #727a90
+      &:hover
+        color #f00
+      &.link-dotted
+        border-color #727a90
+        &:hover
+          border-color #f00
+
+.blog
+  overflow hidden
+  margin-bottom 17px
+  background #f8fbfe
+  border-radius 5px
+  border-radius 5px
+  .blog-header
+    position relative
+    padding 10px 0 13px 78px
+    min-height 16px
+    h2
+      font-size 20px
+      font-weight bold
+      line-height 1em
+      margin-top 3px
+      margin-bottom 7px
+      i
+        position relative
+        top 5px
+    .close
+      position absolute
+      top 0
+      right 0
+      cursor pointer
+      i
+        margin-left 5px
+      a
+        color #727a90
+        border-color #727a90
+        &:hover
+          color #f00
+          border-color #f00
+    .avatar
+      position absolute
+      top -10px
+      left 7px
+    .vote-label
+      text-transform uppercase
+      text-align right
+      font-size 11px
+      color #aaa
+    .count
+      font-size 34px
+      line-height 1em
+      font-weight bold
+      text-align right
+    .vote
+      position absolute
+      top 15px
+      right 15px
+      .vote-count
+        padding-left 25px
+        display block
+        color #333
+      .vote-up
+        position absolute
+        top 22px
+        left 0
+        display none
+      .vote-down
+        position absolute
+        top 35px
+        left 0
+        display none
+      &.vote-count-positive
+        .vote-count
+          color #5055B2
+    .actions
+      margin-bottom 0
+  .blog-content
+    padding 22px 8px 0
+    font-size 13px
+    .blog-description
+      margin-bottom 16px
+      display inline-block
+      width 100%
+      font-size 13px
+    .user-avatar
+      margin-right 10px
+  .blog-footer
+    padding 22px 26px
+    background #f1f7fd
+    button
+      margin-right 10px
+    a
+      color #727a90
+    .admin
+      float right
+      img
+        width 16px
+        height 16px
+        vertical-align middle
+        margin-right 1px
+      a
+        color #4a4a4a
+
+.blog-inner
+  padding 20px
+
+.blog .blog-header .vote:hover .vote-up,
+.blog .blog-header .vote:hover .vote-down,
+.blog .blog-header .vote.voted .vote-up,
+.blog .blog-header .vote.voted .vote-down
+  display inline-block
+
+.blog-info
+  width 300px
+  margin-bottom 16px
+  li
+    margin-bottom 5px
+    background url(images/dots.png)  0% 14px repeat-x
+    position relative
+    padding-right 50px
+    span
+      background #f8fbfe
+      padding-right 2px
+    strong
+      width 150px
+      position absolute
+      top 0
+      right 0
+      background #f8fbfe
+      padding-left 2px
+      font-weight normal
+    &.rating
+      strong
+        color #5fa459
+
+.blog-more
+  display block
+  padding 10px 0
+  text-align center
+  text-decoration none
+  background #fafafa
+  &:hover
+    background #eee
+

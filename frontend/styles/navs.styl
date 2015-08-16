@@ -1,0 +1,240 @@
+.nav
+  overflow hidden
+  zoom 1
+  li
+    float left
+  &.nav-pills
+    margin-bottom 15px
+    font-size 13px
+    li
+      margin-right 14px
+      font-weight bold
+      line-height 16px
+      a
+        display block
+        text-decoration underline
+        float left
+        &:hover
+          color #333
+          border-color #333
+        &.new
+          margin-left 5px
+          text-decoration none
+          color green
+          position relative
+          top -2px
+      &.active
+        border-color #ccc
+        a
+          color #333
+          text-decoration none
+          border-color #ebf0f4
+      &.dropdown
+        position relative
+        a
+          padding-right 12px
+        i
+          position absolute
+          top 4px
+          right 3px
+          cursor pointer
+        ul
+          display none
+          position absolute
+    &.nav-pills-profile
+      margin-bottom 10px
+    &.nav-pills-dropdown
+      position absolute
+      top 0
+      right 0
+      margin 0
+      display none
+      li
+        margin 0
+  &.nav-menu
+    font-size 13px
+    border-radius 13px
+    display inline-block
+    position relative
+    li
+      position relative
+      height 22px
+      padding 1px 1px 1px 0
+      a
+        height 22px
+        line-height 24px
+        padding 0 10px 0 0
+        float left
+    &.nav-filter-sub
+      li
+        a
+          padding 5px 10px
+          font-size 11px
+          color #777
+        &.active
+          a
+            color #fff
+  &.nav-userbar
+    float right
+    li
+      border-radius 0 0 0 4px
+      border-left 1px solid #eaeaea
+      a
+        color #555
+      &:first-child
+        a
+          border-radius 0 0 0 4px
+      &:last-child
+        a
+          border-radius 0 0 4px 0
+      &.nav-userbar-username
+        a
+          position relative
+          padding-left 47px
+          font-weight bold
+          color #333
+        .avatar
+          position absolute
+          top 7px
+          left 15px
+      .new-messages
+        color #4AA731
+        font-weight bold
+  &.nav-main
+    height 51px
+    li
+      margin-right 18px
+      height 51px
+      line-height 49px
+      &:last-child
+        margin-right 0
+      a
+        font-size 20px
+      &.active
+        i
+          display block
+        a
+          color #000
+          text-decoration none
+      &.nav-main-more
+        display none
+  &.nav-profile
+    margin-top 15px
+    li
+      float none
+      font-size 15px
+      border-bottom 1px dotted #dce1e6
+      padding 8px
+      a
+        text-decoration underline
+        color #275ec2
+        &:hover
+          color #f00
+      &.active
+        a
+          text-decoration none
+          color #000
+
+  &.nav-menu
+    li
+      &.active
+        a
+          font-weight bold
+          color #333
+          text-decoration none
+  &.nav-main
+    li
+      i
+        display none
+        position absolute
+        bottom 0
+        left 50%
+        margin-left -2px
+        width 0
+        height 0
+        border 3px solid transparent
+
+.nav-menu-wrapper
+  margin-bottom 10px
+  position relative
+
+.oldie
+  .nav
+    &.nav-menu
+      border-color #dfe3e8
+      border-right none
+      li
+        border-right 1px solid #dfe3e8
+  #nav
+    background #f6f6f6
+
+#userbar
+  border 1px solid #ddd
+  border-top none
+  border-radius 0 0 4px 4px
+  .search
+    float left
+    margin 5px 0 0 6px
+
+.dropdown-menu
+  display none
+  padding 10px 10px 13px
+  border 1px solid #CCC
+  border-radius 6px
+  position absolute
+  top 32px
+  overflow hidden
+  z-index 10
+  background white
+  min-width 90px
+  li
+    line-height 1em
+    margin-bottom 15px
+    &:last-child
+      margin-bottom 0
+    a
+      display block
+    &.active
+      a
+        color #aaa
+
+.dropdown-create
+  margin-right 120px
+  line-height 23px
+  a
+    font-weight normal
+  h2
+    a
+      text-transform lowercase
+      display inline-block
+
+.dropdown-menu-create
+  padding 10px 15px 15px
+  border 3px solid #edf8fd
+  border-radius 10px
+  -webkit-box-shadow 0 0 10px rgba(0,0,0,.5)
+  box-shadow 0 0 10px rgba(0,0,0,.5)
+  position absolute
+  background #fff
+  min-width 150px
+  z-index 10
+  font-size 27px
+  text-transform lowercase
+  li
+    line-height 1em
+    margin-bottom 10px
+    &:last-child
+      margin 0
+    a
+      color #275ec2
+      text-decoration none
+      border-bottom 1px solid #275ec2
+      display inline-block
+      &:hover
+        color #f00
+        border-color #f00
+    &.active
+      a
+        color #aaa
+        border-color #aaa
+

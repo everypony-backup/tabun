@@ -43,34 +43,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/hidecomments.js",
 ];
 
-$config['head']['default']['css'] = [
-	"___path.static.skin___/css/temp/helpers.css",
-	"___path.static.skin___/css/temp/text.css",
-	"___path.static.skin___/css/temp/buttons.css",
-	"___path.static.skin___/css/reset.css",
-	"___path.static.skin___/css/base.css",
-	"___path.static.skin___/js/vendor/markitup/skins/synio/style.css",
-	"___path.static.skin___/js/vendor/markitup/sets/synio/style.css",
-	"___path.static.skin___/js/vendor/jcrop/jquery.Jcrop.css",
-	"___path.static.skin___/css/grid.css",
-	"___path.static.skin___/css/common.css",
-	"___path.static.skin___/css/text.css",
-	"___path.static.skin___/css/forms.css",
-	"___path.static.skin___/css/buttons.css",
-	"___path.static.skin___/css/navs.css",
-	"___path.static.skin___/css/icons.css",
-	"___path.static.skin___/css/tables.css",
-	"___path.static.skin___/css/topic.css",
-	"___path.static.skin___/css/comments.css",
-	"___path.static.skin___/css/blocks.css",
-	"___path.static.skin___/css/modals.css",
-	"___path.static.skin___/css/blog.css",
-	"___path.static.skin___/css/profile.css",
-	"___path.static.skin___/css/infobox.css",
-	"___path.static.skin___/css/jquery.notifier.css",
-	"___path.static.skin___/css/smoothness/jquery-ui.css",
-	"___path.static.skin___/css/print.css",
-	"___path.static.skin___/css/mobile-styles.css",
-];
+$config['head']['default']['css'] = [];
 
 return $config;
