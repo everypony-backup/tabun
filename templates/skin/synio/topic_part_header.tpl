@@ -7,21 +7,20 @@
 {/if}
 
 <article class="topic topic-type-{$oTopic->getType()} js-topic">
-	<header class="topic-header">
-		<h1 class="topic-title word-wrap">
-			{if $bTopicList}
-				<a href="{$oTopic->getUrl()}">{$oTopic->getTitle()|escape:'html'}</a>
-			{else}
-				{$oTopic->getTitle()|escape:'html'}
-			{/if}
+    <header class="topic-header">
+        {strip}
+            <h1 class="topic-title word-wrap">
+                {if $bTopicList}
+                    <a href="{$oTopic->getUrl()}">{$oTopic->getTitle()|escape:'html'}</a>
+                {else}
+                    {$oTopic->getTitle()|escape:'html'}
+                {/if}
 
-			{if $oTopic->getPublish() == 0}
-				<i class="icon-synio-topic-draft" title="{$aLang.topic_unpublish}"></i>
-			{/if}
-
-		</h1>
-
-
+                {if $oTopic->getPublish() == 0}
+                    <i class="icon-synio-topic-draft" title="{$aLang.topic_unpublish}"></i>
+                {/if}
+            </h1>
+		{/strip}
 		<div class="topic-info">
 			<div class="topic-info-vote">
 				<div id="vote_area_topic_{$oTopic->getId()}" class="vote-topic
