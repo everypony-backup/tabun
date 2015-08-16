@@ -5,7 +5,6 @@ $config = [];
 $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/jquery.js",
 	"___path.static.skin___/js/vendor/jquery-ui.js",
-	"___path.static.skin___/js/vendor/jquery.notifier.js",
 	"___path.static.skin___/js/vendor/jquery.jqmodal.js",
 	"___path.static.skin___/js/vendor/jquery.scrollto.js",
 	"___path.static.skin___/js/vendor/jquery.rich-array.min.js",
@@ -18,7 +17,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/poshytip/jquery.poshytip.js",
 	"___path.static.skin___/js/vendor/jquery.placeholder.min.js",
 	"___path.static.skin___/js/vendor/jquery.charcount.js",
-	"___path.static.skin___/js/main.js",
 	"___path.static.skin___/js/favourite.js",
 	"___path.static.skin___/js/blocks.js",
 	"___path.static.skin___/js/talk.js",

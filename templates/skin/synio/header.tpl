@@ -44,12 +44,14 @@
         {/foreach}
     </script>
 
-    {$aHtmlHeadFiles.js}
+    <script src="/static/vendor.bundle.js" type="text/javascript"></script>
+    <script src="/static/main.bundle.js" type="text/javascript"></script>
     <script type="text/javascript">
         ls.lang.load({json var = $aLangJs});
         ls.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
         ls.registry.set('block_stream_show_tip', {json var=$oConfig->Get('block.stream.show_tip')});
     </script>
+    {$aHtmlHeadFiles.js}
 
     {hook run='html_head_end'}
 </head>

@@ -27,11 +27,12 @@ module.exports =
     ]
 
   resolve:
+    alias:
+      jquery: './jquery.coffee'
     extensions: ['', '.coffee', '.js', '.styl', '.css']
 
   plugins: [
     new webpack.optimize.UglifyJsPlugin()
     new ExtractTextPlugin("styles.css")
-    new webpack.optimize.CommonsChunkPlugin name: 'common', chunks: ['main'], minChunks: Infinity
     new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
   ]

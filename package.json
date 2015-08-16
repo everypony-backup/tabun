@@ -8,7 +8,9 @@
     "type": "git",
     "url": "https://bitbucket.org/Orhideous/tabun.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "~3.10.1"
+  },
   "devDependencies": {
     "webpack": "~1.10.5",
     "extract-text-webpack-plugin": "~0.8.2",
@@ -20,8 +22,7 @@
     "stylus-loader": "~1.2.1",
     "file-loader": "~0.8.4",
     "image-webpack-loader": "~1.6.1",
-    "path": "~0.11.14",
-    "lodash": "~3.10.1"
+    "path": "~0.11.14"
   },
   "scripts": {
     "webpack": "webpack --config webpack.config.coffee --progress --profile --colors",
