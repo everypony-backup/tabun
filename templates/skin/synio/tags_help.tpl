@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	ls.registry.set('tags-help-target-id','{$sTagsTargetId}');
+	ls.tools.registry.set('tags-help-target-id','{$sTagsTargetId}');
 </script>
 <a href="#" class="link-dotted help-link" onclick="jQuery('#tags-help').toggle(); return false;">{$aLang.tags_help_link_show}</a>
 

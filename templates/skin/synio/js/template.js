@@ -26,7 +26,7 @@ jQuery(document).ready(function($){
 
 
 	// Всплывающие сообщения
-	if (ls.registry.get('block_stream_show_tip')) {
+	if (ls.tools.registry.get('block_stream_show_tip')) {
 		$('.js-title-comment, .js-title-topic').poshytip({
 			className: 'infobox-yellow',
 			alignTo: 'target',
@@ -221,7 +221,7 @@ jQuery(document).ready(function($){
 
 	// Help-tags link
 	$('.js-tags-help-link').click(function(){
-		var target=ls.registry.get('tags-help-target-id');
+		var target=ls.tools.registry.get('tags-help-target-id');
 		if (!target || !$('#'+target).length) {
 			return false;
 		}

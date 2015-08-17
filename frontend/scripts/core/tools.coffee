@@ -5,7 +5,16 @@ $ = require 'jquery'
 {notice, error} = require "./messages.coffee"
 {ajax} = require "./ajax.coffee"
 
+_registry = {}
+
 tools =
+  registry:
+    get: (sName) ->
+      _registry[sName]
+
+    set: (sName, data) ->
+      _registry[sName] = data
+
   ucfirst: (str) ->
     f = str.charAt(0).toUpperCase()
     f + str.substr(1, str.length - 1)
