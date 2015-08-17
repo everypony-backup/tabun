@@ -3,7 +3,6 @@
 ###
 
 $ = require "jquery"
-require "jquery.ui"
 {ajax} = require "./ajax.coffee"
 
 split = (val) -> val.split /,\s*/

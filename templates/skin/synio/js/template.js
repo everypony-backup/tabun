@@ -1,44 +1,5 @@
 jQuery(document).ready(function($){
 
-	$('.js-registration-form-show').click(function(){
-		if (ls.blocks.switchTab('registration','popup-login')) {
-			$('#window_login_form').jqmShow();
-		} else {
-			window.location=aRouter.registration;
-		}
-		return false;
-	});
-
-	$('.js-login-form-show').click(function(){
-		if (ls.blocks.switchTab('login','popup-login')) {
-			$('#window_login_form').jqmShow();
-		} else {
-			window.location=aRouter.login;
-		}
-		return false;
-	});
-
-	// Datepicker
-	/**
-	 * TODO: навесить языки на datepicker
-	 */
-	$('.date-picker').datepicker({
-		dateFormat: 'dd.mm.yy',
-		dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-		monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-		firstDay: 1
-	});
-
-
-	// Поиск по тегам
-	$('.js-tag-search-form').submit(function(){
-		var val=$(this).find('.js-tag-search').val();
-		if (val) {
-			window.location = aRouter['tag']+encodeURIComponent(val)+'/';
-		}
-		return false;
-	});
-
 	// Скролл
 	$(window)._scrollable();
 

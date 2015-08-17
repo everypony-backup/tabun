@@ -1,4 +1,5 @@
 $ = require "jquery"
+require "jquery.ui"
 require "jquery.jqmodal"
 
 
@@ -32,6 +33,35 @@ init = ->
   blocks.initSwitch 'upload-img'
   blocks.initSwitch 'favourite-topic-tags'
   blocks.initSwitch 'popup-login'
+
+  # Handlers
+  $('.js-registration-form-show').click ->
+    if ls.blocks.switchTab 'registration', 'popup-login'
+      $('#window_login_form').jqmShow()
+    else
+      window.location = router.registration
+    false
+  $('.js-login-form-show').click ->
+    if ls.blocks.switchTab 'login', 'popup-login'
+      $('#window_login_form').jqmShow()
+    else
+      window.location = router.login
+    false
+
+  # Datepicker
+  $('.date-picker').datepicker
+    dateFormat: 'dd.mm.yy'
+    dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
+    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+    firstDay: 1
+
+  # Tag search
+  $('.js-tag-search-form').submit ->
+    val = $(this).find('.js-tag-search').val()
+    if val
+      window.location = "#{router.tag}#{encodeURIComponent(val)}/"
+    false
+
 
 
 module.exports = init
