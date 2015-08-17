@@ -3,7 +3,8 @@ require "./styles.styl"
 
 window.ls = {}
 
-assign ls, require "./scripts/core"
-assign ls, require "./scripts/core/ajax.coffee" # TODO: internal
+assign ls, require "core"
+assign ls, require "app"
+assign ls, require "core/ajax.coffee" # TODO: internal
 
-document.addEventListener "DOMContentLoaded", require("./scripts/template.coffee")
+document.addEventListener "DOMContentLoaded", require("init.coffee")

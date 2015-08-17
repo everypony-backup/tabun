@@ -3,8 +3,8 @@ require "jquery.ui"
 require "jquery.jqmodal"
 
 
-blocks = require "./blocks.coffee"
-autocomplete = require "./core/autocomplete.coffee"
+blocks = require "lib/blocks.coffee"
+autocomplete = require "core/autocomplete.coffee"
 
 router = window.aRouter
 
@@ -36,13 +36,13 @@ init = ->
 
   # Handlers
   $('.js-registration-form-show').click ->
-    if ls.blocks.switchTab 'registration', 'popup-login'
+    if blocks.switchTab 'registration', 'popup-login'
       $('#window_login_form').jqmShow()
     else
       window.location = router.registration
     false
   $('.js-login-form-show').click ->
-    if ls.blocks.switchTab 'login', 'popup-login'
+    if blocks.switchTab 'login', 'popup-login'
       $('#window_login_form').jqmShow()
     else
       window.location = router.login

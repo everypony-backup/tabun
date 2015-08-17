@@ -1,13 +1,13 @@
 $ = require "jquery"
 {assign, debounce} = require "lodash"
-{ajax} = require "./core/ajax.coffee"
-{error} = require "./core/messages.coffee"
+{ajax} = require "core/ajax.coffee"
+{error} = require "core/messages.coffee"
 
 router = window.aRouter
 
 options =
   active: 'active'
-  loader: require("../images/loader-circle.gif")
+  loader: require("../../images/loader-circle.gif")
   type:
     stream_comment: url: "#{router.ajax}stream/comment/"
     stream_topic: url: "#{router.ajax}stream/topic/"

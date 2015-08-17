@@ -33,6 +33,7 @@ module.exports =
   resolve:
     alias: aliases
     extensions: ['', '.coffee', '.js', '.styl', '.css']
+    modulesDirectories: ['node_modules', 'scripts']
 
   plugins: [
     new webpack.optimize.UglifyJsPlugin()
