@@ -15,10 +15,6 @@ tools =
     set: (sName, data) ->
       _registry[sName] = data
 
-  ucfirst: (str) ->
-    f = str.charAt(0).toUpperCase()
-    f + str.substr(1, str.length - 1)
-
   checkAll: (cssclass, checkbox, invert) ->
     $('.' + cssclass).each (index, item) ->
       if invert

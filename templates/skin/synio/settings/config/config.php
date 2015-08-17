@@ -16,7 +16,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/jquery.placeholder.min.js",
 	"___path.static.skin___/js/vendor/jquery.charcount.js",
 	"___path.static.skin___/js/favourite.js",
-	"___path.static.skin___/js/talk.js",
 	"___path.static.skin___/js/vote.js",
 	"___path.static.skin___/js/poll.js",
 	"___path.static.skin___/js/subscribe.js",
