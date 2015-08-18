@@ -6,3 +6,4 @@ module.exports =
   userfeed: require "./userfeed.coffee"
   poll: require "./poll.coffee"
   geo: require "./geo.coffee"
+  vote: require "./vote.coffee"
