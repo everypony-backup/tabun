@@ -6,7 +6,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/jquery.js",
 	"___path.static.skin___/js/vendor/jquery-ui.js",
 	"___path.static.skin___/js/vendor/jquery.scrollto.js",
-	"___path.static.skin___/js/vendor/jquery.rich-array.min.js",
 	"___path.static.skin___/js/vendor/markitup/jquery.markitup.js",
 	"___path.static.skin___/js/vendor/jquery.cookie.js",
 	"___path.static.skin___/js/vendor/jquery.serializejson.js",
