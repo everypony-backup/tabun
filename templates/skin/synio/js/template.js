@@ -105,15 +105,6 @@ jQuery(document).ready(function($){
 			$('#strm_u_'+data.uid).parent().find('a').before('<a href="'+data.user_web_path+'"><img src="'+data.user_avatar_48+'"  class="avatar" /></a> ');
 		}
 	});
-	// опрос
-	ls.hook.add('ls_pool_add_answer_after',function(removeAnchor){
-		var removeAnchor = $('<a href="#" class="icon-synio-remove" />').attr('title', ls.lang.get('delete')).click(function(e){
-			e.preventDefault();
-			return this.removeAnswer(e.target);
-		}.bind(ls.poll));
-		$(this).find('a').remove();
-		$(this).append(removeAnchor);
-	});
 
 	// регистрация
 	ls.hook.add('ls_user_validate_registration_fields_after',function(aFields, sForm, result){

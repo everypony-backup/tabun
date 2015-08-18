@@ -3,3 +3,4 @@ module.exports =
   subscribe: require "./subscribe.coffee"
   topic: require "./topic.coffee"
   usernote: require "./usernote.coffee"
+  poll: require "./poll.coffee"
