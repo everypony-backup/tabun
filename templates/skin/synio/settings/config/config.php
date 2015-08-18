@@ -27,7 +27,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/stream.js",
 	"___path.static.skin___/js/toolbar.js",
 	"___path.static.skin___/js/settings.js",
-	"___path.static.skin___/js/topic.js",
 	"___path.static.skin___/js/hook.js",
 	"___path.static.skin___/js/template.js",
 	"___path.static.skin___/js/tabun.js",

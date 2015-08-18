@@ -35,8 +35,6 @@
 
 			{hook run="uploadimg_link_additional"}
 
-			<button type="submit"  class="button button-primary" onclick="ls.topic.insertImageToEditor(jQuery('#img_url').val(),jQuery('#form-image-url-title').val());">{$aLang.uploadimg_link_submit_paste}</button>
-			{$aLang.or_}
 			<button type="submit"  class="button button-primary" onclick="ls.ajaxUploadImg('block_upload_img_content_link','{$sToLoad}');">{$aLang.uploadimg_link_submit_load}</button>
 			<button type="submit"  class="button jqmClose">{$aLang.uploadimg_cancel}</button>
 		</form>
