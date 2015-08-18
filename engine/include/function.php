@@ -195,7 +195,7 @@ function func_check($sValue,$sParam,$iMin=1,$iMax=100) {
  * @return unknown
  */
 function func_encrypt($sData) {
-	return md5($sData);
+	return hash('sha512', $sData);
 }
 
 
