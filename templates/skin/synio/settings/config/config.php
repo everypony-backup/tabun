@@ -18,7 +18,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/poll.js",
 	"___path.static.skin___/js/infobox.js",
 	"___path.static.skin___/js/geo.js",
-	"___path.static.skin___/js/usernote.js",
 	"___path.static.skin___/js/comments.js",
 	"___path.static.skin___/js/blog.js",
 	"___path.static.skin___/js/user.js",
