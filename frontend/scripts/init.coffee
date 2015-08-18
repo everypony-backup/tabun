@@ -1,10 +1,12 @@
 $ = require "jquery"
 require "jquery.ui"
 require "jquery.jqmodal"
-
+{forEach} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
 autocomplete = require "core/autocomplete.coffee"
+
+talk = require "app/talk.coffee"
 
 router = window.aRouter
 
@@ -62,6 +64,33 @@ init = ->
       window.location = "#{router.tag}#{encodeURIComponent(val)}/"
     false
 
+  # Talk
+  $('#friends input:checkbox').on 'change', ->
+    talk.toggleRecipient $("##{@.id}_label").text(), @.checked
+
+  $('#friend_check_all').on 'click', ->
+    forEach $('#friends input:checkbox'), (item) ->
+      talk.toggleRecipient $("#{item.id}_label").text(), true
+      item.checked = true
+    false
+
+  $('#friend_uncheck_all').on 'click', ->
+    forEach $('#friends input:checkbox'), (item) ->
+      talk.toggleRecipient $("#{item.id}_label").text(), false
+      item.checked = false
+    false
+
+  $('#black_list_block').on 'click', 'a.delete', ->
+    talk.removeFromBlackList @
+    false
+
+  $('#speaker_list_block').on 'click', 'a.delete', ->
+    talk.removeFromTalk @, $('#talk_id').val()
+    false
+  
+  talk.toggleSearchForm = ->
+    $('.talk-search').toggleClass 'opened'
+    false
 
 
 module.exports = init

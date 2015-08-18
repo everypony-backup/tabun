@@ -44,7 +44,7 @@ addToTalk = (idTalk) ->
 removeFromTalk = (link, idTalk) ->
   link = $(link)
   $("##{link.attr('id')}_area").fadeOut 500, ->
-    $(this).remove()
+    $(@).remove()
 
   idTarget = link.attr('id').replace('speaker_item_', '')
   url = "#{router.talk}ajaxdeletetalkuser/"
@@ -95,7 +95,7 @@ addToBlackList = ->
 removeFromBlackList = (link) ->
   link = $(link)
   $("##{link.attr('id')}_area").fadeOut 500, ->
-    $(this).remove()
+    $(@).remove()
 
   idTarget = link.attr('id').replace('blacklist_item_', '')
   url = "#{router.talk}ajaxdeletefromblacklist/"
