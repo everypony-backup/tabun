@@ -73,13 +73,6 @@ jQuery(document).ready(function($){
 		showTimeout: 300
 	});
 
-	// блоки
-	ls.hook.add('ls_blocks_init_navigation_after',function(block,count){
-		if ($('.js-block-'+block+'-nav').find('li').length >= count) {
-			$('.js-block-'+block+'-dropdown-items').css({ 'top': $('.js-block-'+block+'-dropdown-trigger').offset().top + 25 });
-		}
-	});
-
 	// комментарии
 	ls.comments.init();
 
