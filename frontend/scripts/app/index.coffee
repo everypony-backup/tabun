@@ -8,3 +8,4 @@ module.exports =
   geo: require "./geo.coffee"
   vote: require "./vote.coffee"
   favourite: require "./favourite.coffee"
+  blog: require "./blog.coffee"

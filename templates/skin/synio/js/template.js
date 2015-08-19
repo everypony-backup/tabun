@@ -76,22 +76,6 @@ jQuery(document).ready(function($){
 	// комментарии
 	ls.comments.init();
 
-	// вступление в блог
-	ls.hook.add('ls_blog_toggle_join_after',function(idBlog,result){
-		if (!this.data('onlyText')) {
-			this.html('<i class="icon-synio-join"></i><span>'+(result.bState ? ls.lang.get('blog_leave') : ls.lang.get('blog_join'))+'</span>');
-			if (result.bState) {
-				this.addClass('active');
-			} else {
-				this.removeClass('active');
-			}
-		} else {
-			if (this.data('buttonAdditional') && $('#'+this.data('buttonAdditional')).length) {
-				$('#'+this.data('buttonAdditional')).html(result.bState ? ls.lang.get('blog_leave') : ls.lang.get('blog_join'));
-			}
-		}
-	});
-
 	// лента активности
 	ls.hook.add('ls_stream_append_user_after',function(length,data){
 		if (length==0) {

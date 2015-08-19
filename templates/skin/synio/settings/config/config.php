@@ -15,7 +15,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/jquery.charcount.js",
 	"___path.static.skin___/js/infobox.js",
 	"___path.static.skin___/js/comments.js",
-	"___path.static.skin___/js/blog.js",
 	"___path.static.skin___/js/user.js",
 	"___path.static.skin___/js/userfield.js",
 	"___path.static.skin___/js/stream.js",
