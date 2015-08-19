@@ -2,6 +2,8 @@
 # Вспомогательные функции
 ###
 $ = require 'jquery'
+{forEach} = require "lodash"
+
 {notice, error} = require "./messages.coffee"
 {ajax} = require "./ajax.coffee"
 
@@ -16,12 +18,8 @@ tools =
       _registry[sName] = data
 
   checkAll: (cssclass, checkbox, invert) ->
-    $('.' + cssclass).each (index, item) ->
-      if invert
-        $(item).attr 'checked', !$(item).attr('checked')
-      else
-        $(item).attr 'checked', $(checkbox).attr('checked')
-
+    forEach $(".#{cssclass}"), (node) ->
+      node.checked = if invert then not node.checked else checkbox.checked
 
   textPreview: (textId, save, divPreview) ->
     text = $('#' + textId).val()

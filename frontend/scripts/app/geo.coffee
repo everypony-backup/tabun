@@ -48,7 +48,7 @@ loadCities = ($region) ->
     if result.bStateError
       error null, result.sMsg
     else
-      $.each result.aCities, (value) ->
+      forEach result.aCities, (value) ->
         $city.append """<option value="#{value.id}">#{value.name}</option>"""
       $city.show()
 

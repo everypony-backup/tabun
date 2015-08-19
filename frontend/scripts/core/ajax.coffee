@@ -1,23 +1,33 @@
 $ = require "jquery"
 require "jquery.form"
+{forEach, isBoolean, isString, startsWith} = require "lodash"
 {notice, error} = require "./messages.coffee"
 
+router = window.aRouter
+
+_normalize_url = (url) ->
+  unless (
+    startsWith(url, 'http://') or
+      startsWith(url, 'https://') or
+      startsWith(url, '//') or
+      '/' not in url
+  )
+    "#{router.ajax}#{url}/"
+  else
+    url
 
 ajax = (url, params, callback, more) ->
-  more = more or {}
-  params = params or {}
+  more ?= {}
+  params ?= {}
   params.security_ls_key = window.LIVESTREET_SECURITY_KEY
 
-  $.each params, (k, v) ->
-    if typeof v == 'boolean'
-      params[k] = if v then 1 else 0
-
-  if url.indexOf('http://') != 0 and url.indexOf('https://') != 0 and url.indexOf('/') != 0
-    url = aRouter['ajax'] + url + '/'
+  forEach params, (value, key) ->
+    if isBoolean value
+      params[key] = if value then 1 else 0
 
   $.ajax
     type: more.type or 'POST'
-    url: url
+    url: _normalize_url url
     data: params
     dataType: more.dataType or 'json'
     success: callback or ->
@@ -26,23 +36,20 @@ ajax = (url, params, callback, more) ->
 
 
 ajaxSubmit = (url, form, callback, more) ->
-  more = more or {}
+  more ?= {}
 
-  if typeof form == 'string'
-    form = $('#' + form)
-
-  if url.indexOf('http://') != 0 and url.indexOf('https://') != 0 and url.indexOf('/') != 0
-    url = aRouter['ajax'] + url + '/'
+  if isString form
+    form = $ "##{form}"
 
   form.ajaxSubmit
     type: 'POST'
-    url: url
+    url: _normalize_url url
     dataType: more.dataType or 'json'
     data: security_ls_key: window.LIVESTREET_SECURITY_KEY
     success: callback or ->
     error: more.error or ->
 
-ajaxUploadImg = (form, sToLoad) ->
+ajaxUploadImg = (form) ->
   upl_window = $('#window_upload_img')
   btns = $('.main-upl-btn', upl_window)
   btns.attr('disabled', 'disabled').addClass('disabled').text 'Загрузка...'

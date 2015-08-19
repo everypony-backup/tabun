@@ -1,5 +1,5 @@
 $ = require "jquery"
-{assign, debounce} = require "lodash"
+{assign, debounce, isString, forEach} = require "lodash"
 {ajax} = require "core/ajax.coffee"
 {error} = require "core/messages.coffee"
 
@@ -64,7 +64,7 @@ getCurrentItem = (block) ->
   if block.is(':visible')
     block.find selector
   else
-  $(".js-block-#{block}-dropdown-items").find selector
+    $(".js-block-#{block}-dropdown-items").find selector
 
 
 ###*
@@ -77,14 +77,14 @@ switchTab = (obj, block) ->
   # Если вкладку передаем как строчку - значение data-type
   ###
   selItem = $(".js-block-#{block}-item")
-  if typeof obj == 'string'
-    selItem.each (k, v) ->
-      if $(v).data('type') == obj
-        obj = v
+  if isString obj
+    forEach selItem (node) ->
+      if $(node).data('type') == obj
+        obj = node
   ###*
   # Если не нашли такой вкладки
   ###
-  if typeof obj == 'string'
+  if isString obj
     return false
 
   selItem.removeClass options.active
@@ -92,26 +92,26 @@ switchTab = (obj, block) ->
 
   selContent = $(".js-block-#{block}-content")
   selContent.hide()
-  selContent.each (k, v) ->
-    if $(v).data('type') == $(obj).data('type')
-      $(v).show()
+  forEach selContent (node) ->
+    if $(node).data('type') == $(obj).data('type')
+      $(node).show()
   true
 
 initSwitch = (block) ->
-  $(".js-block-#{block}-item").click ->
+  $(".js-block-#{block}-item").on "click", ->
     switchTab this, block
     false
 
 init = (block, params) ->
   params ?= {}
-  $(".js-block-#{block}-item").click ->
+  $(".js-block-#{block}-item").on "click", ->
     load this, block
     false
 
   if params.group_items
     initNavigation block, params.group_min
 
-  $(".js-block-#{block}-update").click ->
+  $(".js-block-#{block}-update").on "click", ->
     $(@).addClass 'active'
     load getCurrentItem(block), block
     setTimeout(
@@ -133,7 +133,7 @@ initNavigation = (block, count) ->
     menu = $(".js-block-#{block}-dropdown-items")
 
     menu.appendTo('body').css 'display': 'none'
-    trigger.click ->
+    trigger.on "click", ->
       pos = $(@).offset()
       menu.css
         'left': pos.left
@@ -142,20 +142,19 @@ initNavigation = (block, count) ->
       menu.slideToggle()
       $(@).toggleClass 'opened'
       false
-    menu.find('a').click ->
+    menu.find('a').on "click", click ->
       trigger.removeClass('opened').find('a').text $(@).text()
       menu.slideToggle()
 
     # Hide menu
-    $(document).click ->
+    $(document).on "click", ->
       trigger.removeClass 'opened'
       menu.slideUp()
 
     $('body').on 'click', ".js-block-#{block}-dropdown-trigger, .js-block-#{block}-dropdown-items", (e) ->
       e.stopPropagation()
 
-    $(window).resize debounce ->
-      menu.css 'left': trigger.offset().left
+    $(window).resize debounce (-> menu.css 'left': trigger.offset().left), 300
 
   else
     # Transform nav to dropdown
