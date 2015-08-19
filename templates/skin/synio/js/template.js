@@ -76,13 +76,6 @@ jQuery(document).ready(function($){
 	// комментарии
 	ls.comments.init();
 
-	// лента активности
-	ls.hook.add('ls_stream_append_user_after',function(length,data){
-		if (length==0) {
-			$('#strm_u_'+data.uid).parent().find('a').before('<a href="'+data.user_web_path+'"><img src="'+data.user_avatar_48+'"  class="avatar" /></a> ');
-		}
-	});
-
 	// регистрация
 	ls.hook.add('ls_user_validate_registration_fields_after',function(aFields, sForm, result){
 		$.each(aFields,function(i,aField){

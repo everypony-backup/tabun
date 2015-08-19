@@ -9,3 +9,4 @@ module.exports =
   vote: require "./vote.coffee"
   favourite: require "./favourite.coffee"
   blog: require "./blog.coffee"
+  stream: require "./stream.coffee"

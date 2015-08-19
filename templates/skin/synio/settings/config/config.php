@@ -17,7 +17,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/comments.js",
 	"___path.static.skin___/js/user.js",
 	"___path.static.skin___/js/userfield.js",
-	"___path.static.skin___/js/stream.js",
 	"___path.static.skin___/js/toolbar.js",
 	"___path.static.skin___/js/settings.js",
 	"___path.static.skin___/js/hook.js",
