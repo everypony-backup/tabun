@@ -1,5 +1,5 @@
 $ = require "jquery"
-{forEach} = require "lodash"
+{forEach, throttle} = require "lodash"
 
 lang = require "core/lang.coffee"
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
@@ -108,6 +108,7 @@ searchBlogs = (form) ->
     $('#blogs-list-original').toogle(result.bStateError)
     $('#blogs-list-search').html(result.sText or '').toggle(not result.bStateError)
 
+searchBlogsThrottled = throttle searchBlogs, 500
 
 toggleInfo = ->
   $('#blog-more-content').slideToggle()
@@ -122,7 +123,7 @@ module.exports = {
   loadInfoType
   removeInvite
   repeatInvite
-  searchBlogs
+  searchBlogsThrottled
   toggleInfo
   toggleJoin
 }

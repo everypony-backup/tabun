@@ -1,5 +1,5 @@
 $ = require "jquery"
-{assign, debounce, isString, forEach} = require "lodash"
+{assign, throttle, isString, forEach} = require "lodash"
 {ajax} = require "core/ajax.coffee"
 {error} = require "core/messages.coffee"
 
@@ -154,7 +154,7 @@ initNavigation = (block, count) ->
     $('body').on 'click', ".js-block-#{block}-dropdown-trigger, .js-block-#{block}-dropdown-items", (e) ->
       e.stopPropagation()
 
-    $(window).resize debounce (-> menu.css 'left': trigger.offset().left), 300
+    $(window).resize throttle (-> menu.css 'left': trigger.offset().left), 300
 
   else
     # Transform nav to dropdown

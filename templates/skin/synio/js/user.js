@@ -478,6 +478,7 @@ ls.user = (function ($) {
 	/**
 	 * Поиск пользователей
 	 */
+	// TODO: expose ONLY throttled!
 	this.searchUsers = function(form) {
 		var url = aRouter['people']+'ajax-search/';
 		var inputSearch=$('#'+form).find('input');
