@@ -15,7 +15,7 @@
 		<table class="table table-talk">
 			<thead>
 				<tr>
-					<th class="cell-checkbox"><input type="checkbox" name="" class="input-checkbox" onclick="ls.tools.checkAll('form_talks_checkbox', this, true);"></th>
+					<th class="cell-checkbox"><input type="checkbox" name="" class="input-checkbox" onclick="ls.talk.checkAll('form_talks_checkbox', this, true);"></th>
 					<th class="cell-recipients">{$aLang.talk_inbox_target}</th>
 					<th class="cell-title">{$aLang.talk_inbox_title}</th>
 					<th class="cell-date ta-r">{$aLang.talk_inbox_date}</th>

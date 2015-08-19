@@ -143,12 +143,17 @@ makeReadTalks = ->
   $('#form_talks_list').submit()
   false
 
+checkAll = (cssclass, checkbox, invert) ->
+  forEach $(".#{cssclass}"), (node) ->
+    node.checked = if invert then not node.checked else checkbox.checked
+
 module.exports = {
-  addToTalk,
-  removeFromTalk,
-  addToBlackList,
-  toggleRecipient,
-  clearFilter,
-  removeTalks,
+  addToTalk
+  removeFromTalk
+  addToBlackList
+  toggleRecipient
+  clearFilter
+  removeTalks
   makeReadTalks
+  checkAll
 }
