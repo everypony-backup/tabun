@@ -76,13 +76,6 @@ jQuery(document).ready(function($){
 	// комментарии
 	ls.comments.init();
 
-	// избранное
-	ls.hook.add('ls_favourite_toggle_after',function(idTarget,objFavourite,type,params,result){
-		var favCount = $('#fav_count_'+type+'_'+idTarget);
-		favCount.text(result.iCount);
-		result.iCount > 0 ? favCount.show() : favCount.hide();
-	});
-
 	// вступление в блог
 	ls.hook.add('ls_blog_toggle_join_after',function(idBlog,result){
 		if (!this.data('onlyText')) {
