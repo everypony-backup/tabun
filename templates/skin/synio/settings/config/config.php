@@ -3,7 +3,6 @@
 $config = [];
 
 $config['head']['default']['js'] = [
-	"___path.static.skin___/js/vendor/jquery.js",
 	"___path.static.skin___/js/vendor/markitup/jquery.markitup.js",
 	"___path.static.skin___/js/vendor/jquery.serializejson.js",
 	"___path.static.skin___/js/vendor/jquery.file.js",

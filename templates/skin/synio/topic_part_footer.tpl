@@ -36,7 +36,7 @@
 					{date_format date=$oTopic->getDateAdd() format='j F Y, H:i'}
 				</time>
 			</li>
-			<li class="topic-info-favourite" onclick="return ls.favourite.toggle({$oTopic->getId()},$('#fav_topic_{$oTopic->getId()}'),'topic');">
+			<li class="topic-info-favourite" onclick="return ls.favourite.toggle({$oTopic->getId()},jQuery('#fav_topic_{$oTopic->getId()}'),'topic');">
 				<i id="fav_topic_{$oTopic->getId()}" class="favourite {if $oUserCurrent && $oTopic->getIsFavourite()}active{/if}">{if $oTopic->getIsFavourite()}Удалить из избранного{else}В избранное{/if}</i>
 				<span class="favourite-count" id="fav_count_topic_{$oTopic->getId()}" {if $oTopic->getCountFavourite() == 0}style="display: none"{/if}>{if $oTopic->getCountFavourite()>0}{$oTopic->getCountFavourite()}{/if}</span>
 			</li>

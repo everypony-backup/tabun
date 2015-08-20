@@ -2,6 +2,7 @@ require "./styles.styl"
 {assign} = require "lodash"
 
 window.ls = {}
+window.jQuery = require "jquery" # TODO: remove
 
 assign ls, require "core"
 assign ls, require "app"
