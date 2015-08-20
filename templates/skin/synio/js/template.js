@@ -134,18 +134,6 @@ jQuery(document).ready(function($){
 			e.stopPropagation();
 		});
 	})();
-
-	ls.blog.toggleInfo = function() {
-		if ($('#blog-mini').is(':visible')) {
-			$('#blog-mini').hide();
-			$('#blog').show();
-		} else {
-			$('#blog-mini').show();
-			$('#blog').hide();
-		}
-
-		return false;
-	};
 });
 
 

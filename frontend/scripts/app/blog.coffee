@@ -96,7 +96,6 @@ loadInfo = (idBlog) ->
 
 loadInfoType = (type) ->
   $('#blog_type_note').text lang.get("blog_create_type_#{type}_notice")
-  return
 
 searchBlogs = (form) ->
   url = aRouter['blogs'] + 'ajax-search/'
@@ -111,10 +110,8 @@ searchBlogs = (form) ->
 searchBlogsThrottled = throttle searchBlogs, 500
 
 toggleInfo = ->
-  $('#blog-more-content').slideToggle()
-  more = $ '#blog-more'
-  more.toggleClass 'expanded'
-  more.html if more.hasClass('expanded') then lang.get('blog_fold_info') else lang.get('blog_expand_info')
+  $('#blog-mini').slideToggle()
+  $('#blog').slideToggle()
 
 
 module.exports = {
