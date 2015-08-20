@@ -4,7 +4,7 @@
 		{assign var="oTopic" value=$oComment->getTarget()}
 		{assign var="oBlog" value=$oTopic->getBlog()}
 		
-		<li class="js-title-comment">
+		<li>
 			<p>
 				<a href="{$oUser->getUserWebPath()}" class="author">{$oUser->getLogin()}</a> в <a href="{$oBlog->getUrlFull()}" class="stream-blog">{$oBlog->getTitle()|escape:'html'}</a>  
 			</p>

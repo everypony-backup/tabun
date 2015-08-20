@@ -9,7 +9,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/jquery.serializejson.js",
 	"___path.static.skin___/js/vendor/jquery.file.js",
 	"___path.static.skin___/js/vendor/jcrop/jquery.Jcrop.js",
-	"___path.static.skin___/js/vendor/poshytip/jquery.poshytip.js",
 	"___path.static.skin___/js/vendor/jquery.placeholder.min.js",
 	"___path.static.skin___/js/vendor/jquery.charcount.js",
 	"___path.static.skin___/js/infobox.js",

@@ -2,7 +2,6 @@
 	{if $bBlogsUseOrder}
 		<thead>
 			<tr>
-				<th class="cell-info">&nbsp;</th>
 				<th class="cell-name cell-tab">
 					<div class="cell-tab-inner {if $sBlogOrder=='blog_title'}active{/if}"><a href="{$sBlogsRootPage}?order=blog_title&order_way={if $sBlogOrder=='blog_title'}{$sBlogOrderWayNext}{else}{$sBlogOrderWay}{/if}" {if $sBlogOrder=='blog_title'}class="{$sBlogOrderWay}"{/if}><span>{$aLang.blogs_title}</span></a></div>
 				</th>
@@ -44,9 +43,6 @@
 				{assign var="oUserOwner" value=$oBlog->getOwner()}
 
 				<tr>
-					<td class="cell-info">
-						<a href="#" onclick="return ls.infobox.showInfoBlog(this,{$oBlog->getId()});" class="blog-list-info"></a>
-					</td>
 					<td class="cell-name">
 						<p>
 							<a href="{$oBlog->getUrlFull()}" class="blog-name">{$oBlog->getTitle()|escape:'html'}</a>

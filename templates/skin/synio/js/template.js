@@ -12,55 +12,6 @@ jQuery(document).ready(function($){
 		}
 	});
 
-
-	// Всплывающие сообщения
-	if (ls.tools.registry.get('block_stream_show_tip')) {
-		$('.js-title-comment, .js-title-topic').poshytip({
-			className: 'infobox-yellow',
-			alignTo: 'target',
-			alignX: 'left',
-			alignY: 'center',
-			offsetX: 10,
-			liveEvents: true,
-			showTimeout: 1000
-		});
-	}
-
-	$('.js-infobox-vote-topic').poshytip({
-		content: function() {
-			var id = $(this).attr('id').replace('vote_area_topic_','vote-info-topic-');
-			return $('#'+id).html();
-		},
-		className: 'infobox-topic',
-		alignTo: 'target',
-		alignX: 'center',
-		alignY: 'top',
-		offsetX: 2,
-		offsetY: 5,
-		liveEvents: true,
-		showTimeout: 100
-	});
-
-	$('.js-tip-help').poshytip({
-		className: 'infobox-standart',
-		alignTo: 'target',
-		alignX: 'right',
-		alignY: 'center',
-		offsetX: 5,
-		liveEvents: true,
-		showTimeout: 500
-	});
-
-	$('.js-infobox').poshytip({
-		className: 'infobox-topic',
-		alignTo: 'target',
-		alignX: 'center',
-		alignY: 'top',
-		offsetY: 5,
-		liveEvents: true,
-		showTimeout: 300
-	});
-
 	// комментарии
 	ls.comments.init();
 
@@ -195,13 +146,6 @@ jQuery(document).ready(function($){
 
 		return false;
 	};
-
-
-	ls.infobox.aOptDef=$.extend(true,ls.infobox.aOptDef,{
-		className: 'infobox-help',
-		offsetX: -16
-	});
-	//ls.infobox.sTemplateProcess=['<div class="infobox-process"><img src="'+DIR_STATIC_SKIN+'/images/loader-circle.gif" />', '</div>'].join('');
 });
 
 

@@ -39,7 +39,6 @@
 				
 				<div class="form-item-help form-item-help-login">
 					<i class="icon-ok-green validate-ok-field-login" style="display: none"></i>
-					<i class="icon-question-sign js-tip-help" title="{$aLang.registration_login_notice}"></i>
 				</div>
 			</dd>
 		</dl>
@@ -52,7 +51,6 @@
 				
 				<div class="form-item-help form-item-help-mail">
 					<i class="icon-ok-green validate-ok-field-mail" style="display: none"></i>
-					<i class="icon-question-sign js-tip-help" title="{$aLang.registration_mail_notice}"></i>
 				</div>
 			</dd>
 		</dl>
@@ -65,7 +63,6 @@
 				
 				<div class="form-item-help form-item-help-password">
 					<i class="icon-ok-green validate-ok-field-password" style="display: none"></i>
-					<i class="icon-question-sign js-tip-help" title="{$aLang.registration_password_notice}"></i>
 				</div>
 			</dd>
 		</dl>
@@ -78,7 +75,6 @@
 				
 				<div class="form-item-help form-item-help-password_confirm">
 					<i class="icon-ok-green validate-ok-field-password_confirm" style="display: none"></i>
-					<i class="icon-question-sign js-tip-help" title="{$aLang.registration_password_notice}"></i>
 				</div>
 			</dd>
 		</dl>
