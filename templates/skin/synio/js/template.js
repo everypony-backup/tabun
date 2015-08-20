@@ -1,17 +1,5 @@
 jQuery(document).ready(function($){
 
-	// Скролл
-	$(window)._scrollable();
-
-
-	// Тул-бар топиков
-	ls.toolbar.topic.init();
-	// Кнопка "UP"
-	ls.toolbar.up.init();
-
-
-
-
 	toolbarPos();
 
 	$(window).resize(function(){

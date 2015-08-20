@@ -11,3 +11,4 @@ module.exports =
   favourite: require "./favourite.coffee"
   blog: require "./blog.coffee"
   stream: require "./stream.coffee"
+  toolbar: require "./toolbar.coffee"

@@ -1,12 +1,15 @@
 $ = require "jquery"
 require "jquery.ui"
 require "jquery.jqmodal"
+require "jquery.scrollto"
+
 {forEach} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
+toolbar = require "app/toolbar.coffee"
 
 router = window.aRouter
 
@@ -91,6 +94,9 @@ init = ->
   talk.toggleSearchForm = ->
     $('.talk-search').toggleClass 'opened'
     false
+
+  # Toolbar
+  toolbar.init()
 
 
 module.exports = init

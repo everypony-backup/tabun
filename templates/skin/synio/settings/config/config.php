@@ -4,7 +4,6 @@ $config = [];
 
 $config['head']['default']['js'] = [
 	"___path.static.skin___/js/vendor/jquery.js",
-	"___path.static.skin___/js/vendor/jquery.scrollto.js",
 	"___path.static.skin___/js/vendor/markitup/jquery.markitup.js",
 	"___path.static.skin___/js/vendor/jquery.cookie.js",
 	"___path.static.skin___/js/vendor/jquery.serializejson.js",
@@ -16,7 +15,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/infobox.js",
 	"___path.static.skin___/js/comments.js",
 	"___path.static.skin___/js/user.js",
-	"___path.static.skin___/js/toolbar.js",
 	"___path.static.skin___/js/settings.js",
 	"___path.static.skin___/js/hook.js",
 	"___path.static.skin___/js/template.js",
