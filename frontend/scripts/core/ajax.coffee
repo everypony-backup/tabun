@@ -35,11 +35,7 @@ ajax = (url, params, callback, more) ->
     complete: more.complete or ->
 
 
-ajaxSubmit = (url, form, callback, more) ->
-  more ?= {}
-
-  if isString form
-    form = $ "##{form}"
+ajaxSubmit = (url, form, callback, more={}) ->
 
   form.ajaxSubmit
     type: 'POST'
