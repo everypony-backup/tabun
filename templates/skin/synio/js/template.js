@@ -26,55 +26,6 @@ jQuery(document).ready(function($){
 		});
 	});
 
-
-
-
-
-	/****************
-	 * DROPDOWN
-	 */
-	var nav_pills_dropdown = $('.nav-pills-dropdown');
-
-	nav_pills_dropdown.each(function(i) {
-		var obj 	= $(this);
-		var menu 	= obj.clone();
-
-		obj.find('li:not(.active)').remove();
-		obj.show();
-
-		var timestamp 	= new Date().getTime();
-		var active 		= $(this).find('li.active');
-		var pos 		= active.offset();
-
-		menu.removeClass().addClass('dropdown-menu').attr('id', 'dropdown-menu-' + timestamp).hide().appendTo('body').css({ 'left': pos.left - 10, 'top': pos.top + 24, 'display': 'none' });
-		active.addClass('dropdown').attr('id', 'dropdown-trigger-' + timestamp).append('<i class="icon-synio-arrows"></i>');
-
-		active.click(function(){
-			menu.slideToggle();
-			return false;
-		});
-	});
-
-	$(window).resize(function(){
-		nav_pills_dropdown.each(function(i) {
-			var obj 		= $(this).find('li');
-			var timestamp 	= obj.attr('id').replace('dropdown-trigger-', '');
-			var pos 		= obj.offset();
-
-			$('#dropdown-menu-' + timestamp).css({ 'left': pos.left + 2 });
-		});
-	});
-
-	// Hide menu
-	$(document).click(function(){
-		$('.dropdown-menu').hide();
-	});
-
-	$('body').on("click", ".dropdown-menu", function(e) {
-		e.stopPropagation();
-	});
-
-
 	// Help-tags link
 	$('.js-tags-help-link').click(function(){
 		var target=ls.tools.registry.get('tags-help-target-id');
