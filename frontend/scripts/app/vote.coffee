@@ -1,6 +1,6 @@
 $ = require "jquery"
 classNames = require "classnames"
-{forEach, capitalize, has, isFunction} = require "lodash"
+{capitalize, has, isFunction} = require "lodash"
 
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"

@@ -78,7 +78,7 @@ switchTab = (obj, block) ->
   ###
   selItem = $(".js-block-#{block}-item")
   if isString obj
-    forEach selItem (node) ->
+    forEach selItem, (node) ->
       if $(node).data('type') == obj
         obj = node
   ###*
@@ -92,7 +92,7 @@ switchTab = (obj, block) ->
 
   selContent = $(".js-block-#{block}-content")
   selContent.hide()
-  forEach selContent (node) ->
+  forEach selContent, (node) ->
     if $(node).data('type') == $(obj).data('type')
       $(node).show()
   true

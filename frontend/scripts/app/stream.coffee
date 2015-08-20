@@ -1,5 +1,5 @@
 $ = require "jquery"
-{forEach, merge} = require "lodash"
+{merge} = require "lodash"
 
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
