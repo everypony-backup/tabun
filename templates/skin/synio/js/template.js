@@ -15,17 +15,6 @@ jQuery(document).ready(function($){
 	// комментарии
 	ls.comments.init();
 
-	// регистрация
-	ls.hook.add('ls_user_validate_registration_fields_after',function(aFields, sForm, result){
-		$.each(aFields,function(i,aField){
-			if (result.aErrors && result.aErrors[aField.field][0]) {
-				sForm.find('.form-item-help-'+aField.field).removeClass('active');
-			} else {
-				sForm.find('.form-item-help-'+aField.field).addClass('active');
-			}
-		});
-	});
-
 	// Help-tags link
 	$('.js-tags-help-link').click(function(){
 		var target=ls.tools.registry.get('tags-help-target-id');
