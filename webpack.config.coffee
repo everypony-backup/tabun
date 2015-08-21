@@ -9,6 +9,8 @@ aliases =
   "jquery.ui": path.join __dirname, 'frontend', 'vendor', 'jquery.ui.js'
   "jquery.form": path.join __dirname, 'frontend', 'vendor', 'jquery.form.js'
   "jquery.markitup": path.join __dirname, 'frontend', 'vendor', 'jquery.markitup.js'
+  "jquery.jcrop": path.join __dirname, 'frontend', 'vendor', 'jquery.jcrop.js'
+  "jquery.file": path.join __dirname, 'frontend', 'vendor', 'jquery.file.js'
 
 module.exports =
   context: path.join __dirname, 'frontend'
