@@ -42,7 +42,7 @@
 
 	
 	<label for="topic_text">{$aLang.topic_create_text}:</label>
-	<textarea name="topic_text" id="topic_text" class="mce-editor markitup-editor input-width-full" rows="20">{$_aRequest.topic_text}</textarea>
+	<textarea name="topic_text" id="topic_text" class="markitup-editor input-width-full" rows="20">{$_aRequest.topic_text}</textarea>
 
 	{include file='tags_help.tpl' sTagsTargetId="topic_text"}
 	<br />

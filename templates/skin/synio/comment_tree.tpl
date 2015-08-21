@@ -56,7 +56,7 @@
 {else}
 	{if $oUserCurrent}
 
-		{include file='editor.tpl' sImgToLoad='form_comment_text' sSettingsMarkitup='ls.settings.getMarkitupComment()'}
+		{include file='editor.tpl' sImgToLoad='form_comment_text'}
 	
 		<h4 class="reply-header" id="comment_id_0">
 			<a href="#" class="link-dotted" onclick="ls.comments.toggleCommentForm(0); return false;">{$sNoticeCommentAdd}</a>
@@ -67,7 +67,7 @@
 			<form method="post" id="form_comment" onsubmit="return false;" enctype="multipart/form-data">
 				{hook run='form_add_comment_begin'}
 				
-				<textarea name="comment_text" id="form_comment_text" class="mce-editor markitup-editor input-width-full"></textarea>
+				<textarea name="comment_text" id="form_comment_text" class="markitup-editor input-width-full"></textarea>
 				
 				{hook run='form_add_comment_end'}
 				
