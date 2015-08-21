@@ -45,7 +45,7 @@ ajaxSubmit = (url, form, callback, more={}) ->
     success: callback or ->
     error: more.error or ->
 
-ajaxUploadImg = (form) ->
+uploadImg = (form) ->
   upl_window = $('#window_upload_img')
   btns = $('.main-upl-btn', upl_window)
   btns.attr('disabled', 'disabled').addClass('disabled').text 'Загрузка...'
@@ -59,4 +59,4 @@ ajaxUploadImg = (form) ->
 
   btns.removeAttr('disabled').removeClass('disabled').text 'Загрузить'
 
-module.exports = {ajax, ajaxSubmit, ajaxUploadImg}
+module.exports = {ajax, ajaxSubmit, uploadImg}
