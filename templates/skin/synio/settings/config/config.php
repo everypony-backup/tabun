@@ -12,7 +12,7 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/settings.js",
 	"___path.static.skin___/js/hook.js",
 	"___path.static.skin___/js/template.js",
-	"___path.static.skin___/js/hidecomments.js",
+	//"___path.static.skin___/js/hidecomments.js",
 ];
 
 $config['head']['default']['css'] = [];
