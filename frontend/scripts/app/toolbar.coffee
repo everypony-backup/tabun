@@ -1,4 +1,6 @@
 $ = require "jquery"
+{forEach} = require "lodash"
+
 
 iCurrentTopic = -1
 
@@ -55,5 +57,9 @@ init = ->
   # Wide Mode
   $('#widemode-switch').on 'click', -> $('body').toggleClass 'widemode'
 
+  # Despoil
+  $('#despoil').on 'click', ->
+    forEach $('.spoiler-body'), (node) ->
+      node.style.display = 'block'
 
 module.exports = {init, goPrevTopic, goNextTopic}
