@@ -2,7 +2,7 @@
 # Вспомогательные функции
 ###
 $ = require 'jquery'
-{delay} = require 'lodash'
+{delay, reduce} = require 'lodash'
 
 {notice, error} = require "./messages.coffee"
 {ajax} = require "./ajax.coffee"
@@ -45,4 +45,13 @@ showPinkie = (time) ->
     time
   )
 
-module.exports = {registry, textPreview, showPinkie}
+prepareJSON = (serialized) ->
+  reduce(
+    serialized,
+    (result, item) ->
+      result[item.name] = item.value
+      result
+    {}
+  )
+
+module.exports = {registry, textPreview, showPinkie, prepareJSON}
