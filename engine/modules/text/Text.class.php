@@ -126,10 +126,11 @@ class ModuleText extends Module {
 
 		if (count($output_array) == 2) {
 			$y_tpl = '<iframe width="560" height="310" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>';
+			$sText = preg_replace($y_video_pattern, $y_tpl, $sText);
 		} elseif (count($output_array) == 3 ) {
 			$y_tpl = '<iframe width="560" height="310" src="http://www.youtube.com/embed/$1?start=$2" frameborder="0" allowfullscreen></iframe>';
+			$sText = preg_replace($y_video_pattern, $y_tpl, $sText);
 		}
-		$sText = preg_replace($y_video_pattern, $y_tpl, $sText);
 		/**
 		 * vimeo.com
 		*/
