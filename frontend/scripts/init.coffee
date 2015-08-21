@@ -8,7 +8,7 @@ require "jquery.file"
 {forEach, random} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
-{showPinkie} = require "core/tools.coffee"
+{showPinkie, registry} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
@@ -111,5 +111,18 @@ init = ->
       $e.css 'display', 'block'
     else
       $e.hide 'normal'
+
+  # Help-tags link
+  $('.js-tags-help-link').on 'click', ({target}) ->
+    helpTargetId = registry.get('tags-help-target-id')
+    unless helpTargetId
+      return false
+
+    helpTarget = $ "##{helpTargetId}"
+    unless helpTarget.length
+      return false
+
+    str = if target.dataset.insert? then target.dataset.insert else target.textContent
+    $.markItUp target: target, replaceWith: str
 
 module.exports = init
