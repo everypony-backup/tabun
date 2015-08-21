@@ -12,7 +12,6 @@ $config['head']['default']['js'] = [
 	"___path.static.skin___/js/settings.js",
 	"___path.static.skin___/js/hook.js",
 	"___path.static.skin___/js/template.js",
-	"___path.static.skin___/js/tabun.js",
 	"___path.static.skin___/js/hidecomments.js",
 ];
 

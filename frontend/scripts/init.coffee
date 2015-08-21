@@ -3,9 +3,10 @@ require "jquery.ui"
 require "jquery.jqmodal"
 require "jquery.scrollto"
 
-{forEach} = require "lodash"
+{forEach, random} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
+{showPinkie} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
@@ -98,5 +99,6 @@ init = ->
   # Toolbar
   toolbar.init()
 
+  if random(1000) < 5 then showPinkie random 150, 1500
 
 module.exports = init

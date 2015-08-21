@@ -48,4 +48,12 @@ init = ->
       iCurrentTopic = parseInt(vars.goTopic) - 1
     goNextTopic()
 
+  # Up/down
+  $('#up-switch').on 'click', -> $.scrollTo 0, 1000
+  $('#down-switch').on 'click', -> $.scrollTo document.body.clientHeight, 1000
+
+  # Wide Mode
+  $('#widemode-switch').on 'click', -> $('body').toggleClass 'widemode'
+
+
 module.exports = {init, goPrevTopic, goNextTopic}
