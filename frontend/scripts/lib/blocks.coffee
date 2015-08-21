@@ -1,5 +1,5 @@
 $ = require "jquery"
-{assign, throttle, isString, forEach} = require "lodash"
+{assign, delay, first, throttle, isString, forEach} = require "lodash"
 {ajax} = require "core/ajax.coffee"
 {error} = require "core/messages.coffee"
 
@@ -34,18 +34,17 @@ onLoad = (content, result) ->
     'height': 'auto'
     'min-height': 0
   if result.bStateError
-    error null, result.sMsg
-  else
-    content.html result.sText
+    return error null, result.sMsg
+
+  content.html result.sText
 
 load = (obj, block, params) ->
   ###*
   * Метод загрузки содержимого блока
   ###
-  type = $(obj).data 'type'
-  unless type
+  unless obj.dataset.type
     return
-  type = "#{block}_#{type}"
+  type = "#{block}_#{obj.dataset.type}"
   params = assign {}, options.type[type].params or {}, params or {}
   content = $(".js-block-#{block}-content")
 
@@ -58,19 +57,13 @@ load = (obj, block, params) ->
 
 
 getCurrentItem = (block) ->
-  block = $(".js-block-#{block}-nav")
+  navBlock = $(".js-block-#{block}-nav")
+  dropBlock = $(".js-block-#{block}-dropdown-items")
   selector = ".js-block-#{block}-item.#{options.active}"
-
-  if block.is(':visible')
-    block.find selector
-  else
-    $(".js-block-#{block}-dropdown-items").find selector
-
+  first if navBlock.is(':visible') then navBlock.find selector else dropBlock.find selector
 
 ###*
 # Переключает вкладки в блоке, без использования Ajax
-# @param obj
-# @param block
 ###
 switchTab = (obj, block) ->
   ###*
@@ -79,7 +72,7 @@ switchTab = (obj, block) ->
   selItem = $(".js-block-#{block}-item")
   if isString obj
     forEach selItem, (node) ->
-      if $(node).data('type') == obj
+      if node.dataset.type == obj
         obj = node
   ###*
   # Если не нашли такой вкладки
@@ -93,29 +86,29 @@ switchTab = (obj, block) ->
   selContent = $(".js-block-#{block}-content")
   selContent.hide()
   forEach selContent, (node) ->
-    if $(node).data('type') == $(obj).data('type')
+    if node.dataset.type == obj.dataset.type
       $(node).show()
   true
 
 initSwitch = (block) ->
-  $(".js-block-#{block}-item").on "click", ->
-    switchTab this, block
+  $(".js-block-#{block}-item").on "click", ({currentTarget}) ->
+    switchTab currentTarget, block
     false
 
 init = (block, params) ->
   params ?= {}
-  $(".js-block-#{block}-item").on "click", ->
-    load this, block
+  $(".js-block-#{block}-item").on "click", ({currentTarget}) ->
+    load currentTarget, block
     false
 
   if params.group_items
     initNavigation block, params.group_min
 
-  $(".js-block-#{block}-update").on "click", ->
-    $(@).addClass 'active'
+  $(".js-block-#{block}-update").on "click", ({currentTarget}) ->
+    $(currentTarget).addClass 'active'
     load getCurrentItem(block), block
-    setTimeout(
-      -> $(@).removeClass 'active'
+    delay(
+      -> $(currentTarget).removeClass 'active'
       600
     )
 
@@ -133,17 +126,17 @@ initNavigation = (block, count) ->
     menu = $(".js-block-#{block}-dropdown-items")
 
     menu.appendTo('body').css 'display': 'none'
-    trigger.on "click", ->
-      pos = $(@).offset()
+    trigger.on "click", ({currentTarget}) ->
+      pos = $(currentTarget).offset()
       menu.css
         'left': pos.left
         'top': pos.top + 30
         'z-index': 2100
       menu.slideToggle()
-      $(@).toggleClass 'opened'
+      $(target).toggleClass 'opened'
       false
-    menu.find('a').on "click", click ->
-      trigger.removeClass('opened').find('a').text $(@).text()
+    menu.find('a').on "click", ({currentTarget}) ->
+      trigger.removeClass('opened').find('a').text $(currentTarget).text()
       menu.slideToggle()
 
     # Hide menu
