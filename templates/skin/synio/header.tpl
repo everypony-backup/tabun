@@ -13,7 +13,6 @@
     <meta name="keywords" content="{$sHtmlKeywords}">
 
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
-    {$aHtmlHeadFiles.css}
 
     <link href="/favicon.ico" rel="shortcut icon"/>
     <link rel="search" type="application/opensearchdescription+xml" href="{router page='search'}opensearch/" title="{cfg name='view.name'}"/>
@@ -49,7 +48,6 @@
         ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
         ls.tools.registry.set('block_stream_show_tip', {json var=$oConfig->Get('block.stream.show_tip')});
     </script>
-    {$aHtmlHeadFiles.js}
 
     {hook run='html_head_end'}
 </head>

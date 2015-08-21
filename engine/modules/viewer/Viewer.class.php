@@ -43,54 +43,6 @@ class ModuleViewer extends Module {
 	 */
 	protected $aBlockRules = array();
 	/**
-	 * Стандартные настройки вывода js, css файлов
-	 *
-	 * @var array
-	 */
-	protected $aFilesDefault=array(
-		'js'  => array(),
-		'css' => array()
-	);
-	/**
-	 * Параметры отображения js, css файлов
-	 *
-	 * @var array
-	 */
-	protected $aFilesParams=array(
-		'js'  => array(),
-		'css' => array()
-	);
-	/**
-	 * Правила переопределение массивов js и css
-	 *
-	 * @var array
-	 */
-	protected $aFileRules=array();
-	/**
-	 * Список JS, которые нужно добавить в начало и в конец
-	 *
-	 * @var array
-	 */
-	protected $aJsInclude = array(
-		'append'  => array(),
-		'prepend' => array()
-	);
-	/**
-	 * Список CSS, которые нужно добавить в начало и в конец
-	 *
-	 * @var array
-	 */
-	protected $aCssInclude = array(
-		'append'  => array(),
-		'prepend' => array()
-	);
-	/**
-	 * Каталог для кешировния js,css файлов
-	 *
-	 * @var string
-	 */
-	protected $sCacheDir='';
-	/**
 	 * Заголовок HTML страницы
 	 *
 	 * @var string
@@ -126,15 +78,6 @@ class ModuleViewer extends Module {
 	 * @var string
 	 */
 	protected $sHtmlCanonical;
-	/**
-	 * Html код для подключения js,css
-	 *
-	 * @var array
-	 */
-	protected $aHtmlHeadFiles=array(
-		'js'=>'',
-		'css'=>''
-	);
 	/**
 	 * Переменные для отдачи при ajax запросе
 	 *
@@ -209,11 +152,6 @@ class ModuleViewer extends Module {
 		$this->oSmarty->setCacheDir(Config::Get('path.smarty.cache'));
 		$this->oSmarty->addPluginsDir(array(Config::Get('path.smarty.plug'),'plugins'));
 		$this->oSmarty->default_template_handler_func=array($this,'SmartyDefaultTemplateHandler');
-		/**
-		 * Получаем настройки JS, CSS файлов
-		 */
-		$this->InitFileParams();
-		$this->sCacheDir = Config::Get('path.smarty.cache');
 	}
 	/**
 	 * Получает локальную копию модуля
@@ -274,7 +212,6 @@ class ModuleViewer extends Module {
 		$this->Assign("sHtmlTitle",htmlspecialchars($this->sHtmlTitle));
 		$this->Assign("sHtmlKeywords",htmlspecialchars($this->sHtmlKeywords));
 		$this->Assign("sHtmlDescription",htmlspecialchars($this->sHtmlDescription));
-		$this->Assign("aHtmlHeadFiles",$this->aHtmlHeadFiles);
 		$this->Assign("aHtmlRssAlternate",$this->aHtmlRssAlternate);
 		$this->Assign("sHtmlCanonical", func_urlspecialchars($this->sHtmlCanonical));
 		/**
@@ -305,11 +242,13 @@ class ModuleViewer extends Module {
 		$this->Assign("aMenuFetch",$this->aMenuFetch);
 		$this->Assign("aMenuContainers",array_keys($this->aMenu));
 	}
-	/**
-	 * Выводит на экран(браузер) обработанный шаблон
-	 *
-	 * @param string $sTemplate	Шаблон для вывода
-	 */
+
+    /**
+     * Выводит на экран(браузер) обработанный шаблон
+     *
+     * @param string $sTemplate Шаблон для вывода
+     * @throws Exception
+     */
 	public function Display($sTemplate) {
 		if ($this->sResponseAjax) {
 			$this->DisplayAjax($this->sResponseAjax);
@@ -559,13 +498,15 @@ class ModuleViewer extends Module {
 		}
 		return $this->aBlocks;
 	}
-	/**
-	 * Определяет тип блока
-	 *
-	 * @param string $sName	Название блока
-	 * @param string|null $sDir	Путь до блока, обычно определяется автоматички для плагинов, если передать параметр 'plugin'=>'myplugin'
-	 * @return string ('block','template','undefined')
-	 */
+
+    /**
+     * Определяет тип блока
+     *
+     * @param string $sName Название блока
+     * @param string|null $sDir Путь до блока, обычно определяется автоматички для плагинов, если передать параметр 'plugin'=>'myplugin'
+     * @return string
+     * @throws Exception
+     */
 	protected function DefineTypeBlock($sName,$sDir=null) {
 		if ($this->TemplateExists(is_null($sDir)?'blocks/block.'.$sName.'.tpl':rtrim($sDir,'/').'/blocks/block.'.$sName.'.tpl')) {
 			/**
@@ -582,7 +523,6 @@ class ModuleViewer extends Module {
 			 * Считаем что тип не определен
 			 */
 			throw new Exception('Can not find the block`s template: '.$sName);
-			return 'undefined';
 		}
 	}
 	/**
@@ -732,369 +672,6 @@ class ModuleViewer extends Module {
 		}
 	}
 	/**
-	 * Инициализирует параметры вывода js- и css- файлов
-	 */
-	protected function InitFileParams() {
-		foreach (array('js','css') as $sType) {
-			/**
-			 * Проверяем наличие списка файлов данного типа
-			 */
-			$aFiles = Config::Get('head.default.'.$sType);
-			if(is_array($aFiles) and count($aFiles)) {
-				foreach ($aFiles as $sFile=>$aParams) {
-					if(!is_array($aParams)) {
-						/**
-						 * Параметры не определены
-						 */
-						$this->aFilesDefault[$sType][] = $aParams;
-					} else {
-						/**
-						 * Добавляем файл и параметры
-						 */
-						$this->aFilesDefault[$sType][] = $sFile;
-						$this->aFilesParams[$sType][$sFile] = $aParams;
-					}
-				}
-			}
-		}
-	}
-	/**
-	 * Добавляет js файл в конец списка
-	 *
-	 * @param $sJs	Файл js
-	 * @param array $aParams	Параметры, например, можно указать параметр 'name'=>'jquery.plugin.foo' для исключения повторного добавления файла с таким именем
-	 * @return bool
-	 */
-	public function AppendScript($sJs,$aParams=array()) {
-		if ($this->ExistsHeadFileByName('js',$aParams)) {
-			return true;
-		}
-		$this->aJsInclude['append'][] = $sJs;
-		$this->aFilesParams['js'][$sJs] = $aParams;
-		return true;
-	}
-	/**
-	 * Добавляет js файл в начало списка
-	 *
-	 * @param $sJs	Файл js
-	 * @param array $aParams	Параметры, например, можно указать параметр 'name'=>'jquery.plugin.foo' для исключения повторного добавления файла с таким именем
-	 * @return bool
-	 */
-	public function PrependScript($sJs,$aParams=array()) {
-		if ($this->ExistsHeadFileByName('js',$aParams)) {
-			return true;
-		}
-		$this->aJsInclude['prepend'][] = $sJs;
-		$this->aFilesParams['js'][$sJs] = $aParams;
-		return true;
-	}
-	/**
-	 * Добавляет css файл в конец списка
-	 *
-	 * @param $sCss	Файл css стилей
-	 * @param array $aParams	Параметры, например, можно указать параметр 'name'=>'blueprint' для исключения повторного добавления файла с таким именем
-	 * @return bool
-	 */
-	public function AppendStyle($sCss,$aParams=array()) {
-		if ($this->ExistsHeadFileByName('css',$aParams)) {
-			return true;
-		}
-		$this->aCssInclude['append'][] = $sCss;
-		$this->aFilesParams['css'][$sCss] = $aParams;
-		return true;
-	}
-	/**
-	 * Добавляет css файл в начало списка
-	 *
-	 * @param $sCss	Файл css стилей
-	 * @param array $aParams	Параметры, например, можно указать параметр 'name'=>'blueprint' для исключения повторного добавления файла с таким именем
-	 * @return bool
-	 */
-	public function PrependStyle($sCss,$aParams=array()) {
-		if ($this->ExistsHeadFileByName('css',$aParams)) {
-			return true;
-		}
-		$this->aCssInclude['prepend'][] = $sCss;
-		$this->aFilesParams['css'][$sCss] = $aParams;
-		return true;
-	}
-	/**
-	 * Проверка на дубль по имени (параметр name) js или css файла
-	 * Позволяет избежать повторного подключения уже используемой библиотеки
-	 *
-	 * @param string $sType Тип файла - css, js
-	 * @param array $aParams	Параметры
-	 *
-	 * @return bool
-	 */
-	protected function ExistsHeadFileByName($sType,$aParams) {
-		if (isset($aParams['name'])) {
-			/**
-			 * Проверяем на дубликат по имени
-			 */
-			foreach($this->aFilesParams[$sType] as $aParamsFile) {
-				if (isset($aParamsFile['name']) and strtolower($aParams['name'])==strtolower($aParamsFile['name'])) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	/**
-	 * Строит массив для подключения css и js,
-	 * преобразовывает их в строку для HTML
-	 *
-	 */
-	protected function BuildHeadFiles() {
-		$sPath = Router::GetPathWebCurrent();
-		/**
-		 * По умолчанию имеем дефаултовые настройки
-		 */
-		$aResult = $this->aFilesDefault;
-
-		$this->aFileRules = Config::Get('head.rules');
-		foreach((array)$this->aFileRules as $sName => $aRule) {
-			if(!$aRule['path']) continue;
-
-			foreach((array)$aRule['path'] as $sRulePath) {
-				$sPattern = "~".str_replace(array('/','*'),array('\/','\w+'), $sRulePath)."~";
-				if(preg_match($sPattern, $sPath)) {
-					/**
-					 * Преобразование JS
-					 */
-					if(isset($aRule['js']['empty']) && $aRule['js']['empty']) $aResult['js']=array();
-					if(isset($aRule['js']['exclude']) && is_array($aRule['js']['exclude'])) $aResult['js']=array_diff($aResult['js'],$aRule['js']['exclude']);
-					if(isset($aRule['js']['include']) && is_array($aRule['js']['include'])) $aResult['js']=array_merge($aResult['js'],$aRule['js']['include']);
-
-					/**
-					 * Преобразование CSS
-					 */
-					if(isset($aRule['css']['empty']) && $aRule['css']['empty']) $aResult['css']=array();
-					if(isset($aRule['css']['exclude']) && is_array($aRule['css']['exclude'])) $aResult['css']=array_diff($aResult['css'],$aRule['css']['exclude']);
-					if(isset($aRule['css']['include']) && is_array($aRule['css']['include'])) $aResult['css']=array_merge($aResult['css'],$aRule['css']['include']);
-
-					/**
-					 * Продолжаем поиск
-					 */
-					if(isset($aRule['stop'])) {
-						break(2);
-					}
-				}
-			}
-		}
-
-		/**
-		 * Добавляем скрипты и css из массивов
-		 */
-		$aResult['js'] = array_values(
-			array_merge(
-				(array)$this->aJsInclude['prepend'],
-				(array)$aResult['js'],
-				(array)$this->aJsInclude['append']
-			)
-		);
-		$aResult['css'] = array_values(
-			array_merge(
-				(array)$this->aCssInclude['prepend'],
-				(array)$aResult['css'],
-				(array)$this->aCssInclude['append']
-			)
-		);
-
-		/**
-		 * Получаем список блоков
-		 */
-		$aBlocks['js'] = array_unique(
-			array_map(
-				create_function('$sJs','return isset($sJs["block"]) ? $sJs["block"] : null;'),
-				$this->aFilesParams['js']
-			)
-		);
-		$aBlocks['css'] = array_unique(
-			array_map(
-				create_function('$sCss','return isset($sCss["block"]) ? $sCss["block"] : null;'),
-				$this->aFilesParams['css']
-			)
-		);
-
-		/**
-		 * Сливаем файлы в один, используя блочное разделение
-		 */
-		$aHeadFiles = array('js'=>array(),'css'=>array());
-
-		foreach (array('js','css') as $sType) {
-			/**
-			 * Отдельно выделяем файлы, для которых указано отображение,
-			 * привязанное к браузеру (ex. IE6, IE7)
-			 */
-			$aFilesHack = array_filter(
-				$this->aFilesParams[$sType],
-				create_function(
-					'$aParams',
-					'return array_key_exists("browser",(array)$aParams);'
-				)
-			);
-			$aFilesHack = array_intersect(array_keys($aFilesHack),$aResult[$sType]);
-			/**
-			 * Исключаем эти файлы из основной выдачи
-			 */
-			$aResult[$sType] = array_diff($aResult[$sType],$aFilesHack);
-
-			/**
-			 * Аналогично выделяем файлы, которые не нужно объединять со всеми
-			 * TODO: объединить в один цикл с $aFilesHack
-			 */
-			$aFilesNoMerge = array_filter(
-				$this->aFilesParams[$sType],
-				create_function(
-					'$aParams',
-					'return array_key_exists("merge",(array)$aParams) and !$aParams["merge"];'
-				)
-			);
-			$aFilesNoMerge = array_intersect(array_keys($aFilesNoMerge),$aResult[$sType]);
-			$aResult[$sType] = array_diff($aResult[$sType],$aFilesNoMerge);
-
-			/**
-			 * Добавляем файлы поблочно
-			 */
-			if($aBlocks[$sType] && count($aBlocks[$sType])) {
-				foreach ($aBlocks[$sType] as $sBlock) {
-					if(!$sBlock) continue;
-					/**
-					 * Выбираем все файлы, входящие в данный блок
-					 */
-					$aFiles = array_filter($this->aFilesParams[$sType],create_function('$aParams','return (isset($aParams)&&($aParams["block"]=="'.$sBlock.'"));'));
-					$aFiles = array_intersect(array_keys($aFiles),$aResult[$sType]);
-					if($aFiles && count($aFiles)) {
-						$aHeadFiles[$sType][] = $this->Compress($aFiles,$sType);
-						/**
-						 * Удаляем эти файлы из
-						 */
-						$aResult[$sType] = array_diff($aResult[$sType],$aFiles);
-					}
-				}
-			}
-			/**
-			 * Обрабатываем "последние" оставшиеся
-			 */
-			if(Config::Get("compress.{$sType}.merge")) {
-				$aHeadFiles[$sType][] = $this->Compress($aResult[$sType],$sType);
-			} else {
-				$aHeadFiles[$sType] = array_map(array($this,'GetWebPath'),array_merge($aHeadFiles[$sType],$aResult[$sType]));
-			}
-			/**
-			 * Добавляем файлы хаков
-			 */
-			if(is_array($aFilesHack) && count($aFilesHack)) $aHeadFiles[$sType] = array_merge($aHeadFiles[$sType],$aFilesHack);
-			if(is_array($aFilesNoMerge) && count($aFilesNoMerge)) $aHeadFiles[$sType] = array_merge($aHeadFiles[$sType],$aFilesNoMerge);
-		}
-
-		/**
-		 * Получаем HTML код
-		 */
-		$aHtmlHeadFiles = $this->BuildHtmlHeadFiles($aHeadFiles);
-		$this->SetHtmlHeadFiles($aHtmlHeadFiles);
-	}
-	/**
-	 * Сжимает все переданные файлы в один,
-	 * использует файловое кеширование
-	 *
-	 * @param  array  $aFiles	Список файлов
-	 * @param  string $sType	Тип файла - js, css
-	 * @return array
-	 */
-	protected function Compress($aFiles,$sType) {
-		$sCacheDir  = $this->sCacheDir."/".Config::Get('view.skin');
-		$sCacheName = $sCacheDir."/".md5(serialize($aFiles).'_head').".{$sType}";
-		$sPathWeb    = Config::Get('path.root.web');
-		/**
-		 * Если кеш существует, то берем из кеша
-		 */
-		if(!file_exists($sCacheName)) {
-			/**
-			 * Создаем директорию для кеша текущего скина,
-			 * если таковая отсутствует
-			 */
-			if(!is_dir($sCacheDir)){
-				@mkdir($sCacheDir);
-			}
-			/**
-			 * Считываем содержимое
-			 */
-			ob_start();
-			foreach ($aFiles as $sFile) {
-				// если файл локальный
-				if (strpos($sFile, $sPathWeb)!==false) {
-					$sFile=$this->GetServerPath($sFile);
-				}
-				list($sFile,)=explode('?',$sFile,2);
-				/**
-				 * Если файл существует, обрабатываем
-				 */
-				if($sFileContent = @file_get_contents($sFile)) {
-					if($sType=='css'){
-						$sFileContent = $this->ConvertPathInCss($sFileContent,$sFile);
-					}
-					print $sFileContent;
-				}
-			}
-			$sContent = ob_get_contents();
-			ob_end_clean();
-
-			/**
-			 * Создаем новый файл и сливаем туда содержимое
-			 */
-			file_put_contents($sCacheName,$sContent);
-			@chmod($sCacheName, 0766);
-		}
-		/**
-		 * Возвращаем имя файла, заменяя адрес сервера на веб-адрес
-		 */
-		return $this->GetWebPath($sCacheName);
-	}
-	/**
-	 * Конвертирует относительные пути в css файлах в абсолютные
-	 *
-	 * @param  string $sContent	Контент CSS
-	 * @param  string $sPath
-	 * @return string
-	 */
-	protected function ConvertPathInCss($sContent,$sPath) {
-		preg_match_all( "/url\((.*?)\)/is",$sContent,$aMatches);
-		if(count($aMatches[1])==0) return $sContent;
-
-		/**
-		 * Обрабатываем список файлов
-		 */
-		$aFiles = array_unique($aMatches[1]);
-		$sDir = dirname($sPath)."/";
-
-		foreach($aFiles as $sFilePath) {
-			/**
-			 * Don't touch data URIs
-			 */
-			if(strstr($sFilePath,"data:")) {
-				continue;
-			}
-			$sFilePathAbsolute = preg_replace("@'|\"@","",trim($sFilePath));
-			/**
-			 * Если путь является абсолютным, необрабатываем
-			 */
-			if(substr($sFilePathAbsolute,0,1) == "/" || substr($sFilePathAbsolute,0,5) == "http:") {
-				continue;
-			}
-			/**
-			 * Обрабатываем относительный путь
-			 */
-			$sFilePathAbsolute = $this->GetWebPath($this->GetRealpath($sDir.$sFilePathAbsolute));
-			/**
-			 * Заменяем относительные пути в файле на абсолютные
-			 */
-			$sContent = str_replace($sFilePath,$sFilePathAbsolute,$sContent);
-		}
-		return $sContent;
-	}
-	/**
 	 * Аналог realpath + обработка URL
 	 *
 	 * @param string $sPath
@@ -1149,44 +726,6 @@ class ModuleViewer extends Module {
 		 */
 		$sFile=str_replace($sPathWeb,Config::Get('path.root.server'),$sFile);
 		return str_replace('/',DIRECTORY_SEPARATOR,$sFile);
-	}
-	/**
-	 * Строит HTML код по переданному массиву файлов
-	 *
-	 * @param  array  $aFileList	Список файлов
-	 * @return array
-	 */
-	protected function BuildHtmlHeadFiles($aFileList) {
-		$aHeader=array('js'=>'','css'=>'');
-
-		foreach ((array)$aFileList['css'] as $sCss) {
-			$aHeader['css'].=$this->WrapHtmlHack("<link rel='stylesheet' type='text/css' href='{$sCss}' />", $sCss, 'css').PHP_EOL;
-		}
-		foreach((array)$aFileList['js'] as $sJs) {
-			$aHeader['js'].=$this->WrapHtmlHack("<script type='text/javascript' src='{$sJs}'></script>",$sJs,'js').PHP_EOL;
-		}
-		return $aHeader;
-	}
-	/**
-	 * Обрамляет HTML код в браузер-хак (ex., [if IE 6])
-	 *
-	 * @param  string $sHtml
-	 * @param  string $sFile
-	 * @param  string $sType (js|css)
-	 *
-	 * @return string
-	 */
-	protected function WrapHtmlHack($sHtml,$sFile,$sType) {
-		if(!isset($this->aFilesParams[$sType][$sFile]['browser'])) return $sHtml;
-		return "<!--[if {$this->aFilesParams[$sType][$sFile]['browser']}]>$sHtml<![endif]-->";
-	}
-	/**
-	 * Устанавливает список файлов для вывода в хидере страницы
-	 *
-	 * @param array $aText	Список файлов
-	 */
-	public function SetHtmlHeadFiles($aText) {
-		$this->aHtmlHeadFiles=$aText;
 	}
 	/**
 	 * Устанавливаем заголовок страницы(тег title)
@@ -1378,12 +917,7 @@ class ModuleViewer extends Module {
 		 * Добавляем блоки по предзагруженным правилам из конфигов
 		 */
 		$this->BuildBlocks();
-
 		$this->SortBlocks();
-		/**
-		 * Добавляем JS и CSS по предписанным правилам
-		 */
-		$this->BuildHeadFiles();
 		$this->VarAssign();
 		/**
 		 * Рендерим меню для шаблонов и передаем контейнеры в шаблон
@@ -1392,4 +926,3 @@ class ModuleViewer extends Module {
 		$this->MenuVarAssign();
 	}
 }
-?>
