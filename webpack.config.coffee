@@ -8,6 +8,7 @@ aliases =
   "jquery.jqmodal": path.join __dirname, 'frontend', 'vendor', 'jquery.jqmodal.js'
   "jquery.ui": path.join __dirname, 'frontend', 'vendor', 'jquery.ui.js'
   "jquery.form": path.join __dirname, 'frontend', 'vendor', 'jquery.form.js'
+  "jquery.markitup": path.join __dirname, 'frontend', 'vendor', 'jquery.markitup.js'
 
 module.exports =
   context: path.join __dirname, 'frontend'
@@ -15,6 +16,7 @@ module.exports =
 
   entry:
     main: "./main"
+    comments: "./comments"
     vendor: keys(aliases).concat keys(pkginfo.dependencies)
 
   output:

@@ -13,3 +13,4 @@ module.exports =
   stream: require "./stream.coffee"
   toolbar: require "./toolbar.coffee"
   user: require "./user.coffee"
+  comments: require "./comments.coffee"

@@ -12,9 +12,6 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	// комментарии
-	ls.comments.init();
-
 	// Help-tags link
 	$('.js-tags-help-link').click(function(){
 		var target=ls.tools.registry.get('tags-help-target-id');
@@ -29,21 +26,6 @@ jQuery(document).ready(function($){
 		}
 		$.markItUp({target: target, replaceWith: s});
 		return false;
-	});
-
-
-	// Фикс бага с z-index у встроенных видео
-	$("iframe").each(function(){
-		var ifr_source = $(this).attr('src');
-
-		if(ifr_source) {
-			var wmode = "wmode=opaque";
-
-			if (ifr_source.indexOf('?') != -1)
-				$(this).attr('src',ifr_source+'&'+wmode);
-			else
-				$(this).attr('src',ifr_source+'?'+wmode);
-		}
 	});
 
 	// Инициализация строчки поиска
