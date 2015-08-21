@@ -45,9 +45,9 @@ showPinkie = (time) ->
     time
   )
 
-prepareJSON = (serialized) ->
+prepareJSON = (raw_form) ->
   reduce(
-    serialized,
+    raw_form.serializeArray(),
     (result, item) ->
       result[item.name] = item.value
       result
