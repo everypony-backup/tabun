@@ -3,6 +3,7 @@ $ = require "jquery"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
+{notice, error} = require "core/messages.coffee"
 {subscribe, unsubscribe} = require "app/stream.coffee"
 
 router = window.aRouter
@@ -58,7 +59,7 @@ uploadAvatar = (form, input) ->
     clone.insertAfter input
     input.appendTo form
 
-  ajaxSubmit '#{router.settings}profile/upload-avatar/', form, (data) ->
+  ajaxSubmit "#{router.settings}profile/upload-avatar/", form, (data) ->
     if data.bStateError
       error data.sMsgTitle, data.sMsg
     else
