@@ -1555,31 +1555,15 @@ class ModuleTopic extends Module {
 		if (!move_uploaded_file($aFile['tmp_name'],$sFileTmp)) {
 			return false;
 		}
-		$sDirSave=Config::Get('path.uploads.imgur');
+		$sDirUpload=$this->Image_GetIdDir($oUser->getId());
 		$aParams=$this->Image_BuildParams('topic');
-		/**
-		 * Передаем изображение на хранение
-		 */
-		if ($sFileImg=$this->Image_Resize($sFileTmp,$sDirSave,func_generator(),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),null,null,true,$aParams)) {
-			$sTabunTempFileBase64 = base64_encode(file_get_contents($sFileImg));
 
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, 'https://api.imgur.com/3/image.json');
-			curl_setopt($ch, CURLOPT_POST, TRUE);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array( 'Authorization: Client-ID ' . Config::Get('path.uploads.imgur_client_id') ));
-			curl_setopt($ch, CURLOPT_POSTFIELDS, array( 'image' => $sTabunTempFileBase64 ));
-			$reply = curl_exec($ch);
-			curl_close($ch);
-			$reply = json_decode($reply);
-			$output = $reply->data->link;
+		if ($sFileImage=$this->Image_Resize($sFileTmp,$sDirUpload,func_generator(6),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),Config::Get('view.img_resize_width'),null,true,$aParams)) {
 			@unlink($sFileTmp);
-			@unlink($sFileImg);
-			return preg_replace("/^http:/i", "https:", $output);
+			return $this->Image_GetWebPath($sFileImage);
 		}
-		@unlink($sFileImg);
 		@unlink($sFileTmp);
-		return ModuleImage::UPLOAD_IMAGE_ERROR;
+		return false;
 	}
 	/**
 	 * Загрузка изображений по переданному URL
@@ -1628,30 +1612,17 @@ class ModuleTopic extends Module {
 		fwrite($fp,$sContent);
 		fclose($fp);
 
-		$sDirSave=Config::Get('path.uploads.imgur');
+		$sDirSave=$this->Image_GetIdDir($oUser->getId());
 		$aParams=$this->Image_BuildParams('topic');
 		/**
-		 * Передаем изображение на хранение
+		 * Передаем изображение на обработку
 		 */
-		if ($sFileImg=$this->Image_Resize($sFileTmp,$sDirSave,func_generator(),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),null,null,true,$aParams)) {
-			$sTabunTempFileBase64 = base64_encode(file_get_contents($sFileImg));
-
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, 'https://api.imgur.com/3/image.json');
-			curl_setopt($ch, CURLOPT_POST, TRUE);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array( 'Authorization: Client-ID ' . Config::Get('path.uploads.imgur_client_id') ));
-			curl_setopt($ch, CURLOPT_POSTFIELDS, array( 'image' => $sTabunTempFileBase64 ));
-			$reply = curl_exec($ch);
-			curl_close($ch);
-			$reply = json_decode($reply);
-			$output = $reply->data->link;
+		if ($sFileImg=$this->Image_Resize($sFileTmp,$sDirSave,func_generator(),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),Config::Get('view.img_resize_width'),null,true,$aParams)) {
 			@unlink($sFileTmp);
-			@unlink($sFileImg);
-			return preg_replace("/^http:/i", "https:", $output);
+			return $this->Image_GetWebPath($sFileImg);
 		}
-		@unlink($sFileImg);
-		@unlink($sFileImg);
+
+		@unlink($sFileTmp);
 		return ModuleImage::UPLOAD_IMAGE_ERROR;
 	}
 	/**

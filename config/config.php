@@ -58,8 +58,6 @@ $config['path']['static']['root'] = '___path.root.web___';                  // �
 $config['path']['static']['skin'] = '___path.static.root___/templates/skin/___view.skin___';
 $config['path']['uploads']['root'] = '/uploads';                            // директория для загрузки файлов
 $config['path']['uploads']['images'] = '___path.uploads.root___/images';
-$config['path']['uploads']['imgur'] = '___path.uploads.root___/imgur';
-$config['path']['uploads']['imgur_client_id'] = '';
 $config['path']['offset_request_url'] = 0;                                   // иногда помогает если сервер использует внутренние реврайты
 /**
  * Настройки шаблонизатора Smarty
