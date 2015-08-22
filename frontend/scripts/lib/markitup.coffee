@@ -221,7 +221,7 @@ topic =
   onTab:
     keepDefault: false
     replaceWith: '    '
-  markupSet: Array.concat(
+  markupSet: Array::concat(
     commons
     headers
     aligns
@@ -239,7 +239,7 @@ comment =
   onTab:
     keepDefault: false
     replaceWith: '    '
-  markupSet: Array.concat(
+  markupSet: Array::concat(
     commons
     aligns
     quotesAndSpoilers
