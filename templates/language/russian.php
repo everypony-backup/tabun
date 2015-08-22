@@ -864,7 +864,6 @@ return array(
 	'admin_header' => 'Админка',
 	'admin_list_plugins' => 'Управление плагинами',
 	'admin_list_userfields' => 'Настройка пользовательских полей',
-	'admin_list_restorecomment' => 'Перестроение дерева комментариев',
 	'admin_list_recalcfavourite' => 'Пересчитать счетчики избранных',
 	'admin_list_recalcvote' => 'Пересчитать счетчики голосований',
 	'admin_list_recalctopic' => 'Пересчитать количество постов в блогах',

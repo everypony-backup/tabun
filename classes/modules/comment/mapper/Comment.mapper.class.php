@@ -222,98 +222,6 @@ class ModuleComment_MapperComment extends Mapper {
 		return null;
 	}
 	/**
-	 * Получает комменты используя nested set
-	 *
-	 * @param int $sId	ID владельца коммента
-	 * @param string $sTargetType	Тип владельца комментария
-	 * @return array
-	 */
-	public function GetCommentsTreeByTargetId($sId,$sTargetType) {
-		$sql = "SELECT 
-					comment_id 
-				FROM 
-					".Config::Get('db.table.comment')."
-				WHERE 
-					target_id = ?d 
-					AND			
-					target_type = ? 					
-				ORDER by comment_left asc;	
-					";
-		$aComments=array();
-		if ($aRows=$this->oDb->select($sql,$sId,$sTargetType)) {
-			foreach ($aRows as $aRow) {
-				$aComments[]=$aRow['comment_id'];
-			}
-		}
-		return $aComments;
-	}
-	/**
-	 * Получает комменты используя nested set
-	 *
-	 * @param int $sId	ID владельца коммента
-	 * @param string $sTargetType	Тип владельца комментария
-	 * @param int $iCount	Возвращает общее количество элементов
-	 * @param  int $iPage	Номер страницы
-	 * @param  int $iPerPage	Количество элементов на страницу
-	 * @return array
-	 */
-	public function GetCommentsTreePageByTargetId($sId,$sTargetType,&$iCount,$iPage,$iPerPage) {
-
-		/**
-		 * Сначала получаем корни и определяем границы выборки веток
-		 */
-		$sql = "SELECT 
-					comment_left,
-					comment_right 
-				FROM 
-					".Config::Get('db.table.comment')."
-				WHERE 
-					target_id = ?d 
-					AND			
-					target_type = ? 
-					AND
-					comment_pid IS NULL
-				ORDER by comment_left desc
-				LIMIT ?d , ?d ;";
-		$aComments=array();
-		if ($aRows=$this->oDb->selectPage($iCount,$sql,$sId,$sTargetType,($iPage-1)*$iPerPage, $iPerPage)) {
-			$aCmt=array_pop($aRows);
-			$iLeft=$aCmt['comment_left'];
-			if ($aRows) {
-				$aCmt=array_shift($aRows);
-			}
-			$iRight=$aCmt['comment_right'];
-		} else {
-			return array();
-		}
-
-		/**
-		 * Теперь получаем полный список комментов
-		 */
-		$sql = "SELECT 
-					comment_id 
-				FROM 
-					".Config::Get('db.table.comment')."
-				WHERE 
-					target_id = ?d 
-					AND			
-					target_type = ? 
-					AND
-					comment_left >= ?d
-					AND
-					comment_right <= ?d
-				ORDER by comment_left asc;	
-					";
-		$aComments=array();
-		if ($aRows=$this->oDb->select($sql,$sId,$sTargetType,$iLeft,$iRight)) {
-			foreach ($aRows as $aRow) {
-				$aComments[]=$aRow['comment_id'];
-			}
-		}
-
-		return $aComments;
-	}
-	/**
 	 * Возвращает количество дочерних комментариев у корневого коммента
 	 *
 	 * @param int $sId	ID владельца коммента
@@ -335,62 +243,6 @@ class ModuleComment_MapperComment extends Mapper {
 		if ($aRow=$this->oDb->selectRow($sql,$sId,$sTargetType)) {
 			return $aRow['c'];
 		}
-	}
-	/**
-	 * Возвращает количество комментариев
-	 *
-	 * @param int $sId	ID владельца коммента
-	 * @param string $sTargetType	Тип владельца комментария
-	 * @param int $iLeft	Значение left для дерева nested set
-	 * @return int
-	 */
-	public function GetCountCommentsAfterByTargetId($sId,$sTargetType,$iLeft)  {
-		$sql = "SELECT 
-					count(comment_id) as c
-				FROM 
-					".Config::Get('db.table.comment')."
-				WHERE 
-					target_id = ?d 
-					AND			
-					target_type = ? 					
-					AND
-					comment_pid IS NULL	
-					AND 
-					comment_left >= ?d ;";
-
-		if ($aRow=$this->oDb->selectRow($sql,$sId,$sTargetType,$iLeft)) {
-			return $aRow['c'];
-		}
-	}
-	/**
-	 * Возвращает корневой комментарий
-	 *
-	 * @param int $sId	ID владельца коммента
-	 * @param string $sTargetType	Тип владельца комментария
-	 * @param int $iLeft	Значение left для дерева nested set
-	 * @return ModuleComment_EntityComment|null
-	 */
-	public function GetCommentRootByTargetIdAndChildren($sId,$sTargetType,$iLeft) {
-		$sql = "SELECT 
-					*
-				FROM 
-					".Config::Get('db.table.comment')."
-				WHERE 
-					target_id = ?d 
-					AND			
-					target_type = ? 					
-					AND
-					comment_pid IS NULL	
-					AND 
-					comment_left < ?d 
-					AND 
-					comment_right > ?d 
-				LIMIT 0,1 ;";
-
-		if ($aRow=$this->oDb->selectRow($sql,$sId,$sTargetType,$iLeft,$iLeft)) {
-			return Engine::GetEntity('Comment',$aRow);
-		}
-		return null;
 	}
 	/**
 	 * Получить новые комменты для владельца
@@ -528,46 +380,6 @@ class ModuleComment_MapperComment extends Mapper {
 		return false;
 	}
 	/**
-	 * Добавляет коммент в дерево nested set
-	 *
-	 * @param  ModuleComment_EntityComment $oComment	Объект комментария
-	 * @return bool|int
-	 */
-	public function AddCommentTree(ModuleComment_EntityComment $oComment) {
-		$this->oDb->transaction();
-
-		if ($oComment->getPid() and $oCommentParent=$this->GetCommentsByArrayId(array($oComment->getPid()))) {
-			$oCommentParent=$oCommentParent[0];
-			$iLeft=$oCommentParent->getRight();
-			$iLevel=$oCommentParent->getLevel()+1;
-
-			$sql= "UPDATE ".Config::Get('db.table.comment')." SET comment_left=comment_left+2 WHERE target_id=?d and target_type=? and comment_left>? ;";
-			$this->oDb->query($sql, $oComment->getTargetId(),$oComment->getTargetType(),$iLeft-1);
-			$sql = "UPDATE ".Config::Get('db.table.comment')." SET comment_right=comment_right+2 WHERE target_id=?d and target_type=? and comment_right>? ;";
-			$this->oDb->query($sql, $oComment->getTargetId(),$oComment->getTargetType(),$iLeft-1);
-		} else {
-			if ($oCommentLast=$this->GetCommentLast($oComment->getTargetId(),$oComment->getTargetType())) {
-				$iLeft=$oCommentLast->getRight()+1;
-			} else {
-				$iLeft=1;
-			}
-			$iLevel=0;
-		}
-
-		if ($iId=$this->AddComment($oComment)) {
-			$sql = "UPDATE ".Config::Get('db.table.comment')." SET comment_left = ?d, comment_right = ?d, comment_level = ?d WHERE comment_id = ? ;";
-			$this->oDb->query($sql, $iLeft,$iLeft+1,$iLevel,$iId);
-			$this->oDb->commit();
-			return $iId;
-		}
-
-		if (strtolower(Config::Get('db.tables.engine'))=='innodb') {
-			$this->oDb->rollback();
-		}
-
-		return false;
-	}
-	/**
 	 * Возвращает последний комментарий
 	 *
 	 * @param int $sTargetId	ID владельца коммента
@@ -580,7 +392,7 @@ class ModuleComment_MapperComment extends Mapper {
 				target_id = ?d 
 				AND
 				target_type = ? 
-			ORDER BY comment_right DESC
+			ORDER BY comment_id DESC
 			LIMIT 0,1
 				";
 		if ($aRow=$this->oDb->selectRow($sql,$sTargetId,$sTargetType)) {
@@ -797,38 +609,6 @@ class ModuleComment_MapperComment extends Mapper {
 			return true;
 		}
 		return false;
-	}
-	/**
-	 * Перестраивает дерево комментариев
-	 * Восстанавливает значения left, right и level
-	 *
-	 * @param int $iPid	ID родителя
-	 * @param int $iLft	Значение left для дерева nested set
-	 * @param int $iLevel	Уровень
-	 * @param int $aTargetId	Список ID владельцев
-	 * @param string $sTargetType	Тип владельца
-	 * @return int
-	 */
-	public function RestoreTree($iPid,$iLft,$iLevel,$aTargetId,$sTargetType) {
-		$iRgt = $iLft+1;
-		$iLevel++;
-		$sql = "SELECT comment_id FROM ".Config::Get('db.table.comment')." WHERE target_id = ? and target_type = ? { and comment_pid = ?  } { and comment_pid IS NULL and 1=?d}
-				ORDER BY  comment_id ASC";
-
-		if ($aRows=$this->oDb->select($sql,$aTargetId,$sTargetType,!is_null($iPid) ? $iPid:DBSIMPLE_SKIP, is_null($iPid) ? 1:DBSIMPLE_SKIP)) {
-			foreach ($aRows as $aRow) {
-				$iRgt = $this->RestoreTree($aRow['comment_id'], $iRgt,$iLevel,$aTargetId,$sTargetType);
-			}
-		}
-		$iLevel--;
-		if (!is_null($iPid)) {
-			$sql = "UPDATE ".Config::Get('db.table.comment')."
-				SET comment_left=?d, comment_right=?d , comment_level =?d
-				WHERE comment_id = ? ";
-			$this->oDb->query($sql,$iLft,$iRgt,$iLevel,$iPid);
-		}
-
-		return $iRgt+1;
 	}
 	/**
 	 * Возвращает список всех используемых типов владельца

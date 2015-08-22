@@ -57,7 +57,6 @@ class ActionAdmin extends Action {
 	protected function RegisterEvent() {
 		$this->AddEvent('index','EventIndex');
 		$this->AddEvent('plugins','EventPlugins');
-		$this->AddEvent('restorecomment','EventRestoreComment');
 		$this->AddEvent('userfields','EventUserfields');
 		$this->AddEvent('recalcfavourite','EventRecalculateFavourite');
 		$this->AddEvent('recalcvote','EventRecalculateVote');
@@ -76,19 +75,6 @@ class ActionAdmin extends Action {
 	 */
 	protected function EventIndex() {
 
-	}
-	/**
-	 * Перестроение дерева комментариев, актуально при $config['module']['comment']['use_nested'] = true;
-	 *
-	 */
-	protected function EventRestoreComment() {
-		$this->Security_ValidateSendForm();
-		set_time_limit(0);
-		$this->Comment_RestoreTree();
-		$this->Cache_Clean();
-
-		$this->Message_AddNotice($this->Lang_Get('admin_comment_restore_tree'),$this->Lang_Get('attention'));
-		$this->SetTemplateAction('index');
 	}
 	/**
 	 * Пересчет счетчика избранных

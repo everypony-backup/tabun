@@ -56,7 +56,7 @@
                 </li>
             {/if}
             <li class="comment-link">
-                <a href="{if $oConfig->GetValue('module.comment.nested_per_page')}{router page='comments'}{else}{$oTopic->getUrl()}#comment{/if}{$oComment->getId()}" title="{$aLang.comment_url_notice}">
+                <a href="{$oTopic->getUrl()}#comment{$oComment->getId()}" title="{$aLang.comment_url_notice}">
                     <i class="icon-synio-link"></i>
                 </a>
             </li>

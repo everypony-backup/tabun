@@ -358,15 +358,9 @@ class ModuleComment extends Module {
 	 *
 	 * @param  int $sId	ID владельца коммента
 	 * @param  string $sTargetType	Тип владельца комментария
-	 * @param  int $iPage	Номер страницы
-	 * @param  int $iPerPage	Количество элементов на страницу
 	 * @return array('comments'=>array,'iMaxIdComment'=>int)
 	 */
-	public function GetCommentsByTargetId($sId,$sTargetType,$iPage=1,$iPerPage=0) {
-		if (Config::Get('module.comment.use_nested')) {
-			return $this->GetCommentsTreeByTargetId($sId,$sTargetType,$iPage,$iPerPage);
-		}
-
+	public function GetCommentsByTargetId($sId,$sTargetType) {
 		if (false === ($aCommentsRec = $this->Cache_Get("comment_target_{$sId}_{$sTargetType}"))) {
 			$aCommentsRow=$this->oMapper->GetCommentsByTargetId($sId,$sTargetType);
 			if (count($aCommentsRow)) {
@@ -386,38 +380,6 @@ class ModuleComment extends Module {
 
 	}
 	/**
-	 * Получает комменты используя nested set
-	 *
-	 * @param int $sId	ID владельца коммента
-	 * @param string $sTargetType	Тип владельца комментария
-	 * @param  int $iPage	Номер страницы
-	 * @param  int $iPerPage	Количество элементов на страницу
-	 * @return array('comments'=>array,'iMaxIdComment'=>int,'count'=>int)
-	 */
-	public function GetCommentsTreeByTargetId($sId,$sTargetType,$iPage=1,$iPerPage=0) {
-		if (!Config::Get('module.comment.nested_page_reverse') and $iPerPage and $iCountPage=ceil($this->GetCountCommentsRootByTargetId($sId,$sTargetType)/$iPerPage)) {
-			$iPage=$iCountPage-$iPage+1;
-		}
-		$iPage=$iPage<1 ? 1 : $iPage;
-		if (false === ($aReturn = $this->Cache_Get("comment_tree_target_{$sId}_{$sTargetType}_{$iPage}_{$iPerPage}"))) {
-
-			/**
-			 * Нужно или нет использовать постраничное разбиение комментариев
-			 */
-			if ($iPerPage) {
-				$aComments=$this->oMapper->GetCommentsTreePageByTargetId($sId,$sTargetType,$iCount,$iPage,$iPerPage);
-			} else {
-				$aComments=$this->oMapper->GetCommentsTreeByTargetId($sId,$sTargetType);
-				$iCount=count($aComments);
-			}
-			$iMaxIdComment=count($aComments) ? max($aComments) : 0;
-			$aReturn=array('comments'=>$aComments,'iMaxIdComment'=>$iMaxIdComment,'count'=>$iCount);
-			$this->Cache_Set($aReturn, "comment_tree_target_{$sId}_{$sTargetType}_{$iPage}_{$iPerPage}", array("comment_new_{$sTargetType}_{$sId}"), 60*60*24*2);
-		}
-		$aReturn['comments']=$this->GetCommentsAdditionalData($aReturn['comments']);
-		return $aReturn;
-	}
-	/**
 	 * Возвращает количество дочерних комментариев у корневого коммента
 	 *
 	 * @param int $sId	ID владельца коммента
@@ -428,55 +390,13 @@ class ModuleComment extends Module {
 		return $this->oMapper->GetCountCommentsRootByTargetId($sId,$sTargetType);
 	}
 	/**
-	 * Возвращает номер страницы, на которой расположен комментарий
-	 *
-	 * @param int $sId	ID владельца коммента
-	 * @param string $sTargetType	Тип владельца комментария
-	 * @param ModuleComment_EntityComment $oComment	Объект комментария
-	 * @return bool|int
-	 */
-	public function GetPageCommentByTargetId($sId,$sTargetType,$oComment) {
-		if (!Config::Get('module.comment.nested_per_page')) {
-			return 1;
-		}
-		if (is_numeric($oComment)) {
-			if (!($oComment=$this->GetCommentById($oComment))) {
-				return false;
-			}
-			if ($oComment->getTargetId()!=$sId or $oComment->getTargetType()!=$sTargetType) {
-				return false;
-			}
-		}
-		/**
-		 * Получаем корневого родителя
-		 */
-		if ($oComment->getPid()) {
-			if (!($oCommentRoot=$this->oMapper->GetCommentRootByTargetIdAndChildren($sId,$sTargetType,$oComment->getLeft()))) {
-				return false;
-			}
-		} else {
-			$oCommentRoot=$oComment;
-		}
-		$iCount=ceil($this->oMapper->GetCountCommentsAfterByTargetId($sId,$sTargetType,$oCommentRoot->getLeft())/Config::Get('module.comment.nested_per_page'));
-
-		if (!Config::Get('module.comment.nested_page_reverse') and $iCountPage=ceil($this->GetCountCommentsRootByTargetId($sId,$sTargetType)/Config::Get('module.comment.nested_per_page'))) {
-			$iCount=$iCountPage-$iCount+1;
-		}
-		return $iCount ? $iCount : 1;
-	}
-	/**
 	 * Добавляет коммент
 	 *
 	 * @param  ModuleComment_EntityComment $oComment	Объект комментария
 	 * @return bool|ModuleComment_EntityComment
 	 */
 	public function AddComment(ModuleComment_EntityComment $oComment) {
-		if (Config::Get('module.comment.use_nested')) {
-			$sId=$this->oMapper->AddCommentTree($oComment);
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("comment_update"));
-		} else {
-			$sId=$this->oMapper->AddComment($oComment);
-		}
+		$sId=$this->oMapper->AddComment($oComment);
 		if ($sId) {
 			if ($oComment->getTargetType()=='topic') {
 				$this->Topic_increaseTopicCountComment($oComment->getTargetId());
@@ -892,39 +812,6 @@ class ModuleComment extends Module {
 	public function MoveTargetParentOnline($sParentId, $sTargetType, $sParentIdNew) {
 		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("comment_online_update_{$sTargetType}"));
 		return $this->oMapper->MoveTargetParentOnline($sParentId, $sTargetType, $sParentIdNew);
-	}
-	/**
-	 * Перестраивает дерево комментариев
-	 * Восстанавливает значения left, right и level
-	 *
-	 * @param int $aTargetId	Список ID владельцев
-	 * @param string $sTargetType	Тип владельца
-	 */
-	public function RestoreTree($aTargetId=null,$sTargetType=null) {
-		// обработать конкретную сущность
-		if (!is_null($aTargetId) and !is_null($sTargetType)) {
-			$this->oMapper->RestoreTree(null,0,-1,$aTargetId,$sTargetType);
-			return ;
-		}
-		$aType=array();
-		// обработать все сущности конкретного типа
-		if (!is_null($sTargetType)) {
-			$aType[]=$sTargetType;
-		} else {
-			// обработать все сущности всех типов
-			$aType=$this->oMapper->GetCommentTypes();
-		}
-		foreach ($aType as $sTargetType) {
-			// для каждого типа получаем порциями ID сущностей
-			$iPage=1;
-			$iPerPage=50;
-			while ($aResult=$this->oMapper->GetTargetIdByType($sTargetType,$iPage,$iPerPage)) {
-				foreach ($aResult as $Row) {
-					$this->oMapper->RestoreTree(null,0,-1,$Row['target_id'],$sTargetType);
-				}
-				$iPage++;
-			}
-		}
 	}
 	/**
 	 * Пересчитывает счетчик избранных комментариев

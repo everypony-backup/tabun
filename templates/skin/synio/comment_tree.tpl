@@ -1,5 +1,4 @@
 {add_block group='toolbar' name='toolbar_comment.tpl'
-	aPagingCmt=$aPagingCmt
 	iTargetId=$iTargetId
 	sTargetType=$sTargetType
 	iMaxIdComment=$iMaxIdComment
@@ -45,9 +44,6 @@
 		{/if}
 	{/foreach}
 </div>				
-	
-	
-{include file='comment_paging.tpl' aPagingCmt=$aPagingCmt}
 
 {hook run='comment_tree_end' iTargetId=$iTargetId sTargetType=$sTargetType}
 

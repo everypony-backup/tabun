@@ -112,15 +112,7 @@ class ActionComments extends Action {
 		/**
 		 * Определяем необходимую страницу для отображения комментария
 		 */
-		if (!Config::Get('module.comment.use_nested') or !Config::Get('module.comment.nested_per_page')) {
-			Router::Location($oTopic->getUrl().'#comment'.$oComment->getId());
-		}
-		$iPage=$this->Comment_GetPageCommentByTargetId($oComment->getTargetId(),$oComment->getTargetType(),$oComment);
-		if ($iPage==1) {
-			Router::Location($oTopic->getUrl().'#comment'.$oComment->getId());
-		} else {
-			Router::Location($oTopic->getUrl()."?cmtpage={$iPage}#comment".$oComment->getId());
-		}
+        Router::Location($oTopic->getUrl().'#comment'.$oComment->getId());
 		exit();
 	}
 	/**

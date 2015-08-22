@@ -14,7 +14,7 @@
 	sNoticeCommentAdd=$aLang.topic_comment_add
 	bAllowSubscribe=true
 	oSubscribeComment=$oTopic->getSubscribeNewComment()
-	aPagingCmt=$aPagingCmt}
+}
 
 
 {include file='footer.tpl'}

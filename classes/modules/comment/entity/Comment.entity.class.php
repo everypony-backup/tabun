@@ -39,22 +39,6 @@ class ModuleComment_EntityComment extends Entity {
 		return $this->_getDataOne('comment_pid');
 	}
 	/**
-	 * Возвращает значение left для дерева nested set
-	 *
-	 * @return int|null
-	 */
-	public function getLeft() {
-		return $this->_getDataOne('comment_left');
-	}
-	/**
-	 * Возвращает значение right для дерева nested set
-	 *
-	 * @return int|null
-	 */
-	public function getRight() {
-		return $this->_getDataOne('comment_right');
-	}
-	/**
 	 * Возвращает ID владельца
 	 *
 	 * @return int|null
@@ -228,22 +212,6 @@ class ModuleComment_EntityComment extends Entity {
 	 */
 	public function setPid($data) {
 		$this->_aData['comment_pid']=$data;
-	}
-	/**
-	 * Устанавливает значени left для дерева nested set
-	 *
-	 * @param int $data
-	 */
-	public function setLeft($data) {
-		$this->_aData['comment_left']=$data;
-	}
-	/**
-	 * Устанавливает значени right для дерева nested set
-	 *
-	 * @param int $data
-	 */
-	public function setRight($data) {
-		$this->_aData['comment_right']=$data;
 	}
 	/**
 	 * Устанавливает ID владельца

@@ -89,8 +89,6 @@ load = (idTarget, typeTarget, selfIdComment, bNotFlushNew) ->
 
   if selfIdComment
     params.selfIdComment = selfIdComment
-  if $('#comment_use_paging').val()
-    params.bUsePaging = 1
 
   ajax options.type[typeTarget].url_response, params, (result) ->
     objImg.removeClass 'active'
