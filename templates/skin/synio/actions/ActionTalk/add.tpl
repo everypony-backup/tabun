@@ -36,4 +36,4 @@
 
 {hook run='talk_add_end'}
 
-{include file='footer.tpl'}
+{include file='footer.tpl' sMarkItUpBundle="topics"}

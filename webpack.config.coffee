@@ -19,6 +19,7 @@ module.exports =
   entry:
     main: "./main"
     comments: "./comments"
+    topics: "./topics"
     vendor: keys(aliases).concat keys(pkginfo.dependencies)
 
   output:
