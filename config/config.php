@@ -54,9 +54,11 @@ $config['path']['root']['web'] = 'http://' . $_SERVER['HTTP_HOST'];         // �
 $config['path']['root']['server'] = dirname(dirname(__FILE__));             // полный путь до сайта в файловой системе
 $config['path']['root']['engine'] = '___path.root.server___/engine';        // полный путь до сайта в файловой системе;
 $config['path']['root']['engine_lib'] = '___path.root.web___/engine/lib';   // полный путь до сайта в файловой системе
-$config['path']['static']['root'] = '___path.root.web___';                  // чтоб можно было статику засунуть на отдельный сервер
-$config['path']['static']['skin'] = '___path.static.root___/templates/skin/___view.skin___';
-$config['path']['uploads']['root'] = '/uploads';                            // директория для загрузки файлов
+
+$config['path']['static']['url'] = '/static';                               // url для локальных файлов TODO: удалить этот fallback
+$config['path']['uploads']['url'] = '/storage';                             // url для отдачи загруженых файлов
+$config['path']['uploads']['storage'] = '___path.root.server___/storage';   // путь для хранения загруженых файлов
+
 $config['path']['uploads']['images'] = '___path.uploads.root___/images';
 $config['path']['offset_request_url'] = 0;                                   // иногда помогает если сервер использует внутренние реврайты
 /**

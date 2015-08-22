@@ -40,8 +40,8 @@
         {/foreach}
     </script>
 
-    <script src="/static/vendor.bundle.js" type="text/javascript"></script>
-    <script src="/static/main.bundle.js" type="text/javascript"></script>
+    <script src="{cfg name='path.static.url'}/vendor.bundle.js" type="text/javascript"></script>
+    <script src="{cfg name='path.static.url'}/main.bundle.js" type="text/javascript"></script>
     <script type="text/javascript">
         ls.lang.load({json var = $aLangJs});
         ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
