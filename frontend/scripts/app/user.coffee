@@ -73,7 +73,7 @@ showResizeAvatar = (sImgFile) ->
   $('#avatar-resize').jqmShow()
   $('#avatar-resize-original-img').Jcrop {aspectRatio: 1, minSize: [32, 32]}, ->
     jcropAvatar = @
-    setSelect [0, 0, 500, 500]
+    @setSelect [0, 0, 500, 500]
 
 resizeAvatar = ->
   unless jcropAvatar
@@ -137,7 +137,7 @@ showResizeFoto = (sImgFile) ->
   $('#foto-resize').jqmShow()
   $('#foto-resize-original-img').Jcrop minSize: [32, 32], ->
     jcropFoto = @
-    setSelect [0, 0, 500, 500]
+    @setSelect [0, 0, 500, 500]
 
 resizeFoto = ->
   unless jcropFoto
