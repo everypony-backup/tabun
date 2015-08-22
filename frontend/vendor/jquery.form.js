@@ -58,7 +58,7 @@
     $.fn.ajaxSubmit = function (options) {
         // fast fail if nothing selected (http://dev.jquery.com/ticket/2752)
         if (!this.length) {
-            log('ajaxSubmit: skipping submit process - no element selected');
+            console.log('ajaxSubmit: skipping submit process - no element selected');
             return this;
         }
 
@@ -89,13 +89,13 @@
         var veto = {};
         this.trigger('form-pre-serialize', [this, options, veto]);
         if (veto.veto) {
-            log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
+            console.log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
             return this;
         }
 
         // provide opportunity to alter form data before it is serialized
         if (options.beforeSerialize && options.beforeSerialize(this, options) === false) {
-            log('ajaxSubmit: submit aborted via beforeSerialize callback');
+            console.log('ajaxSubmit: submit aborted via beforeSerialize callback');
             return this;
         }
 
@@ -118,14 +118,14 @@
 
         // give pre-submit callback an opportunity to abort the submit
         if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) {
-            log('ajaxSubmit: submit aborted via beforeSubmit callback');
+            console.log('ajaxSubmit: submit aborted via beforeSubmit callback');
             return this;
         }
 
         // fire vetoable 'validate' event
         this.trigger('form-submit-validate', [a, this, options, veto]);
         if (veto.veto) {
-            log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
+            console.log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
             return this;
         }
 
@@ -251,7 +251,7 @@
                 },
                 abort: function (status) {
                     var e = (status === 'timeout' ? 'timeout' : 'aborted');
-                    log('aborting upload... ' + e);
+                    console.log('aborting upload... ' + e);
                     this.aborted = 1;
                     $io.attr('src', s.iframeSrc); // abort op in progress
                     xhr.error = e;
@@ -336,12 +336,12 @@
                 function checkState() {
                     try {
                         var state = getDoc(io).readyState;
-                        log('state = ' + state);
+                        console.log('state = ' + state);
                         if (state.toLowerCase() == 'uninitialized')
                             setTimeout(checkState, 50);
                     }
                     catch (e) {
-                        log('Server abort: ', e, ' (', e.name, ')');
+                        console.log('Server abort: ', e, ' (', e.name, ')');
                         cb(SERVER_ABORT);
                         timeoutHandle && clearTimeout(timeoutHandle);
                         timeoutHandle = undefined;
@@ -396,7 +396,7 @@
                     doc = getDoc(io);
                 }
                 catch (ex) {
-                    log('cannot access response document: ', ex);
+                    console.log('cannot access response document: ', ex);
                     e = SERVER_ABORT;
                 }
                 if (e === CLIENT_TIMEOUT_ABORT && xhr) {
@@ -422,21 +422,21 @@
                     }
 
                     var isXml = s.dataType == 'xml' || doc.XMLDocument || $.isXMLDoc(doc);
-                    log('isXml=' + isXml);
+                    console.log('isXml=' + isXml);
                     if (!isXml && window.opera && (doc.body == null || doc.body.innerHTML == '')) {
                         if (--domCheckCount) {
                             // in some browsers (Opera) the iframe DOM is not always traversable when
                             // the onload callback fires, so we loop a bit to accommodate
-                            log('requeing onLoad callback, DOM not available');
+                            console.log('requeing onLoad callback, DOM not available');
                             setTimeout(cb, 250);
                             return;
                         }
                         // let this fall through because server response could be an empty document
-                        //log('Could not access iframe DOM after mutiple tries.');
+                        //console.log('Could not access iframe DOM after mutiple tries.');
                         //throw 'DOMException: not available';
                     }
 
-                    //log('response detected');
+                    //console.log('response detected');
                     var docRoot = doc.body ? doc.body : doc.documentElement;
                     xhr.responseText = docRoot ? docRoot.innerHTML : null;
                     xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
@@ -488,13 +488,13 @@
                     }
                 }
                 catch (e) {
-                    log('error caught: ', e);
+                    console.log('error caught: ', e);
                     status = 'error';
                     xhr.error = errMsg = (e || status);
                 }
 
                 if (xhr.aborted) {
-                    log('upload aborted');
+                    console.log('upload aborted');
                     status = null;
                 }
 
@@ -593,14 +593,14 @@
         if (this.length === 0) {
             var o = {s: this.selector, c: this.context};
             if (!$.isReady && o.s) {
-                log('DOM not ready, queuing ajaxForm');
+                console.log('DOM not ready, queuing ajaxForm');
                 $(function () {
                     $(o.s, o.c).ajaxForm(options);
                 });
                 return this;
             }
             // is your DOM ready?  http://docs.jquery.com/Tutorials:Introducing_$(document).ready()
-            log('terminating; zero elements found by selector' + ($.isReady ? '' : ' (DOM not ready)'));
+            console.log('terminating; zero elements found by selector' + ($.isReady ? '' : ' (DOM not ready)'));
             return this;
         }
 
@@ -917,16 +917,4 @@
             }
         });
     };
-
-// helper fn for console logging
-    function log() {
-        var msg = '[jquery.form] ' + Array.prototype.join.call(arguments, '');
-        if (window.console && window.console.log) {
-            window.console.log(msg);
-        }
-        else if (window.opera && window.opera.postError) {
-            window.opera.postError(msg);
-        }
-    };
-
 }));
