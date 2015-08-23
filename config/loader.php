@@ -77,23 +77,6 @@ if ($hDirInclude = opendir($sDirInclude)) {
 }
 
 /**
- * Инклудим все *.php файлы из каталога {path.root.server}/include/ - пользовательские файлы
- */
-$sDirInclude=Config::get('path.root.server').'/include/';
-if ($hDirInclude = opendir($sDirInclude)) {
-	while (false !== ($sFileInclude = readdir($hDirInclude))) {
-		$sFileIncludePathFull=$sDirInclude.$sFileInclude;
-		if ($sFileInclude !='.' and $sFileInclude !='..' and is_file($sFileIncludePathFull)) {
-			$aPathInfo=pathinfo($sFileIncludePathFull);
-			if (isset($aPathInfo['extension']) and strtolower($aPathInfo['extension'])=='php') {
-				require_once($sDirInclude.$sFileInclude);
-			}
-		}
-	}
-	closedir($hDirInclude);
-}
-
-/**
  * Ищет routes-конфиги модулей и объединяет их с текущим
  * @see Router.class.php
  */
