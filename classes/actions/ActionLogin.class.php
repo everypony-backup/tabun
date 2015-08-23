@@ -73,7 +73,7 @@ class ActionLogin extends Action {
 			 * Сверяем хеши паролей и проверяем активен ли юзер
 			 */
 
-			if ($oUser->getPassword()==func_encrypt(getRequest('password'))) {
+			if (validate_password(getRequestStr('password'), $oUser->getPassword())) {
 				if (!$oUser->getActivate()) {
 					$this->Message_AddErrorSingle($this->Lang_Get('user_not_activated', array('reactivation_path' => Router::GetPath('login') . 'reactivation')));
 					return;
@@ -199,8 +199,8 @@ class ActionLogin extends Action {
 			 */
 			if ($oReminder=$this->User_GetReminderByCode($this->GetParam(0))) {
 				if (!$oReminder->getIsUsed() and strtotime($oReminder->getDateExpire())>time() and $oUser=$this->User_GetUserById($oReminder->getUserId())) {
-					$sNewPassword=func_generator(7);
-					$oUser->setPassword(func_encrypt($sNewPassword));
+					$sNewPassword=func_generator(16);
+					$oUser->setPassword(create_hash($sNewPassword));
 					if ($this->User_Update($oUser)) {
 						$oReminder->setDateUsed(date("Y-m-d H:i:s"));
 						$oReminder->setIsUsed(1);
