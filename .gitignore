@@ -1,7 +1,4 @@
-/uploads/
-/templates/cache/
 /templates/compiled/
-/tmp/
 /config/config.local.php
 /static/
 /node_modules/
