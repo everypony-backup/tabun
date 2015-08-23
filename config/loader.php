@@ -130,8 +130,8 @@ if ($hDirConfig = opendir($sDirConfig)) {
 if(file_exists(Config::Get('path.root.server').'/config/config.local.php')) {
 	Config::LoadFromFile(Config::Get('path.root.server').'/config/config.local.php',false);
 }
-if(file_exists(Config::Get('path.root.server').'/config/config.stable.php')) {
-	Config::LoadFromFile(Config::Get('path.root.server').'/config/config.stable.php',false);
+if(file_exists('/etc/config.stable.php')) {
+	Config::LoadFromFile('/etc/config.stable.php', false);
 }
 
 /**
