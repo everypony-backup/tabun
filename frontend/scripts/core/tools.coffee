@@ -54,7 +54,8 @@ prepareJSON = (raw_form) ->
     {}
   )
 
-uploadImg = (form) ->
+uploadImg = (formId) ->
+  form = $ "##{formId}"
   upl_window = $('#window_upload_img')
   btns = $('.main-upl-btn', upl_window)
   btns.attr('disabled', 'disabled').addClass('disabled').text 'Загрузка...'
