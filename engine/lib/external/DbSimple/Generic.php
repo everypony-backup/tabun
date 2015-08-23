@@ -94,20 +94,14 @@ class DbSimple_Generic
         $class = 'DbSimple_'.ucfirst($parsed['scheme']);
         if (!class_exists($class)) {
             $file = str_replace('_', '/', $class) . ".php";
-            // Try to load library file from standard include_path.
-            if ($f = @fopen($file, "r", true)) {
-                fclose($f);
-                require_once($file);
+            // Load from current directory.
+            $base = basename($file);
+            $dir = dirname(__FILE__);
+            if (@is_file($path = "$dir/$base")) {
+                require_once($path);
             } else {
-                // Wrong include_path; try to load from current directory.
-                $base = basename($file);
-                $dir = dirname(__FILE__);
-                if (@is_file($path = "$dir/$base")) {
-                    require_once($path);
-                } else {
-                    trigger_error("Error loading database driver: no file $file in include_path; no file $base in $dir", E_USER_ERROR);
-                    return null;
-                }
+                trigger_error("Error loading database driver: no file $file in include_path; no file $base in $dir", E_USER_ERROR);
+                return null;
             }
         }
         $object = new $class($parsed);
