@@ -68,10 +68,6 @@ $config['path']['smarty']['cache'] = '/var/smarty/cache';
 $config['path']['smarty']['plug'] = '___path.root.engine___/modules/viewer/plugs';
 $config['smarty']['compile_check'] = true; // Проверять или нет файлы шаблона на изменения перед компиляцией, false может значительно увеличить быстродействие, но потребует ручного удаления кеша при изменения шаблона
 /**
- * Настройки плагинов
- */
-$config['sys']['plugins']['activation_file'] = 'plugins.dat'; // файл со списком активных плагинов в каталоге /plugins/
-/**
  * Настройки куков
  */
 $config['sys']['cookie']['host'] = null;                    // хост для установки куков
