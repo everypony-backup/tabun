@@ -415,6 +415,7 @@ $config['sys']['celery']['backend'] = 'redis';
  * Разное
  */
 $config['misc']['ga'] = '';
+$config['misc']['fv'] = 'trunk';        // Frontend version
 
 return $config;
 

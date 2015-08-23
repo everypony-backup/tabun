@@ -1,8 +1,11 @@
 path = require 'path'
 webpack = require 'webpack'
-{merge, keys} = require 'lodash'
+{keys} = require 'lodash'
 pkginfo = require "./package.json"
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
+StatsPlugin = require 'stats-webpack-plugin'
+isProduction = process.env.NODE_ENV == 'production';
+
 
 aliases =
   "jquery.jqmodal": path.join __dirname, 'frontend', 'vendor', 'jquery.jqmodal.js'
@@ -20,19 +23,25 @@ module.exports =
     main: "./main"
     comments: "./comments"
     topics: "./topics"
-    vendor: keys(aliases).concat keys(pkginfo.dependencies)
+    vendor: Array::concat keys(aliases), keys(pkginfo.dependencies)
 
   output:
     path: path.join __dirname, 'static'
     publicPath: '/static/'
-    filename: '[name].bundle.js'
+    filename: if isProduction then '[name].[hash].bundle.js' else '[name].trunk.bundle.js'
 
   module:
     loaders: [
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
-      {test: /.*\.(gif|png|jpg|jpeg|svg)$/, loaders: ['file?name=img/[hash:4].[ext]', 'image-webpack?optimizationLevel=7&interlaced=false']}
+      {
+        test: /.*\.(gif|png|jpg|jpeg|svg)$/,
+        loaders: Array::concat(
+          if isProduction then ['file?name=img/[hash:4].[ext]'] else ['file?name=img/[name].[ext]']
+          if isProduction then ['image-webpack?optimizationLevel=7&interlaced=false'] else []
+        )
+      }
     ]
 
   resolve:
@@ -40,8 +49,13 @@ module.exports =
     extensions: ['', '.coffee', '.js', '.styl', '.css']
     modulesDirectories: ['node_modules', 'scripts']
 
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin()
-    new ExtractTextPlugin("styles.css")
-    new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
-  ]
+  plugins: Array::concat(
+    if isProduction then [
+      new webpack.optimize.UglifyJsPlugin()
+      new StatsPlugin 'stats.json', modules: false, chunks: false, assets: false, version: false, errorDetails: false
+    ] else []
+    [
+      new ExtractTextPlugin if isProduction then "styles.[hash].css" else "styles.trunk.css"
+      new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
+    ]
+  )

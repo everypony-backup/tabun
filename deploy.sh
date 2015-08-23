@@ -37,6 +37,11 @@ deploy(){
     echo "Sources cleanup"
     clean_source
 
+    echo "Build static"
+    npm run-script webpack:production
+    local STATIC_VER=$(grep -Po '(?:"hash"):.*?[^\\]"' static/stats.json | perl -pe 's/"hash"://; s/"//g')
+    rm static/stats.json
+
     echo "Remove app"
     rm -rf ${APP_PATH}/*
     echo "Clean temporary files"
@@ -46,9 +51,6 @@ deploy(){
     echo "Clean static bundles & files"
     rm -rf ${STATIC_PATH}/*
 
-    echo "Build static"
-    npm run-script webpack
-
     echo "Deploy static"
     rsync -au static/ ${STATIC_PATH}
     cp -r frontend/images/local/ ${STATIC_PATH}
@@ -57,6 +59,9 @@ deploy(){
     for chunk in ${APP}; do
         cp -r ${chunk} ${APP_PATH}
     done
+
+    echo "Set static version to ${STATIC_VER}"
+    sed -i "s/\$config\['misc'\]\['fv'\].*/\$config\['misc'\]\['fv'\] = '"${STATIC_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
 
     echo "Set owner and permissions"
     chown ${PERMS} ${APP_PATH} -R

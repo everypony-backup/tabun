@@ -13,7 +13,7 @@
 
 {include file='toolbar.tpl'}
 {if isset($sMarkItUpBundle)}
-	<script src="{cfg name='path.static.url'}/{$sMarkItUpBundle}.bundle.js" type="text/javascript"></script>
+	<script src="{cfg name='path.static.url'}/{$sMarkItUpBundle}.{cfg name='misc.fv'}.bundle.js" type="text/javascript"></script>
 {/if}
 {hook run='body_end'}
 
