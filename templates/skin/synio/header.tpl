@@ -12,9 +12,9 @@
     <meta name="description" content="{$sHtmlDescription}">
     <meta name="keywords" content="{$sHtmlKeywords}">
 
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/styles.css">
 
-    <link href="/favicon.ico" rel="shortcut icon"/>
+    <link href="{cfg name='path.static.url'}/local/favicon.ico" rel="shortcut icon"/>
     <link rel="search" type="application/opensearchdescription+xml" href="{router page='search'}opensearch/" title="{cfg name='view.name'}"/>
 
     {if $aHtmlRssAlternate}
