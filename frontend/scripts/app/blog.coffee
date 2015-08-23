@@ -97,9 +97,11 @@ loadInfo = (idBlog) ->
 loadInfoType = (type) ->
   $('#blog_type_note').text lang.get("blog_create_type_#{type}_notice")
 
-searchBlogs = (form) ->
-  url = aRouter['blogs'] + 'ajax-search/'
-  inputSearch = $('#' + form).find('input')
+searchBlogs = (formId) ->
+  url = "#{router.blogs}ajax-search/"
+  form = $ "##{formId}"
+
+  inputSearch = form.find('input')
   inputSearch.addClass 'loader'
 
   ajaxSubmit url, form, (result) ->
