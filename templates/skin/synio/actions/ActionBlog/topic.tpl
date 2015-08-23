@@ -13,6 +13,7 @@
 	sNoticeNotAllow=$aLang.topic_comment_notallow
 	sNoticeCommentAdd=$aLang.topic_comment_add
 	bAllowSubscribe=true
+	bNoCommentFavourites=false
 	oSubscribeComment=$oTopic->getSubscribeNewComment()
 }
 
