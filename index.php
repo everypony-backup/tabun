@@ -27,7 +27,7 @@ chdir(dirname(__FILE__));
 require_once("./config/loader.php");
 require_once(Config::Get('path.root.engine')."/classes/Engine.class.php");
 
-$oProfiler=ProfilerSimple::getInstance(Config::Get('path.root.server').'/logs/'.Config::Get('sys.logs.profiler_file'),Config::Get('sys.logs.profiler'));
+$oProfiler=ProfilerSimple::getInstance(Config::Get('sys.logs.dir').'/'.Config::Get('sys.logs.profiler_file'),Config::Get('sys.logs.profiler'));
 $iTimeId=$oProfiler->Start('full_time');
 
 $oRouter=Router::getInstance();
