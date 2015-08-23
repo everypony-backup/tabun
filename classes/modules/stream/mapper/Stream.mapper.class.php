@@ -136,9 +136,8 @@ class ModuleStream_MapperStream extends Mapper {
 			$aUserId=array($aUserId);
 		}
 		$sql = 'SELECT count(*) as c FROM ' . Config::Get('db.table.stream_event'). '
-				WHERE
-					publish = 1
-					{ event_type IN (?a) }
+				WHERE publish = 1
+					{ AND event_type IN (?a) }
 					{ AND user_id IN (?a) }
 		';
 		if ($aRow=$this->oDb->selectRow($sql,
