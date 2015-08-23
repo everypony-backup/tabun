@@ -12,7 +12,7 @@
 </div> <!-- /container -->
 
 {include file='toolbar.tpl'}
-{if $sMarkItUpBundle}
+{if isset($sMarkItUpBundle)}
 	<script src="{cfg name='path.static.url'}/{$sMarkItUpBundle}.bundle.js" type="text/javascript"></script>
 {/if}
 {hook run='body_end'}

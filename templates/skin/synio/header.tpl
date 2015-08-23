@@ -26,7 +26,7 @@
         <link rel="canonical" href="{$sHtmlCanonical}"/>
     {/if}
 
-    {if $bRefreshToHome}
+    {if isset($bRefreshToHome)}
         <meta HTTP-EQUIV="Refresh" CONTENT="3; URL={cfg name='path.root.web'}/">
     {/if}
     {include 'analytics.tpl'}
