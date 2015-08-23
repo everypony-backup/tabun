@@ -110,7 +110,7 @@ class ActionSettings extends Action {
 		 * Ресайзим и сохраняем именьшенную копию
 		 * Храним две копии - мелкую для показа пользователю и крупную в качестве исходной для ресайза
 		 */
-		$sDir=Config::Get('path.uploads.images')."/tmp/fotos/{$this->oUserCurrent->getId()}";
+		$sDir="/tmp/fotos/{$this->oUserCurrent->getId()}";
 		if ($sFile=$this->Image_Resize($sFileTmp,$sDir,'original',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),1000,null,true)) {
 			if ($sFilePreview=$this->Image_Resize($sFileTmp,$sDir,'preview',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),200,null,true)) {
 				/**
@@ -250,7 +250,7 @@ class ActionSettings extends Action {
 		/**
 		 * Ресайзим и сохраняем уменьшенную копию
 		 */
-		$sDir=Config::Get('path.uploads.images')."/tmp/avatars/{$this->oUserCurrent->getId()}";
+		$sDir="tmp/avatars/{$this->oUserCurrent->getId()}";
 		if ($sFileAvatar=$this->Image_Resize($sFileTmp,$sDir,'original',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),200,null,true)) {
 			/**
 			 * Зписываем в сессию

@@ -226,13 +226,13 @@ function func_header_location($sLocation) {
 /**
  * Создаёт каталог по полному пути
  *
- * @param unknown_type $sBasePath
- * @param unknown_type $sNewDir
+ * @param string $sBasePath
+ * @param string $sNewDir
  */
 function func_mkdir($sBasePath,$sNewDir) {
   $sDirToCheck = rtrim ($sBasePath, '/') . '/' . $sNewDir;
   if (!is_dir ($sDirToCheck)) {
-    @mkdir ($sDirToCheck, 0755, true);
+    mkdir ($sDirToCheck, 0755, true);
   }
 }
 

@@ -303,7 +303,7 @@ class ModuleImage extends Module {
 	 * @return bool | string
 	 */
 	public function SaveFile($sFileSource,$sDirDest,$sFileDest,$iMode=null,$bRemoveSource=false) {
-		$sFileDestFullPath=rtrim(Config::Get('path.root.server'),"/").'/'.trim($sDirDest,"/").'/'.$sFileDest;
+		$sFileDestFullPath=rtrim(Config::Get('path.uploads.storage'),"/").'/'.trim($sDirDest,"/").'/'.$sFileDest;
 		$this->CreateDirectory($sDirDest);
 
 		$bResult=copy($sFileSource,$sFileDestFullPath);
@@ -352,7 +352,7 @@ class ModuleImage extends Module {
 	 * @param string $sDirDest	Каталог относительно корня сайта
 	 */
 	public function CreateDirectory($sDirDest) {
-		@func_mkdir(Config::Get('path.root.server'),$sDirDest);
+		@func_mkdir(Config::Get('path.uploads.storage'),$sDirDest);
 	}
 	/**
 	 * Возвращает серверный адрес по переданному web-адресу
@@ -361,20 +361,7 @@ class ModuleImage extends Module {
 	 * @return string
 	 */
 	public function GetServerPath($sPath) {
-		/**
-		 * Определяем, принадлежит ли этот адрес основному домену
-		 */
-		if(parse_url($sPath,PHP_URL_HOST)!=parse_url(Config::Get('path.root.web'),PHP_URL_HOST)) {
-			return $sPath;
-		}
-		/**
-		 * Выделяем адрес пути
-		 */
-		$sPath = ltrim(parse_url($sPath,PHP_URL_PATH),'/');
-		if($iOffset = Config::Get('path.offset_request_url')){
-			$sPath = preg_replace('#^([^/]+/*){'.$iOffset.'}#msi', '', $sPath);
-		}
-		return rtrim(Config::Get('path.root.server'),'/').'/'.$sPath;
+		return rtrim(Config::Get('path.uploads.storage'),'/').'/'.ltrim(parse_url($sPath,PHP_URL_PATH),'/');
 	}
 	/**
 	 * Возвращает WEB адрес по переданному серверному адресу
@@ -383,19 +370,17 @@ class ModuleImage extends Module {
 	 * @return string
 	 */
 	public function GetWebPath($sPath) {
-		$sServerPath = rtrim(str_replace(DIRECTORY_SEPARATOR,'/',Config::Get('path.root.server')),'/');
-		$sWebPath    = rtrim(Config::Get('path.root.web'), '/');
-		return str_replace($sServerPath, $sWebPath, str_replace(DIRECTORY_SEPARATOR,'/',$sPath));
+        return str_replace(Config::Get('path.uploads.storage'), Config::Get('path.uploads.url'), $sPath);
 	}
 	/**
 	 * Получает директорию для данного пользователя
-	 * Используется фомат хранения данных (/images/us/er/id/yyyy/mm/dd/file.jpg)
+	 * Используется фомат хранения данных (us/er/id/yyyy/mm/dd/file.jpg)
 	 *
 	 * @param  int $sId	Целое число, обычно это ID пользователя
 	 * @return string
 	 */
 	public function GetIdDir($sId) {
-		return Config::Get('path.uploads.images').'/'.preg_replace('~(.{2})~U', "\\1/", str_pad($sId, 6, "0", STR_PAD_LEFT)).date('Y/m/d');
+		return preg_replace('~(.{2})~U', "\\1/", str_pad($sId, 6, "0", STR_PAD_LEFT)).date('Y/m/d');
 	}
 	/**
 	 * Возвращает валидный Html код тега <img>
@@ -414,4 +399,3 @@ class ModuleImage extends Module {
 		return $sText;
 	}
 }
-?>

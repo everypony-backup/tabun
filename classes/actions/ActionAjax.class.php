@@ -1058,14 +1058,14 @@ class ActionAjax extends Action {
 		}
 		$sFile=null;
 		/**
-		 * Был выбран файл с компьютера и он успешно зугрузился?
+		 * Был выбран файл с компьютера и он успешно загрузился?
 		 */
-		if (is_uploaded_file($_FILES['img_file']['tmp_name'])) {
+		if (isset($_FILES['img_file']) && is_uploaded_file($_FILES['img_file']['tmp_name'])) {
 			if(!$sFile=$this->Topic_UploadTopicImageFile($_FILES['img_file'],$this->oUserCurrent)) {
 				$this->Message_AddErrorSingle($this->Lang_Get('uploadimg_file_error'),$this->Lang_Get('error'));
 				return;
 			}
-		} elseif (isPost('img_url') && $_REQUEST['img_url']!='' && $_REQUEST['img_url']!='http://') {
+		} elseif (isPost('img_url') && $_REQUEST['img_url']!='' && $_REQUEST['img_url']!='http://' && $_REQUEST['img_url']!='https://' ) {
 			/**
 			 * Загрузка файла по URl
 			 */

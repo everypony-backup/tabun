@@ -59,7 +59,6 @@ $config['path']['static']['url'] = '/static';                               // u
 $config['path']['uploads']['url'] = '/storage';                             // url для отдачи загруженых файлов
 $config['path']['uploads']['storage'] = '___path.root.server___/storage';   // путь для хранения загруженых файлов
 
-$config['path']['uploads']['images'] = '___path.uploads.root___/images';
 $config['path']['offset_request_url'] = 0;                                   // иногда помогает если сервер использует внутренние реврайты
 /**
  * Настройки шаблонизатора Smarty
