@@ -1,5 +1,6 @@
 {assign var="oUser" value=$oComment->getUser()}
 {assign var="oVote" value=$oComment->getVote()}
+{assign var="oTopic" value=$oComment->getTarget()}
 
 <section id="comment_id_{$oComment->getId()}" class="comment {if $oComment->isBad()}comment-bad{/if} {if $oComment->getDelete()}comment-deleted{elseif $oUserCurrent and $oComment->getUserId() == $oUserCurrent->getId()} comment-self{elseif $sDateReadLast <= $oComment->getDate()} comment-new{/if}">
     {if !$oComment->getDelete() or $bOneComment or ($oUserCurrent and $oUserCurrent->isAdministrator())}
