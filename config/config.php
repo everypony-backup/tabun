@@ -63,8 +63,8 @@ $config['path']['offset_request_url'] = 0;                                   // 
  * Настройки шаблонизатора Smarty
  */
 $config['path']['smarty']['template'] = '___path.root.server___/templates/skin/___view.skin___';
-$config['path']['smarty']['compiled'] = '___path.root.server___/templates/compiled';
-$config['path']['smarty']['cache'] = '___path.root.server___/templates/cache';
+$config['path']['smarty']['compiled'] = '/var/smarty/compiled';
+$config['path']['smarty']['cache'] = '/var/smarty/cache';
 $config['path']['smarty']['plug'] = '___path.root.engine___/modules/viewer/plugs';
 $config['smarty']['compile_check'] = true; // Проверять или нет файлы шаблона на изменения перед компиляцией, false может значительно увеличить быстродействие, но потребует ручного удаления кеша при изменения шаблона
 /**
