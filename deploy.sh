@@ -15,10 +15,11 @@ Usage:
         --static-perms ep:ep
 
 Options:
-   -h, --help       Show this message and exit
-   -c, --chroot     Path to chroot
-   -s, --static     Path to static dir
-   -p, --perms      Permissions
+   -h, --help           Show this message and exit
+   -c, --chroot         Path to chroot
+   -s, --static         Path to static dir
+   -a, --app-perms      App files permissions
+   -p, --static-perms   Static files permissions
 EOT
 exit 0;
 }
@@ -89,7 +90,7 @@ do
         -c|--chroot) CHROOT_PATH=$2; shift;;
         -s|--static) STATIC_PATH=$2; shift;;
         -a|--app-perms) APP_PERMS=$2; shift;;
-        -s|--static-perms) STATIC_PERMS=$2; shift;;
+        -p|--static-perms) STATIC_PERMS=$2; shift;;
         -h|--help) usage;;
         *) break;;
     esac
