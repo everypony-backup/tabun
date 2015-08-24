@@ -144,7 +144,7 @@ inject = (idCommentParent, idComment, sHtml) ->
 
 
 toggle = (obj, commentId) ->
-  url = "${router.ajax}comment/delete/"
+  url = "#{router.ajax}comment/delete/"
   params = idComment: commentId
   
   ajax url, params, (result) ->
