@@ -10,8 +10,9 @@ Deploy Tabun
 Usage:
     ./deploy.sh \
         --chroot /home/ep/tabun.everypony.ru \
-        --static /home/ep/cdn.everypony.ru/static \
-        --perms ep_tabun:ep_tabun
+        --static /home/ep/cdn.everypony.ru/www/static \
+        --app-perms ep_tabun:ep_tabun \
+        --static-perms ep:ep
 
 Options:
    -h, --help       Show this message and exit
@@ -64,9 +65,12 @@ deploy(){
     sed -i "s/\$config\['misc'\]\['fv'\].*/\$config\['misc'\]\['fv'\] = '"${STATIC_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
 
     echo "Set owner and permissions"
-    chown ${PERMS} ${APP_PATH} -R
+    chown ${APP_PERMS} ${APP_PATH} -R
+    chown ${STATIC_PERMS} ${STATIC_PATH} -R
     find ${APP_PATH} -type f | xargs chmod 440
+    find ${STATIC_PATH} -type f | xargs chmod 440
     find ${APP_PATH} -type d | xargs chmod 550
+    find ${STATIC_PATH} -type d | xargs chmod 550
 
     echo "Restart services"
     systemctl restart memcached
@@ -84,14 +88,15 @@ do
     case "$1" in
         -c|--chroot) CHROOT_PATH=$2; shift;;
         -s|--static) STATIC_PATH=$2; shift;;
-        -p|--perms) PERMS=$2; shift;;
+        -a|--app-perms) APP_PERMS=$2; shift;;
+        -s|--static-perms) STATIC_PERMS=$2; shift;;
         -h|--help) usage;;
         *) break;;
     esac
     shift
 done
 
-if [ -z ${CHROOT_PATH+x} ] || [ -z ${STATIC_PATH+x} ] || [ -z ${PERMS+x} ]; then
+if [ -z ${CHROOT_PATH+x} ] || [ -z ${STATIC_PATH+x} ] || [ -z ${APP_PERMS+x} ] || [ -z ${STATIC_PERMS+x} ]; then
     usage
 else
     deploy
