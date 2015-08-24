@@ -38,6 +38,7 @@ deploy(){
 
     echo "Sources cleanup"
     clean_source
+    local APP_VER=$(git name-rev --tags --name-only $(git rev-parse HEAD))
 
     echo "Build static"
     npm run-script webpack:production
@@ -63,7 +64,9 @@ deploy(){
     done
 
     echo "Set static version to ${STATIC_VER}"
-    sed -i "s/\$config\['misc'\]\['fv'\].*/\$config\['misc'\]\['fv'\] = '"${STATIC_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
+    sed -i "s/\$config\['misc'\]\['ver'\]\['front'\].*/\$config\['misc'\]\['ver'\]\['front'\] = '"${STATIC_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
+    echo "Set app version to ${APP_VER}"
+    sed -i "s/\$config\['misc'\]\['ver'\]\['code'\].*/\$config\['misc'\]\['ver'\]\['code'\] = '"${APP_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
 
     echo "Set owner and permissions"
     chown ${APP_PERMS} ${APP_PATH} -R
