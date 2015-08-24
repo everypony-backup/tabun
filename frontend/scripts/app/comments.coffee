@@ -191,7 +191,7 @@ goToNextComment = ->
 
 
 scrollToComment = (idComment) ->
-  $.scrollTo '#comment_id_' + idComment, 1000, offset: -250
+  $.scrollTo '#comment_id_' + idComment, 300, offset: -250
   if iCurrentViewComment
     $('#comment_id_' + iCurrentViewComment).removeClass options.classes.comment_current
   $('#comment_id_' + idComment).addClass options.classes.comment_current
