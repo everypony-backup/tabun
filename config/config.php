@@ -84,9 +84,8 @@ $config['sys']['session']['path'] = '___sys.cookie.path___';    // путь се
 /**
  * Настройки почтовых уведомлений
  */
-$config['sys']['mail']['type'] = 'mail';                            // Какой тип отправки использовать
-$config['sys']['mail']['from_email'] = 'noreply@everypony.info';    // Мыло с которого отправляются все уведомления
-$config['sys']['mail']['from_name'] = 'Пони почтовик';              // Имя с которого отправляются все уведомления
+$config['sys']['mail']['from_email'] = 'noreply@example.com';    // Мыло с которого отправляются все уведомления
+$config['sys']['mail']['from_name'] = 'PonyMail';              // Имя с которого отправляются все уведомления
 $config['sys']['mail']['include_comment'] = true;                   // Включает в уведомление о новых комментах текст коммента
 $config['sys']['mail']['include_talk'] = true;                      // Включает в уведомление о новых личных сообщениях текст сообщения
 /**

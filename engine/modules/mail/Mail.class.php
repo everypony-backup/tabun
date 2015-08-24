@@ -15,6 +15,8 @@
 ---------------------------------------------------------
 */
 
+use Predis\Connection\ConnectionException;
+
 require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/vendor/autoload.php');
 require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/celery.php');
 
@@ -33,9 +35,9 @@ require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/celery
  */
 class ModuleMail extends Module {
 	/**
-	 * Основной объект рассылбщика
+	 * Основной объект почтовика
 	 *
-	 * @var phpmailer
+	 * @var Celery
 	 */
 	protected $oCeleryClient;
 	/**
@@ -80,16 +82,20 @@ class ModuleMail extends Module {
 		/**
 		 * Настройки Celery клиента для отправки писем
 		 */
-		$this->oCeleryClient = new Celery(
-			Config::Get('sys.celery.host'),
-			Config::Get('sys.celery.login'),
-			Config::Get('sys.celery.password'),
-			Config::Get('sys.celery.db'),
-			Config::Get('sys.celery.exchange'),
-			Config::Get('sys.celery.binding'),
-			Config::Get('sys.celery.port'),
-			Config::Get('sys.celery.backend')
-		);
+		try{
+            $this->oCeleryClient = new Celery(
+                Config::Get('sys.celery.host'),
+                Config::Get('sys.celery.login'),
+                Config::Get('sys.celery.password'),
+                Config::Get('sys.celery.db'),
+                Config::Get('sys.celery.exchange'),
+                Config::Get('sys.celery.binding'),
+                Config::Get('sys.celery.port'),
+                Config::Get('sys.celery.backend')
+            );
+        } catch (ConnectionException $exc) {
+            error_log($exc->getMessage());
+        }
 		/**
 		 * Мыло от кого отправляется вся почта
 		 */
@@ -130,6 +136,9 @@ class ModuleMail extends Module {
 	 * @return bool
 	 */
 	public function Send() {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
 		$this->oCeleryClient->PostTask(
 			'tasks.send_mail',
 			[
