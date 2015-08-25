@@ -2,6 +2,7 @@ $ = require "jquery"
 {forEach, map, reduce} = require "lodash"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
+{gettext} = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
 
 router = window.aRouter
@@ -9,13 +10,13 @@ router = window.aRouter
 
 favTypes =
   topic:
-    url: "${router.ajax}favourite/topic/"
+    url: "#{router.ajax}favourite/topic/"
     targetName: 'idTopic'
   talk:
-    url: "${router.ajax}favourite/talk/"
+    url: "#{router.ajax}favourite/talk/"
     targetName: 'idTalk'
   comment:
-    url: "${router.ajax}favourite/comment/"
+    url: "#{router.ajax}favourite/comment/"
     targetName: 'idComment'
 
 
@@ -24,20 +25,22 @@ toggle = (idTarget, objFavourite, type) ->
     return false
   objFavourite = $ objFavourite
   params = {}
-  params['type'] = !@objFavourite.hasClass("active")
+  params.type = not objFavourite.hasClass "active"
   params[favTypes[type].targetName] = idTarget
   ajax favTypes[type].url, params, (result) ->
     if result.bStateError
-      error null, result.sMsg
-      return
+      return error null, result.sMsg
 
     notice null, result.sMsg
-    objFavourite.removeClass "active"
+    objFavourite.toggleClass "active", result.bState
+
     if result.bState
-      objFavourite.addClass "active"
+      objFavourite.text gettext "favourite_in"
       showTags type, idTarget
     else
+      objFavourite.text gettext "favourite_add"
       hideTags type, idTarget
+
     favCount = $ "#fav_count_#{type}_#{idTarget}"
     favCount.text result.iCount
     if result.iCount > 0 then favCount.show() else favCount.hide()
@@ -65,7 +68,7 @@ hideEditTags = ->
   false
 
 saveTags = (form) ->
-  url = "${router.ajax}favourite/save-tags/"
+  url = "#{router.ajax}favourite/save-tags/"
   ajaxSubmit url, $(form), (result) ->
     if result.bStateError
       error null, result.sMsg
