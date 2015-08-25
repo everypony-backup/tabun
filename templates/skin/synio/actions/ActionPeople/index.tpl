@@ -17,7 +17,7 @@
 </form>
 
 
-<div id="users-list-search" style="display:none;"></div>
+<div id="users-list-search"></div>
 
 <div id="users-list-original">
 	{router page='people' assign=sUsersRootPage}

@@ -1,5 +1,5 @@
 $ = require "jquery"
-{forEach, first, throttle, uniqueId, isString} = require "lodash"
+{forEach, first, debounce, uniqueId, isString} = require "lodash"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
@@ -317,20 +317,16 @@ reactivation = (form) ->
 
 searchUsers = (form) ->
   url = "#{router.people}ajax-search/"
+  if isString form then form = $ "##{form}"
+
   formLoader form
 
   ajaxSubmit url, form, (result) ->
     formLoader form, true
+    $('#users-list-original').toggleClass('h-hidden', not result.bStateError)
+    $('#users-list-search').html(result.sText or '').toggleClass('h-hidden', result.bStateError)
 
-    searchList = $ '#users-list-search'
-    searchOrig = $ '#users-list-original'
-
-    searchList.toggle not result.bStateError
-    searchOrig.toggle result.bStateError
-    unless result.bStateError then searchList.html result.sText
-
-
-searchUsersThrottled = throttle searchUsers, 750
+searchUsersThrottled = debounce searchUsers, 500
 
 
 searchUsersByPrefix = (sPrefix, obj) ->
@@ -344,19 +340,10 @@ searchUsersByPrefix = (sPrefix, obj) ->
 
   ajax url, params, (result) ->
     $('#search-user-login').removeClass 'loader'
-
-    $('#user-prefix-filter')
-    .find '.active'
-    .removeClass 'active'
-
+    $('#user-prefix-filter .active').removeClass 'active'
     obj.parent().addClass 'active'
-
-    searchList = $ '#users-list-search'
-    searchOrig = $ '#users-list-original'
-
-    searchList.toggle not result.bStateError
-    searchOrig.toggle result.bStateError
-    unless result.bStateError then searchList.html result.sText
+    $('#users-list-original').toggleClass('h-hidden', not result.bStateError)
+    $('#users-list-search').html(result.sText or '').toggleClass('h-hidden', result.bStateError)
 
   false
 

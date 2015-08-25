@@ -9,7 +9,7 @@
 	</div>
 </form>
 
-<div id="blogs-list-search" style="display:none;"></div>
+<div id="blogs-list-search"></div>
 
 <div id="blogs-list-original">
 	{router page='blogs' assign=sBlogsRootPage}

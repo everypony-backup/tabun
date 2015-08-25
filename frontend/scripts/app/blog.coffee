@@ -1,5 +1,5 @@
 $ = require "jquery"
-{forEach, throttle} = require "lodash"
+{forEach, debounce} = require "lodash"
 
 lang = require "core/lang.coffee"
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
@@ -106,10 +106,10 @@ searchBlogs = (formId) ->
 
   ajaxSubmit url, form, (result) ->
     inputSearch.removeClass 'loader'
-    $('#blogs-list-original').toogle(result.bStateError)
-    $('#blogs-list-search').html(result.sText or '').toggle(not result.bStateError)
+    $('#blogs-list-original').toggleClass('h-hidden', not result.bStateError)
+    $('#blogs-list-search').html(result.sText or '').toggleClass('h-hidden', result.bStateError)
 
-searchBlogsThrottled = throttle searchBlogs, 500
+searchBlogsThrottled = debounce searchBlogs, 250
 
 toggleInfo = ->
   $('#blog-mini').slideToggle()
