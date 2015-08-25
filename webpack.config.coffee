@@ -35,6 +35,7 @@ module.exports =
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
+      {test: /\.po$/, loader: 'json!po?format=jed1.x'}
       {
         test: /.*\.(gif|png|jpg|jpeg|svg)$/,
         loaders: Array::concat(
@@ -47,7 +48,7 @@ module.exports =
   resolve:
     alias: aliases
     extensions: ['', '.coffee', '.js', '.styl', '.css']
-    modulesDirectories: ['node_modules', 'scripts']
+    modulesDirectories: ['node_modules', 'scripts', 'locale']
 
   plugins: Array::concat(
     if isProduction then [

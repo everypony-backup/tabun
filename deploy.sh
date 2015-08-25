@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-APP="classes config engine templates index.php"
+APP="classes config engine templates locale index.php"
 
 usage(){
 cat <<'EOT'
@@ -44,6 +44,9 @@ deploy(){
     npm run-script webpack:production
     local STATIC_VER=$(grep -Po '(?:"hash"):.*?[^\\]"' static/stats.json | perl -pe 's/"hash"://; s/"//g')
     rm static/stats.json
+
+    echo "Build i10n files"
+    find locale -name "*.po" -execdir msgfmt messages.po -o messages.mo \;
 
     echo "Remove app"
     rm -rf ${APP_PATH}/*

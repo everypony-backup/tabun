@@ -1,9 +1,10 @@
-###*
-* Доступ к языковым текстовкам (предварительно должны быть прогружены в шаблон)
-###
 {assign, forEach} = require "lodash"
+Jed = require 'jed'
 
 messages = {}
+
+i18n = new Jed require "ru_RU/LC_MESSAGES/messages.po"
+
 
 String::tr = (a, p) ->
   p = if typeof p == 'string' then p else ''
@@ -28,3 +29,6 @@ module.exports =
       if replace
         value = value.tr(replace)
       value
+
+  gettext: (message) ->
+    i18n.gettext message
