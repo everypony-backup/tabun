@@ -7,7 +7,7 @@
 	
 	<footer id="footer">
 		<p>Все права принадлежат пони. Весь мир принадлежит пони.</p>
-		<div class="text version">
+		<div class="text version h-float-right">
             <div>Версия Табуна: <strong>{cfg name='misc.ver.code'}</strong></div>
             <div><a href="https://bitbucket.org/Orhideous/tabun/issues/new">Сообщить об ошибке</a></div>
 		</div>
