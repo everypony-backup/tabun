@@ -7,7 +7,7 @@ lang = require "core/lang.coffee"
 router = window.aRouter
 
 vote = (idTopic, idAnswer) ->
-  url = "#{router.subscribe}vote/question/"
+  url = "#{router.ajax}vote/question/"
   params =
     idTopic: idTopic
     idAnswer: idAnswer
