@@ -68,7 +68,6 @@ body
   font-family Georgia, Times, serif
   background #1d2a4f url(images/header-bg.jpg) no-repeat 0 0
   .main-menu
-    float left
     padding 35px 0 0 26px
     color #cdcae9
     line-height 24px
@@ -79,33 +78,28 @@ body
       padding 5px 20px 0 0
       a
         color #fafae8
+        &:hover
+          color fff
     li#logolink
       font-size 35px
       padding 0 46px 0 0
       white-space nowrap
+  & .rss, & .twitter
+    float right
+    width 32px
+    height 32px
+    margin 0 0.6em
+    &:hover
+      background-position 0 -32px
   .rss
-    clear right
+    background url(images/rss.png)
   .twitter
-    background-image url(images/twitter.png)
-
-#c-header  .main-menu li a:hover, .servicelinks a:hover
-  color #fff
+    background url(images/twitter.png)
 
 #logolink
   a
     color #cdcae9 !important
     text-decoration none
-
-#c-header .rss, #c-header .twitter
-  float right
-  width 32px
-  height 32px
-  background transparent url(images/rss.png) 0 0 no-repeat
-  overflow hidden
-  margin 33px 0 0 14px
-
-#c-header .rss:hover, #c-header .twitter:hover
-  background-position 0 -32px
 
 .servicelinks
   float left

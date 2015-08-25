@@ -9,9 +9,10 @@
         <li><a href="//wiki.everypony.ru">Вики</a></li>
         <li><a href="//minecraft.everypony.ru">Майнкрафт</a></li>
     </ul>
-
-    <a class="rss" href="//tabun.everypony.ru/rss/" title="RSS поток Табуна"></a>
-    <a class="twitter" href="https://twitter.com/#!/everypony_ru" title="Твиттер Everypony.ru"></a>
+    <ul>
+        <li><a class="rss" href="//tabun.everypony.ru/rss/" title="RSS поток Табуна"></a></li>
+        <li><a class="twitter" href="https://twitter.com/#!/everypony_ru" title="Твиттер Everypony.ru"></a></li>
+    </ul>
 </div>
 <header id="header" role="banner">
     {hook run='header_banner_begin'}
