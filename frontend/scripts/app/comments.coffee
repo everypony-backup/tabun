@@ -102,7 +102,7 @@ load = (idTarget, typeTarget, selfIdComment, bNotFlushNew) ->
         $('#comment_last_id').val result.iMaxIdComment
         $('#count-comments').text parseInt($('#count-comments').text()) + aCmt.length
         curItemBlock = blocks.getCurrentItem('stream')
-        if curItemBlock.dataset.type == 'comment'
+        if curItemBlock?.dataset.type == 'comment'
           blocks.load curItemBlock, 'stream'
       iCountOld = 0
       if bNotFlushNew
