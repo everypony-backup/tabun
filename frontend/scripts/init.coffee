@@ -105,7 +105,7 @@ init = ->
   if random(1000) < 5 then showPinkie random 150, 1500
 
   # Spoilers
-  $('.spoiler-title').on 'click', ({target}) ->
+  $(document).on 'click', '.spoiler-title', ({target}) ->
     $e = $('.spoiler-body', $(target).closest('.spoiler')).eq(0)
     if $e.css('display') == 'none'
       $e.css 'display', 'block'
