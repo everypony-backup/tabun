@@ -77,7 +77,7 @@
 		{/if}
 	<span id="blog_user_count_{$oBlog->getId()}">{$iCountBlogUsers}</span> {$iCountBlogUsers|declension:$aLang.reader_declension:'russian'},
 	{$oBlog->getCountTopic()} {$oBlog->getCountTopic()|declension:$aLang.topic_declension:'russian'}
-	<div class="fl-r" id="blog-mini-header">
+	<div class="h-float-right" id="blog-mini-header">
 		<a href="#" class="link-dotted" onclick="ls.blog.toggleInfo(); return false;">{$aLang.blog_expand_info}</a>
 		<a href="{router page='rss'}blog/{$oBlog->getUrl()}/">RSS</a>
 	</div>
