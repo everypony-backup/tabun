@@ -1,11 +1,18 @@
 path = require 'path'
 webpack = require 'webpack'
 {keys} = require 'lodash'
-pkginfo = require "./package.json"
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 StatsPlugin = require 'stats-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production';
 
+
+vendors = [
+  "lodash"
+  "jquery"
+  "classnames"
+  "jquery.scrollto"
+  "jed"
+]
 
 aliases =
   "jquery.jqmodal": path.join __dirname, 'frontend', 'vendor', 'jquery.jqmodal.js'
@@ -14,6 +21,7 @@ aliases =
   "jquery.markitup": path.join __dirname, 'frontend', 'vendor', 'jquery.markitup.js'
   "jquery.jcrop": path.join __dirname, 'frontend', 'vendor', 'jquery.jcrop.js'
   "jquery.file": path.join __dirname, 'frontend', 'vendor', 'jquery.file.js'
+  "SortedSet": path.join __dirname, 'node_modules', 'js-sorted-set', 'src', 'SortedSet.coffee'
 
 module.exports =
   context: path.join __dirname, 'frontend'
@@ -23,7 +31,7 @@ module.exports =
     main: "./main"
     comments: "./comments"
     topics: "./topics"
-    vendor: Array::concat keys(aliases), keys(pkginfo.dependencies)
+    vendor: Array::concat keys(aliases), vendors
 
   output:
     path: path.join __dirname, 'static'
