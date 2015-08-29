@@ -19,3 +19,19 @@ msgstr "В избранное"
 
 msgid "favourite_in"
 msgstr "В избранном"
+
+# Errors
+msgid "common_error"
+msgstr "Ошибка"
+
+msgid "server_error"
+msgstr "Ошибка сервера"
+
+msgid "network_error"
+msgstr "Ошибка сети"
+
+msgid "try_later"
+msgstr "Попробуйте позже"
+
+msgid "data_not_send"
+msgstr "Не удалось отправить данные"
