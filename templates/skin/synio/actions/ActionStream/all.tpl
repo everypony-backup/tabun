@@ -9,8 +9,7 @@
 	</ul>
 
     {if !$bDisableGetMoreButton}
-        <input type="hidden" id="stream_last_id" value="{$iStreamLastId}" />
-        <a class="stream-get-more" id="stream_get_more" href="javascript:ls.stream.getMoreAll()">{$aLang.stream_get_more} &darr;</a>
+        <span class="stream-get-more" id="stream_get_more" data-last-id="{$iStreamLastId}" onclick="ls.stream.getMoreAll()">{$aLang.stream_get_more} &darr;</span>
     {/if}
 {else}
     {$aLang.stream_no_events}

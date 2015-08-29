@@ -61,13 +61,11 @@ appendUser = ->
 
 
 more = (url, extra_params={}) ->
-  if isBusy
-    return
-  lastId = $('#stream_last_id').val()
-  unless lastId
-    return
-  selLoad = $ '#stream_get_more'
-  selLoad.addClass 'stream_loading'
+  if isBusy then return
+  selLoad = document.getElementById 'stream_get_more'
+  lastId = selLoad.dataset.lastId
+  unless lastId then return
+  selLoad.classList.add 'stream_loading'
   isBusy = true
   url = "#{router.stream}#{url}/"
   params =
@@ -77,10 +75,10 @@ more = (url, extra_params={}) ->
   ajax url, merge(params, extra_params), (data) ->
     unless data.bStateError and data.events_count
       $('#stream-list').append data.result
-      $('#stream_last_id').attr 'value', data.iStreamLastId
+      selLoad.dataset.lastId = data.iStreamLastId
     unless data.events_count
-      selLoad.hide()
-    selLoad.removeClass 'stream_loading'
+      selLoad.classList.add 'h-hidden'
+    selLoad.classList.remove 'stream_loading'
     isBusy = false
 
 getMore = ->
