@@ -13,7 +13,7 @@
     <meta name="description" content="{$sHtmlDescription}">
     <meta name="keywords" content="{$sHtmlKeywords}">
 
-    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/styles.{cfg name='misc.ver.front'}.css">
+    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/styles.css">
 
     <link href="{cfg name='path.static.url'}/local/favicon.ico" rel="shortcut icon"/>
     <link rel="search" type="application/opensearchdescription+xml" href="{router page='search'}opensearch/" title="{cfg name='view.name'}"/>
@@ -41,8 +41,8 @@
         {/foreach}
     </script>
 
-    <script src="{cfg name='path.static.url'}/vendor.{cfg name='misc.ver.front'}.bundle.js" type="text/javascript"></script>
-    <script src="{cfg name='path.static.url'}/main.{cfg name='misc.ver.front'}.bundle.js" type="text/javascript"></script>
+    <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
+    <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>
     <script type="text/javascript">
         ls.lang.load({json var = $aLangJs});
         ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});

@@ -8,7 +8,7 @@
 	<footer id="footer">
 		<p>Все права принадлежат пони. Весь мир принадлежит пони.</p>
 		<div class="text version h-float-right">
-            <div>Версия Табуна: <strong>{cfg name='misc.ver.code'}</strong></div>
+            <div>Версия Табуна: <a href="https://bitbucket.org/Orhideous/tabun/issues?version={cfg name='misc.ver.code'}&status=open&status=new"><strong>{cfg name='misc.ver.code'}</strong></a></div>
             <div><a href="https://bitbucket.org/Orhideous/tabun/issues/new" target="_blank">Сообщить об ошибке</a></div>
 		</div>
 		{hook run='footer_end'}
@@ -17,7 +17,7 @@
 
 {include file='toolbar.tpl'}
 {if isset($sMarkItUpBundle)}
-	<script src="{cfg name='path.static.url'}/{$sMarkItUpBundle}.{cfg name='misc.ver.front'}.bundle.js" type="text/javascript"></script>
+	<script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$sMarkItUpBundle}.bundle.js" type="text/javascript"></script>
 {/if}
 {hook run='body_end'}
 

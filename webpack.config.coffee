@@ -33,9 +33,9 @@ module.exports =
     vendor: Array::concat keys(aliases), vendors
 
   output:
-    path: path.join __dirname, 'static'
-    publicPath: '/static/'
-    filename: if isProduction then '[name].[hash].bundle.js' else '[name].trunk.bundle.js'
+    path: path.join __dirname, 'static', if isProduction then '[hash]' else 'trunk'
+    publicPath: "/static/#{if isProduction then '[hash]' else 'trunk'}/"
+    filename: '[name].bundle.js'
 
   module:
     loaders: [
@@ -63,7 +63,7 @@ module.exports =
       new StatsPlugin 'stats.json', modules: false, chunks: false, assets: false, version: false, errorDetails: false
     ] else []
     [
-      new ExtractTextPlugin if isProduction then "styles.[hash].css" else "styles.trunk.css"
+      new ExtractTextPlugin "styles.css"
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
     ]
   )
