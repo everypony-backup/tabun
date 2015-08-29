@@ -1,7 +1,7 @@
 $ = require "jquery"
-
-{isNull} = require "lodash"
-lang = require "core/lang.coffee"
+{Set, OrderedSet} = require "immutable"
+{keys, map, filter, forEach, transform} = require "lodash"
+{gettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
 {textPreview, registry, prepareJSON} = require "core/tools.coffee"
@@ -10,62 +10,81 @@ blocks = require "lib/blocks.coffee"
 router = window.aRouter
 
 
-options =
-  type:
-    topic:
-      url_add:  "#{router.blog}ajaxaddcomment/"
-      url_response: "#{router.blog}ajaxresponsecomment/"
-    talk:
-      url_add: "#{router.talk}ajaxaddcomment/"
-      url_response: "#{router.talk}ajaxresponsecomment/"
-  classes:
-    form_loader: 'loader'
-    comment_new: 'comment-new'
-    comment_current: 'comment-current'
-    comment_deleted: 'comment-deleted'
-    comment_self: 'comment-self'
-    comment: 'comment'
-    comment_goto_parent: 'goto-comment-parent'
-    comment_goto_child: 'goto-comment-child'
-    comment_hidden: 'comment-hidden'
+types =
+  topic:
+    url_add:  "#{router.blog}ajaxaddcomment/"
+    url_response: "#{router.blog}ajaxresponsecomment/"
+  talk:
+    url_add: "#{router.talk}ajaxaddcomment/"
+    url_response: "#{router.talk}ajaxresponsecomment/"
+
+classes =
+  form_loader: 'loader'
+  new: 'comment-new'
+  current: 'comment-current'
+  deleted: 'comment-deleted'
+  self: 'comment-self'
+  folded: 'folded'
+  comment: 'comment'
+  comment_goto_parent: 'goto-comment-parent'
+  comment_goto_child: 'goto-comment-child'
+  comment_hidden: 'comment-hidden'
+
+hideClasses = [classes.self, classes.new, classes.deleted, classes.current]
 
 iCurrentShowFormComment = 0
 iCurrentViewComment = null
-aCommentNew = []
 
+newComments = new Set()
+allComments = new OrderedSet()
 
-add = (formObj, targetId, targetType) ->
-  formObj = $('#' + formObj)
+toggleCommentFormState = (state) ->
+  commentForm = $ '#form_comment_text'
+  submitButton = $ '#comment-button-submit'
 
-  $('#form_comment_text').addClass(options.classes.form_loader).attr 'readonly', true
-  $('#comment-button-submit').attr 'disabled', 'disabled'
+  commentForm.toggleClass classes.form_loader, not state
+  commentForm.attr 'readonly', not state
+  if state
+    submitButton.removeAttr 'disabled'
+  else
+    submitButton.attr 'disabled', 'disabled'
+  null
 
-  ajax options.type[targetType].url_add, prepareJSON(formObj), (result) ->
-    $('#comment-button-submit').removeAttr 'disabled'
-    enableFormComment()
+add = (formId, targetId, targetType) ->
+  form = $ "##{formId}"
+
+  toggleCommentFormState false
+
+  _success = (result) ->
     unless result
-      return error 'Error', 'Please try again later'
+      return error gettext("server_error"), gettext("try_later")
     if result.bStateError
-      return error null, result.sMsg
+      return error gettext("common_error"), result.sMsg
 
     $('#form_comment_text').val ''
-    load targetId, targetType, result.sCommentId, true
+    load targetId, targetType, result.sCommentId, false
 
+  _complete = -> toggleCommentFormState true
 
-enableFormComment = ->
-  $('#form_comment_text').removeClass(options.classes.form_loader).attr 'readonly', false
+  ajax types[targetType].url_add, prepareJSON(form), _success, null, _complete
 
 
 toggleCommentForm = (idComment, bNoFocus) ->
-  reply = $('#reply')
-  unless reply.length
-    return
-  $("#comment_preview_#{iCurrentShowFormComment}").remove()
-  if iCurrentShowFormComment == idComment and reply.is(':visible')
-    reply.hide()
+  reply = document.getElementById 'reply'
+  unless reply then return
+
+  # Throw away old previews
+  preview = document.getElementById "comment_preview_#{iCurrentShowFormComment}"
+  preview?.parentNode?.removeChild preview
+
+  if iCurrentShowFormComment == idComment and 'h-hidden' not in reply.classList
+    reply.classList.add 'h-hidden'
     return
 
-  reply.insertAfter('#comment_id_' + idComment).show()
+  commentNode = document.getElementById "comment_id_#{idComment}"
+  commentNode.parentNode.insertBefore reply, commentNode.nextSibling
+  reply.classList.remove 'h-hidden'
+
   $('#form_comment_text').val ''
   $('#form_comment_reply').val idComment
   iCurrentShowFormComment = idComment
@@ -73,15 +92,11 @@ toggleCommentForm = (idComment, bNoFocus) ->
     $('#form_comment_text').focus()
 
 
-load = (idTarget, typeTarget, selfIdComment, bNotFlushNew) ->
-  idCommentLast = $('#comment_last_id').val()
-  # Удаляем подсветку у комментариев
-  unless bNotFlushNew
-    $('.comment').each (index, item) ->
-      $(item).removeClass options.classes.comment_new + ' ' + options.classes.comment_current
+load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
+  idCommentLast = parseInt(document.getElementById('new_comments_counter').dataset.idCommentLast) || 0
 
-  objImg = $('#update-comments')
-  objImg.addClass 'active'
+  objImg = document.getElementById 'update-comments'
+  objImg.classList.add 'active'
   params =
     idCommentLast: idCommentLast
     idTarget: idTarget
@@ -90,77 +105,90 @@ load = (idTarget, typeTarget, selfIdComment, bNotFlushNew) ->
   if selfIdComment
     params.selfIdComment = selfIdComment
 
-  ajax options.type[typeTarget].url_response, params, (result) ->
-    objImg.removeClass 'active'
+  _success = (result) ->
     unless result
-      error 'Error', 'Please try again later'
+      return error gettext("server_error"), gettext("try_later")
     if result.bStateError
-      error null, result.sMsg
-    else
-      aCmt = result.aComments
-      if aCmt.length > 0 and result.iMaxIdComment
-        $('#comment_last_id').val result.iMaxIdComment
-        $('#count-comments').text parseInt($('#count-comments').text()) + aCmt.length
-        curItemBlock = blocks.getCurrentItem('stream')
-        if curItemBlock?.dataset.type == 'comment'
-          blocks.load curItemBlock, 'stream'
-      iCountOld = 0
-      if bNotFlushNew
-        iCountOld = aCommentNew.length
-      else
-        aCommentNew = []
-      if selfIdComment
-        toggleCommentForm iCurrentShowFormComment, true
-        setCountNewComment aCmt.length - 1 + iCountOld
-      else
-        setCountNewComment aCmt.length + iCountOld
-      $.each aCmt, (index, item) ->
-        if !(selfIdComment and selfIdComment == item.id)
-          aCommentNew.push item.id
-        inject item.idParent, item.id, item.html
-        
-      if selfIdComment and $('#comment_id_' + selfIdComment).length
-        scrollToComment selfIdComment
-      checkFolding()
+      return error gettext("common_error"), result.sMsg
+
+    curItemBlock = blocks.getCurrentItem 'stream'
+    if curItemBlock?.dataset.type == 'comment'
+      blocks.load curItemBlock, 'stream'
+
+    ###*
+    # TODO: fix this workaround with direct iterating over new aComments structure
+    # TODO: it should be aComments = HashMap<Int, Comment>
+    ###
+    rawComments = transform(
+      result.aComments
+      (accumulator, value) -> accumulator[value.id] = value
+      {}
+    )
+    forEach rawComments, (comment, id) ->
+      unless allComments.contains parseInt id
+        inject comment
+
+    if bFlushNew
+      newComments.forEach (newCommentId) ->
+        comment = document.getElementById "comment_id_#{newCommentId}"
+        comment.classList.remove classes.new
+        comment.classList.remove classes.current
+
+    setCountNewComment parseNewCommentTree()
+    setCountAllComment parseAllCommentTree()
+
+    if selfIdComment
+      toggleCommentForm iCurrentShowFormComment, true
+
+    if selfIdComment and document.getElementById "comment_id_#{selfIdComment}"
+      scrollToComment selfIdComment
+
+  _complete = -> objImg.classList.remove 'active'
+
+  ajax types[typeTarget].url_response, params, _success, null, _complete
 
 
-inject = (idCommentParent, idComment, sHtml) ->
-  newComment = $('<div>',
-    'class': 'comment-wrapper'
-    id: 'comment_wrapper_id_' + idComment).html(sHtml)
-  if idCommentParent
+inject = ({idParent, id, html}) ->
+  newComment = document.createElement 'div'
+  newComment.classList.add 'comment-wrapper'
+  newComment.id = "comment_wrapper_id_#{id}"
+  newComment.innerHTML = html
+
+  if idParent
     # Уровень вложенности родителя
-    iCurrentTree = $('#comment_wrapper_id_' + idCommentParent).parentsUntil('#comments').length
+    iCurrentTree = $('#comment_wrapper_id_' + idParent).parentsUntil('#comments').length
     if iCurrentTree == registry.get('comment_max_tree')
       # Определяем id предыдушего родителя
-      prevCommentParent = $('#comment_wrapper_id_' + idCommentParent).parent()
-      idCommentParent = parseInt(prevCommentParent.attr('id').replace('comment_wrapper_id_', ''))
-    $('#comment_wrapper_id_' + idCommentParent).append newComment
+      prevCommentParent = $('#comment_wrapper_id_' + idParent).parent()
+      idParent = parseInt(prevCommentParent.attr('id').replace('comment_wrapper_id_', ''))
+    targetId = "comment_wrapper_id_#{idParent}"
   else
-    $('#comments').append newComment
+    targetId = 'comments'
 
-  if $('section', newComment).hasClass('comment-bad')
-    hide parseInt(idComment), true
+  document.getElementById(targetId).appendChild newComment
 
 
 toggle = (obj, commentId) ->
   url = "#{router.ajax}comment/delete/"
   params = idComment: commentId
-  
-  ajax url, params, (result) ->
-    unless result
-      error 'Error', 'Please try again later'
-    if result.bStateError
-      error null, result.sMsg
-    else
-      notice null, result.sMsg
-      $('#comment_id_' + commentId).removeClass options.classes.comment_self + ' ' + options.classes.comment_new + ' ' + options.classes.comment_deleted + ' ' + options.classes.comment_current
-      if result.bState
-        $('#comment_id_' + commentId).addClass options.classes.comment_deleted
-      $(obj).text result.sTextToggle
 
-  
-preview = (divPreview) ->
+  _success = (result) ->
+    unless result
+      return error gettext("server_error"), gettext("try_later")
+    if result.bStateError
+      return error gettext("common_error"), result.sMsg
+
+    notice null, result.sMsg
+    comment = document.getElementById "comment_id_#{commentId}"
+    forEach hideClasses, (className) -> comment.classList.remove className
+    if result.bState
+      comment.classList.add classes.deleted
+    obj.text result.sTextToggle
+
+  ajax url, params, _success
+
+
+preview = ->
   if $('#form_comment_text').val() == ''
     return
   $("#comment_preview_#{iCurrentShowFormComment}").remove()
@@ -169,161 +197,77 @@ preview = (divPreview) ->
 
 
 setCountNewComment = (count) ->
-  if count > 0
-    $('#new_comments_counter').show().text count
-  else
-    $('#new_comments_counter').text(0).hide()
+  $('#new_comments_counter').text(count).toggleClass('h-hidden', !count)
 
+setCountAllComment = (count) ->
+  document.getElementById("count-comments").text = count
 
-calcNewComments = ->
-  aCommentsNew = $('.' + options.classes.comment + '.' + options.classes.comment_new)
-  setCountNewComment aCommentsNew.length
-  $.each aCommentsNew, (k, v) ->
-    aCommentNew.push parseInt($(v).attr('id').replace('comment_id_', ''))
-   
+parseAllCommentTree = ->
+  allComments = Set map(
+    document.getElementsByClassName(classes.comment)
+    (comment) -> parseInt comment.dataset.id
+  )
+  allComments.size
+
+parseNewCommentTree = ->
+  newComments = OrderedSet map(
+    document.getElementsByClassName(classes.new)
+    (comment) -> parseInt comment.dataset.id
+  )
+  newComments.size
 
 goToNextComment = ->
-  if aCommentNew[0]
-    if $('#comment_id_' + aCommentNew[0]).length
-      scrollToComment aCommentNew[0]
-    aCommentNew.shift()
-  setCountNewComment aCommentNew.length
+  commentId = newComments.first()
+  if commentId
+    if document.getElementById "comment_id_#{commentId}"
+      scrollToComment commentId
+    newComments = newComments.delete commentId
+  setCountNewComment newComments.size
 
 
 scrollToComment = (idComment) ->
-  $.scrollTo '#comment_id_' + idComment, 300, offset: -250
+  $.scrollTo "#comment_id_#{idComment}", 300, offset: -250
   if iCurrentViewComment
-    $('#comment_id_' + iCurrentViewComment).removeClass options.classes.comment_current
-  $('#comment_id_' + idComment).addClass options.classes.comment_current
+    $("#comment_id_#{iCurrentViewComment}").removeClass classes.current
+  $("#comment_id_#{idComment}").addClass classes.current
   iCurrentViewComment = idComment
 
-# Прокрутка к родительскому комментарию
-
 goToParentComment = (id, pid) ->
-  thisObj = this
-  $('.' + options.classes.comment_goto_child).hide().find('a').unbind()
-  $('#comment_id_' + pid).find('.' + options.classes.comment_goto_child).show().find('a').bind 'click', ->
-    $(this).parent('.' + options.classes.comment_goto_child).hide()
-    thisObj.scrollToComment id
-    false
+  $('.' + classes.comment_goto_child).hide().find('a').unbind()
+  $('#comment_id_' + pid).find('.' + classes.comment_goto_child).show().find('a').bind 'click', ->
+    $(this).parent('.' + classes.comment_goto_child).hide()
+    scrollToComment id
   scrollToComment pid
-  false
-
-# Сворачивание комментариев
-
-checkFolding = ->
-  $('.folding').each (index, element) ->
-    if $(element).parent('.comment').next('.comment-wrapper').length == 0
-      $(element).hide()
-    else
-      $(element).show()
-  false
-
-expandComment = (folding) ->
-  $(folding).removeClass('folded').parent().nextAll('.comment-wrapper').show()
-
-collapseComment = (folding) ->
-  $(folding).addClass('folded').parent().nextAll('.comment-wrapper').hide()
-
-
-expandCommentAll = ->
-  $.each $('.folding'), (k, v) ->
-    expandComment v
-
-
-collapseCommentAll = ->
-  $.each $('.folding'), (k, v) ->
-    collapseComment v
-
 
 initEvent = ->
-  $('#form_comment_text').bind 'keyup', (e) ->
-    key = e.keyCode or e.which
-    if e.ctrlKey and key == 13
+  $('#form_comment_text').on 'keyup', ({keyCode, which, ctrlKey}) ->
+    key = keyCode or which
+    if ctrlKey and key == 13
       $('#comment-button-submit').click()
-      return false
 
-  $('.folding').click (e) ->
-    if $(e.target).hasClass('folded')
-      expandComment e.target
+  $(document).on "click", '.folding', ({target}) ->
+    wrappers = document
+      .getElementById "comment_wrapper_id_#{target.dataset.id}"
+      .getElementsByClassName "comment-wrapper"
+
+    if classes.folded in target.classList
+      # Expand
+      target.classList.remove classes.folded
+      forEach wrappers, (wrapper) -> wrapper.classList.remove 'h-hidden'
     else
-      collapseComment e.target
-
-
-hiddenCommentsStorageKey = "hidden-comments-#{window.location.pathname}"
-storedHiddenComments = {}
-hiddenContent = {}
-btnUnhide = '<a href="#" onclick="ls.comments.unhide({{id}})">Раскрыть комментарий</a>'
-
-flushHiddenCommentsStorage = ->
-  arr = []
-  for id of storedHiddenComments
-    if Object::hasOwnProperty.call(storedHiddenComments, id)
-      arr.push id
-  if arr.length
-    sessionStorage.setItem hiddenCommentsStorageKey, arr.join(',')
-  else
-    sessionStorage.removeItem hiddenCommentsStorageKey
-
-
-hide = (commentId, bNotRemember, bNotFlushStorage) ->
-  unless isNull hiddenContent[commentId]
-    return error 'Комментарий уже скрыт'
-
-  elComment = $("#comment_id_#{commentId}")
-  elText = $('.comment-content .text', elComment)
-  hiddenContent[commentId] = elText.html()
-  elComment.addClass options.classes.comment_hidden
-  elText.html btnUnhide.replace('{{id}}', commentId)
-  unless bNotRemember
-    storedHiddenComments[commentId] = true
-    unless bNotFlushStorage
-      flushHiddenCommentsStorage()
-
-
-unhide = (commentId, bNotFlushStorage) ->
-  unless isNull hiddenContent[commentId]
-    return error 'Комментарий и так не скрыт'
-
-  elComment = $("#comment_id_#{commentId}")
-  $('.comment-content .text', elComment).html hiddenContent[commentId]
-  delete @hiddenContent[commentId]
-  elComment.removeClass options.classes.comment_hidden
-  delete storedHiddenComments[commentId]
-  unless bNotFlushStorage
-    flushHiddenCommentsStorage()
-
-hide_bad = ->
-  # Скроем запомненные скрытые комменты
-  if sessionStorage
-    storedHiddenComments = sessionStorage.getItem(hiddenCommentsStorageKey)
-    if storedHiddenComments
-      try
-        storedHiddenComments.split(',').forEach (k) ->
-          # запоминаем, но пока не сохраняем в storage, чтобы зря не дёргать
-          hide parseInt(k), false, true
-      catch err
-        sessionStorage.removeItem hiddenCommentsStorageKey
-        storedHiddenComments = {}
-  # сохраняем в storage скрытые комменты
-  flushHiddenCommentsStorage()
-  $('.comment-bad').each ->
-    id = parseInt(@getAttribute('id').replace(/^comment_id_/, ''))
-    # не запоминаем в sessionStorage
-    hide id, true
+      # Collapse
+      target.classList.add classes.folded
+      forEach wrappers, (wrapper) -> wrapper.classList.add 'h-hidden'
 
 
 init = ->
   initEvent()
-  calcNewComments()
-  checkFolding()
+  parseAllCommentTree()
+  setCountNewComment parseNewCommentTree()
   toggleCommentForm iCurrentShowFormComment
-  hide_bad()
 
 module.exports = {
   init
-  hide
-  unhide
   goToParentComment
   toggleCommentForm
   toggle

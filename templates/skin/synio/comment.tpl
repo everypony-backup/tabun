@@ -1,12 +1,12 @@
 {assign var="oUser" value=$oComment->getUser()}
 {assign var="oVote" value=$oComment->getVote()}
 
-<section id="comment_id_{$oComment->getId()}" class="comment {if $oComment->isBad()}comment-bad{/if} {if $oComment->getDelete()}comment-deleted{elseif $oUserCurrent and $oComment->getUserId() == $oUserCurrent->getId()} comment-self{elseif $sDateReadLast <= $oComment->getDate()} comment-new{/if}">
+<section data-id="{$oComment->getId()}" id="comment_id_{$oComment->getId()}" class="comment {if $oComment->isBad()}comment-bad{/if} {if $oComment->getDelete()}comment-deleted{elseif $oUserCurrent and $oComment->getUserId() == $oUserCurrent->getId()} comment-self{elseif $sDateReadLast <= $oComment->getDate()} comment-new{/if}">
     {if !$oComment->getDelete() or $bOneComment or ($oUserCurrent and $oUserCurrent->isAdministrator())}
         <a name="comment{$oComment->getId()}"></a>
-        <div class="folding"></div>
+        <div data-id="{$oComment->getId()}" class="folding"></div>
         <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
-            <div class=" text">{$oComment->getText()}</div>
+            <div class="text">{$oComment->getText()}</div>
         </div>
         <ul class="comment-info">
             <li class="comment-author {if $iAuthorId == $oUser->getId()}comment-topic-author{/if}"
