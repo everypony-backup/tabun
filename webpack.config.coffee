@@ -21,7 +21,6 @@ aliases =
   "jquery.markitup": path.join __dirname, 'frontend', 'vendor', 'jquery.markitup.js'
   "jquery.jcrop": path.join __dirname, 'frontend', 'vendor', 'jquery.jcrop.js'
   "jquery.file": path.join __dirname, 'frontend', 'vendor', 'jquery.file.js'
-  "SortedSet": path.join __dirname, 'node_modules', 'js-sorted-set', 'src', 'SortedSet.coffee'
 
 module.exports =
   context: path.join __dirname, 'frontend'
