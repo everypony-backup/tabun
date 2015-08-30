@@ -19,17 +19,23 @@
 
     <ul class="nav nav-main" id="nav-main">
         {if $oUserCurrent}
-            <li><a href="{router page='topic'}add/" class="button-write js-write-window-show"
-                   id="modal_write_show">{$aLang.block_create}</a></li>
+            <li>
+                <a href="{router page='topic'}add/" class="button-write js-write-window-show"
+                   id="modal_write_show">{$aLang.block_create}</a>
+            </li>
         {/if}
-        <li {if $sMenuHeadItemSelect=='blog'}class="active"{/if}><a
-                    href="{cfg name='path.root.web'}">{$aLang.topic_title}</a></li>
-        <li {if $sMenuHeadItemSelect=='blogs'}class="active"{/if}><a href="{router page='blogs'}">{$aLang.blogs}</a>
+        <li {if $sMenuHeadItemSelect=='blog'}class="active"{/if}>
+            <a href="{cfg name='path.root.web'}">{$aLang.topic_title}</a>
         </li>
-        <li {if $sMenuHeadItemSelect=='people'}class="active"{/if}><a href="{router page='people'}">{$aLang.people}</a>
+        <li {if $sMenuHeadItemSelect=='blogs'}class="active"{/if}>
+            <a href="{router page='blogs'}">{$aLang.blogs}</a>
         </li>
-        <li {if $sMenuHeadItemSelect=='stream'}class="active"{/if}><a
-                    href="{router page='stream'}">{$aLang.stream_menu}</a></li>
+        <li {if $sMenuHeadItemSelect=='people'}class="active"{/if}>
+            <a href="{router page='people'}">{$aLang.people}</a>
+        </li>
+        <li {if $sMenuHeadItemSelect=='stream'}class="active"{/if}>
+            <a href="{router page='stream'}">{$aLang.stream_menu}</a>
+        </li>
 
         {hook run='main_menu_item'}
     </ul>
@@ -85,7 +91,7 @@
 
     {hook run='header_banner_end'}
     <nav id="nav">
-        {if $menu}
+        {if isset($menu)}
             {if in_array($menu,$aMenuContainers)}{$aMenuFetch.$menu}{else}{include file="menu.$menu.tpl"}{/if}
         {/if}
     </nav>

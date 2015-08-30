@@ -37,7 +37,7 @@
 	</ul>
 {/if}
 
-{if $sPeriodSelectCurrent}
+{if isset($sPeriodSelectCurrent)}
 	<ul class="nav nav-pills">
 		<li {if $sPeriodSelectCurrent=='1'}class="active"{/if}><a href="{$sPeriodSelectRoot}?period=1">{$aLang.blog_menu_top_period_24h}</a></li>
 		<li {if $sPeriodSelectCurrent=='7'}class="active"{/if}><a href="{$sPeriodSelectRoot}?period=7">{$aLang.blog_menu_top_period_7d}</a></li>

@@ -1,6 +1,9 @@
+{if !isset($bTopicList)}
+	{assign var="bTopicList" value=false}
+{/if}
 {include file='topic_part_header.tpl'}
-   
-   
+
+
 <div class="topic-content text">
 	{hook run='topic_content_begin' topic=$oTopic bTopicList=$bTopicList}
 	

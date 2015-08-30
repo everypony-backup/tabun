@@ -73,17 +73,25 @@
 </div>
 
 <div id="container" class="{hook run='container_class'}">
+    {if !isset($noSidebar)}
+        {assign var="noSidebar" value=false}
+    {/if}
+    {if !isset($sMenuHeadItemSelect)}
+        {assign var="sMenuHeadItemSelect" value=''}
+    {/if}
+    {if !isset($sMenuItemSelect)}
+        {assign var="sMenuItemSelect" value=''}
+    {/if}
     {include file='header_top.tpl'}
-
     <div id="wrapper" class="{if $noSidebar}no-sidebar{/if}{hook run='wrapper_class'}">
         {if !$noSidebar}
             {include file='sidebar.tpl'}
         {/if}
 
-        <div id="content-wrapper" {if $sidebarPosition == 'left'}class="content-profile"{/if}>
+        <div id="content-wrapper">
             <div id="content" role="main" {if $sMenuItemSelect=='profile'}itemscope
                  itemtype="http://data-vocabulary.org/Person"{/if}>
                 {include file='nav_content.tpl'}
-                {include file='system_message.tpl'}
+                {include file='system_message.tpl' noShowSystemMessage=false}
 
                 {hook run='content_begin'}

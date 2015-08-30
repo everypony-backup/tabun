@@ -1,4 +1,3 @@
-{assign var="sidebarPosition" value='left'}
 {assign var="sMenuItemSelect" value='profile'}
 {include file='header.tpl' menu='people'}
 
