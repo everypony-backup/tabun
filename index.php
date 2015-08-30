@@ -22,7 +22,8 @@ require_once(Config::Get('path.root.engine')."/classes/Engine.class.php");
 
 $locale = Config::Get('locale');
 putenv("LANGUAGE=$locale");
-setlocale(LC_ALL, $locale);
+if (!setlocale(LC_ALL, $locale))
+    setlocale(LC_ALL, $locale.".UTF-8");
 date_default_timezone_set(Config::Get('timezone'));
 
 $oProfiler=ProfilerSimple::getInstance(Config::Get('sys.logs.dir').'/'.Config::Get('sys.logs.profiler_file'),Config::Get('sys.logs.profiler'));
