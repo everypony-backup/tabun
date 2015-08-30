@@ -54,11 +54,10 @@ deploy(){
     rm -rf ${CHROOT_PATH}/tmp/*
     echo "Clean smarty pre-compiled templates"
     rm -rf ${CHROOT_PATH}/var/smarty/*
-    echo "Clean static bundles & files"
-    rm -rf ${STATIC_PATH}/*
 
-    echo "Deploy static"
-    rsync -au static/ ${STATIC_PATH}
+    echo "Deploy static, version: ${STATIC_VER}"
+    mkdir -p ${STATIC_PATH}/${STATIC_VER}
+    rsync -au static/ ${STATIC_PATH}/${STATIC_VER}
     cp -r frontend/images/local/ ${STATIC_PATH}
 
     echo "Deploy app"
