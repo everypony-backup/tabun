@@ -7,7 +7,6 @@ router = window.aRouter
 
 options =
   active: 'active'
-  loader: require("../../images/loader-circle.gif")
   type:
     stream_comment: url: "#{router.ajax}stream/comment/"
     stream_topic: url: "#{router.ajax}stream/topic/"
@@ -21,18 +20,14 @@ showProgress = (content) ->
   * Отображение процесса загрузки
   ###
   content.height content.height()
-  content.empty().css
-    'background': "url(#{options.loader}) no-repeat center top"
-    'min-height': 70
+  content.empty().removeClass("block-loaded").addClass("block-loading")
+
 
 onLoad = (content, result) ->
   ###*
   * Обработка результатов загрузки
   ###
-  content.empty().css
-    'background': 'none'
-    'height': 'auto'
-    'min-height': 0
+  content.empty().removeClass("block-loading").addClass("block-loaded")
   if result.bStateError
     return error null, result.sMsg
 

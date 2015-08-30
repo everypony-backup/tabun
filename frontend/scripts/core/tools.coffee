@@ -37,7 +37,7 @@ textPreview = (textId, save, divPreview) ->
 showPinkie = (time) ->
   pinkie = $('<img>')
   pinkie.attr
-    src: require("../../images/pinkamena.png")
+    src: "//files.everypony.ru/tabun/pinkamena.png"
     style: 'display:block;position:fixed;left:0px;bottom:0px;z-index:100;height:100%;'
   $('body').append pinkie
   delay(
