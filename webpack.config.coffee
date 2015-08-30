@@ -2,7 +2,6 @@ path = require 'path'
 webpack = require 'webpack'
 {keys} = require 'lodash'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
-StatsPlugin = require 'stats-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production';
 
 
@@ -60,7 +59,6 @@ module.exports =
   plugins: Array::concat(
     if isProduction then [
       new webpack.optimize.UglifyJsPlugin()
-      new StatsPlugin 'stats.json', modules: false, chunks: false, assets: false, version: false, errorDetails: false
     ] else []
     [
       new ExtractTextPlugin "styles.css"

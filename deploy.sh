@@ -42,8 +42,7 @@ deploy(){
 
     echo "Build static"
     npm run-script webpack:production
-    local STATIC_VER=$(grep -Po '(?:"hash"):.*?[^\\]"' static/stats.json | perl -pe 's/"hash"://; s/"//g')
-    rm static/${STATIC_VER}/stats.json
+    local STATIC_VER=$(ls -1 --color=never static/)
 
     echo "Build i10n files"
     find locale -name "*.po" -execdir msgfmt messages.po -o messages.mo \;
@@ -56,8 +55,7 @@ deploy(){
     rm -rf ${CHROOT_PATH}/var/smarty/*
 
     echo "Deploy static, version: ${STATIC_VER}"
-    mkdir -p ${STATIC_PATH}/${STATIC_VER}
-    rsync -au static/ ${STATIC_PATH}/${STATIC_VER}
+    rsync -au static/ ${STATIC_PATH}
     cp -r frontend/images/local/ ${STATIC_PATH}
 
     echo "Deploy app"
@@ -81,9 +79,6 @@ deploy(){
     echo "Restart services"
     systemctl restart memcached
     systemctl reload php5-fpm
-
-    echo "Sources cleanup"
-    clean_source
 }
 
 
