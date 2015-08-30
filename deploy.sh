@@ -26,7 +26,6 @@ exit 0;
 
 clean_source () {
     git reset --hard
-    git fetch
     git pull
     npm prune
     npm install
