@@ -11,6 +11,7 @@ vendors = [
   "classnames"
   "jquery.scrollto"
   "jed"
+  "immutable"
 ]
 
 aliases =
