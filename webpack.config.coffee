@@ -34,7 +34,7 @@ module.exports =
 
   output:
     path: path.join __dirname, 'static', if isProduction then '[hash]' else 'trunk'
-    publicPath: "/static/#{if isProduction then '[hash]' else 'trunk'}/"
+    publicPath: "./"
     filename: '[name].bundle.js'
 
   module:
