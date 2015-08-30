@@ -113,16 +113,14 @@ function isPost($sName) {
 }
 
 /**
- * генерирует случайную последовательность символов
- *
- * @param unknown_type $iLength
- * @return unknown
+ * @param int $iLength Длина
+ * @return string Псевдослучайная последовательность символов
  */
 function func_generator($iLength=10) {
 	if ($iLength>32) {
 		$iLength=32;
 	}
-	return substr(md5(uniqid(mt_rand(),true)),0,$iLength);
+	return substr(uniqid(), 0, $iLength);
 }
 
 /**
