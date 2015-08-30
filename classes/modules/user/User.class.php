@@ -1048,7 +1048,6 @@ class ModuleUser extends Module {
 			return false;
 		}
 		$sPath = $this->Image_GetIdDir($oUser->getId());
-		$aParams=$this->Image_BuildParams('avatar');
 
 		/**
 		 * Срезаем квадрат
@@ -1067,7 +1066,6 @@ class ModuleUser extends Module {
 
 		if (!$aSize) {
 			$oImage = $this->Image_CropSquare($oImage);
-			$oImage->set_jpg_quality($aParams['jpg_quality']);
 			$oImage->output(null,$sFileTmp);
 		} else {
 			$iWSource=$oImage->get_image_params('width');
@@ -1113,13 +1111,13 @@ class ModuleUser extends Module {
 			$oImage->output(null,$sFileTmp);
 		}
 
-		if ($sFileAvatar=$this->Image_Resize($sFileTmp,$sPath,'avatar_100x100',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),100,100,false,$aParams)) {
+		if ($sFileAvatar=$this->Image_Resize($sFileTmp,$sPath,'avatar_100x100',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),100,100,false)) {
 			$aSize=Config::Get('module.user.avatar_size');
 			foreach ($aSize as $iSize) {
 				if ($iSize==0) {
-					$this->Image_Resize($sFileTmp,$sPath,'avatar',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),null,null,false,$aParams);
+					$this->Image_Resize($sFileTmp,$sPath,'avatar',Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),null,null,false);
 				} else {
-					$this->Image_Resize($sFileTmp,$sPath,"avatar_{$iSize}x{$iSize}",Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),$iSize,$iSize,false,$aParams);
+					$this->Image_Resize($sFileTmp,$sPath,"avatar_{$iSize}x{$iSize}",Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),$iSize,$iSize,false);
 				}
 			}
 			@unlink($sFileTmp);
@@ -1163,8 +1161,6 @@ class ModuleUser extends Module {
 			return false;
 		}
 		$sDirUpload=$this->Image_GetIdDir($oUser->getId());
-		$aParams=$this->Image_BuildParams('foto');
-
 
 		if ($aSize) {
 			$oImage = $this->Image_CreateImageObject($sFileTmp);
@@ -1219,7 +1215,7 @@ class ModuleUser extends Module {
 			$oImage->output(null,$sFileTmp);
 		}
 
-		if ($sFileFoto=$this->Image_Resize($sFileTmp,$sDirUpload,func_generator(6),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),Config::Get('module.user.profile_photo_width'),null,true,$aParams)) {
+		if ($sFileFoto=$this->Image_Resize($sFileTmp,$sDirUpload,func_generator(6),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),Config::Get('module.user.profile_photo_width'),null,true)) {
 			@unlink($sFileTmp);
 			/**
 			 * удаляем старое фото

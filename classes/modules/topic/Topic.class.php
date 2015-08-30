@@ -1548,22 +1548,20 @@ class ModuleTopic extends Module {
 	 */
 	public function UploadTopicImageFile($aFile,$oUser) {
 		if(!is_array($aFile) || !isset($aFile['tmp_name'])) {
-			return false;
+			return ModuleImage::UPLOAD_IMAGE_ERROR_READ;
 		}
-
 		$sFileTmp=Config::Get('sys.cache.dir').func_generator();
 		if (!move_uploaded_file($aFile['tmp_name'],$sFileTmp)) {
-			return false;
+			return ModuleImage::UPLOAD_IMAGE_ERROR_FS;
 		}
 		$sDirUpload=$this->Image_GetIdDir($oUser->getId());
-		$aParams=$this->Image_BuildParams('topic');
-
-		if ($sFileImage=$this->Image_Resize($sFileTmp,$sDirUpload,func_generator(6),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),Config::Get('view.img_resize_width'),null,true,$aParams)) {
-			@unlink($sFileTmp);
-			return $this->Image_GetWebPath($sFileImage);
-		}
-		@unlink($sFileTmp);
-		return false;
+		if ($sExt = $this->Image_ValidateImageFile($sFileTmp)){
+            $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0440, true);
+            return $this->Image_GetWebPath($sFileImage);
+        } else {
+            @unlink($sFileTmp);
+            return ModuleImage::UPLOAD_IMAGE_ERROR;
+        }
 	}
 	/**
 	 * Загрузка изображений по переданному URL
@@ -1574,12 +1572,6 @@ class ModuleTopic extends Module {
 	 */
 	public function UploadTopicImageUrl($sUrl, $oUser) {
 		/**
-		 * Проверяем, является ли файл изображением
-		 */
-		if(!@getimagesize($sUrl)) {
-			return ModuleImage::UPLOAD_IMAGE_ERROR_TYPE;
-		}
-		/**
 		 * Открываем файловый поток и считываем файл поблочно,
 		 * контролируя максимальный размер изображения
 		 */
@@ -1588,12 +1580,12 @@ class ModuleTopic extends Module {
 			return ModuleImage::UPLOAD_IMAGE_ERROR_READ;
 		}
 
-		$iMaxSizeKb=Config::Get('view.img_max_size_url');
+		$iMaxSizeKb=Config::Get('module.image.max_size');
 		$iSizeKb=0;
 		$sContent='';
-		while (!feof($oFile) and $iSizeKb<$iMaxSizeKb) {
-			$sContent.=fread($oFile ,1024*1);
-			$iSizeKb++;
+		while (!feof($oFile) and $iSizeKb<=$iMaxSizeKb) {
+			$sContent.=fread($oFile, 1024*100);
+			$iSizeKb+=100;
 		}
 		/**
 		 * Если конец файла не достигнут,
@@ -1607,23 +1599,18 @@ class ModuleTopic extends Module {
 		 * Создаем tmp-файл, для временного хранения изображения
 		 */
 		$sFileTmp=Config::Get('sys.cache.dir').func_generator();
-
 		$fp=fopen($sFileTmp,'w');
 		fwrite($fp,$sContent);
 		fclose($fp);
 
-		$sDirSave=$this->Image_GetIdDir($oUser->getId());
-		$aParams=$this->Image_BuildParams('topic');
-		/**
-		 * Передаем изображение на обработку
-		 */
-		if ($sFileImg=$this->Image_Resize($sFileTmp,$sDirSave,func_generator(),Config::Get('view.img_max_width'),Config::Get('view.img_max_height'),Config::Get('view.img_resize_width'),null,true,$aParams)) {
-			@unlink($sFileTmp);
-			return $this->Image_GetWebPath($sFileImg);
-		}
-
-		@unlink($sFileTmp);
-		return ModuleImage::UPLOAD_IMAGE_ERROR;
+        $sDirUpload=$this->Image_GetIdDir($oUser->getId());
+        if ($sExt = $this->Image_ValidateImageFile($sFileTmp)){
+            $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0440, true);
+            return $this->Image_GetWebPath($sFileImage);
+        } else {
+            @unlink($sFileTmp);
+            return ModuleImage::UPLOAD_IMAGE_ERROR;
+        }
 	}
 	/**
 	 * Пересчитывает счетчик избранных топиков
@@ -1651,4 +1638,3 @@ class ModuleTopic extends Module {
 		return $this->GetTopicsByArrayId($aTopocId);
 	}
 }
-?>

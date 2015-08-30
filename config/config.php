@@ -26,7 +26,6 @@ $config['view']['noindex'] = false;             // "прятать" или не�
 $config['view']['img_resize_width'] = 570;      // до какого размера в пикселях ужимать картинку по щирине при загрузки её в топики и комменты
 $config['view']['img_max_width'] = 10000;       // максимальная ширина загружаемых изображений в пикселях
 $config['view']['img_max_height'] = 10000;      // максимальная высота загружаемых изображений в пикселях
-$config['view']['img_max_size_url'] = 30000;    // максимальный размер картинки в kB для загрузки по URL
 
 /**
  * Настройки СЕО для вывода топиков
@@ -201,30 +200,20 @@ $config['module']['notify']['delayed'] = false;         // Указывает н
 $config['module']['notify']['insert_single'] = true;    // Если опция установлена в true, систему будет собирать записи заданий удаленной публикации, для вставки их в базу единым INSERT
 $config['module']['notify']['per_process'] = 1000;      // Количество отложенных заданий, обрабатываемых одним крон-процессом
 // Модуль Image
-$config['module']['image']['default']['watermark_use'] = false;
-$config['module']['image']['default']['watermark_type'] = 'text';
-$config['module']['image']['default']['watermark_position'] = '0,24';
-$config['module']['image']['default']['watermark_text'] = '(c) LiveStreet';
-$config['module']['image']['default']['watermark_font'] = 'arial';
-$config['module']['image']['default']['watermark_font_color'] = '255,255,255';
-$config['module']['image']['default']['watermark_font_size'] = '10';
-$config['module']['image']['default']['watermark_font_alfa'] = '0';
-$config['module']['image']['default']['watermark_back_color'] = '0,0,0';
-$config['module']['image']['default']['watermark_back_alfa'] = '40';
-$config['module']['image']['default']['watermark_image'] = false;
-$config['module']['image']['default']['watermark_min_width'] = 200;
-$config['module']['image']['default']['watermark_min_height'] = 130;
-$config['module']['image']['default']['round_corner'] = false;
-$config['module']['image']['default']['round_corner_radius'] = '18';
-$config['module']['image']['default']['round_corner_rate'] = '40';
-$config['module']['image']['default']['path']['watermarks'] = '___path.root.server___/engine/lib/external/LiveImage/watermarks/';
-$config['module']['image']['default']['path']['fonts'] = '___path.root.server___/engine/lib/external/LiveImage/fonts/';
-$config['module']['image']['default']['jpg_quality'] = 100;
-$config['module']['image']['foto']['watermark_use'] = false;
-$config['module']['image']['foto']['round_corner'] = false;
+$config['module']['image']['allowed_mime'] = [
+    "image/bmp" => "bmp",
+    "image/gif" => "gif",
+    "image/png" => "png",
+    "image/jpeg" => "jpg",
+    "image/pjpeg" => "jpg",
+    "image/svg+xml" => "svg",
+    "image/tiff" => "tiff",
+    "image/x-tiff" => "tiff",
+];
+$config['module']['image']['max_x'] = 10000;
+$config['module']['image']['max_y'] = 20000;
+$config['module']['image']['max_size'] = 30000; // максимальный размер картинки в kB для загрузки по URL
 
-$config['module']['image']['topic']['watermark_use'] = false;
-$config['module']['image']['topic']['round_corner'] = false;
 // Модуль Security
 $config['module']['security']['hash'] = "";             // "примесь" к строке, хешируемой в качестве security-кода
 
