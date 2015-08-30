@@ -37,8 +37,10 @@ deploy(){
 
     echo "Sources cleanup"
     clean_source
-    local APP_VER=$(git name-rev --tags --name-only $(git rev-parse HEAD))
-
+    APP_VER=$(git name-rev --tags --name-only $(git rev-parse HEAD))
+    if [ ${APP_VER} == 'undefined' ]; then
+        APP_VER=$(git rev-parse --short HEAD)
+    fi
     echo "Build static"
     npm run-script webpack:production
     local STATIC_VER=$(ls -1 --color=never static/)
