@@ -43,7 +43,7 @@ deploy(){
     echo "Build static"
     npm run-script webpack:production
     local STATIC_VER=$(grep -Po '(?:"hash"):.*?[^\\]"' static/stats.json | perl -pe 's/"hash"://; s/"//g')
-    rm static/stats.json
+    rm static/${STATIC_VER}/stats.json
 
     echo "Build i10n files"
     find locale -name "*.po" -execdir msgfmt messages.po -o messages.mo \;
