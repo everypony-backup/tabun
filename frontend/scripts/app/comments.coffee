@@ -112,10 +112,6 @@ load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
     if result.bStateError
       return error gettext("common_error"), result.sMsg
 
-    curItemBlock = blocks.getCurrentItem 'stream'
-    if curItemBlock?.dataset.type == 'comment'
-      blocks.load curItemBlock, 'stream'
-
     ###*
     # TODO: fix this workaround with direct iterating over new aComments structure
     # TODO: it should be aComments = HashMap<Int, Comment>
@@ -137,7 +133,12 @@ load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
 
     setCountNewComment parseNewCommentTree()
     setCountAllComment parseAllCommentTree()
-    newCounter.dataset.idCommentLast = result.iMaxIdComment
+
+    if rawComments.length and result.iMaxIdComment > 0
+      curItemBlock = blocks.getCurrentItem 'stream'
+      if curItemBlock?.dataset.type == 'comment'
+        blocks.load curItemBlock, 'stream'
+      newCounter.dataset.idCommentLast = result.iMaxIdComment
 
     if selfIdComment
       toggleCommentForm iCurrentShowFormComment, true
