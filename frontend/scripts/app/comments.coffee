@@ -93,7 +93,8 @@ toggleCommentForm = (idComment, bNoFocus) ->
 
 
 load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
-  idCommentLast = parseInt(document.getElementById('new_comments_counter').dataset.idCommentLast) || 0
+  newCounter = document.getElementById 'new_comments_counter'
+  idCommentLast = parseInt(newCounter.dataset.idCommentLast) || 0
 
   objImg = document.getElementById 'update-comments'
   objImg.classList.add 'active'
@@ -136,6 +137,7 @@ load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
 
     setCountNewComment parseNewCommentTree()
     setCountAllComment parseAllCommentTree()
+    newCounter.dataset.idCommentLast = result.iMaxIdComment
 
     if selfIdComment
       toggleCommentForm iCurrentShowFormComment, true
