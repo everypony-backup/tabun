@@ -406,6 +406,7 @@ $config['sys']['celery']['backend'] = 'redis';
 $config['misc']['ga'] = '';
 $config['misc']['ver']['front'] = 'trunk';        // Frontend version
 $config['misc']['ver']['code'] = 'trunk';        // Code version
+$config['misc']['debug'] = false;
 
 return $config;
 
