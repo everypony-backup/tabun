@@ -345,7 +345,7 @@ $config['block']['rule_people'] = [
 ];
 $config['block']['rule_personal_blog'] = [
     'action' => ['personal_blog'],
-    'blocks' => ['right' => ['sidetop', 'search', 'stream', 'donate', 'herdmind', 'tags']],
+    'blocks' => ['right' => ['sidetop', 'search', 'stream', 'donate', 'herdmind']],
 ];
 $config['block']['rule_profile'] = [
     'action' => ['profile', 'talk', 'settings'],
