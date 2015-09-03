@@ -56,27 +56,25 @@ appendUser = ->
         notice data.sMsgTitle, data.sMsg
 
 getMore = ->
-  if isBusy
-    return
-  lastId = $('#userfeed_last_id').val()
-  unless lastId
-    return
-
-  $('#userfeed_get_more').addClass 'userfeed_loading'
+  if isBusy then return
+  selLoad = document.getElementById 'userfeed_get_more'
+  lastId = selLoad.dataset.userfeedLastId
+  unless lastId then return
+  selLoad.classList.add 'stream_loading'
   isBusy = true
-
   url = "#{router.feed}get_more/"
-  params = 'last_id': lastId
+  params =
+    last_id: lastId
 
   ajax url, params, (data) ->
     unless data.bStateError and data.topics_count
       $('#userfeed_loaded_topics').append data.result
-      $('#userfeed_last_id').attr 'value', data.iUserfeedLastId
+      selLoad.dataset.userfeedLastId = data.iUserfeedLastId
     unless data.topics_count
-      $('#userfeed_get_more').hide()
+      selLoad.classList.add 'h-hidden'
 
+    selLoad.classList.remove 'stream_loading'
     isBusy = false
-    $('#userfeed_get_more').removeClass 'userfeed_loading'
 
 
 module.exports = {subscribe, unsubscribe, appendUser, getMore}

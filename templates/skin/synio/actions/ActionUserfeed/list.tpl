@@ -6,8 +6,7 @@
 {if count($aTopics)}
     {if !$bDisableGetMoreButton}
         <div id="userfeed_loaded_topics"></div>
-        <input type="hidden" id="userfeed_last_id" value="{$iUserfeedLastId}" />
-        <a class="stream-get-more" id="userfeed_get_more" href="javascript:ls.userfeed.getMore()">{$aLang.userfeed_get_more} &darr;</a>
+        <span class="stream-get-more" id="userfeed_get_more" data-userfeed-last-id="{$iUserfeedLastId}" onclick="ls.userfeed.getMore()">{$aLang.userfeed_get_more} &darr;</span>
     {/if}
 {else}
     {$aLang.userfeed_no_events}
