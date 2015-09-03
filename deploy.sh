@@ -64,7 +64,7 @@ deploy(){
 
     if [ ${ENV_TYPE} != 'production' ]; then
         echo "Clean old static from trunk"
-        rm -r ${STATIC_PATH}/trunk
+        rm -rf ${STATIC_PATH}/trunk
     fi
     echo "Deploy static, version: ${STATIC_VER}"
     rsync -au static/ ${STATIC_PATH}
