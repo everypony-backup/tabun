@@ -28,14 +28,14 @@ class DbSimple_MysqlWrapper extends DbSimple_Mysql
     {
     	$this->_lastQuery = $queryMain;
         $this->_expandPlaceholders($queryMain, false);
-        
-        $oProfiler=ProfilerSimple::getInstance();
-		$iTimeId=$oProfiler->Start('query',$queryMain[0]);
-        
+        if (Config::Get('misc.debug')) {
+            $oProfiler = ProfilerSimple::getInstance();
+            $iTimeId = $oProfiler->Start('query', $queryMain[0]);
+        }
         $result = @mysql_query($queryMain[0], $this->link);
-        
-        $oProfiler->Stop($iTimeId);
-        
+        if (Config::Get('misc.debug')) {
+            $oProfiler->Stop($iTimeId);
+        }
         if ($result === false) return $this->_setDbError($queryMain[0]);
         if (!is_resource($result)) {
             if (preg_match('/^\s* INSERT \s+/six', $queryMain[0])) {

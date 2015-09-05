@@ -1,8 +1,4 @@
-{if
-	$bIsShowStatsPerformance and
-        ($oUserCurrent and $oUserCurrent->isAdministrator()) or
-        ({cfg name='misc.debug'} == true)
-}
+{if	$bIsShowStatsPerformance and ({cfg name='misc.debug'} == true) and $oUserCurrent and $oUserCurrent->isAdministrator()}
 	<div class="stat-performance">
 		{hook run='statistics_performance_begin'}
 		<table>
