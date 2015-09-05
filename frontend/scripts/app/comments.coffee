@@ -1,7 +1,8 @@
 $ = require "jquery"
+{scrollTo} = require "jquery"
 {Set, OrderedSet} = require "immutable"
-{keys, map, filter, forEach, transform} = require "lodash"
-{gettext} = require "core/lang.coffee"
+{keys, map, filter, first, forEach} = require "lodash"
+{gettext, ngettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
 {textPreview, registry, prepareJSON} = require "core/tools.coffee"
@@ -23,6 +24,7 @@ classes =
   new: 'comment-new'
   current: 'comment-current'
   deleted: 'comment-deleted'
+  wrapper: 'comment-wrapper'
   self: 'comment-self'
   folded: 'folded'
   comment: 'comment'
@@ -33,26 +35,28 @@ classes =
 hideClasses = [classes.self, classes.new, classes.deleted, classes.current]
 
 iCurrentShowFormComment = 0
-iCurrentViewComment = null
+currentViewedCommentId = null
 
 newComments = new Set()
 allComments = new OrderedSet()
+newCounter = null
+allCounter = null
+commentForm = null
 
 toggleCommentFormState = (state) ->
-  commentForm = $ '#form_comment_text'
-  submitButton = $ '#comment-button-submit'
+  submitButton = document.getElementById "comment-button-submit"
 
-  commentForm.toggleClass classes.form_loader, not state
-  commentForm.attr 'readonly', not state
   if state
-    submitButton.removeAttr 'disabled'
+    commentForm.classList.remove classes.form_loader
+    commentForm.readOnly = false
+    submitButton.disabled = false
   else
-    submitButton.attr 'disabled', 'disabled'
+    commentForm.classList.add classes.form_loader
+    commentForm.readOnly = true
+    submitButton.disabled = true
   null
 
 add = (formId, targetId, targetType) ->
-  form = $ "##{formId}"
-
   toggleCommentFormState false
 
   _success = (result) ->
@@ -61,12 +65,14 @@ add = (formId, targetId, targetType) ->
     if result.bStateError
       return error gettext("common_error"), result.sMsg
 
-    $('#form_comment_text').val ''
-    load targetId, targetType, result.sCommentId, false
+    commentForm.value = ""
+    load targetId, targetType, false
 
-  _complete = -> toggleCommentFormState true
+  _complete = (result) ->
+    toggleCommentFormState true
+    toggleCommentForm iCurrentShowFormComment, true
 
-  ajax types[targetType].url_add, prepareJSON(form), _success, null, _complete
+  ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
 
 
 toggleCommentForm = (idComment, bNoFocus) ->
@@ -85,17 +91,15 @@ toggleCommentForm = (idComment, bNoFocus) ->
   commentNode.parentNode.insertBefore reply, commentNode.nextSibling
   reply.classList.remove 'h-hidden'
 
-  $('#form_comment_text').val ''
-  $('#form_comment_reply').val idComment
+  commentForm.value = ""
+  document.getElementById("form_comment_reply").value = idComment
   iCurrentShowFormComment = idComment
   unless bNoFocus
-    $('#form_comment_text').focus()
+    commentForm.focus()
 
 
-load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
-  newCounter = document.getElementById 'new_comments_counter'
+load = (idTarget, typeTarget, bFlushNew=true) ->
   idCommentLast = parseInt(newCounter.dataset.idCommentLast) || 0
-
   objImg = document.getElementById 'update-comments'
   objImg.classList.add 'active'
   params =
@@ -103,72 +107,58 @@ load = (idTarget, typeTarget, selfIdComment, bFlushNew=true) ->
     idTarget: idTarget
     typeTarget: typeTarget
 
-  if selfIdComment
-    params.selfIdComment = selfIdComment
-
   _success = (result) ->
-    unless result
-      return error gettext("server_error"), gettext("try_later")
     if result.bStateError
       return error gettext("common_error"), result.sMsg
 
-    ###*
-    # TODO: fix this workaround with direct iterating over new aComments structure
-    # TODO: it should be aComments = HashMap<Int, Comment>
-    ###
-    rawComments = transform(
-      result.aComments
-      (accumulator, value) -> accumulator[value.id] = value
-      {}
-    )
-    forEach rawComments, (comment, id) ->
-      unless allComments.contains parseInt id
-        inject comment
-
     if bFlushNew
-      newComments.forEach (newCommentId) ->
-        comment = document.getElementById "comment_id_#{newCommentId}"
+      forEach document.getElementsByClassName(classes.new), (comment) ->
         comment.classList.remove classes.new
         comment.classList.remove classes.current
+
+    forEach result.comments, (comment, id) ->
+      unless allComments.contains parseInt id
+        inject comment
 
     setCountNewComment parseNewCommentTree()
     setCountAllComment parseAllCommentTree()
 
-    if rawComments.length and result.iMaxIdComment > 0
+    if keys(result.comments) > 0
       curItemBlock = blocks.getCurrentItem 'stream'
       if curItemBlock?.dataset.type == 'comment'
         blocks.load curItemBlock, 'stream'
       newCounter.dataset.idCommentLast = result.iMaxIdComment
 
-    if selfIdComment
-      toggleCommentForm iCurrentShowFormComment, true
-
-    if selfIdComment and document.getElementById "comment_id_#{selfIdComment}"
-      scrollToComment selfIdComment
-
   _complete = -> objImg.classList.remove 'active'
 
-  ajax types[typeTarget].url_response, params, _success, null, _complete
+  ajax types[typeTarget].url_response, params, _success, _complete
 
 
-inject = ({idParent, id, html}) ->
+inject = ({pid, id, html}) ->
   newComment = document.createElement 'div'
-  newComment.classList.add 'comment-wrapper'
+  newComment.classList.add classes.wrapper
   newComment.id = "comment_wrapper_id_#{id}"
   newComment.innerHTML = html
 
-  if idParent
-    # Уровень вложенности родителя
-    iCurrentTree = $('#comment_wrapper_id_' + idParent).parentsUntil('#comments').length
-    if iCurrentTree == registry.get('comment_max_tree')
-      # Определяем id предыдушего родителя
-      prevCommentParent = $('#comment_wrapper_id_' + idParent).parent()
-      idParent = parseInt(prevCommentParent.attr('id').replace('comment_wrapper_id_', ''))
-    targetId = "comment_wrapper_id_#{idParent}"
-  else
-    targetId = 'comments'
+  if pid
+    element = document.getElementById "comment_wrapper_id_#{pid}"
+    allParents = []
+    allParents.push(element)
+    while element.parentNode
+      if element.classList and classes.wrapper in element.classList
+        allParents.unshift(element.parentNode)
+      element = element.parentNode
 
-  document.getElementById(targetId).appendChild newComment
+    if allParents.length == registry.get('comment_max_tree')
+      target = allParents[allParents.length - 2]
+    else
+      target = allParents[allParents.length - 1]
+  else
+    target = document.getElementById "comments"
+
+  target.appendChild newComment
+  if newComment.getElementsByClassName classes.self
+    scrollToComment id
 
 
 toggle = (obj, commentId) ->
@@ -192,18 +182,35 @@ toggle = (obj, commentId) ->
 
 
 preview = ->
-  if $('#form_comment_text').val() == ''
+  unless commentForm.value
     return
-  $("#comment_preview_#{iCurrentShowFormComment}").remove()
-  $('#reply').before """<div id="comment_preview_#{iCurrentShowFormComment}" class="comment-preview text"></div>"""
+
+  old_preview = document.getElementById "comment_preview_#{iCurrentShowFormComment}"
+  old_preview?.parentNode?.removeChild old_preview
+
+  new_preview = document.createElement "div"
+  new_preview.className = "comment-preview text"
+  new_preview.id = "comment_preview_#{iCurrentShowFormComment}"
+
+  reply = document.getElementById("reply")
+  reply.parentNode.insertBefore new_preview, reply
+
   textPreview 'form_comment_text', false, "comment_preview_#{iCurrentShowFormComment}"
 
 
 setCountNewComment = (count) ->
-  $('#new_comments_counter').text(count).toggleClass('h-hidden', !count)
+  console.debug "New comments count: #{newCounter.textContent} -> #{count}"
+  newCounter.textContent = count
+  if count
+    newCounter.classList.remove "h-hidden"
+  else
+    newCounter.classList.add "h-hidden"
+
 
 setCountAllComment = (count) ->
-  document.getElementById("count-comments").text = count
+  console.debug "All comments count: #{allCounter.textContent} -> #{count}"
+  document.getElementById("name-count-comments").textContent = ngettext "comment", "comments", count
+  allCounter.textContent = count
 
 parseAllCommentTree = ->
   allComments = Set map(
@@ -221,19 +228,29 @@ parseNewCommentTree = ->
 
 goToNextComment = ->
   commentId = newComments.first()
-  if commentId
-    if document.getElementById "comment_id_#{commentId}"
-      scrollToComment commentId
-    newComments = newComments.delete commentId
+  if commentId then scrollToComment commentId
+
+
+scrollToComment = (commentId) ->
+  previousViewedComment = document.getElementById "comment_id_#{currentViewedCommentId}"
+  if previousViewedComment
+    previousViewedComment.classList.remove classes.current
+
+  comment = document.getElementById "comment_id_#{commentId}"
+  unless comment
+    console.warn "There're no comment #{commentId}"
+    return
+
+  scrollTo comment, 300, offset: -250
+
+  newComments = newComments.delete commentId
   setCountNewComment newComments.size
 
+  comment.classList.remove classes.new
+  comment.classList.add classes.current
 
-scrollToComment = (idComment) ->
-  $.scrollTo "#comment_id_#{idComment}", 300, offset: -250
-  if iCurrentViewComment
-    $("#comment_id_#{iCurrentViewComment}").removeClass classes.current
-  $("#comment_id_#{idComment}").addClass classes.current
-  iCurrentViewComment = idComment
+  currentViewedCommentId = parseInt comment.dataset.id
+
 
 goToParentComment = (id, pid) ->
   $('.' + classes.comment_goto_child).hide().find('a').unbind()
@@ -243,7 +260,7 @@ goToParentComment = (id, pid) ->
   scrollToComment pid
 
 initEvent = ->
-  $('#form_comment_text').on 'keyup', ({keyCode, which, ctrlKey}) ->
+  $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
     key = keyCode or which
     if ctrlKey and key == 13
       $('#comment-button-submit').click()
@@ -251,7 +268,7 @@ initEvent = ->
   $(document).on "click", '.folding', ({target}) ->
     wrappers = document
       .getElementById "comment_wrapper_id_#{target.dataset.id}"
-      .getElementsByClassName "comment-wrapper"
+      .getElementsByClassName classes.wrapper
 
     if classes.folded in target.classList
       # Expand
@@ -264,8 +281,11 @@ initEvent = ->
 
 
 init = ->
+  newCounter = document.getElementById "new_comments_counter"
+  allCounter = document.getElementById "count-comments"
+  commentForm = document.getElementById "form_comment_text"
   initEvent()
-  parseAllCommentTree()
+  setCountAllComment parseAllCommentTree()
   setCountNewComment parseNewCommentTree()
   toggleCommentForm iCurrentShowFormComment
 
