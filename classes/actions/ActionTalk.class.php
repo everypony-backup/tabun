@@ -571,17 +571,26 @@ class ActionTalk extends Action {
 		$oTalkUser->setCommentCountNew(0);
 		$this->Talk_UpdateTalkUser($oTalkUser);
 
-		$aComments=array();
+		$aComments=[];
+		$comments=[];
 		$aCmts=$aReturn['comments'];
 		if ($aCmts and is_array($aCmts)) {
 			foreach ($aCmts as $aCmt) {
+				$_id = $aCmt['obj']->getId();
+				$_pid = $aCmt['obj']->getPid();
 				$aComments[]=array(
 					'html' => $aCmt['html'],
-					'idParent' => $aCmt['obj']->getPid(),
-					'id' => $aCmt['obj']->getId(),
+					'idParent' => $_pid,
+					'id' => $_id,
 				);
+				$comments[$_id] = [
+					'id' => $_id,
+					'pid' => $_pid,
+					'html' => $aCmt['html'],
+				];
 			}
 		}
+		$this->Viewer_AssignAjax('comments',$comments);
 		$this->Viewer_AssignAjax('aComments',$aComments);
 		$this->Viewer_AssignAjax('iMaxIdComment',$iMaxIdComment);
 	}
