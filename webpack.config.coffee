@@ -33,7 +33,7 @@ module.exports =
     vendor: Array::concat keys(aliases), vendors
 
   output:
-    path: path.join __dirname, 'static', if isProduction then '[hash]' else 'trunk'
+    path: path.join __dirname, 'static', '[hash]'
     publicPath: "./"
     filename: '[name].bundle.js'
 

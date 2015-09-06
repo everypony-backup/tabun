@@ -46,11 +46,10 @@ deploy(){
     echo "Build static"
     if [ ${ENV_TYPE} == 'production' ]; then
         npm run-script webpack:production
-        STATIC_VER=$(ls -1 --color=never static/)
     else
         npm run-script webpack:trunk
-        STATIC_VER='trunk'
     fi
+    STATIC_VER=$(ls -1 --color=never static/)
 
     echo "Build i10n files"
     find locale -name "*.po" -execdir msgfmt messages.po -o messages.mo \;
