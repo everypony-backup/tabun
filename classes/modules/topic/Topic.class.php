@@ -1555,12 +1555,13 @@ class ModuleTopic extends Module {
 			return ModuleImage::UPLOAD_IMAGE_ERROR_FS;
 		}
 		$sDirUpload=$this->Image_GetIdDir($oUser->getId());
-		if ($sExt = $this->Image_ValidateImageFile($sFileTmp)){
+        $sExt = $this->Image_ValidateImageFile($sFileTmp);
+        if (is_string($sExt)) {
             $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0440, true);
             return $this->Image_GetWebPath($sFileImage);
         } else {
             @unlink($sFileTmp);
-            return ModuleImage::UPLOAD_IMAGE_ERROR;
+            return $sExt;
         }
 	}
 	/**
@@ -1625,12 +1626,13 @@ class ModuleTopic extends Module {
 		fclose($fp);
 
         $sDirUpload=$this->Image_GetIdDir($oUser->getId());
-        if ($sExt = $this->Image_ValidateImageFile($sFileTmp)){
+        $sExt = $this->Image_ValidateImageFile($sFileTmp);
+        if (is_string($sExt)) {
             $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0440, true);
             return $this->Image_GetWebPath($sFileImage);
         } else {
             @unlink($sFileTmp);
-            return ModuleImage::UPLOAD_IMAGE_ERROR;
+            return $sExt;
         }
 	}
 	/**

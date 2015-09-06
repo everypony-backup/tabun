@@ -894,7 +894,7 @@ return array(
 	'uploadimg_file' => 'Файл',
 	'uploadimg_file_error' => 'Невозможно обработать изображение, проверьте тип и размер файла',
 	'uploadimg_url' => 'Ссылка на изображение',
-	'uploadimg_url_error_type' => 'Файл не является изображением',
+	'uploadimg_url_error_type' => 'Неизвестный формат изображения',
 	'uploadimg_url_error_read' => 'Невозможно прочитать файл',
 	'uploadimg_url_error_size' => 'Файл слишком большой',
 	'uploadimg_url_error_fs' => 'Внутренняя ошибка сохранения файла',

@@ -202,6 +202,8 @@ $config['module']['notify']['per_process'] = 1000;      // Количество 
 // Модуль Image
 $config['module']['image']['allowed_mime'] = [
     "image/bmp" => "bmp",
+    "image/x-bmp" => "bmp",
+    "image/x-ms-bmp" => "bmp",
     "image/gif" => "gif",
     "image/png" => "png",
     "image/jpeg" => "jpg",
