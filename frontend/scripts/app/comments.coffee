@@ -111,7 +111,7 @@ load = (idTarget, typeTarget, bFlushNew=true) ->
       return error gettext("common_error"), result.sMsg
 
     if bFlushNew
-      forEach document.getElementsByClassName(classes.new), (comment) ->
+      Set(document.getElementsByClassName(classes.new)).forEach (comment) ->
         comment.classList.remove classes.new
         comment.classList.remove classes.current
 
