@@ -79,7 +79,6 @@ toggleCommentForm = (idComment, bNoFocus) ->
   reply = document.getElementById 'reply'
   unless reply then return
 
-  # Throw away old previews
   preview = document.getElementById "comment_preview_#{iCurrentShowFormComment}"
   preview?.parentNode?.removeChild preview
 
