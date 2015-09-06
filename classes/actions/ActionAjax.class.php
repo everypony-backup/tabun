@@ -1093,6 +1093,10 @@ class ActionAjax extends Action {
                 $this->Message_AddErrorSingle($this->Lang_Get('uploadimg_url_error_fs'),$this->Lang_Get('error'));
                 return;
 
+			case ($sFile==ModuleImage::UPLOAD_IMAGE_ERROR_NETWORK):
+				$this->Message_AddErrorSingle($this->Lang_Get('uploadimg_url_error_network'),$this->Lang_Get('error'));
+				return;
+
             default:
             case ($sFile==ModuleImage::UPLOAD_IMAGE_ERROR):
                 $this->Message_AddErrorSingle($this->Lang_Get('uploadimg_url_error'),$this->Lang_Get('error'));
