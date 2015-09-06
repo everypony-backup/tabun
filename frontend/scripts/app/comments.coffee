@@ -142,8 +142,7 @@ inject = ({pid, id, html}) ->
 
   if pid
     element = document.getElementById "comment_wrapper_id_#{pid}"
-    allParents = []
-    allParents.push(element)
+    allParents = [element]
     while element.parentNode
       if element.classList and classes.wrapper in element.classList
         allParents.unshift(element.parentNode)
@@ -157,7 +156,8 @@ inject = ({pid, id, html}) ->
     target = document.getElementById "comments"
 
   target.appendChild newComment
-  if newComment.getElementsByClassName classes.self
+
+  if (newComment.getElementsByClassName(classes.self)).length
     scrollToComment id
 
 
