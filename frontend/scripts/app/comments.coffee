@@ -64,13 +64,14 @@ add = (formId, targetId, targetType) ->
       return error gettext("server_error"), gettext("try_later")
     if result.bStateError
       return error gettext("common_error"), result.sMsg
+    else
+      commentForm.value = ""
+      load targetId, targetType, false
 
-    commentForm.value = ""
-    load targetId, targetType, false
-
-  _complete = (result) ->
+  _complete = ({responseJSON:{bStateError}}) ->
     toggleCommentFormState true
-    toggleCommentForm iCurrentShowFormComment, true
+    unless bStateError
+      toggleCommentForm iCurrentShowFormComment, true
 
   ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
 
