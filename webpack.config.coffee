@@ -39,7 +39,6 @@ module.exports =
 
   module:
     loaders: [
-      {test: /\.js$/, loader: "webpack-strip?strip[]=debug" }
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
