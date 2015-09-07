@@ -2,7 +2,7 @@ path = require 'path'
 webpack = require 'webpack'
 {keys} = require 'lodash'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
-isProduction = process.env.NODE_ENV == 'production';
+isProduction = process.env.NODE_ENV == 'production'
 
 
 vendors = [
@@ -39,6 +39,7 @@ module.exports =
 
   module:
     loaders: [
+      {test: /\.js$/, loader: "webpack-strip?strip[]=debug" }
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}

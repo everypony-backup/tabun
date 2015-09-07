@@ -199,7 +199,6 @@ preview = ->
 
 
 setCountNewComment = (count) ->
-  console.debug "New comments count: #{newCounter.textContent} -> #{count}"
   newCounter.textContent = count
   if count
     newCounter.classList.remove "h-hidden"
@@ -208,7 +207,6 @@ setCountNewComment = (count) ->
 
 
 setCountAllComment = (count) ->
-  console.debug "All comments count: #{allCounter.textContent} -> #{count}"
   document.getElementById("name-count-comments").textContent = ngettext "comment", "comments", count
   allCounter.textContent = count
 
@@ -238,7 +236,6 @@ scrollToComment = (commentId) ->
 
   comment = document.getElementById "comment_id_#{commentId}"
   unless comment
-    console.warn "There're no comment #{commentId}"
     return
 
   scrollTo comment, 300, offset: -250
