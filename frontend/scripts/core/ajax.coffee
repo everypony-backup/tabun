@@ -19,7 +19,7 @@ _normalize_url = (url) ->
 
 _error = -> return error gettext("network_error"), gettext("data_not_send")
 
-ajax = (url, params, callback, error, complete) ->
+ajax = (url, params, callback, complete, error) ->
   params ?= {}
   params.security_ls_key = window.LIVESTREET_SECURITY_KEY
 

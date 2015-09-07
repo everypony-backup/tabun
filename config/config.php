@@ -202,6 +202,8 @@ $config['module']['notify']['per_process'] = 1000;      // Количество 
 // Модуль Image
 $config['module']['image']['allowed_mime'] = [
     "image/bmp" => "bmp",
+    "image/x-bmp" => "bmp",
+    "image/x-ms-bmp" => "bmp",
     "image/gif" => "gif",
     "image/png" => "png",
     "image/jpeg" => "jpg",
@@ -345,7 +347,7 @@ $config['block']['rule_people'] = [
 ];
 $config['block']['rule_personal_blog'] = [
     'action' => ['personal_blog'],
-    'blocks' => ['right' => ['sidetop', 'search', 'stream', 'donate', 'herdmind', 'tags']],
+    'blocks' => ['right' => ['sidetop', 'search', 'stream', 'donate', 'herdmind']],
 ];
 $config['block']['rule_profile'] = [
     'action' => ['profile', 'talk', 'settings'],
@@ -406,6 +408,7 @@ $config['sys']['celery']['backend'] = 'redis';
 $config['misc']['ga'] = '';
 $config['misc']['ver']['front'] = 'trunk';        // Frontend version
 $config['misc']['ver']['code'] = 'trunk';        // Code version
+$config['misc']['debug'] = false;
 
 return $config;
 

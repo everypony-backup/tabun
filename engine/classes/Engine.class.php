@@ -16,7 +16,6 @@
 */
 
 set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__));
-require_once(Config::Get('path.root.engine').'/lib/internal/ProfilerSimple/Profiler.class.php');
 
 require_once("LsObject.class.php");
 require_once("Plugin.class.php");
@@ -275,12 +274,14 @@ class Engine extends LsObject {
 				/**
 				 * Замеряем время инициализации модуля
 				 */
-				$oProfiler=ProfilerSimple::getInstance();
-				$iTimeId=$oProfiler->Start('InitModule',get_class($oModule));
-
+				if (Config::Get('misc.debug')) {
+					$oProfiler = ProfilerSimple::getInstance();
+					$iTimeId = $oProfiler->Start('InitModule', get_class($oModule));
+				}
 				$this->InitModule($oModule);
-
-				$oProfiler->Stop($iTimeId);
+				if (Config::Get('misc.debug')) {
+					$oProfiler->Stop($iTimeId);
+				}
 			}
 		}
 	}
@@ -349,12 +350,14 @@ class Engine extends LsObject {
 			/**
 			 * Замеряем время shutdown`a модуля
 			 */
-			$oProfiler=ProfilerSimple::getInstance();
-			$iTimeId=$oProfiler->Start('ShutdownModule',get_class($oModule));
-
+			if (Config::Get('misc.debug')) {
+				$oProfiler = ProfilerSimple::getInstance();
+				$iTimeId = $oProfiler->Start('ShutdownModule', get_class($oModule));
+			}
 			$oModule->Shutdown();
-
-			$oProfiler->Stop($iTimeId);
+			if (Config::Get('misc.debug')) {
+				$oProfiler->Stop($iTimeId);
+			}
 		}
 	}
 
@@ -536,9 +539,10 @@ class Engine extends LsObject {
 		/**
 		 * Замеряем время выполнения метода
 		 */
-		$oProfiler=ProfilerSimple::getInstance();
-		$iTimeId=$oProfiler->Start('callModule',$sModuleName.'->'.$sMethod.'()');
-
+		if (Config::Get('misc.debug')) {
+			$oProfiler = ProfilerSimple::getInstance();
+			$iTimeId = $oProfiler->Start('callModule', $sModuleName . '->' . $sMethod . '()');
+		}
 		$sModuleName=strtolower($sModuleName);
 		$aResultHook=array();
 		if (!in_array($sModuleName,array('plugin','hook'))) {
@@ -560,8 +564,9 @@ class Engine extends LsObject {
 		if (!in_array($sModuleName,array('plugin','hook'))) {
 			$this->Hook_Run('module_'.$sModuleName.'_'.strtolower($sMethod).'_after',array('result'=>&$result,'params'=>$aArgs));
 		}
-
-		$oProfiler->Stop($iTimeId);
+		if (Config::Get('misc.debug')) {
+			$oProfiler->Stop($iTimeId);
+		}
 		return $result;
 	}
 

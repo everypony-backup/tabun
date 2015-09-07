@@ -47,7 +47,7 @@ showPinkie = (time) ->
 
 prepareJSON = (raw_form) ->
   reduce(
-    raw_form.serializeArray(),
+    $(raw_form).serializeArray(),
     (result, item) ->
       result[item.name] = item.value
       result

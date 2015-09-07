@@ -46,6 +46,10 @@ class ModuleImage extends Module {
 	 */
 	const UPLOAD_IMAGE_ERROR_FS = 16;
 	/**
+	 * Ошибка удаленного сервера
+	 */
+	const UPLOAD_IMAGE_ERROR_NETWORK = 32;
+	/**
 	 * Тескт последней ошибки
 	 *
 	 * @var string

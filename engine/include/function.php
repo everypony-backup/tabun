@@ -120,7 +120,7 @@ function func_generator($iLength=10) {
 	if ($iLength>32) {
 		$iLength=32;
 	}
-	return substr(uniqid(), 0, $iLength);
+	return substr(bin2hex(mcrypt_create_iv(32)), 0, $iLength);
 }
 
 /**

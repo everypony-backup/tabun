@@ -1144,32 +1144,10 @@ class ActionBlog extends Action {
 		 * Пользователь состоит в блоге?
 		 */
 		$idCommentLast=getRequestStr('idCommentLast',null,'post');
-		$selfIdComment=getRequestStr('selfIdComment',null,'post');
-		$aComments=array();
-		/**
-		 * Если используется постраничность, возвращаем только добавленный комментарий
-		 */
-		if (getRequest('bUsePaging',null,'post') and $selfIdComment) {
-			if ($oComment=$this->Comment_GetCommentById($selfIdComment) and $oComment->getTargetId()==$oTopic->getId() and $oComment->getTargetType()=='topic') {
-				$oViewerLocal=$this->Viewer_GetLocalViewer();
-				$oViewerLocal->Assign('oUserCurrent',$this->oUserCurrent);
-				$oViewerLocal->Assign('bOneComment',true);
+		$aComments=[];
+		$comments=[];
 
-				$oViewerLocal->Assign('oComment',$oComment);
-				$sText=$oViewerLocal->Fetch($this->Comment_GetTemplateCommentByTarget($oTopic->getId(),'topic'));
-				$aCmt=array();
-				$aCmt[]=array(
-					'html' => $sText,
-					'obj'  => $oComment,
-				);
-			} else {
-				$aCmt=array();
-			}
-			$aReturn['comments']=$aCmt;
-			$aReturn['iMaxIdComment']=$selfIdComment;
-		} else {
-			$aReturn=$this->Comment_GetCommentsNewByTargetId($oTopic->getId(),'topic',$idCommentLast);
-		}
+		$aReturn=$this->Comment_GetCommentsNewByTargetId($oTopic->getId(),'topic',$idCommentLast);
 		$iMaxIdComment=$aReturn['iMaxIdComment'];
 
 		$oTopicRead=Engine::GetEntity('Topic_TopicRead');
@@ -1183,15 +1161,23 @@ class ActionBlog extends Action {
 		$aCmts=$aReturn['comments'];
 		if ($aCmts and is_array($aCmts)) {
 			foreach ($aCmts as $aCmt) {
+				$_id = $aCmt['obj']->getId();
+				$_pid = $aCmt['obj']->getPid();
 				$aComments[]=array(
 					'html' => $aCmt['html'],
-					'idParent' => $aCmt['obj']->getPid(),
-					'id' => $aCmt['obj']->getId(),
+					'idParent' => $_pid,
+					'id' => $_id,
 				);
+				$comments[$_id] = [
+                    'id' => $_id,
+                    'pid' => $_pid,
+                    'html' => $aCmt['html'],
+				];
 			}
 		}
 
 		$this->Viewer_AssignAjax('iMaxIdComment',$iMaxIdComment);
+		$this->Viewer_AssignAjax('comments',$comments);
 		$this->Viewer_AssignAjax('aComments',$aComments);
 	}
 	/**

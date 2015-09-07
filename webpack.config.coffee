@@ -2,7 +2,7 @@ path = require 'path'
 webpack = require 'webpack'
 {keys} = require 'lodash'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
-isProduction = process.env.NODE_ENV == 'production';
+isProduction = process.env.NODE_ENV == 'production'
 
 
 vendors = [
@@ -33,7 +33,7 @@ module.exports =
     vendor: Array::concat keys(aliases), vendors
 
   output:
-    path: path.join __dirname, 'static', if isProduction then '[hash]' else 'trunk'
+    path: path.join __dirname, 'static', '[hash]'
     publicPath: "./"
     filename: '[name].bundle.js'
 

@@ -330,7 +330,6 @@ return array(
 	'comment_preview' => 'предпросмотр',
 	'comment_unregistered' => 'Только зарегистрированные и авторизованные пользователи могут оставлять комментарии.',
 	'comment_subscribe' => 'подписаться на новые комментарии',
-	'comment_declension' => 'комментарий;комментария;комментариев',
 	/**
 	 * Голосование за комментарий
 	 */
@@ -895,11 +894,12 @@ return array(
 	'uploadimg_file' => 'Файл',
 	'uploadimg_file_error' => 'Невозможно обработать изображение, проверьте тип и размер файла',
 	'uploadimg_url' => 'Ссылка на изображение',
-	'uploadimg_url_error_type' => 'Файл не является изображением',
+	'uploadimg_url_error_type' => 'Неизвестный формат изображения',
 	'uploadimg_url_error_read' => 'Невозможно прочитать файл',
 	'uploadimg_url_error_size' => 'Файл слишком большой',
-	'uploadimg_url_error_size' => 'Внетренняя ошибка загрузки файла',
-	'uploadimg_url_error' => 'Невозможно обработать внешний файл',
+	'uploadimg_url_error_fs' => 'Внутренняя ошибка сохранения файла',
+	'uploadimg_url_error_network' => 'Ошибка удаленного сервера',
+	'uploadimg_url_error' => 'Внутренняя ошибка загрузки файла',
 	'uploadimg_align' => 'Выравнивание',
 	'uploadimg_align_no' => 'нет',
 	'uploadimg_align_left' => 'слева',

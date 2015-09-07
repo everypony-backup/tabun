@@ -30,5 +30,6 @@ module.exports =
         value = value.tr(replace)
       value
 
-  gettext: (message) ->
-    i18n.gettext message
+  gettext: (message) -> i18n.gettext message
+
+  ngettext: (single, plural, value) -> i18n.ngettext single, plural, value
