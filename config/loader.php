@@ -16,48 +16,10 @@
 */
 
 /**
- * Основные константы
- */
-define('LS_VERSION','1.0.3');
-
-/**
  * Operations with Config object
  */
 require_once(dirname(dirname(__FILE__))."/engine/lib/internal/ConfigSimple/Config.class.php");
 Config::LoadFromFile(dirname(__FILE__).'/config.php');
-
-$fGetConfig = create_function('$sPath', '$config=array(); return include $sPath;');
-
-/**
- * Загружает конфиги модулей вида /config/modules/[module_name]/config.php
- */
-$sDirConfig=Config::get('path.root.server').'/config/modules/';
-if ($hDirConfig = opendir($sDirConfig)) {
-	while (false !== ($sDirModule = readdir($hDirConfig))) {
-		if ($sDirModule !='.' and $sDirModule !='..' and is_dir($sDirConfig.$sDirModule)) {
-			$sFileConfig=$sDirConfig.$sDirModule.'/config.php';
-			if (file_exists($sFileConfig)) {
-				$aConfig = $fGetConfig($sFileConfig);
-				if(!empty($aConfig) && is_array($aConfig)) {
-					// Если конфиг этого модуля пуст, то загружаем массив целиком
-					$sKey = "module.$sDirModule";
-					if(!Config::isExist($sKey)) {
-						Config::Set($sKey,$aConfig);
-					} else {
-						// Если уже существую привязанные к модулю ключи,
-						// то сливаем старые и новое значения ассоциативно
-						Config::Set(
-							$sKey,
-							func_array_merge_assoc(Config::Get($sKey), $aConfig) 
-						);
-					}
-				}
-			}
-		}
-	}
-	closedir($hDirConfig);
-}
-
 
 /**
  * Инклудим все *.php файлы из каталога {path.root.engine}/include/ - это файлы ядра
@@ -74,37 +36,6 @@ if ($hDirInclude = opendir($sDirInclude)) {
 		}
 	}
 	closedir($hDirInclude);
-}
-
-/**
- * Ищет routes-конфиги модулей и объединяет их с текущим
- * @see Router.class.php
- */
-$sDirConfig=Config::get('path.root.server').'/config/modules/';
-if ($hDirConfig = opendir($sDirConfig)) {
-	while (false !== ($sDirModule = readdir($hDirConfig))) {
-		if ($sDirModule !='.' and $sDirModule !='..' and is_dir($sDirConfig.$sDirModule)) {
-			$sFileConfig=$sDirConfig.$sDirModule.'/config.route.php';
-			if (file_exists($sFileConfig)) {
-				$aConfig = $fGetConfig($sFileConfig);
-				if(!empty($aConfig) && is_array($aConfig)) {
-					// Если конфиг этого модуля пуст, то загружаем массив целиком
-					$sKey = "router";
-					if(!Config::isExist($sKey)) {
-						Config::Set($sKey,$aConfig);
-					} else {
-						// Если уже существую привязанные к модулю ключи,
-						// то сливаем старые и новое значения ассоциативно
-						Config::Set(
-							$sKey,
-							func_array_merge_assoc(Config::Get($sKey), $aConfig) 
-						);
-					}
-				}
-			}
-		}
-	}
-	closedir($hDirConfig);
 }
 
 /**
