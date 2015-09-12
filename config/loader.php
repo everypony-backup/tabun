@@ -46,3 +46,8 @@ $local_config = $_SERVER["CONFIG"];
 if (file_exists($local_config)) {
     Config::LoadFromFile($local_config, false);
 }
+
+/**
+ * Composer libs
+ */
+require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
