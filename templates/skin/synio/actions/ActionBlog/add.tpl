@@ -72,4 +72,4 @@
 </form>
 
 
-{include file='footer.tpl' sMarkItUpBundle="topics"}
+{include file='footer.tpl' scripts=["topics"]}

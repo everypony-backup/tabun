@@ -35,4 +35,4 @@
 
 {hook run='talk_add_end'}
 
-{include file='footer.tpl' sMarkItUpBundle="topics"}
+{include file='footer.tpl' scripts=["topics"]}
