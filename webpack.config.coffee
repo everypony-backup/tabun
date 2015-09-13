@@ -63,6 +63,7 @@ module.exports =
     ] else []
     [
       new ExtractTextPlugin "[name].css"
+      new webpack.optimize.DedupePlugin()
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
     ]
   )
