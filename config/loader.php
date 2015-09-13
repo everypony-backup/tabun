@@ -51,4 +51,4 @@ if(file_exists('/etc/config.stable.php')) {
 /**
  * Composer libs
  */
-require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
+// require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
