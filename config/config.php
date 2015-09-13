@@ -76,7 +76,6 @@ $config['sys']['cookie']['time'] = 60 * 60 * 24 * 7;        // время жиз
 /**
  * Настройки сессий
  */
-$config['sys']['session']['standart'] = true;                   // Использовать или нет стандартный механизм сессий
 $config['sys']['session']['name'] = 'TABUNSESSIONID';           // название сессии
 $config['sys']['session']['timeout'] = null;                    // Тайм-аут сессии в секундах
 $config['sys']['session']['host'] = '___sys.cookie.host___';    // хост сессии в куках
