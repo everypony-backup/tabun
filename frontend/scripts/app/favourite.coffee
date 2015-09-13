@@ -4,30 +4,23 @@ $ = require "jquery"
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 {gettext} = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
+routes = require "lib/routes.coffee"
 
-router = window.aRouter
 
-
-favTypes =
-  topic:
-    url: "#{router.ajax}favourite/topic/"
-    targetName: 'idTopic'
-  talk:
-    url: "#{router.ajax}favourite/talk/"
-    targetName: 'idTalk'
-  comment:
-    url: "#{router.ajax}favourite/comment/"
-    targetName: 'idComment'
+favTargets =
+  comment: 'idComment'
+  topic: 'idTopic'
+  user: 'idUser'
 
 
 toggle = (idTarget, objFavourite, type) ->
-  unless favTypes[type]
+  unless favTargets[type]
     return false
   objFavourite = $ objFavourite
   params = {}
   params.type = not objFavourite.hasClass "active"
-  params[favTypes[type].targetName] = idTarget
-  ajax favTypes[type].url, params, (result) ->
+  params[favTargets[type]] = idTarget
+  ajax routes.favourite[type], params, (result) ->
     if result.bStateError
       return error null, result.sMsg
 
@@ -68,7 +61,7 @@ hideEditTags = ->
   false
 
 saveTags = (form) ->
-  url = "#{router.ajax}favourite/save-tags/"
+  url = routes.favourite.saveTags
   ajaxSubmit url, $(form), (result) ->
     if result.bStateError
       error null, result.sMsg

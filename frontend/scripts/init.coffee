@@ -8,13 +8,13 @@ require "jquery.file"
 {forEach, random} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
+routes = require "lib/routes.coffee"
 {showPinkie, registry} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
 toolbar = require "app/toolbar.coffee"
 
-router = window.aRouter
 
 init = ->
   # Popups
@@ -29,10 +29,10 @@ init = ->
   $('#userfield_form').jqm toTop: true
 
   # Autocomplete
-  autocomplete.add $(".autocomplete-tags-sep"), "#{router.ajax}autocompleter/tag/", true
-  autocomplete.add $(".autocomplete-tags"), "#{router.ajax}autocompleter/tag/", false
-  autocomplete.add $(".autocomplete-users-sep"), "#{router.ajax}autocompleter/user/", true
-  autocomplete.add $(".autocomplete-users"), "#{router.ajax}autocompleter/user/", false
+  autocomplete.add $(".autocomplete-tags-sep"), routes.tag.autocomplete, true
+  autocomplete.add $(".autocomplete-tags"), routes.tag.autocomplete, false
+  autocomplete.add $(".autocomplete-users-sep"), routes.people.autocomplete, true
+  autocomplete.add $(".autocomplete-users"), routes.people.autocomplete, false
 
   # Blocks
   blocks.init 'stream', group_items: true, group_min: 3
@@ -46,15 +46,10 @@ init = ->
   $('.js-registration-form-show').click ->
     if blocks.switchTab 'registration', 'popup-login'
       $('#window_login_form').jqmShow()
-    else
-      window.location = router.registration
-    false
   $('.js-login-form-show').click ->
     if blocks.switchTab 'login', 'popup-login'
       $('#window_login_form').jqmShow()
-    else
-      window.location = router.login
-    false
+
 
   # Datepicker
   $('.date-picker').datepicker
@@ -67,7 +62,7 @@ init = ->
   $('.js-tag-search-form').submit ->
     val = $(this).find('.js-tag-search').val()
     if val
-      window.location = "#{router.tag}#{encodeURIComponent(val)}/"
+      window.location = "#{routes.tag.main}#{encodeURIComponent(val)}/"
     false
 
   # Talk

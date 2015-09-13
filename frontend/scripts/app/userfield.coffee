@@ -4,9 +4,9 @@ $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
+routes = require "lib/routes.coffee"
 
-router = window.aRouter
-
+url = routes.userfields
 
 iCountMax = 2
 
@@ -45,7 +45,6 @@ addUserfield = ->
   title = $('#user_fields_form_title').val()
   pattern = $('#user_fields_form_pattern').val()
   type = $('#user_fields_form_type').val()
-  url = "#{router.admin}userfields"
   params = merge {action: 'add'}, {name, title, pattern, type}
 
   ajax url, params, (data) ->
@@ -67,7 +66,6 @@ updateUserfield = ->
   title = $('#user_fields_form_title').val()
   pattern = $('#user_fields_form_pattern').val()
   type = $('#user_fields_form_type').val()
-  url = "#{router.admin}userfields"
   params = merge {'action': 'update'}, {id, name, title, pattern, type}
 
   ajax url, params, (data) ->
@@ -84,8 +82,7 @@ updateUserfield = ->
 deleteUserfield = (id) ->
   unless confirm(lang.get('user_field_delete_confirm'))
     return
-  url = "#{router.admin}userfields"
-  params = 
+  params =
     'action': 'delete'
     'id': id
   

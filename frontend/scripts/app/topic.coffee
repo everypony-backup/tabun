@@ -2,13 +2,13 @@ $ = require "jquery"
 
 {ajaxSubmit} = require "core/ajax.coffee"
 {error} = require "core/messages.coffee"
+routes = require "lib/routes.coffee"
 
-router = window.aRouter
 
 preview = (form, preview) ->
   form = $ "##{form}"
   preview = $ "##{preview}"
-  url = "#{router.ajax}preview/topic/"
+  url = routes.preview.topic
 
   ajaxSubmit url, form, (result) ->
     if result.bStateError

@@ -1,11 +1,11 @@
 $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
+routes = require "lib/routes.coffee"
 
-router = window.aRouter
 
 toggle = (sTargetType, iTargetId, sMail, iValue) ->
-  url = "#{router.subscribe}ajax-subscribe-toggle/"
+  url = routes.subscribe.toggle
   params =
     target_type: sTargetType
     target_id: iTargetId

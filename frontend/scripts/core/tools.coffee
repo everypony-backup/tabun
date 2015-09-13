@@ -6,6 +6,7 @@ $ = require 'jquery'
 
 {notice, error} = require "./messages.coffee"
 {ajax, ajaxSubmit} = require "./ajax.coffee"
+routes = require "lib/routes.coffee"
 
 _registry = {}
 
@@ -18,11 +19,10 @@ registry =
 
 textPreview = (textId, save, divPreview) ->
   text = $('#' + textId).val()
-  ajaxUrl = aRouter['ajax'] + 'preview/text/'
   ajaxOptions =
     text: text
     save: save
-  ajax ajaxUrl, ajaxOptions, (result) ->
+  ajax routes.preview.text, ajaxOptions, (result) ->
     if !result
       error 'Error', 'Please try again later'
     if result.bStateError
@@ -59,7 +59,7 @@ uploadImg = (formId) ->
   upl_window = $('#window_upload_img')
   btns = $('.main-upl-btn', upl_window)
   btns.attr('disabled', 'disabled').addClass('disabled').text 'Загрузка...'
-  ajaxSubmit 'upload/image/', form, (data) ->
+  ajaxSubmit routes.image.uploadImage, form, (data) ->
     if data.bStateError
       error data.sMsgTitle, data.sMsg
     else

@@ -5,38 +5,29 @@ classNames = require "classnames"
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 prefix =
   area: 'vote_area_'
   total: 'vote_total_'
   count: 'vote_count_'
 
-voteTypes = 
-  comment:
-    url: "#{router.ajax}vote/comment/"
-    targetName: 'idComment'
-  topic:
-    url: "#{router.ajax}vote/topic/"
-    targetName: 'idTopic'
-  blog:
-    url: "#{router.ajax}vote/blog/"
-    targetName: 'idBlog'
-  user:
-    url: "#{router.ajax}vote/user/"
-    targetName: 'idUser'
+voteTargets =
+  comment: 'idComment'
+  topic: 'idTopic'
+  blog: 'idBlog'
+  user: 'idUser'
 
 vote = (idTarget, objVote, value, type) ->
-  unless voteTypes[type]
+  unless voteTargets[type]
     return false
 
   objVote = $(objVote)
   params = {}
   params['value'] = value
-  params[voteTypes[type].targetName] = idTarget
+  params[voteTargets[type]] = idTarget
 
-  ajax voteTypes[type].url, params, (result) ->
+  ajax routes.vote[type], params, (result) ->
     onVote idTarget, objVote, value, type, result
 
 

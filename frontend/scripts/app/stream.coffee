@@ -4,14 +4,14 @@ $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
 
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 isBusy = false
 dateLast = null
 
 subscribe = (iTargetUserId) ->
-  url = "#{router.stream}subscribe/"
+  url = routes.stream.subscribe
   params = id: iTargetUserId
   ajax url, params, (data) ->
     if data.bStateError
@@ -20,7 +20,7 @@ subscribe = (iTargetUserId) ->
       notice data.sMsgTitle, data.sMsg
 
 unsubscribe = (iId) ->
-  url = "#{router.stream}unsubscribe/"
+  url = routes.stream.unsubscribe
   params = id: iId
   ajax url, params, (data) ->
     unless data.bStateError
@@ -28,7 +28,7 @@ unsubscribe = (iId) ->
 
 
 switchEventType = (iType) ->
-  url = "#{router.stream}switchEventType/"
+  url = routes.stream.switchEventType
   params = 'type': iType
   ajax url, params, (data) ->
     unless data.bStateError
@@ -39,7 +39,7 @@ appendUser = ->
   sLogin = $('#stream_users_complete').val()
   unless sLogin
     return
-  url = "#{router.stream}subscribeByLogin/"
+  url = routes.stream.subscribeByLogin
   params = 'login': sLogin
   ajax url, params, (data) ->
     if data.bStateError
@@ -67,7 +67,6 @@ more = (url, extra_params={}) ->
   unless lastId then return
   selLoad.classList.add 'stream_loading'
   isBusy = true
-  url = "#{router.stream}#{url}/"
   params =
     last_id: lastId
     date_last: dateLast
@@ -82,13 +81,13 @@ more = (url, extra_params={}) ->
     isBusy = false
 
 getMore = ->
-  more "get_more"
+  more routes.stream.getMore
 
 getMoreAll = ->
-  more "get_more_all"
+  more routes.stream.getMoreAll
 
 getMoreByUser = (iUserId) ->
-  more "get_more_user", user_id: iUserId
+  more routes.stream.getMoreUser, user_id: iUserId
 
 
 module.exports = {
