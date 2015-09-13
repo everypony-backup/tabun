@@ -371,7 +371,10 @@ $config['block']['rule_blog_info'] = [
     'action' => ['blog' => ['{topic}']],
     'blocks' => ['right' => ['blog']],
 ];
-
+$config['block']['rule_search'] = [
+    'action' => ['search'],
+    'blocks' => ['right' => ['sidetop', 'search', 'donate', 'herdmind']],
+];
 /**
  * Установка локали
  */
