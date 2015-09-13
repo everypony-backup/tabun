@@ -30,6 +30,9 @@ msgstr "Ошибка сервера"
 msgid "network_error"
 msgstr "Ошибка сети"
 
+msgid "incorrect_url"
+msgstr "Ошибка адреса"
+
 msgid "try_later"
 msgstr "Попробуйте позже"
 

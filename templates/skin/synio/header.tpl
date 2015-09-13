@@ -33,12 +33,6 @@
     {include 'analytics.tpl'}
     <script type="text/javascript">
         var LIVESTREET_SECURITY_KEY = '{$LIVESTREET_SECURITY_KEY}';
-        var SESSION_ID = '{$_sPhpSessionId}';
-
-        var aRouter = [];
-        {foreach from=$aRouter key=sPage item=sPath}
-        aRouter['{$sPage}'] = '{$sPath}';
-        {/foreach}
     </script>
 
     <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
