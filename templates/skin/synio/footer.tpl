@@ -28,7 +28,6 @@
 <script type="text/javascript">
     ls.lang.load({json var = $aLangJs});
     ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
-    ls.tools.registry.set('block_stream_show_tip', {json var=$oConfig->Get('block.stream.show_tip')});
 </script>
 {if isset($scripts)}
     {foreach from=$scripts item=item}
