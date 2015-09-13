@@ -62,7 +62,7 @@ module.exports =
       new webpack.optimize.UglifyJsPlugin()
     ] else []
     [
-      new ExtractTextPlugin "styles.css"
+      new ExtractTextPlugin "[name].css"
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
     ]
   )
