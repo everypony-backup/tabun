@@ -15,14 +15,13 @@ allowedUrls = Set flatten reduce(
   []
 )
 security_ls_key = window.LIVESTREET_SECURITY_KEY
-default_params = {security_ls_key}
 
 _error = -> return error gettext("network_error"), gettext("data_not_send")
 
-ajax = (url, params, callback, complete, error) ->
+ajax = (url, params={}, callback, complete, error) ->
   unless allowedUrls.contains url
     return error gettext("incorrect_url")
-  params ?= default_params
+  params.security_ls_key = security_ls_key
 
   forEach params, (value, key) ->
     if isBoolean value
@@ -44,7 +43,7 @@ ajaxSubmit = (url, form, callback, error) ->
     type: 'POST'
     url: url
     dataType: 'json'
-    data: default_params
+    data: {security_ls_key}
     success: callback or ->
     error: error or _error
 
