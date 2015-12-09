@@ -44,6 +44,10 @@ class ActionStream extends Action {
 		 * Личная лента доступна только для авторизованных, для гостей показываем общую ленту
 		 */
 		$this->oUserCurrent = $this->User_getUserCurrent();
+		if ($this->oUserCurrent and $this->oUserCurrent->getRating() < Config::Get('module.user.bad_rating')) {
+			$this->User_Logout();
+			return parent::EventNotFound();
+		};
 		if ($this->oUserCurrent) {
 			$this->SetDefaultEvent('user');
 		} else {

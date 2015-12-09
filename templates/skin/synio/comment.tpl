@@ -2,7 +2,11 @@
 {assign var="oVote" value=$oComment->getVote()}
 
 <section data-id="{$oComment->getId()}" id="comment_id_{$oComment->getId()}" class="comment {if $oComment->isBad()}comment-bad{/if} {if $oComment->getDelete()}comment-deleted{elseif $oUserCurrent and $oComment->getUserId() == $oUserCurrent->getId()} comment-self{elseif $sDateReadLast <= $oComment->getDate()} comment-new{/if}">
-    {if !$oComment->getDelete() or $bOneComment or ($oUserCurrent and $oUserCurrent->isAdministrator())}
+    {if $oComment->getRating() < $oConfig->GetValue('module.user.bad_rating')}
+        <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
+            <div class="text"><em>{$aLang.comment_was_hidden}</em></div>
+        </div>
+    {elseif !$oComment->getDelete() or $bOneComment or ($oUserCurrent and $oUserCurrent->isAdministrator())}
         <a name="comment{$oComment->getId()}"></a>
         <div data-id="{$oComment->getId()}" class="folding"></div>
         <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
@@ -96,6 +100,8 @@
             {/if}
         </ul>
     {else}
-        {$aLang.comment_was_delete}
+        <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
+            <div class="text"><em>{$aLang.comment_was_delete}</em></div>
+        </div>
     {/if}
 </section>

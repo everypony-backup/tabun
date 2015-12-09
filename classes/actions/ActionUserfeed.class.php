@@ -38,6 +38,10 @@ class ActionUserfeed extends Action {
 		 * Доступ только у авторизованных пользователей
 		 */
 		$this->oUserCurrent = $this->User_getUserCurrent();
+		if ($this->oUserCurrent and $this->oUserCurrent->getRating() < Config::Get('module.user.bad_rating')) {
+			$this->User_Logout();
+			return parent::EventNotFound();
+		};
 		if (!$this->oUserCurrent) {
 			parent::EventNotFound();
 		}
