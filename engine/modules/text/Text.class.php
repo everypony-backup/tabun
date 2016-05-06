@@ -125,17 +125,17 @@ class ModuleText extends Module {
 		preg_match($y_video_pattern, $sText, $output_array);
 
 		if (count($output_array) == 2) {
-			$y_tpl = '<iframe width="560" height="310" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>';
+			$y_tpl = '<iframe width="560" height="310" src="//www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>';
 			$sText = preg_replace($y_video_pattern, $y_tpl, $sText);
 		} elseif (count($output_array) == 3 ) {
-			$y_tpl = '<iframe width="560" height="310" src="http://www.youtube.com/embed/$1?start=$2" frameborder="0" allowfullscreen></iframe>';
+			$y_tpl = '<iframe width="560" height="310" src="//www.youtube.com/embed/$1?start=$2" frameborder="0" allowfullscreen></iframe>';
 			$sText = preg_replace($y_video_pattern, $y_tpl, $sText);
 		}
 		/**
 		 * vimeo.com
 		*/
 		$v_video_pattern = '/<video>(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+).*<\/video>/i';
-		$v_tpl = '<iframe src="http://player.vimeo.com/video/$1" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+		$v_tpl = '<iframe src="//player.vimeo.com/video/$1" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
 		$sText = preg_replace($v_video_pattern, $v_tpl, $sText);
 
 		/**
@@ -144,7 +144,7 @@ class ModuleText extends Module {
 
 		$d_video_pattern = "/(<video>)(?:https?:\/\/)?(?:www\.)?dailymotion.com\/video\/(\w+)(?:_.*?)?(<\/video>)/ui";
 		$d_video_pattern_short = "/(<video>)(?:https?:\/\/)?(?:www\.)?dai.ly\/(\w+)(?:_.*?)?(<\/video>)/ui";
-		$d_tpl = '<iframe frameborder="0" width="560" height="315" src="http://www.dailymotion.com/embed/video/$2" allowfullscreen></iframe>';
+		$d_tpl = '<iframe frameborder="0" width="560" height="315" src="//www.dailymotion.com/embed/video/$2" allowfullscreen></iframe>';
 		$sText = preg_replace($d_video_pattern, $d_tpl, $sText);
 		$sText = preg_replace($d_video_pattern_short, $d_tpl, $sText);
 
@@ -152,14 +152,14 @@ class ModuleText extends Module {
 		* coub.com
 		*/
 		$c_video_pattern = "/(<video>)(?:https?:\/\/)?(?:www\.)?coub.com\/view\/(\w+)(<\/video>)/ui";
-		$c_tpl = '<iframe src="http://coub.com/embed/$2?muted=false&autostart=false&originalSize=false&hideTopBar=true&noSiteButtons=true&startWithHD=false" allowfullscreen="true" frameborder="0" width="400" height="400"></iframe>';
+		$c_tpl = '<iframe src="//coub.com/embed/$2?muted=false&autostart=false&originalSize=false&hideTopBar=true&noSiteButtons=true&startWithHD=false" allowfullscreen="true" frameborder="0" width="400" height="400"></iframe>';
 		$sText = preg_replace($c_video_pattern, $c_tpl, $sText);
 		/**
 		* rutube.ru
 		*/
 
 		$r_video_pattern = "/(<video>)(?:https?:\/\/)?(?:www\.)?rutube.ru\/video\/(\w+)\/?(<\/video>)/ui";
-		$r_tpl = '<iframe src="http://rutube.ru/video/embed/$2" allowfullscreen="true" frameborder="0" width="560" height="315"></iframe>';
+		$r_tpl = '<iframe src="//rutube.ru/video/embed/$2" allowfullscreen="true" frameborder="0" width="560" height="315"></iframe>';
 		$sText = preg_replace($r_video_pattern, $r_tpl, $sText);
 
 		return $sText;
