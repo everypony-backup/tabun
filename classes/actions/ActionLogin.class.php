@@ -74,6 +74,10 @@ class ActionLogin extends Action {
 			 */
 
 			if (validate_password(getRequestStr('password'), $oUser->getPassword())) {
+				if ($oUser->getRating() < Config::Get('module.user.bad_rating')) {
+					$this->Message_AddErrorSingle($this->Lang_Get('user_not_activе'));
+					return;
+				}
 				if (!$oUser->getActivate()) {
 					$this->Message_AddErrorSingle($this->Lang_Get('user_not_activated', array('reactivation_path' => Router::GetPath('login') . 'reactivation')));
 					return;

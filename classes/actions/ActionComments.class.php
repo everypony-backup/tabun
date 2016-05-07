@@ -40,6 +40,10 @@ class ActionComments extends Action {
 	 */
 	public function Init() {
 		$this->oUserCurrent=$this->User_GetUserCurrent();
+		if ($this->oUserCurrent and $this->oUserCurrent->getRating() < Config::Get('module.user.bad_rating')) {
+			$this->User_Logout();
+			return parent::EventNotFound();
+		};
 	}
 	/**
 	 * Регистрация евентов

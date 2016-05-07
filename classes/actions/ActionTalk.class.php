@@ -57,6 +57,10 @@ class ActionTalk extends Action {
 		 * Получаем текущего юзера
 		 */
 		$this->oUserCurrent=$this->User_GetUserCurrent();
+		if ($this->oUserCurrent and $this->oUserCurrent->getRating() < Config::Get('module.user.bad_rating')) {
+			$this->User_Logout();
+			return parent::EventNotFound();
+		};
 		$this->SetDefaultEvent('inbox');
 		$this->Viewer_AddHtmlTitle($this->Lang_Get('talk_menu_inbox'));
 
