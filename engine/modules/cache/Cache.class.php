@@ -79,19 +79,7 @@ class ModuleCache extends Module
      *
      * @var array
      */
-    protected $aStoreLife = array();
-    /**
-     * Статистика кеширования
-     *
-     * @var array
-     */
-    protected $aStats = array(
-        'time' => 0,
-        'count' => 0,
-        'count_get' => 0,
-        'count_set' => 0,
-    );
-
+    protected $aStoreLife = [];
     /**
      * Инициализируем нужный тип кеша
      *
@@ -200,34 +188,6 @@ class ModuleCache extends Module
             return false;
         }
         return $this->oBackendCache->clean($cMode, $aTags);
-    }
-
-    /**
-     * Подсчет статистики использования кеша
-     *
-     * @param int $iTime Время выполнения метода
-     * @param string $sMethod имя метода
-     */
-    public function CalcStats($iTime, $sMethod)
-    {
-        $this->aStats['time'] += $iTime;
-        $this->aStats['count']++;
-        if ($sMethod == 'Dklab_Cache_Backend_Profiler::load') {
-            $this->aStats['count_get']++;
-        }
-        if ($sMethod == 'Dklab_Cache_Backend_Profiler::save') {
-            $this->aStats['count_set']++;
-        }
-    }
-
-    /**
-     * Возвращает статистику использования кеша
-     *
-     * @return array
-     */
-    public function GetStats()
-    {
-        return $this->aStats;
     }
 
     /**
