@@ -87,15 +87,22 @@ $config['sys']['mail']['from_email'] = 'noreply@example.com';    // Мыло с 
 $config['sys']['mail']['from_name'] = 'PonyMail';              // Имя с которого отправляются все уведомления
 $config['sys']['mail']['include_comment'] = true;                   // Включает в уведомление о новых комментах текст коммента
 $config['sys']['mail']['include_talk'] = true;                      // Включает в уведомление о новых личных сообщениях текст сообщения
+
 /**
  * Настройки кеширования
  */
-// Устанавливаем настройки кеширования
 $config['sys']['cache']['use'] = true;              // использовать кеширование или нет
-$config['sys']['cache']['type'] = 'memory';         // тип кеширования: file, xcache и memory. memory использует мемкеш, xcache - использует XCache
+$config['sys']['cache']['servers'] = [
+    [
+        'host' => '127.0.0.1',
+        'port' => 6379,
+        'dbindex' => 11,
+    ],
+];
+$config['sys']['cache']['lifetime'] = 3600;
+$config['sys']['cache']['automatic_serialization'] = true;
 $config['sys']['cache']['dir'] = '/tmp/';           // каталог для файлового кеша, также используется для временных картинок. По умолчанию подставляем каталог для хранения сессий
 $config['sys']['cache']['prefix'] = 'tabun_cache';  // префикс кеширования, чтоб можно было на одной машине держать несколько сайтов с общим кешевым хранилищем
-$config['sys']['cache']['directory_level'] = 1;     // уровень вложенности директорий файлового кеша
 $config['sys']['cache']['solid'] = true;            // Настройка использования раздельного и монолитного кеша для отдельных операций
 
 /**
