@@ -49,7 +49,7 @@ $config['pagination']['pages']['count'] = 4;                // количест�
 /**
  * Настройка путей
  */
-$config['path']['root']['web'] = 'http://' . $_SERVER['HTTP_HOST'];         // полный WEB адрес сайта
+$config['path']['root']['web'] = 'https://' . $_SERVER['HTTP_HOST'];         // полный WEB адрес сайта
 $config['path']['root']['server'] = dirname(dirname(__FILE__));             // полный путь до сайта в файловой системе
 $config['path']['root']['engine'] = '___path.root.server___/engine';        // полный путь до сайта в файловой системе;
 $config['path']['root']['engine_lib'] = '___path.root.web___/engine/lib';   // полный путь до сайта в файловой системе
