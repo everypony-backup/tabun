@@ -2,3 +2,8 @@
 /static/
 /node_modules/
 /locale/**/*.mo
+.idea
+/var/
+/log/
+.htaccess
+/storage/
