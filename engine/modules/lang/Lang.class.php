@@ -70,9 +70,9 @@ class ModuleLang extends Module {
 	 */
 	protected function InitLang() {
 		/**
-		 * Если используется кеширование через memcaсhed, то сохраняем данные языкового файла в кеш
+		 * Если используется кеширование, то сохраняем данные языкового файла в кеш
 		 */
-		if (Config::Get('sys.cache.type')=='memory') {
+		if (Config::Get('sys.cache.use')) {
 			if (false === ($this->aLangMsg = $this->Cache_Get("lang_{$this->sCurrentLang}_".Config::Get('view.skin')))) {
 				$this->aLangMsg=array();
 				$this->LoadLangFiles($this->sDefaultLang);
