@@ -39,10 +39,7 @@ deploy(){
 
     echo "Sources cleanup"
     clean_source
-    APP_VER=$(git name-rev --tags --name-only $(git rev-parse HEAD))
-    if [ ${APP_VER} == 'undefined' ]; then
-        APP_VER=$(git rev-parse --short HEAD)
-    fi
+    APP_VER=$(git describe --tags)
     echo "Build static"
     if [ ${ENV_TYPE} == 'production' ]; then
         npm run-script webpack:production
