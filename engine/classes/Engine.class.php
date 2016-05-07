@@ -623,7 +623,7 @@ class Engine extends LsObject {
 	 * @return array
 	 */
 	public function getStats() {
-		return array('sql'=>$this->Database_GetStats(),'cache'=>$this->Cache_GetStats(),'engine'=>array('time_load_module'=>round($this->iTimeLoadModule,3)));
+		return array('sql'=>$this->Database_GetStats(),'engine'=>array('time_load_module'=>round($this->iTimeLoadModule,3)));
 	}
 
 	/**
