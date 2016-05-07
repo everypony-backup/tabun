@@ -112,14 +112,6 @@ class ModuleCache extends Module {
 	 * @var array
 	 */
 	protected $aStoreLife=array();
-	/**
-	 * Префикс для "умного" кеширования
-	 * @see SmartSet
-	 * @see SmartGet
-	 *
-	 * @var string
-	 */
-	protected $sPrefixSmartCache='for-smart-cache-';
 
 	/**
 	 * Инициализируем нужный тип кеша
@@ -202,25 +194,6 @@ class ModuleCache extends Module {
 		}
 	}
 	/**
-	 * Получения значения из "умного" кеша для борьбы с конкурирующими запросами
-	 * Если кеш "протух", и за ним обращаются много запросов, то только первый запрос вернет FALSE, остальные будут получать чуть устаревшие данные из временного кеша, пока их не обновит первый запрос
-	 *
-	 * @param $sName	Имя ключа
-	 * @return bool|mixed
-	 */
-	public function SmartGet($sName) {
-		if (!$this->bUseCache) {
-			return false;
-		}
-		/**
-		 * Если данных в основном кеше нет, то перекладываем их из временного
-		 */
-		if (($data=$this->Get($sName))===false) {
-			$this->Set($this->Get($this->sPrefixSmartCache.$sName),$sName,array(),60); // храним данные из временного в основном не долго
-		}
-		return $data;
-	}
-	/**
 	 * Поддержка мульти-запросов к кешу
 	 * Такие запросы поддерживает только memcached, поэтому для остальных типов делаем эмуляцию
 	 *
@@ -283,20 +256,6 @@ class ModuleCache extends Module {
 			$data=serialize($data);
 		}
 		return $this->oBackendCache->save($data,$sName,$aTags,$iTimeLife);
-	}
-	/**
-	 * Устанавливаем значение в "умном" кеша для борьбы с конкурирующими запросами
-	 * Дополнительно сохраняет значение во временном кеше на чуть большее время
-	 *
-	 * @param mixed $data	Данные для хранения в кеше
-	 * @param string $sName	Имя ключа
-	 * @param array $aTags	Список тегов, для возможности удалять сразу несколько кешей по тегу
-	 * @param int $iTimeLife	Время жизни кеша в секундах
-	 * @return bool
-	 */
-	public function SmartSet($data,$sName,$aTags=array(),$iTimeLife=false) {
-		$this->Set($data,$this->sPrefixSmartCache.$sName,array(),$iTimeLife!==false ? $iTimeLife+60 : false);
-		return $this->Set($data,$sName,$aTags,$iTimeLife);
 	}
 	/**
 	 * Удаляет значение из кеша по ключу(имени)
