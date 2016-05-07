@@ -59,6 +59,10 @@ class ActionTopic extends Action {
 			return parent::EventNotFound();
 		}
 		$this->oUserCurrent=$this->User_GetUserCurrent();
+		if ($this->oUserCurrent and $this->oUserCurrent->getRating() < Config::Get('module.user.bad_rating')) {
+			$this->User_Logout();
+			return parent::EventNotFound();
+		};
 		/**
 		 * Усанавливаем дефолтный евент
 		 */

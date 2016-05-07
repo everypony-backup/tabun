@@ -57,6 +57,10 @@ class ActionSettings extends Action {
 		 * Получаем текущего юзера
 		 */
 		$this->oUserCurrent=$this->User_GetUserCurrent();
+		if ($this->oUserCurrent and $this->oUserCurrent->getRating() < Config::Get('module.user.bad_rating')) {
+			$this->User_Logout();
+			return parent::EventNotFound();
+		};
 		$this->SetDefaultEvent('profile');
 		/**
 		 * Устанавливаем title страницы
