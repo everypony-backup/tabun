@@ -165,6 +165,35 @@ class ModuleText extends Module {
 		return $sText;
 	}
 	/**
+	 * Парсинг дайсов в тексте
+     * 
+     * TODO: Переписать
+	 *
+	 * @param string $sText
+	 * @return string
+	 */
+    private function DiceParser($sText)
+    {
+        $border = Config::Get('plugin.dice.border');
+        $delim = Config::Get('plugin.dice.delim');
+        $max_x = Config::Get('plugin.dice.max_x');
+        $max_y = Config::Get('plugin.dice.max_y');
+        if (stristr($sText, $border)) {
+            preg_match_all('/' . $border . '[0-9]{1,3}' . $delim . '[0-9]{1,3}' . $border . '/', $sText, $matches, PREG_SET_ORDER);
+            foreach ($matches as $match) {
+                preg_match_all('/[0-9]{1,3}/', $match[0], $array, PREG_SET_ORDER);
+                if ($array[0][0] > 0 && $array[0][0] <= $max_x && $array[1][0] > 0 && $array[1][0] <= $max_y) {
+                    $dices = null;
+                    for ($i = 1; $i <= $array[0][0]; $i++, $dices[] = rand(1, $array[1][0])) {
+                    }
+                    $str[] = '<span class="dice"><span class="blue">' . $array[0][0] . $delim . $array[1][0] . '</span>: <span class="green">[' . implode(' + ', $dices) . ']</span> | <span class="red">[' . array_sum($dices) . ']</span></span>';
+                }
+            }
+            foreach ($str as $s) $sText = preg_replace('/' . $border . '[0-9]{1,3}' . $delim . '[0-9]{1,3}' . $border . '/', $s, $sText, 1);
+        }
+        return $sText;
+    }
+	/**
 	 * Парсит текст, применя все парсеры
 	 *
 	 * @param string $sText Исходный текст
@@ -176,6 +205,7 @@ class ModuleText extends Module {
 		}
 		$sResult=$this->JevixParser($sText);
 		$sResult=$this->VideoParser($sResult);
+		$sResult=$this->DiceParser($sResult);
 		return $sResult;
 	}
 	/**
