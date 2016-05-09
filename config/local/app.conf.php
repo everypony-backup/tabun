@@ -9,6 +9,7 @@ $config['db']['tables']['engine'] = 'InnoDB';
 $config['db']['table']['prefix'] = 'ls_';
 
 $config['path']['offset_request_url'] = '0';
+$config['sys']['cache']['use'] = false;
 $config['sys']['logs']['dir'] = '/log';
 
 $config['path']['uploads']['storage'] = '/storage';
