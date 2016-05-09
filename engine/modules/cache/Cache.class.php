@@ -115,7 +115,7 @@ class ModuleCache extends Module
             return false;
         }
         if (!is_array($sName)) {
-            return $this->oBackendCache->load($sName);
+            return $this->oBackendCache->load(md5($sName));
         } else {
             return $this->multiGet($sName);
         }
@@ -158,7 +158,7 @@ class ModuleCache extends Module
         if (!$this->bUseCache) {
             return false;
         }
-        return $this->oBackendCache->save($data, $sName, $aTags, $iTimeLife);
+        return $this->oBackendCache->save($data, md5($sName), $aTags, $iTimeLife);
     }
 
     /**
@@ -172,7 +172,7 @@ class ModuleCache extends Module
         if (!$this->bUseCache) {
             return false;
         }
-        return $this->oBackendCache->remove($sName);
+        return $this->oBackendCache->remove(md5($sName));
     }
 
     /**
