@@ -18,32 +18,31 @@
 /**
  * Operations with Config object
  */
-require_once(dirname(dirname(__FILE__))."/engine/lib/internal/ConfigSimple/Config.class.php");
-Config::LoadFromFile(dirname(__FILE__).'/config.php');
+require_once(dirname(dirname(__FILE__)) . "/engine/lib/internal/ConfigSimple/Config.class.php");
+Config::LoadFromFile(dirname(__FILE__) . '/config.php');
 
 /**
  * Инклудим все *.php файлы из каталога {path.root.engine}/include/ - это файлы ядра
  */
-$sDirInclude=Config::get('path.root.engine').'/include/';
+$sDirInclude = Config::get('path.root.engine') . '/include/';
 if ($hDirInclude = opendir($sDirInclude)) {
-	while (false !== ($sFileInclude = readdir($hDirInclude))) {
-		$sFileIncludePathFull=$sDirInclude.$sFileInclude;
-		if ($sFileInclude !='.' and $sFileInclude !='..' and is_file($sFileIncludePathFull)) {
-			$aPathInfo=pathinfo($sFileIncludePathFull);
-			if (isset($aPathInfo['extension']) and strtolower($aPathInfo['extension'])=='php') {
-				require_once($sDirInclude.$sFileInclude);
-			}
-		}
-	}
-	closedir($hDirInclude);
+    while (false !== ($sFileInclude = readdir($hDirInclude))) {
+        $sFileIncludePathFull = $sDirInclude . $sFileInclude;
+        if ($sFileInclude != '.' and $sFileInclude != '..' and is_file($sFileIncludePathFull)) {
+            $aPathInfo = pathinfo($sFileIncludePathFull);
+            if (isset($aPathInfo['extension']) and strtolower($aPathInfo['extension']) == 'php') {
+                require_once($sDirInclude . $sFileInclude);
+            }
+        }
+    }
+    closedir($hDirInclude);
 }
 
 /**
- * Подгружаем файлы локального и продакшн-конфига
+ * Подгружаем файл конфигурации окружения
  */
-if(file_exists(Config::Get('path.root.server').'/config/config.local.php')) {
-	Config::LoadFromFile(Config::Get('path.root.server').'/config/config.local.php',false);
-}
-if(file_exists('/etc/config.stable.php')) {
-	Config::LoadFromFile('/etc/config.stable.php', false);
+
+$local_config = $_SERVER["CONFIG"];
+if (file_exists($local_config)) {
+    Config::LoadFromFile($local_config, false);
 }
