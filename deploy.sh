@@ -39,7 +39,7 @@ deploy(){
 
     echo "Sources cleanup"
     clean_source
-    APP_VER=$(git describe --tags)
+    APP_VER=$(git describe --tags --dirty=-dev)
     echo "Build static"
     if [ ${ENV_TYPE} == 'production' ]; then
         npm run-script webpack:production
