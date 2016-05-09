@@ -1,6 +1,11 @@
 minimum-vagga: v0.5.0
 
 containers:
+  mail:
+    setup:
+    - !Alpine v3.3
+    - !Install [python]
+
   redis:
     setup:
     - !Alpine v3.3
@@ -144,3 +149,14 @@ commands:
         - /config/php-fpm.conf
         - --allow-to-run-as-root
         - -e
+      mail: !Command
+        container: mail
+        run:
+        - python
+        - -m
+        - smtpd
+        - -c
+        - DebuggingServer
+        - -d
+        - -n
+        - 127.0.0.1:1025
