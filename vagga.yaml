@@ -69,6 +69,7 @@ containers:
       - php5-fpm
       - php5-mysql
       - php5-redis
+      - php5-mcrypt
       - php5-xdebug
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem
@@ -76,6 +77,8 @@ containers:
     - !Copy
       source: /work/config/local/xdebug.ini
       path: /etc/php5/mods-available/xdebug.ini
+    - !Sh |
+        ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/fpm/conf.d/20-mcrypt.ini
     - !EnsureDir /log
     - !EnsureDir /config
     - !EnsureDir /storage
