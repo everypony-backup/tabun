@@ -1,10 +1,15 @@
 minimum-vagga: v0.5.0
 
 containers:
-  mail:
+  celery:
     setup:
     - !Alpine v3.3
-    - !Install [python]
+    - !Install [python3]
+    - !PipConfig
+      dependencies: true
+    - !Py3Install
+      - celery[redis]
+      - beautifulsoup4
 
   redis:
     setup:
@@ -150,9 +155,9 @@ commands:
         - --allow-to-run-as-root
         - -e
       mail: !Command
-        container: mail
+        container: celery
         run:
-        - python
+        - python3
         - -m
         - smtpd
         - -c
@@ -160,3 +165,11 @@ commands:
         - -d
         - -n
         - 127.0.0.1:1025
+      celery: !Command
+        container: celery
+        work-dir: celery_tasks
+        run:
+        - celery
+        - worker
+        - --config=celeryconfig
+        - --pool=solo
