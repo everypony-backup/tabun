@@ -1,0 +1,146 @@
+minimum-vagga: v0.5.0
+
+containers:
+  redis:
+    setup:
+    - !Alpine v3.3
+    - !Install [redis]
+    - !EnsureDir /config
+    - !EnsureDir /storage
+    - !EnsureDir /work/run/storage/redis
+    - !Sh "chmod +r /bin/bbsuid"
+    volumes:
+      /storage: !BindRW /work/run/storage/redis
+      /config: !BindRO /work/config/local
+
+  nginx:
+    setup:
+    - !Alpine v3.3
+    - !Install [nginx]
+    - !Text
+      /etc/passwd: "root:x:0:0:root:/root:/bin/false\n"
+      /etc/group: "root:x:0:\n"
+    - !EnsureDir /log
+    - !EnsureDir /config
+    - !EnsureDir /work/run/log/nginx
+    volumes:
+      /log: !BindRW /work/run/log/nginx
+      /tmp: !Tmpfs { size: 256Mi, mode: 0o1777 }
+      /var/log/nginx: !Tmpfs { size: 1Mi, mode: 0o1777 }
+      /config: !BindRO /work/config/local
+
+  mysql:
+    setup:
+    - !Alpine v3.3
+    - !Install
+      - mariadb
+      - mariadb-client
+    - !EnsureDir /config
+    - !EnsureDir /storage
+    - !EnsureDir /srv
+    - !EnsureDir /log
+    - !EnsureDir /work/run/log/mysql
+    - !EnsureDir /work/run/storage/mysql
+    - !EnsureDir /work/run/storage/srv
+    - !Sh "chmod +r /bin/bbsuid"
+    - !Remove /var/lib/mysql
+    volumes:
+      /config: !BindRO /work/config/local
+      /storage: !BindRW /work/run/storage/mysql
+      /log: !BindRW /work/run/log/mysql
+      /srv: !BindRO /work/run/storage/srv
+      /tmp: !Tmpfs { size: 256Mi, mode: 0o1777 }
+
+  php:
+    setup:
+    - !Ubuntu trusty
+    - !UbuntuUniverse
+    - !Install
+      - php5-fpm
+      - php5-mysql
+      - php5-redis
+      - php5-xdebug
+    - !Download
+      url: https://curl.haxx.se/ca/cacert.pem
+      path: /etc/cacert.pem
+    - !Copy
+      source: /work/config/local/xdebug.ini
+      path: /etc/php5/mods-available/xdebug.ini
+    - !EnsureDir /log
+    - !EnsureDir /config
+    - !EnsureDir /storage
+    - !EnsureDir /work/run/log/php
+    - !EnsureDir /work/run/storage/php
+    volumes:
+      /config: !BindRO /work/config/local
+      /storage: !BindRW /work/run/storage/php
+      /log: !BindRW /work/run/log/php
+
+commands:
+  db_init: !Command
+    description: Initialize fresh MySQL database. The old one will be REMOVED! Also load dump if provided.
+    container: mysql
+    accepts-arguments: true
+    environ:
+      DB_DATADIR: /storage
+      DB_HOST: 127.0.0.1
+      DB_DATABASE: tabun
+      DB_USERNAME: tabun
+      DB_PASSWORD: tabun
+    run: |
+      echo "Cleanup old database"
+      rm -r /storage/*
+      rm -r /log/*
+      mysql_install_db --datadir=$DB_DATADIR
+      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
+      while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
+      mysqladmin --defaults-extra-file=/config/mysql.conf create $DB_DATABASE
+      mysql --defaults-extra-file=/config/mysql.conf -e "CREATE USER '$DB_USERNAME'@'$DB_HOST' IDENTIFIED BY '$DB_PASSWORD';"
+      mysql --defaults-extra-file=/config/mysql.conf -e "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'$DB_HOST';"
+      mysqladmin --defaults-extra-file=/config/mysql.conf flush-privileges
+      if [ "$#" = 1 ] ; then
+        case "$1" in
+          *.gz )
+            echo "Loading compressed data from $1"
+            viewer=zcat
+            ;;
+          *)
+            echo "Loading raw data from $1"
+            viewer=cat
+            ;;
+        esac
+        $viewer $1 | mysql --defaults-extra-file=/config/mysql.conf --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE
+      fi
+      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
+
+  run: !Supervise
+    description: Run full server stack using php-fpm app server
+    kill-unresponsive-after: 5
+    children:
+      redis: !Command
+        container: redis
+        run:
+        - redis-server
+        - /config/redis.conf
+      nginx: !Command
+        container: nginx
+        run:
+        - nginx
+        - -c
+        - /config/nginx.conf
+      mysql: !Command
+        container: mysql
+        run:
+        - mysqld_safe
+        - --defaults-extra-file=/config/mysql.conf
+        - --skip-syslog
+        - --console
+        - --debug-gdb
+      php: !Command
+        container: php
+        run:
+        - php5-fpm
+        - --fpm-config
+        - /config/php-fpm.conf
+        - --allow-to-run-as-root
+        - -e
