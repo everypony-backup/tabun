@@ -11,6 +11,11 @@ containers:
       - celery[redis]
       - beautifulsoup4
 
+  memcached:
+    setup:
+    - !Alpine v3.3
+    - !Install [memcached]
+
   redis:
     setup:
     - !Alpine v3.3
@@ -71,6 +76,7 @@ containers:
       - php5-redis
       - php5-mcrypt
       - php5-xdebug
+      - php5-memcache
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem
       path: /etc/cacert.pem
@@ -176,3 +182,12 @@ commands:
         - worker
         - --config=celeryconfig
         - --pool=solo
+
+      memcached: !Command
+        container: memcached
+        run:
+        - memcached
+        - -m128
+        - -uroot
+        - -p11211
+        - -l127.0.0.1
