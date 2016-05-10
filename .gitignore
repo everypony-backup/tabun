@@ -10,3 +10,4 @@
 # Vagga stuff
 /run/
 /.vagga/
+/vendor/

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-APP="classes config engine templates locale index.php"
+APP="classes config engine templates locale vendor index.php"
 
 usage(){
 cat <<'EOT'
@@ -40,6 +40,10 @@ deploy(){
     echo "Sources cleanup"
     clean_source
     APP_VER=$(git describe --tags --dirty=-dev)
+
+    echo "Fetch dependencies"
+    composer install
+
     echo "Build static"
     if [ ${ENV_TYPE} == 'production' ]; then
         npm run-script webpack:production
@@ -85,7 +89,6 @@ deploy(){
     find ${STATIC_PATH} -type d | xargs chmod 550
 
     echo "Restart services"
-    systemctl restart memcached
     systemctl reload php5-fpm
 }
 
