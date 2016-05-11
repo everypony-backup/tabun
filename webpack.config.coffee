@@ -12,6 +12,9 @@ vendors = [
   "jquery.scrollto"
   "jed"
   "immutable"
+  "react"
+  "react-bootstrap"
+  "react-dom"
 ]
 
 aliases =
@@ -39,6 +42,7 @@ module.exports =
 
   module:
     loaders: [
+      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, query: {presets: ['es2015', 'react']}}
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}

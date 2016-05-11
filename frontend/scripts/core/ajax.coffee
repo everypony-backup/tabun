@@ -29,7 +29,7 @@ ajax = (url, params={}, callback, complete, error) ->
 
   $.ajax
     type: 'POST'
-    url: url
+    url: '.' + url  #debug
     data: params
     dataType: 'json'
     success: callback or ->
