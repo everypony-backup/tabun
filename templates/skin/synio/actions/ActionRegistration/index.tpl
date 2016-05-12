@@ -1,5 +1,6 @@
 {include file='header.tpl'}
 
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <script type="text/javascript">
 	jQuery(document).ready(function($){
 		$('#registration-form').find('input.js-ajax-validate').blur(function(e){
@@ -81,23 +82,8 @@
 	</div>
 	
 	<div class="wrapper-content wrapper-content-dark">
-		{hookb run="registration_captcha"}
-		<dl class="form-item">
-			<dt><label for="registration-user-captcha">{$aLang.registration_captcha}:</label></dt>
-			<dd>
-				<img src="{cfg name='path.root.engine_lib'}/external/kcaptcha/index.php?{$_sPhpSessionName}={$_sPhpSessionId}" 
-					 onclick="this.src='{cfg name='path.root.engine_lib'}/external/kcaptcha/index.php?{$_sPhpSessionName}={$_sPhpSessionId}&n='+Math.random();" 
-					 class="captcha-image" />
-				<input type="text" name="captcha" id="registration-user-captcha" value="" maxlength="3" class="input-text input-width-100 js-ajax-validate" style="width: 165px" />
-				<small class="validate-error-hide validate-error-field-captcha"></small>
-				
-				<div class="form-item-help form-item-help-captcha">
-					<i class="icon-ok-green validate-ok-field-captcha" style="display: none"></i>
-				</div>
-			</dd>
-		</dl>
-		{/hookb}
-		
+		<div class="g-recaptcha" data-sitekey="6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD"></div>
+
 		{hook run='form_registration_end'}
 	</div>
 	

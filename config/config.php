@@ -412,5 +412,12 @@ $config['misc']['ver']['front'] = 'trunk';        // Frontend version
 $config['misc']['ver']['code'] = 'trunk';        // Code version
 $config['misc']['debug'] = false;
 
+/**
+ * Рекапча
+ */
+$config['module']['user']['captcha_use_registration'] = false;            // Disable default captcha
+$config['module']['user']['recaptcha_use_registration'] = true;           // Enable Google Recaptcha
+$config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup'; // Google Recaptcha Secret
+
 return $config;
 

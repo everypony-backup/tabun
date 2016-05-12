@@ -30,6 +30,14 @@ class Field extends React.Component {
             });
         }
     }
+    isValid() {
+        if (this.props.optional) {
+            return this.state.value === '' || this.state.validationStatus === 'ok';
+        }
+        else {
+            return this.state.validationStatus === 'ok';
+        }
+    }
     revalidate(force=false) {
         if (this.state.validationStatus || force) {
             let value = this.state.value;

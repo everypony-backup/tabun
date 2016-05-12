@@ -5,10 +5,6 @@ require "jquery.scrollto"
 require "jquery.jcrop"
 require "jquery.file"
 
-React = require 'react'
-ReactDOM = require 'react-dom'
-Login = require("lib/react-login-component/login.jsx").default
-
 {forEach, random} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
@@ -19,69 +15,17 @@ autocomplete = require "core/autocomplete.coffee"
 talk = require "app/talk.coffee"
 toolbar = require "app/toolbar.coffee"
 
-{ajax, ajaxSubmit} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 
+ReactDOM = require 'react-dom'
+Login = require "core/login.coffee"
+
 init = ->
-  # Login React Component
-  loginComponent = ReactDOM.render React.createElement(Login,
-    initiallyHidden: true
-    isLabeled: false
-    initialTab: 'registration'
-    recaptcha: { key: '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD' }
-    tabs: [
-      { 'id': 'enter', 'url': '/login' }
-      { 'id': 'registration', 'url': '/registration' }
-      { 'id': 'reminder', 'url': '/login/reminder' }
-    ]
-    locale:
-      'lang': 'ru'
+  # Render React Login Component
+  if el = document.getElementById 'window_login_form'
+    loginComponent = ReactDOM.render Login, el
 
-      'enter': 'Вход'
-      'registration': 'Регистрация'
-      'reminder': 'Восстановление пароля'
-
-      'username_or_email': 'Логин или эл. почта'
-      'password': 'Пароль'
-      'keep_me_logged_in': 'Запомнить меня'
-      'sign_in': 'Войти'
-
-      'username': 'Логин'
-      'email': 'Эл. почта'
-      'repeat_password': 'Повторите пароль'
-      'sign_up': 'Зарегистрироваться'
-
-      'your_email': 'Ваша эл. почта'
-      'remind_password': 'Выслать ссылку на изменение пароля'
-
-      'passwords_do_not_match': 'Пароли должны совпадать'
-      'empty_repeated_password': 'Необходимо ввести пароль повторно'
-      'entered_correctly': 'Введено верно'
-      'password_too_short': 'Пароль слишком короткий'
-      'password_too_simple': 'Пароль слишком простой'
-
-      'username_available': 'Логин свободен'
-      'username_not_available': 'Логин занят'
-      'empty_username': 'Необходимо ввести логин'
-      'invalid_username': 'Логин может состоять только из латинских букв и знака подчеркивания'
-      'username_too_short': 'Слишком короткий логин'
-
-      'valid_email': 'Эл. почта введена верно, на нее будет отправлено письмо'
-      'invalid_email': 'Эл. почта не соответствует формату name@email.ru'
-      'empty_email': 'Необходимо указать адрес эл. почты'
-    onLogin: ({login, password, remember}, onSuccess, onError) =>
-      console.log "login"
-    onRegister: ({login, email, password, repeatedPassword}, onSuccess, onError) =>
-      console.log "register"
-    onRemind: ({email}, onSuccess, onError) =>
-      console.log "remind"
-    onValidate: (value) =>
-      ajax routes.profile.validateFields, {'fields[0][field]': 'login', 'fields[0][value]': value}, (result) ->
-        console.log result
-  ), document.getElementById 'window_login_form'
-
-
-  # Login Handlers
+  # Bind login handlers
   $('.js-registration-form-show').click (e) ->
     e.preventDefault()
     loginComponent.show 'registration'

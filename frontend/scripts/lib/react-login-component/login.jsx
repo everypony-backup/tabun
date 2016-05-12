@@ -50,6 +50,7 @@ class Login extends React.Component {
                         onLogin={this.props.onLogin}
                         onRegister={this.props.onRegister}
                         onRemind={this.props.onRemind}
+
                         onValidate={this.props.onValidate}
 
                         isLabeled={this.props.isLabeled}
@@ -162,7 +163,11 @@ class Enter extends React.Component {
         this.state = {
             login: '',
             password: '',
-            remember: true
+            remember: true,
+            submitStatus: null,
+            submitMessage: '',
+            trials: 0,
+            disabled: false
         };
 
         this.loc = props.locale;
@@ -183,15 +188,23 @@ class Enter extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.setState({
-            login: '',
-            password: '',
-            remember: this.state.remember
-        });
-        this.props.onSubmit(this.state, (msg) => {
-            console.log('Success: ', msg);
-        }, (msg) => {
-            console.warn('Error: ', msg);
+        this.setState({disabled: true});
+        this.props.onSubmit(this.state, (submitStatus, submitMessage) => {
+            let trialsInc = this.state.trials + 1;
+            if (trialsInc >= 3) {
+                this.setState({
+                    submitStatus,
+                    submitMessage: submitMessage + '\n' + this.loc['trials_exceed_limit'],
+                    trials: trialsInc
+                });
+            } else {
+                this.setState({
+                    submitStatus,
+                    submitMessage,
+                    trials: trialsInc,
+                    disabled: false
+                });
+            }
         });
     }
     render() {
@@ -201,7 +214,7 @@ class Enter extends React.Component {
                     <input
                         autoFocus
                         type="text"
-                        placeholder={this.props.isLabeled ? null : this.loc['username_or_password']}
+                        placeholder={this.props.isLabeled ? null : this.loc['username_or_email']}
                         value={this.state.login}
                         onChange={this.handleLoginChange}
                     />
@@ -222,6 +235,9 @@ class Enter extends React.Component {
                     />&nbsp;
                     {this.loc['keep_me_logged_in']}
                 </label>
+                {this.state.submitStatus ?
+                <div className={'message ' + this.state.submitStatus}>{this.state.submitMessage}</div>
+                    : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['sign_in']} />
             </form>
         );
@@ -232,21 +248,30 @@ class Registration extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            login: '',
+            username: '',
             email: '',
             password: '',
-            repeatedPassword: '',
-            disabled: false
+            submitStatus: null,
+            submitMessage: '',
+            disabled: false,
+            recaptcha: null
         };
 
         this.loc = props.locale;
-
-        this.handleLoginChange = this.handleLoginChange.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleRepeatedPasswordChange = this.handleRepeatedPasswordChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
 
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleUsernameChange(value) {
+        this.setState({username: value});
+    }
+    handleEmailChange(value) {
+        this.setState({email: value});
+    }
+    handlePasswordChange(value) {
+        this.setState({password: value});
     }
     componentDidMount() {
         if (this.props.recaptcha) {
@@ -255,31 +280,54 @@ class Registration extends React.Component {
             document.head.appendChild(script);
         }
     }
-    handleLoginChange(e) {
-        this.setState({login: e.target.value});
-    }
-    handleEmailChange(e) {
-        this.setState({remember: e.target.value});
-    }
-    handlePasswordChange(e) {
-        this.setState({password: e.target.value});
-    }
-    handleRepeatedPasswordChange(e) {
-        this.setState({remember: e.target.value});
-    }
     handleSubmit(e) {
         e.preventDefault();
         this.setState({
-            login: '',
-            email: '',
-            password: '',
-            repeatedPassword: '',
             disabled: true
         });
-        this.props.onSubmit(this.state, (msg) => {
-            console.log('Success: ', msg);
-        }, (msg) => {
-            console.warn('Error: ', msg);
+
+        if (!this.refs['username'].isValid() ||
+            !this.refs['email'].isValid()    ||
+            !this.refs['password'].isValid()) {
+            this.setState({
+                submitStatus: 'err',
+                submitMessage: <span><strong>{this.loc['validation_error_title']}</strong><br />{this.loc['validation_error_description']}</span>,
+                disabled: false
+            });
+            return;
+        }
+
+        var state = this.state;
+        if (this.props.recaptcha) {
+            state.recaptcha = grecaptcha.getResponse();
+            if (!state.recaptcha) {
+                this.setState({
+                    submitStatus: 'err',
+                    submitMessage: this.loc['empty_captcha'],
+                    disabled: false
+                });
+                return;
+            }
+        }
+
+        this.props.onSubmit(state, (submitStatus, submitMessage) => {
+            if (submitStatus === 'ok') {
+                let submitMessages = submitMessage.split('\n');
+                if (submitMessages.length > 1) {
+                    submitMessage = <span><strong>{submitMessages[0]}</strong><br />{submitMessages[1]}</span>;
+                }
+                this.setState({
+                    submitStatus,
+                    submitMessage
+                });
+            }
+            else {
+                this.setState({
+                    submitStatus,
+                    submitMessage,
+                    disabled: false
+                });
+            }
         });
     }
     render() {
@@ -287,49 +335,32 @@ class Registration extends React.Component {
             <form onSubmit={this.handleSubmit}>
                 <Field
                     name={this.loc['username']}
+                    ref="username"
                     type="text"
                     isFocused
                     isLabeled={this.props.isLabeled}
-                    // onChange={this.handleLoginChange}
-                    validate={(value, callback) => {
-                        this.props.onValidate(value, callback);
-                        if (value.length === 0) {
-                            return callback('err', this.loc['empty_username']);
-                        }
-                        else if (value.length < 3) {
-                            return callback('err', this.loc['username_too_short']);
-                        }
-                        else if (!(/^[A-z]+$/.test(value))) {
-                            return callback('err', this.loc['invalid_username']);
-                        }
-                        else {
-                            return callback('ok', this.loc['username_available']);
-                        }
+                    onChange={this.handleUsernameChange}
+                    validate={(value, callback)=> {
+                        this.props.onValidate('username', value, callback);
                     }}
                 />
                 <Field
                     name={this.loc['email']}
+                    ref="email"
                     type="text"
                     isLabeled={this.props.isLabeled}
-                    // onChange={this.handleLoginChange}
+                    onChange={this.handleEmailChange}
                     validate={(value, callback)=>{
-                        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                        if (value.length === 0) {
-                            return callback('err', this.loc['empty_email']);
-                        }
-                        else if (!re.test(value)) {
-                            return callback('err', this.loc['invalid_email']);
-                        }
-                        else {
-                            return callback('ok', this.loc['valid_email']);
-                        }
+                        this.props.onValidate('email', value, callback);
                     }}
                 />
                 <PasswordField
                     name={this.loc['password']}
+                    ref="password"
                     repeatName={this.loc['repeat_password']}
                     isLabeled={this.props.isLabeled}
-                    
+                    onChange={this.handlePasswordChange}
+
                     locale={this.loc}
 
                 />
@@ -337,6 +368,9 @@ class Registration extends React.Component {
                 {this.props.recaptcha ?
                 <div className="g-recaptcha" data-sitekey={this.props.recaptcha.key}></div> : null}
 
+                {this.state.submitStatus ?
+                    <div className={'message ' + this.state.submitStatus}>{this.state.submitMessage}</div>
+                    : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['sign_up']} />
             </form>
         );
@@ -349,7 +383,9 @@ class Reminder extends React.Component {
         super(props);
         this.state = {
             email: '',
-            disabled: false
+            disabled: false,
+            submitStatus: null,
+            submitMessage: ''
         };
 
         this.loc = props.locale;
@@ -363,13 +399,23 @@ class Reminder extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         this.setState({
-            email: '',
             disabled: true
         });
-        this.props.onSubmit(this.state, (msg) => {
-            console.log('Success: ', msg);
-        }, (msg) => {
-            console.warn('Error: ', msg);
+
+        this.props.onSubmit(this.state, (submitStatus, submitMessage) => {
+            if (submitStatus === 'err') {
+                this.setState({
+                    submitStatus,
+                    submitMessage,
+                    disabled: false
+                });
+            }
+            else if (submitStatus === 'ok') {
+                this.setState({
+                    submitStatus,
+                    submitMessage
+                });
+            }
         });
     }
     render() {
@@ -383,6 +429,10 @@ class Reminder extends React.Component {
                         onChange={this.handleEmailChange}
                     />
                 </label>
+
+                {this.state.submitStatus ?
+                    <div className={'message ' + this.state.submitStatus}>{this.state.submitMessage}</div>
+                    : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['remind_password']} />
             </form>
         );

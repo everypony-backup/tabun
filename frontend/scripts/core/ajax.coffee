@@ -15,6 +15,7 @@ allowedUrls = Set flatten reduce(
   []
 )
 security_ls_key = window.LIVESTREET_SECURITY_KEY
+prefix = '' # debug env
 
 _error = -> return error gettext("network_error"), gettext("data_not_send")
 
@@ -29,7 +30,7 @@ ajax = (url, params={}, callback, complete, error) ->
 
   $.ajax
     type: 'POST'
-    url: '.' + url  #debug
+    url: prefix + url
     data: params
     dataType: 'json'
     success: callback or ->
@@ -41,7 +42,7 @@ ajaxSubmit = (url, form, callback, error) ->
 
   form.ajaxSubmit
     type: 'POST'
-    url: url
+    url: prefix + url
     dataType: 'json'
     data: {security_ls_key}
     success: callback or ->

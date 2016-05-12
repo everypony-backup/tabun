@@ -21,13 +21,23 @@ class PasswordField extends React.Component {
             value: value,
             strength: this.calcStrength(value)
         }, () => {
-            this.refs['repeatPassword'] && this.refs['repeatPassword'].revalidate();
+            if (!this.state.visible) {
+                this.refs['repeatPassword'].revalidate();
+            }
         });
 
         if (typeof this.props.onChange === 'function') {
             this.props.onChange(value);
         }
 
+    }
+    isValid() {
+        if (this.state.visible) {
+            return this.state.strength > 1;
+        }
+        else {
+            return this.state.strength > 1 && this.refs['repeatPassword'].isValid();
+        }
     }
     toggleVisibility() {
         this.setState({visible: !this.state.visible});
@@ -42,6 +52,7 @@ class PasswordField extends React.Component {
         else {
             return callback('err', this.loc['passwords_do_not_match']);
         }
+
     }
     calcStrength(password) {
         var strength = 0;
