@@ -418,6 +418,6 @@ $config['misc']['debug'] = false;
 $config['module']['user']['captcha_use_registration'] = false;            // Disable default captcha
 $config['module']['user']['recaptcha_use_registration'] = true;           // Enable Google Recaptcha
 $config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup'; // Google Recaptcha Secret
-
+$config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
 return $config;
 

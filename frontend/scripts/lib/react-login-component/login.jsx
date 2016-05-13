@@ -32,18 +32,20 @@ class Login extends React.Component {
     render() {
         return (
             this.state.isHidden ? null :
-            <div className="login">
-                <div className="loginOverlay"
-                    onClick={this.hide}
-                ></div>
-                <div className="loginModal">
-                    <Tabs
-                        tabs={this.tabs}
-                        changeTab={this.changeTab}
-                        currentTab={this.state.currentTab}
+            <div className={'login ' + (this.props.isModal ? 'login-modal' : 'login-flat')}>
+                {this.props.isModal ?
+                    <div className="login-overlay"
+                        onClick={this.hide}></div> :
+                    null}
+                <div className="login-container">
+                    {this.props.hasNavigation ?
+                        <Tabs
+                            tabs={this.tabs}
+                            changeTab={this.changeTab}
+                            currentTab={this.state.currentTab}
 
-                        locale={this.props.locale}
-                    />
+                            locale={this.props.locale}
+                        /> : null}
                     <Form
                         currentTab={this.state.currentTab}
 
@@ -165,7 +167,7 @@ class Enter extends React.Component {
             password: '',
             remember: true,
             submitStatus: null,
-            submitMessage: '',
+            submitMessage: {__html: ''},
             trials: 0,
             disabled: false
         };
@@ -194,13 +196,13 @@ class Enter extends React.Component {
             if (trialsInc >= 3) {
                 this.setState({
                     submitStatus,
-                    submitMessage: submitMessage + '\n' + this.loc['trials_exceed_limit'],
+                    submitMessage: {__html: this.loc['trials_exceed_limit']},
                     trials: trialsInc
                 });
             } else {
                 this.setState({
                     submitStatus,
-                    submitMessage,
+                    submitMessage: {__html: submitMessage},
                     trials: trialsInc,
                     disabled: false
                 });
@@ -236,8 +238,8 @@ class Enter extends React.Component {
                     {this.loc['keep_me_logged_in']}
                 </label>
                 {this.state.submitStatus ?
-                <div className={'message ' + this.state.submitStatus}>{this.state.submitMessage}</div>
-                    : null}
+                    <div className={'message ' + this.state.submitStatus} dangerouslySetInnerHTML={this.state.submitMessage}></div>
+                        : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['sign_in']} />
             </form>
         );
@@ -252,7 +254,7 @@ class Registration extends React.Component {
             email: '',
             password: '',
             submitStatus: null,
-            submitMessage: '',
+            submitMessage: {__html: ''},
             disabled: false,
             recaptcha: null
         };
@@ -291,7 +293,7 @@ class Registration extends React.Component {
             !this.refs['password'].isValid()) {
             this.setState({
                 submitStatus: 'err',
-                submitMessage: <span><strong>{this.loc['validation_error_title']}</strong><br />{this.loc['validation_error_description']}</span>,
+                submitMessage: {__html: `<strong>${this.loc['validation_error_title']}</strong><br />${this.loc['validation_error_description']}`},
                 disabled: false
             });
             return;
@@ -303,7 +305,7 @@ class Registration extends React.Component {
             if (!state.recaptcha) {
                 this.setState({
                     submitStatus: 'err',
-                    submitMessage: this.loc['empty_captcha'],
+                    submitMessage: {__html: this.loc['empty_captcha']},
                     disabled: false
                 });
                 return;
@@ -312,19 +314,15 @@ class Registration extends React.Component {
 
         this.props.onSubmit(state, (submitStatus, submitMessage) => {
             if (submitStatus === 'ok') {
-                let submitMessages = submitMessage.split('\n');
-                if (submitMessages.length > 1) {
-                    submitMessage = <span><strong>{submitMessages[0]}</strong><br />{submitMessages[1]}</span>;
-                }
                 this.setState({
                     submitStatus,
-                    submitMessage
+                    submitMessage: {__html: submitMessage}
                 });
             }
             else {
                 this.setState({
                     submitStatus,
-                    submitMessage,
+                    submitMessage: {__html: submitMessage},
                     disabled: false
                 });
             }
@@ -369,7 +367,7 @@ class Registration extends React.Component {
                 <div className="g-recaptcha" data-sitekey={this.props.recaptcha.key}></div> : null}
 
                 {this.state.submitStatus ?
-                    <div className={'message ' + this.state.submitStatus}>{this.state.submitMessage}</div>
+                    <div className={'message ' + this.state.submitStatus} dangerouslySetInnerHTML={this.state.submitMessage}></div>
                     : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['sign_up']} />
             </form>
@@ -385,7 +383,7 @@ class Reminder extends React.Component {
             email: '',
             disabled: false,
             submitStatus: null,
-            submitMessage: ''
+            submitMessage: {__html: ''}
         };
 
         this.loc = props.locale;
@@ -406,14 +404,14 @@ class Reminder extends React.Component {
             if (submitStatus === 'err') {
                 this.setState({
                     submitStatus,
-                    submitMessage,
+                    submitMessage: {__html: submitMessage},
                     disabled: false
                 });
             }
             else if (submitStatus === 'ok') {
                 this.setState({
                     submitStatus,
-                    submitMessage
+                    submitMessage: {__html: submitMessage}
                 });
             }
         });
@@ -431,7 +429,7 @@ class Reminder extends React.Component {
                 </label>
 
                 {this.state.submitStatus ?
-                    <div className={'message ' + this.state.submitStatus}>{this.state.submitMessage}</div>
+                    <div className={'message ' + this.state.submitStatus} dangerouslySetInnerHTML={this.state.submitMessage}></div>
                     : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['remind_password']} />
             </form>

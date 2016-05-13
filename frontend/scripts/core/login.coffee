@@ -2,6 +2,8 @@
 # Компонента входа и регистрации
 ###
 
+{assign} = require 'lodash'
+
 React = require 'react'
 Login = require("lib/react-login-component/login.jsx").default
 
@@ -49,7 +51,7 @@ registrationAjax = (username, email, password, recaptcha, callback) ->
     'return-path': window.location.href
   ajax routes.profile.registration, params, (result) ->
     if result.sUrlRedirect
-      callback 'ok', gettext('activation_title') + '\n' + gettext('activation_description')
+      callback 'ok', "<strong>#{gettext('activation_title')}</strong><br />#{gettext('activation_description')}"
     else
       callback 'err', result.sMsg
 
@@ -99,23 +101,28 @@ onValidate = (type, value, callback) =>
 
 
 # Initialization
-module.exports = React.createElement(Login,
-  initiallyHidden: true
-  isLabeled: false
-  recaptcha: { key: '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD' }
-  tabs: [
-    { 'id': 'enter', 'url': '/login' }
-    { 'id': 'registration', 'url': '/registration' }
-    { 'id': 'reminder', 'url': '/login/reminder' }
-  ]
-  locale: prepareLoginLocale [ 'enter', 'registration', 'reminder', 'username_or_email', 'password', 'keep_me_logged_in',
-    'sign_in', 'username', 'email', 'repeat_password', 'sign_up', 'your_email', 'remind_password', 'passwords_do_not_match',
-    'empty_repeated_password', 'entered_correctly', 'password_too_short', 'password_too_simple', 'username_available',
-    'username_not_available', 'empty_username', 'invalid_username', 'username_too_short', 'valid_email',
-    'invalid_email', 'empty_email', 'trials_exceed_limit', 'validation_error_title', 'validation_error_description', 'empty_captcha']
-  onLogin: onLogin
-  onRegister: onRegister
-  onRemind: onRemind
+module.exports = (props = {}) ->
+    React.createElement(Login,
+      assign
+        isModal: true
+        initiallyHidden: true
+        hasNavigation: true
+        isLabeled: false
+        recaptcha: { key: '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD' }
+        tabs: [
+          { 'id': 'enter', 'url': '/login' }
+          { 'id': 'registration', 'url': '/registration' }
+          { 'id': 'reminder', 'url': '/login/reminder' }
+        ]
+        locale: prepareLoginLocale [ 'enter', 'registration', 'reminder', 'username_or_email', 'password', 'keep_me_logged_in',
+          'sign_in', 'username', 'email', 'repeat_password', 'sign_up', 'your_email', 'remind_password', 'passwords_do_not_match',
+          'empty_repeated_password', 'entered_correctly', 'password_too_short', 'password_too_simple', 'username_available',
+          'username_not_available', 'empty_username', 'invalid_username', 'username_too_short', 'valid_email',
+          'invalid_email', 'empty_email', 'trials_exceed_limit', 'validation_error_title', 'validation_error_description', 'empty_captcha']
+        onLogin: onLogin
+        onRegister: onRegister
+        onRemind: onRemind
 
-  onValidate: onValidate
-)
+        onValidate: onValidate
+      , props
+    )

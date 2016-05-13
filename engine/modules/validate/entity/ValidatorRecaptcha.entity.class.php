@@ -31,8 +31,9 @@ class ModuleValidate_EntityValidatorRecaptcha extends ModuleValidate_EntityValid
      */
     public function validate($sValue) {
         $secret = Config::Get('recaptcha.secret');
-        $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify".
-            "?secret=".$secret."&response=".$sValue), true);
+        $url = Config::Get('recaptcha.url');
+
+        $response = json_decode(file_get_contents($url."?secret=".$secret."&response=".$sValue), true);
 
         if ($response['success'] != false) {
             return true;

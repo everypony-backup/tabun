@@ -1,4 +1,18 @@
-.loginOverlay {
+.login.login-modal {
+    position: fixed;
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+.login.login-modal::-webkit-scrollbar {
+    display: none;
+}
+
+
+.login.login-modal .login-overlay {
     top: 0;
     left: 0;
     height: 100%;
@@ -9,7 +23,7 @@
     background-color: #000;
 }
 
-.loginModal {
+.login.login-modal .login-container {
     top: 50px;
     width: 450px;
     left: 0;
@@ -25,19 +39,14 @@
     padding: 30px;
 }
 
-.login {
-    position: fixed;
-    top: 0;
-    left: -100px;
-    right: -100px;
-    bottom: 0;
-    overflow-y: auto;
+.login.login-flat {
+
 }
 
-.login::-webkit-scrollbar {
-    display: none;
+.login.login-flat .login-container {
+    margin-top: 25px;
+    width: 450px;
 }
-
 
 .login nav {
     margin-bottom: 50px;

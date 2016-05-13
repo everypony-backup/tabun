@@ -23,7 +23,36 @@ Login = require "core/login.coffee"
 init = ->
   # Render React Login Component
   if el = document.getElementById 'window_login_form'
-    loginComponent = ReactDOM.render Login, el
+    loginComponent = ReactDOM.render Login(
+      isModal: true)
+    , el
+
+  if el = document.getElementById 'action_reminder'
+    ReactDOM.render Login(
+      isModal: false
+      initiallyHidden: false
+      hasNavigation: false
+      isLabeled: true
+      initialTab: 'reminder'
+    ), el
+
+  if el = document.getElementById 'action_registration'
+    ReactDOM.render Login(
+      isModal: false
+      initiallyHidden: false
+      hasNavigation: false
+      isLabeled: true
+      initialTab: 'registration'
+  ), el
+
+  if el = document.getElementById 'action_login'
+    ReactDOM.render Login(
+      isModal: false
+      initiallyHidden: false
+      hasNavigation: false
+      isLabeled: true
+      initialTab: 'enter'
+  ), el
 
   # Bind login handlers
   $('.js-registration-form-show').click (e) ->
