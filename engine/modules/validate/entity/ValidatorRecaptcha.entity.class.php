@@ -32,14 +32,29 @@ class ModuleValidate_EntityValidatorRecaptcha extends ModuleValidate_EntityValid
     public function validate($sValue) {
         $secret = Config::Get('recaptcha.secret');
         $url = Config::Get('recaptcha.url');
+        $q = "?secret=".$secret."&response=".$sValue;
+        $result = gettext('recaptcha_error');
 
-        $response = json_decode(file_get_contents($url."?secret=".$secret."&response=".$sValue), true);
+        $ch = curl_init();
 
-        if ($response['success'] != false) {
-            return true;
-        } else {
-            return gettext('recaptcha_error');
+        curl_setopt($ch, CURLOPT_URL, $url.$q);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if (!curl_errno($ch)) {
+            $response = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+
+            $json = json_decode($response, true);
+
+            if ($httpcode == 200) {
+                if ($json['success'] == true) {
+                    $result = true;
+                }
+            }
         }
+        return $result;
     }
 }
 ?>
