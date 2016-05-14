@@ -1,5 +1,6 @@
 import React from 'react';
 import Field from './field.jsx';
+import classNames from 'classnames';
 
 class PasswordField extends React.Component {
     constructor(props) {
@@ -105,7 +106,7 @@ class PasswordField extends React.Component {
                             onChange={this.onChange}
                         />
                         <div
-                            className={'visibility' +  (this.state.visible ? ' invisible' : ' visible')}
+                            className={classNames('visibility', (this.state.visible ? 'invisible' : 'visible'))}
                             onClick={this.toggleVisibility}
                         ></div>
                     </div>

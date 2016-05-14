@@ -1,5 +1,5 @@
 import React from 'react';
-
+import classNames from 'classnames';
 
 class Field extends React.Component {
     constructor(props) {
@@ -46,7 +46,7 @@ class Field extends React.Component {
     }
     render() {
         return (
-            <label className={'field ' + this.props.className}>{this.props.isLabeled ? this.props.name + ':' : null}
+            <label className={classNames('field', this.props.className)}>{this.props.isLabeled ? this.props.name + ':' : null}
                 <input
                     autoFocus={this.props.isFocused}
                     type={this.props.type}
@@ -54,7 +54,7 @@ class Field extends React.Component {
                     onChange={this.onChange}
                 />
                 {this.state.validationStatus ?
-                    <div className={'validation ' + this.state.validationStatus}>
+                    <div className={classNames('validation', this.state.validationStatus)}>
                         {this.state.validationMessage}
                     </div> : null}
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Field from './field.jsx';
 import PasswordField from './password-field.jsx';
-
+import classNames from 'classnames';
 
 class Login extends React.Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class Login extends React.Component {
     render() {
         return (
             this.state.isHidden ? null :
-            <div className={'login ' + (this.props.isModal ? 'login-modal' : 'login-flat')}>
+            <div className={classNames('login', (this.props.isModal ? 'login-modal' : 'login-flat'))}>
                 {this.props.isModal ?
                     <div className="login-overlay"
                         onClick={this.hide}></div> :
@@ -109,7 +109,7 @@ class Tab extends React.Component {
     }
     render() {
         return (
-            <li className={this.props.isCurrent ? 'current' : null}>
+            <li className={classNames({'current': this.props.isCurrent})}>
                 <a onClick={this.handleClick} href={this.props.url}>
                     {this.props.name}
                 </a>
@@ -121,7 +121,7 @@ class Tab extends React.Component {
 class Form extends React.Component {
     render () {
         return (
-            <div className={'loginFormWrap' + (this.props.isLabeled ? ' labeled' : '')}>
+            <div className={classNames('loginFormWrap', {'labeled': this.props.isLabeled})}>
                 {this.props.currentTab === 'enter' ?
                     <Enter
                         isLabeled={this.props.isLabeled}
@@ -238,7 +238,8 @@ class Enter extends React.Component {
                     {this.loc['keep_me_logged_in']}
                 </label>
                 {this.state.submitStatus ?
-                    <div className={'message ' + this.state.submitStatus} dangerouslySetInnerHTML={this.state.submitMessage}></div>
+                    <div className={classNames('message', this.state.submitStatus)}
+                         dangerouslySetInnerHTML={this.state.submitMessage}></div>
                         : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['sign_in']} />
             </form>
@@ -367,7 +368,8 @@ class Registration extends React.Component {
                 <div className="g-recaptcha" data-sitekey={this.props.recaptcha.key}></div> : null}
 
                 {this.state.submitStatus ?
-                    <div className={'message ' + this.state.submitStatus} dangerouslySetInnerHTML={this.state.submitMessage}></div>
+                    <div className={classNames('message', this.state.submitStatus)}
+                         dangerouslySetInnerHTML={this.state.submitMessage}></div>
                     : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['sign_up']} />
             </form>
@@ -429,7 +431,8 @@ class Reminder extends React.Component {
                 </label>
 
                 {this.state.submitStatus ?
-                    <div className={'message ' + this.state.submitStatus} dangerouslySetInnerHTML={this.state.submitMessage}></div>
+                    <div className={classNames('message', this.state.submitStatus)}
+                         dangerouslySetInnerHTML={this.state.submitMessage}></div>
                     : null}
                 <input disabled={this.state.disabled} type="submit" value={this.loc['remind_password']} />
             </form>
