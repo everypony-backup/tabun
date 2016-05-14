@@ -27,32 +27,15 @@ init = ->
       isModal: true)
     , el
 
-  if el = document.getElementById 'action_reminder'
-    ReactDOM.render Login(
-      isModal: false
-      initiallyHidden: false
-      hasNavigation: false
-      isLabeled: true
-      initialTab: 'reminder'
-    ), el
-
-  if el = document.getElementById 'action_registration'
-    ReactDOM.render Login(
-      isModal: false
-      initiallyHidden: false
-      hasNavigation: false
-      isLabeled: true
-      initialTab: 'registration'
-  ), el
-
-  if el = document.getElementById 'action_login'
-    ReactDOM.render Login(
-      isModal: false
-      initiallyHidden: false
-      hasNavigation: false
-      isLabeled: true
-      initialTab: 'enter'
-  ), el
+  ['reminder', 'registration', 'enter'].map (tab) ->
+    if el = document.getElementById 'action_' + tab
+      ReactDOM.render Login(
+        isModal: false
+        initiallyHidden: false
+        hasNavigation: false
+        isLabeled: true
+        initialTab: tab
+      ), el
 
   # Bind login handlers
   $('.js-registration-form-show').click (e) ->

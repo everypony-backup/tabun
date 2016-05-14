@@ -2,7 +2,7 @@
 {include file='header.tpl'}
 
 <h2 class="page-header">{$aLang.user_authorization}</h2>
-<div id="action_login"></div>
+<div id="action_enter"></div>
 <br />
 <br />
 <a href="{router page='registration'}">{$aLang.user_registration}</a><br />
