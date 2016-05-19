@@ -237,6 +237,8 @@
 
 .g-recaptcha {
     margin-bottom: 20px;
+    height: 78px;
+    width: 304px;
 }
 
 .login .message {
