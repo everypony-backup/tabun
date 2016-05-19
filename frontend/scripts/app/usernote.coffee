@@ -2,8 +2,7 @@ $ = require "jquery"
 
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 showNote = (sText) ->
@@ -29,7 +28,7 @@ hideForm = ->
   false
 
 save = (iUserId) ->
-  url = "#{router.profile}ajax-note-save/"
+  url = routes.profile.addNote
   params =
     iUserId: iUserId
     text: $('#usernote-form-text').val()
@@ -43,7 +42,7 @@ save = (iUserId) ->
 
 
 remove = (iUserId) ->
-  url = "#{router.profile}ajax-note-remove/"
+  url = routes.profile.removeNote
   params = iUserId: iUserId
 
   ajax url, params, (result) ->

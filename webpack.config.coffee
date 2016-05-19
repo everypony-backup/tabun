@@ -3,7 +3,7 @@ webpack = require 'webpack'
 {keys} = require 'lodash'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
-
+isDevelopment = process.env.NODE_ENV == 'development'
 
 vendors = [
   "lodash"
@@ -12,6 +12,9 @@ vendors = [
   "jquery.scrollto"
   "jed"
   "immutable"
+  "react"
+  "react-bootstrap"
+  "react-dom"
 ]
 
 aliases =
@@ -33,12 +36,13 @@ module.exports =
     vendor: Array::concat keys(aliases), vendors
 
   output:
-    path: path.join __dirname, 'static', '[hash]'
+    path: path.join __dirname, 'static', if isDevelopment then 'trunk' else '[hash]'
     publicPath: "./"
     filename: '[name].bundle.js'
 
   module:
     loaders: [
+      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, query: {presets: ['es2015', 'react']}}
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
@@ -62,7 +66,8 @@ module.exports =
       new webpack.optimize.UglifyJsPlugin()
     ] else []
     [
-      new ExtractTextPlugin "styles.css"
+      new ExtractTextPlugin "[name].css"
+      new webpack.optimize.DedupePlugin()
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
     ]
   )

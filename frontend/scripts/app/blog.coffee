@@ -5,11 +5,11 @@ lang = require "core/lang.coffee"
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
 
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 toggleJoin = (obj, idBlog) ->
-  url = "#{router.blog}ajaxblogjoin/"
+  url = routes.blog.join
   params = idBlog: idBlog
 
   ajax url, params, (result) ->
@@ -33,7 +33,7 @@ addInvite = (idBlog) ->
   unless sUsers
     return false
   $('#blog_admin_user_add').val ''
-  url = "#{router.blog}ajaxaddbloginvite/"
+  url = routes.blog.invite
   params =
     users: sUsers
     idBlog: idBlog
@@ -54,7 +54,7 @@ addInvite = (idBlog) ->
 
 
 repeatInvite = (idUser, idBlog) ->
-  url = "#{router.blog}ajaxrebloginvite/"
+  url = routes.blog.reinvite
   params =
     idUser: idUser
     idBlog: idBlog
@@ -68,7 +68,7 @@ repeatInvite = (idUser, idBlog) ->
 
 
 removeInvite = (idUser, idBlog) ->
-  url = "#{router.blog}ajaxremovebloginvite/"
+  url = routes.blog.remove
   params =
     idUser: idUser
     idBlog: idBlog
@@ -84,7 +84,7 @@ removeInvite = (idUser, idBlog) ->
 
 
 loadInfo = (idBlog) ->
-  url = "#{router.blog}ajaxbloginfo/"
+  url = routes.blog.info
   params = idBlog: idBlog
 
   ajax url, params, (result) ->
@@ -98,7 +98,7 @@ loadInfoType = (type) ->
   $('#blog_type_note').text lang.get("blog_create_type_#{type}_notice")
 
 searchBlogs = (formId) ->
-  url = "#{router.blogs}ajax-search/"
+  url = routes.blogs.search
   form = $ "##{formId}"
 
   inputSearch = form.find('input')

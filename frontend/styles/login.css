@@ -1,0 +1,256 @@
+.login.login-modal {
+    position: fixed;
+    top: 0;
+    left: -100px;
+    right: -100px;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+.login.login-modal::-webkit-scrollbar {
+    display: none;
+}
+
+
+.login.login-modal .login-overlay {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 99999;
+    opacity: 0.5;
+    background-color: #000;
+}
+
+.login.login-modal .login-container {
+    top: 50px;
+    width: 450px;
+    left: 0;
+    right: 0;
+    margin: 0 auto 50px;
+    position: absolute;
+    z-index: 99999;
+    color: #333;
+    background-color: #fbfcfc;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,.5);
+    overflow: hidden;
+    padding: 30px;
+}
+
+.login.login-flat {
+
+}
+
+.login.login-flat .login-container {
+    margin-top: 25px;
+    width: 450px;
+}
+
+.login nav {
+    margin-bottom: 50px;
+    font-size: 13px;
+}
+
+.login nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.login nav li {
+    float: left;
+    margin-right: 14px;
+    font-weight: 700;
+    line-height: 1pc;
+}
+
+.login label {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.login li > a {
+    color: #09f;
+    text-decoration: none;
+    border-bottom: 1px dotted #09f;
+}
+
+.login li > a:hover {
+    color: #333;
+    border-bottom: 1px dotted #333;
+}
+
+.login li.current > a {
+    color: #333;
+    border-bottom: none;
+}
+
+.login input[type='text'], input[type='password'] {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #c9c9c9;
+    box-shadow: 0 2px 4px rgba(0,0,0,.07) inset;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.login input[type='text']:focus, input[type='password']:focus {
+    border-color: #57bceb;
+    box-shadow: 0 2px 4px rgba(0,0,0,.07) inset,0 0 3px #00a8ff;
+    outline: 0;
+}
+
+.login input {
+    font-size: 100%;
+    outline: 0;
+}
+
+.login input[type='submit'] {
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+    background: #334470 none repeat scroll 0 0;
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 0;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    line-height: 20px;
+    border: 1px solid #213162;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 hsla(0,0%,100%,.2) inset,0 1px 2px rgba(0,0,0,.05);
+    cursor: pointer;
+}
+
+.login input[type='submit']:active {
+    position: relative;
+    top: 1px;
+}
+
+.login input[type='submit']:disabled {
+    opacity: 0.3;
+}
+
+.loginRemember {
+    font-size: 11px;
+    font-style: italic;
+    color: #6c7272;
+}
+
+/* Field css */
+
+.field .validation {
+    font-size: 11px;
+    font-style: italic;
+}
+
+.field .validation.ok {
+    color: green;
+}
+.field .validation.warn {
+    color: orange;
+}
+.field .validation.err {
+    color: darkred;
+}
+
+/* PasswordField css */
+.passwordField .strengthmeter {
+    height: 5px;
+    width: 100%;
+    background-color: #ccc;
+    margin-top: 5px;
+    position: relative;
+}
+
+.passwordField .strengthmeter .indicator {
+    background-color: #40a070;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    -webkit-transition: width 0.5s, background-color 0.3s;
+    transition: width 0.5s, background-color 0.3s;
+}
+
+.passwordField .strengthmeter .s0 {
+    width: 0%;
+    background-color: darkred;
+}
+.passwordField .strengthmeter .s1 {
+    width: 20%;
+    background-color: darkred;
+}
+.passwordField .strengthmeter .s2 {
+    width: 40%;
+    background-color: darkorange;
+}
+.passwordField .strengthmeter .s3 {
+    width: 60%;
+    background-color: darkorange;
+}
+.passwordField .strengthmeter .s4 {
+    width: 80%;
+    background-color: green;
+}
+.passwordField .strengthmeter .s5 {
+    width: 100%;
+    background-color: green;
+}
+
+.passwordField .visibility {
+    display: inline-block;
+    width: 16px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    cursor: pointer;
+    opacity: 0.5;
+}
+.passwordField .visibility:hover {
+    opacity: 0.7;
+}
+
+.passwordField .visible {
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTExLjYyNnB4IiBoZWlnaHQ9IjUxMS42MjZweCIgdmlld0JveD0iMCAwIDUxMS42MjYgNTExLjYyNiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTExLjYyNiA1MTEuNjI2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTUwNS45MTgsMjM2LjExN2MtMjYuNjUxLTQzLjU4Ny02Mi40ODUtNzguNjA5LTEwNy40OTctMTA1LjA2NWMtNDUuMDE1LTI2LjQ1Ny05Mi41NDktMzkuNjg3LTE0Mi42MDgtMzkuNjg3Yy01MC4wNTksMC05Ny41OTUsMTMuMjI1LTE0Mi42MSwzOS42ODdDNjguMTg3LDE1Ny41MDgsMzIuMzU1LDE5Mi41Myw1LjcwOCwyMzYuMTE3QzEuOTAzLDI0Mi43NzgsMCwyNDkuMzQ1LDAsMjU1LjgxOGMwLDYuNDczLDEuOTAzLDEzLjA0LDUuNzA4LDE5LjY5OWMyNi42NDcsNDMuNTg5LDYyLjQ3OSw3OC42MTQsMTA3LjQ5NSwxMDUuMDY0YzQ1LjAxNSwyNi40Niw5Mi41NTEsMzkuNjgsMTQyLjYxLDM5LjY4YzUwLjA2LDAsOTcuNTk0LTEzLjE3NiwxNDIuNjA4LTM5LjUzNmM0NS4wMTItMjYuMzYxLDgwLjg1Mi02MS40MzIsMTA3LjQ5Ny0xMDUuMjA4YzMuODA2LTYuNjU5LDUuNzA4LTEzLjIyMyw1LjcwOC0xOS42OTlDNTExLjYyNiwyNDkuMzQ1LDUwOS43MjQsMjQyLjc3OCw1MDUuOTE4LDIzNi4xMTd6IE0xOTQuNTY4LDE1OC4wM2MxNy4wMzQtMTcuMDM0LDM3LjQ0Ny0yNS41NTQsNjEuMjQyLTI1LjU1NGMzLjgwNSwwLDcuMDQzLDEuMzM2LDkuNzA5LDMuOTk5YzIuNjYyLDIuNjY0LDQsNS45MDEsNCw5LjcwN2MwLDMuODA5LTEuMzM4LDcuMDQ0LTMuOTk0LDkuNzA0Yy0yLjY2MiwyLjY2Ny01LjkwMiwzLjk5OS05LjcwOCwzLjk5OWMtMTYuMzY4LDAtMzAuMzYyLDUuODA4LTQxLjk3MSwxNy40MTZjLTExLjYxMywxMS42MTUtMTcuNDE2LDI1LjYwMy0xNy40MTYsNDEuOTcxYzAsMy44MTEtMS4zMzYsNy4wNDQtMy45OTksOS43MWMtMi42NjcsMi42NjgtNS45MDEsMy45OTktOS43MDcsMy45OTljLTMuODA5LDAtNy4wNDQtMS4zMzQtOS43MS0zLjk5OWMtMi42NjctMi42NjYtMy45OTktNS45MDMtMy45OTktOS43MUMxNjkuMDE1LDE5NS40ODIsMTc3LjUzNSwxNzUuMDY1LDE5NC41NjgsMTU4LjAzeiBNMzc5Ljg2NywzNDkuMDRjLTM4LjE2NCwyMy4xMi03OS41MTQsMzQuNjg3LTEyNC4wNTQsMzQuNjg3Yy00NC41MzksMC04NS44ODktMTEuNTYtMTI0LjA1MS0zNC42ODdzLTY5LjkwMS01NC4yLTk1LjIxNS05My4yMjJjMjguOTMxLTQ0LjkyMSw2NS4xOS03OC41MTgsMTA4Ljc3Ny0xMDAuNzgzYy0xMS42MSwxOS43OTItMTcuNDE3LDQxLjIwNy0xNy40MTcsNjQuMjM2YzAsMzUuMjE2LDEyLjUxNyw2NS4zMjksMzcuNTQ0LDkwLjM2MnM1NS4xNTEsMzcuNTQ0LDkwLjM2MiwzNy41NDRjMzUuMjE0LDAsNjUuMzI5LTEyLjUxOCw5MC4zNjItMzcuNTQ0czM3LjU0NS01NS4xNDYsMzcuNTQ1LTkwLjM2MmMwLTIzLjAyOS01LjgwOC00NC40NDctMTcuNDE5LTY0LjIzNmM0My41ODUsMjIuMjY1LDc5Ljg0Niw1NS44NjUsMTA4Ljc3NiwxMDAuNzgzQzQ0OS43NjcsMjk0Ljg0LDQxOC4wMzEsMzI1LjkxMywzNzkuODY3LDM0OS4wNHoiLz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PC9zdmc+) no-repeat 50% 50%;
+    background-size: 100% auto;
+}
+
+.passwordField .invisible {
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTExLjYyNnB4IiBoZWlnaHQ9IjUxMS42MjdweCIgdmlld0JveD0iMCAwIDUxMS42MjYgNTExLjYyNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTExLjYyNiA1MTEuNjI3OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PGc+PHBhdGggZD0iTTM2MS4xNjEsMjkxLjY1MmMxNS4wMzctMjEuNzk2LDIyLjU2LTQ1LjkyMiwyMi41Ni03Mi4zNzVjMC03LjQyMi0wLjc2LTE1LjQxNy0yLjI4Ni0yMy45ODRsLTc5LjkzOCwxNDMuMzIxQzMyNi4yMzUsMzI5LjEwMSwzNDYuMTI1LDMxMy40MzgsMzYxLjE2MSwyOTEuNjUyeiIvPjxwYXRoIGQ9Ik0zNzIuODcyLDk0LjIyMWMwLjE5MS0wLjM3OCwwLjI4LTEuMjM1LDAuMjgtMi41NjhjMC0zLjIzNy0xLjUyMi01LjgwMi00LjU3MS03LjcxNWMtMC41NjgtMC4zOC0yLjQyMy0xLjQ3NS01LjU2OC0zLjI4N2MtMy4xMzgtMS44MDUtNi4xNC0zLjU2Ny04Ljk4OS01LjI4MmMtMi44NTQtMS43MTMtNS45ODktMy40NzItOS40MjItNS4yOGMtMy40MjYtMS44MDktNi4zNzUtMy4yODQtOC44NDYtNC40MjdjLTIuNDc5LTEuMTQxLTQuMTg5LTEuNzEzLTUuMTQxLTEuNzEzYy0zLjQyNiwwLTYuMDkyLDEuNTI1LTcuOTk0LDQuNTY5bC0xNS40MTMsMjcuNjk2Yy0xNy4zMTYtMy4yMzQtMzQuNDUxLTQuODU0LTUxLjM5MS00Ljg1NGMtNTEuMjAxLDAtOTguNDA0LDEyLjk0Ni0xNDEuNjEzLDM4LjgzMUM3MC45OTgsMTU2LjA4LDM0LjgzNiwxOTEuMzg1LDUuNzExLDIzNi4xMTRDMS45MDMsMjQyLjAxOSwwLDI0OC41ODYsMCwyNTUuODE5YzAsNy4yMzEsMS45MDMsMTMuODAxLDUuNzExLDE5LjY5OGMxNi43NDgsMjYuMDczLDM2LjU5Miw0OS4zOTYsNTkuNTI4LDY5Ljk0OWMyMi45MzYsMjAuNTYxLDQ4LjAxMSwzNy4wMTgsNzUuMjI5LDQ5LjM5NmMtOC4zNzUsMTQuMjczLTEyLjU2MiwyMi41NTYtMTIuNTYyLDI0Ljg0MmMwLDMuNDI1LDEuNTI0LDYuMDg4LDQuNTcsNy45OWMyMy4yMTksMTMuMzI5LDM1Ljk3LDE5Ljk4NSwzOC4yNTYsMTkuOTg1YzMuNDIyLDAsNi4wODktMS41MjksNy45OTItNC41NzVsMTMuOTktMjUuNDA2YzIwLjE3Ny0zNS45NjcsNTAuMjQ4LTg5LjkzMSw5MC4yMjItMTYxLjg3OEMzMjIuOTA4LDE4My44NzEsMzUyLjg4NiwxMzAuMDA1LDM3Mi44NzIsOTQuMjIxeiBNMTU4LjQ1NiwzNjIuODg1QzEwOC45NywzNDAuNjE2LDY4LjMzLDMwNC45MywzNi41NDcsMjU1LjgyMmMyOC45MzEtNDQuOTIxLDY1LjE5LTc4LjUxOCwxMDguNzc3LTEwMC43ODNjLTExLjYxLDE5Ljc5Mi0xNy40MTcsNDEuMjA2LTE3LjQxNyw2NC4yMzdjMCwyMC4zNjUsNC42NjEsMzkuNjgsMTMuOTksNTcuOTU1YzkuMzI3LDE4LjI3NCwyMi4yNywzMy40LDM4LjgzLDQ1LjM5MkwxNTguNDU2LDM2Mi44ODV6IE0yNjUuNTI1LDE1NS44ODdjLTIuNjYyLDIuNjY3LTUuOTA2LDMuOTk5LTkuNzEyLDMuOTk5Yy0xNi4zNjgsMC0zMC4zNjEsNS44MDgtNDEuOTcxLDE3LjQxNmMtMTEuNjEzLDExLjYxNS0xNy40MTYsMjUuNjAzLTE3LjQxNiw0MS45NzFjMCwzLjgxMS0xLjMzNiw3LjA0NC0zLjk5OSw5LjcxYy0yLjY2OCwyLjY2Ny01LjkwMiwzLjk5OS05LjcwNywzLjk5OWMtMy44MDksMC03LjA0NS0xLjMzNC05LjcxLTMuOTk5Yy0yLjY2Ny0yLjY2Ni0zLjk5OS01LjkwMy0zLjk5OS05LjcxYzAtMjMuNzksOC41Mi00NC4yMDYsMjUuNTUzLTYxLjI0MmMxNy4wMzQtMTcuMDM0LDM3LjQ0Ny0yNS41NTMsNjEuMjQxLTI1LjU1M2MzLjgwNiwwLDcuMDQzLDEuMzM2LDkuNzEzLDMuOTk5YzIuNjYyLDIuNjY0LDMuOTk2LDUuOTAxLDMuOTk2LDkuNzA3QzI2OS41MTUsMTQ5Ljk5MiwyNjguMTgxLDE1My4yMjgsMjY1LjUyNSwxNTUuODg3eiIvPjxwYXRoIGQ9Ik01MDUuOTE2LDIzNi4xMTRjLTEwLjg1My0xOC4wOC0yNC42MDMtMzUuNTk0LTQxLjI1NS01Mi41MzRjLTE2LjY0Ni0xNi45MzktMzQuMDIyLTMxLjQ5Ni01Mi4xMDUtNDMuNjhsLTE3Ljk4NywzMS45NzdjMzEuNzg1LDIxLjg4OCw1OC42MjUsNDkuODcsODAuNTEsODMuOTM5Yy0yMy4wMjQsMzUuNzgyLTUxLjcyMyw2NS04Ni4wNyw4Ny42NDhjLTM0LjM1OCwyMi42NjEtNzEuNzEyLDM1LjY5My0xMTIuMDY1LDM5LjExNWwtMjEuMTI5LDM3LjY4OGM0Mi4yNTcsMCw4Mi4xOC05LjAzOCwxMTkuNzY5LTI3LjEyMWMzNy41OS0xOC4wNzYsNzAuNjY4LTQzLjQ4OCw5OS4yMTYtNzYuMjI1YzEzLjMyMi0xNS40MjEsMjMuNjk1LTI5LjIxOSwzMS4xMjEtNDEuNDAxYzMuODA2LTYuNDc2LDUuNzA4LTEzLjA0Niw1LjcwOC0xOS43MDJDNTExLjYyNiwyNDkuMTU3LDUwOS43MjQsMjQyLjU5LDUwNS45MTYsMjM2LjExNHoiLz48L2c+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjwvc3ZnPg==) no-repeat 50% 50%;
+    background-size: 100% auto;
+}
+
+.passwordField .inputWrap {
+    position: relative;
+}
+.passwordField .inputWrap > input {
+    padding-right: 23px;
+}
+
+.passwordField .hidden {
+    display: none;
+}
+
+.g-recaptcha {
+    margin-bottom: 20px;
+}
+
+.login .message {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+}
+.login .message.err {
+    background: #f0c8c8;
+    color: #b22626;
+}
+
+.login .message.ok {
+    background: #93f0a7;
+    color: green;
+}
+
+/* TODO: reimplement as mixins with existing styles? */

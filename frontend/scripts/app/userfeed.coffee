@@ -3,14 +3,13 @@ $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 isBusy = false
 
 subscribe = (sType, iId) ->
-  url = "#{router.feed}subscribe/"
+  url = routes.feed.subscribe
   params =
     'type': sType
     'id': iId
@@ -21,7 +20,7 @@ subscribe = (sType, iId) ->
 
 
 unsubscribe = (sType, iId) ->
-  url = "#{router.feed}unsubscribe/"
+  url = routes.feed.unsubscribe
   params =
     'type': sType
     'id': iId
@@ -35,7 +34,7 @@ appendUser = ->
   sLogin = $('#userfeed_users_complete').val()
   unless sLogin
     return
-  url = "#{router.feed}subscribeByLogin/"
+  url = routes.feed.subscribeByLogin
   params = 'login': sLogin
 
   ajax url, params, (data) ->
@@ -62,7 +61,7 @@ getMore = ->
   unless lastId then return
   selLoad.classList.add 'stream_loading'
   isBusy = true
-  url = "#{router.feed}get_more/"
+  url = routes.feed.getMore
   params =
     last_id: lastId
 

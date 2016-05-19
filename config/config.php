@@ -36,7 +36,6 @@ $config['seo']['description_words_count'] = 20;               // количес�
  * Настройка основных блоков
  */
 $config['block']['stream']['row'] = 20;                     // сколько записей выводить в блоке "Прямой эфир"
-$config['block']['stream']['show_tip'] = false;             // выводить или нет всплывающие сообщения в блоке "Прямой эфир"
 $config['block']['blogs']['row'] = 20;                      // сколько записей выводить в блоке "Блоги"
 $config['block']['tags']['tags_count'] = 20;                // сколько тегов выводить в блоке "теги"
 $config['block']['tags']['personal_tags_count'] = 20;       // сколько тегов пользователя выводить в блоке "теги"
@@ -373,7 +372,10 @@ $config['block']['rule_blog_info'] = [
     'action' => ['blog' => ['{topic}']],
     'blocks' => ['right' => ['blog']],
 ];
-
+$config['block']['rule_search'] = [
+    'action' => ['search'],
+    'blocks' => ['right' => ['sidetop', 'search', 'donate', 'herdmind']],
+];
 /**
  * Установка локали
  */
@@ -410,5 +412,12 @@ $config['misc']['ver']['front'] = 'trunk';        // Frontend version
 $config['misc']['ver']['code'] = 'trunk';        // Code version
 $config['misc']['debug'] = false;
 
+/**
+ * Рекапча
+ */
+$config['module']['user']['captcha_use_registration'] = false;            // Disable default captcha
+$config['module']['user']['recaptcha_use_registration'] = true;           // Enable Google Recaptcha
+$config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup'; // Google Recaptcha Secret
+$config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
 return $config;
 
