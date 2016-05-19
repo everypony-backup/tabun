@@ -21,6 +21,7 @@
 {include file='toolbar.tpl'}
 <script type="text/javascript">
     var LIVESTREET_SECURITY_KEY = '{$LIVESTREET_SECURITY_KEY}';
+    var RECAPTCHA_KEY = '{cfg name='recaptcha.key'}';
 </script>
 <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
 <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>

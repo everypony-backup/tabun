@@ -415,9 +415,10 @@ $config['misc']['debug'] = false;
 /**
  * Рекапча
  */
-$config['module']['user']['captcha_use_registration'] = false;            // Disable default captcha
-$config['module']['user']['recaptcha_use_registration'] = true;           // Enable Google Recaptcha
-$config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup'; // Google Recaptcha Secret
+$config['module']['user']['captcha_use_registration'] = false;                   // Disable default captcha
+$config['module']['user']['recaptcha_use_registration'] = true;                  // Enable Google Recaptcha
+$config['recaptcha']['key'] = '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD';        // Google Recaptcha Key
+$config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup';     // Google Recaptcha Secret
 $config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
 return $config;
 
