@@ -20,7 +20,4 @@ $config['path']['smarty']['cache'] = '/tmp/smarty/cache';
 
 $config['misc']['debug'] = true;
 
-$config['misc']['ver']['code'] = 'trunk';
-$config['misc']['ver']['front'] = 'ba0952a008d21b500faa';
-
 return $config;

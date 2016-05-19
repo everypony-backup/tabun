@@ -1,9 +1,9 @@
 path = require 'path'
 webpack = require 'webpack'
 {keys} = require 'lodash'
+fs = require 'fs'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
-isDevelopment = process.env.NODE_ENV == 'development'
 
 vendors = [
   "lodash"
@@ -28,6 +28,7 @@ aliases =
 module.exports =
   context: path.join __dirname, 'frontend'
   cache: true
+  devtool: "#source-map"
 
   entry:
     main: "./main"
@@ -36,7 +37,7 @@ module.exports =
     vendor: Array::concat keys(aliases), vendors
 
   output:
-    path: path.join __dirname, 'static', if isDevelopment then 'trunk' else '[hash]'
+    path: path.join __dirname, 'static', '[hash]'
     publicPath: "./"
     filename: '[name].bundle.js'
 
@@ -69,5 +70,12 @@ module.exports =
       new ExtractTextPlugin "[name].css"
       new webpack.optimize.DedupePlugin()
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
+      () ->
+        @plugin("done", (stats) ->
+          fs.writeFileSync(
+            path.join(__dirname, "config", "frontend.version"),
+            stats.hash
+          )
+        )
     ]
   )

@@ -408,8 +408,8 @@ $config['sys']['celery']['backend'] = 'redis';
  * Разное
  */
 $config['misc']['ga'] = '';
-$config['misc']['ver']['front'] = 'trunk';        // Frontend version
-$config['misc']['ver']['code'] = 'trunk';        // Code version
+$config['misc']['ver']['front'] = file_get_contents(dirname(__FILE__) . "/frontend.version");
+$config['misc']['ver']['code'] = file_get_contents(dirname(__FILE__) . "/backend.version");
 $config['misc']['debug'] = false;
 
 /**
