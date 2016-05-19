@@ -99,7 +99,7 @@ onValidate = (type, value, callback) =>
     when 'email'
       validateEmail value, callback
 
-
+      
 # Initialization
 module.exports = (props = {}) ->
     React.createElement(Login,
@@ -108,7 +108,7 @@ module.exports = (props = {}) ->
         initiallyHidden: true
         hasNavigation: true
         isLabeled: false
-        recaptcha: { key: '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD' }
+        recaptcha: { key: RECAPTCHA_KEY }
         tabs: [
           { 'id': 'enter', 'url': '/login' }
           { 'id': 'registration', 'url': '/registration' }
