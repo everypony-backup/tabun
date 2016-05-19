@@ -7,7 +7,7 @@
 React = require 'react'
 Login = require("lib/react-login-component/login.jsx").default
 
-{ajax, ajaxSubmit} = require "core/ajax.coffee"
+{ajax} = require "core/ajax.coffee"
 routes = require "lib/routes.coffee"
 {gettext} = require "core/lang.coffee"
 

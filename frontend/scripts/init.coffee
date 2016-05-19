@@ -15,8 +15,6 @@ autocomplete = require "core/autocomplete.coffee"
 talk = require "app/talk.coffee"
 toolbar = require "app/toolbar.coffee"
 
-lang = require "core/lang.coffee"
-
 ReactDOM = require 'react-dom'
 Login = require "core/login.coffee"
 
