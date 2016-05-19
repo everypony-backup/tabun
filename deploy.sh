@@ -39,14 +39,18 @@ deploy(){
 
     echo "Sources cleanup"
     clean_source
-    APP_VER=$(git describe --tags)
+
+    APP_VER=$(git describe --tags --dirty=-dev)
+    echo "Set app version to ${APP_VER}"
+    echo ${APP_VER} > config/backend.version
+
     echo "Build static"
     if [ ${ENV_TYPE} == 'production' ]; then
         npm run-script webpack:production
     else
         npm run-script webpack:trunk
     fi
-    STATIC_VER=$(ls -1 --color=never static/)
+    STATIC_VER=$(cat config/frontend.version)
 
     echo "Build i10n files"
     find locale -name "*.po" -execdir msgfmt messages.po -o messages.mo \;
@@ -70,11 +74,6 @@ deploy(){
     for chunk in ${APP}; do
         cp -r ${chunk} ${APP_PATH}
     done
-
-    echo "Set static version to ${STATIC_VER}"
-    sed -i "s/\$config\['misc'\]\['ver'\]\['front'\].*/\$config\['misc'\]\['ver'\]\['front'\] = '"${STATIC_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
-    echo "Set app version to ${APP_VER}"
-    sed -i "s/\$config\['misc'\]\['ver'\]\['code'\].*/\$config\['misc'\]\['ver'\]\['code'\] = '"${APP_VER}"';/g" ${CHROOT_PATH}/etc/config.stable.php
 
     echo "Set owner and permissions"
     chown ${APP_PERMS} ${APP_PATH} -R

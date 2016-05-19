@@ -398,7 +398,7 @@ $config['flags'] = [];
 $config['sys']['celery']['host'] = 'localhost';
 $config['sys']['celery']['login'] = '';
 $config['sys']['celery']['password'] = '';
-$config['sys']['celery']['db'] = 0;
+$config['sys']['celery']['db'] = 5;
 $config['sys']['celery']['exchange'] = 'celery';
 $config['sys']['celery']['binding'] = 'celery';
 $config['sys']['celery']['port'] = 6379;
@@ -408,9 +408,16 @@ $config['sys']['celery']['backend'] = 'redis';
  * Разное
  */
 $config['misc']['ga'] = '';
-$config['misc']['ver']['front'] = 'trunk';        // Frontend version
-$config['misc']['ver']['code'] = 'trunk';        // Code version
+$config['misc']['ver']['front'] = file_get_contents(dirname(__FILE__) . "/frontend.version");
+$config['misc']['ver']['code'] = file_get_contents(dirname(__FILE__) . "/backend.version");
 $config['misc']['debug'] = false;
 
+/**
+ * Рекапча
+ */
+$config['module']['user']['captcha_use_registration'] = false;            // Disable default captcha
+$config['module']['user']['recaptcha_use_registration'] = true;           // Enable Google Recaptcha
+$config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup'; // Google Recaptcha Secret
+$config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
 return $config;
 

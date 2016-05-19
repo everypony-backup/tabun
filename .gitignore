@@ -7,3 +7,9 @@
 /log/
 .htaccess
 /storage/
+# Vagga stuff
+/run/
+/.vagga/
+
+# Versioning
+/config/*.version

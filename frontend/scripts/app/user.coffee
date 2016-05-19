@@ -1,12 +1,11 @@
 $ = require "jquery"
-{forEach, first, debounce, uniqueId, isString} = require "lodash"
+{forEach, debounce, uniqueId, isString} = require "lodash"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {notice, error} = require "core/messages.coffee"
 {subscribe, unsubscribe} = require "app/stream.coffee"
 routes = require "lib/routes.coffee"
-
 
 jcropAvatar = null
 jcropFoto = null
@@ -165,115 +164,10 @@ cancelFoto = ->
 
   false
 
-validateRegistrationFields = (aFields, sForm) ->
-  params = fields: aFields
-  if isString sForm
-    sForm = $ "##{sForm}"
-
-  ajax routes.profile.validateFields, params, (result) ->
-    unless sForm
-      sForm = $('body')
-    # поиск полей по всей странице
-    forEach aFields, (aField) ->
-      bIsError = result.aErrors and result.aErrors[aField.field][0]
-      errField = sForm.find(".validate-error-field-#{aField.field}")
-
-      sForm.find(".validate-ok-field-#{aField.field}").toggle(not bIsError)
-      sForm.find(".form-item-help-#{aField.field}").toggleClass 'active', not bIsError
-      errField.toggleClass('validate-error-show', bIsError)
-      errField.toggleClass('validate-error-hide', not bIsError)
-
-      if bIsError
-        sForm.text result.aErrors[aField.field][0]
-
-validateRegistrationField = (sField, sValue, sForm, aParams = {}) ->
-  aFields = [{
-    field: sField
-    value: sValue
-    params: aParams
-  }]
-  validateRegistrationFields aFields, sForm
-
-registration = (form) ->
-  if isString form then form = $ "##{form}"
-
-  formLoader form
-
-  ajaxSubmit routes.profile.registration, form, (result) ->
-    formLoader form, true
-
-    if result.bStateError
-      return error null, result.sMsg
-
-    form
-    .find '.validate-error-show'
-    .removeClass 'validate-error-show'
-    .addClass 'validate-error-hide'
-
-    if result.aErrors
-      forEach result.aErrors, (sField) ->
-        error = first aErrors
-        if error
-          form
-          .find ".validate-error-field-#{sField}"
-          .removeClass 'validate-error-hide'
-          .addClass 'validate-error-show'
-          .text error
-
-    else
-      if result.sMsg then notice null, result.sMsg
-      if result.sUrlRedirect then window.location = result.sUrlRedirect
-
-login = (form) ->
-  if isString form then form = $ "##{form}"
-
-  formLoader form
-
-  ajaxSubmit routes.profile.login, form, (result) ->
-    formLoader form, true
-
-    form
-    .find '.validate-error-show'
-    .removeClass 'validate-error-show'
-    .addClass 'validate-error-hide'
-
-    if result.bStateError
-      form
-      .find '.validate-error-login'
-      .removeClass 'validate-error-hide'
-      .addClass 'validate-error-show'
-      .html result.sMsg
-    else
-      if result.sMsg then notice null, result.sMsg
-      if result.sUrlRedirect then window.location = result.sUrlRedirect
 
 formLoader = (form, bHide) ->
   forEach form.find('input[type="text"], input[type="password"]'), (node) ->
     $(node).toggleClass 'loader', bHide
-
-reminder = (form) ->
-  if isString form then form = $ "##{form}"
-
-  formLoader form
-
-  ajaxSubmit routes.profile.reminder, form, (result) ->
-    formLoader form, true
-
-    form
-    .find '.validate-error-show'
-    .removeClass 'validate-error-show'
-    .addClass 'validate-error-hide'
-
-    if result.bStateError
-      form
-      .find '.validate-error-reminder'
-      .removeClass 'validate-error-hide'
-      .addClass 'validate-error-show'
-      .text result.sMsg
-    else
-      form.find('input').val ''
-      if result.sMsg then notice null, result.sMsg
-      if result.sUrlRedirect then window.location = result.sUrlRedirect
 
 reactivation = (form) ->
   if isString form then form = $ "##{form}"
@@ -338,13 +232,9 @@ followToggle = (obj, iUserId) ->
   false
 
 module.exports = {
-  login
   reactivation
-  registration
-  reminder
   searchUsersThrottled
   searchUsersByPrefix
-  validateRegistrationField
   removeFriend
   addFriend
   followToggle

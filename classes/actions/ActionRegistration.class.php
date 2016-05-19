@@ -153,6 +153,7 @@ class ActionRegistration extends Action {
 		$oUser->setPassword(getRequestStr('password'));
 		$oUser->setPasswordConfirm(getRequestStr('password_confirm'));
 		$oUser->setCaptcha(getRequestStr('captcha'));
+		$oUser->setRecaptcha(getRequestStr('g-recaptcha-response'));
 		$oUser->setDateRegister(date("Y-m-d H:i:s"));
 		$oUser->setIpRegister(func_getIp());
 		/**

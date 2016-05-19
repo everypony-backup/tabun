@@ -15,10 +15,35 @@ autocomplete = require "core/autocomplete.coffee"
 talk = require "app/talk.coffee"
 toolbar = require "app/toolbar.coffee"
 
+ReactDOM = require 'react-dom'
+Login = require "core/login.coffee"
 
 init = ->
+  # Render React Login Component
+  if el = document.getElementById 'window_login_form'
+    loginComponent = ReactDOM.render Login(
+      isModal: true)
+    , el
+
+  ['reminder', 'registration', 'enter'].map (tab) ->
+    if el = document.getElementById 'action_' + tab
+      ReactDOM.render Login(
+        isModal: false
+        initiallyHidden: false
+        hasNavigation: false
+        isLabeled: true
+        initialTab: tab
+      ), el
+
+  # Bind login handlers
+  $('.js-registration-form-show').click (e) ->
+    e.preventDefault()
+    loginComponent.show 'registration'
+  $('.js-login-form-show').click (e) ->
+    e.preventDefault()
+    loginComponent.show 'enter'
+
   # Popups
-  $('#window_login_form').jqm()
   $('#blog_delete_form').jqm trigger: '#blog_delete_show', toTop: true
   $('#add_friend_form').jqm trigger: '#add_friend_show', toTop: true
   $('#window_upload_img').jqm()
@@ -41,15 +66,6 @@ init = ->
   blocks.initSwitch 'upload-img'
   blocks.initSwitch 'favourite-topic-tags'
   blocks.initSwitch 'popup-login'
-
-  # Handlers
-  $('.js-registration-form-show').click ->
-    if blocks.switchTab 'registration', 'popup-login'
-      $('#window_login_form').jqmShow()
-  $('.js-login-form-show').click ->
-    if blocks.switchTab 'login', 'popup-login'
-      $('#window_login_form').jqmShow()
-
 
   # Datepicker
   $('.date-picker').datepicker
