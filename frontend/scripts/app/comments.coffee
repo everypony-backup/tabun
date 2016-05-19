@@ -7,17 +7,16 @@ $ = require "jquery"
 {error, notice} = require "core/messages.coffee"
 {textPreview, registry, prepareJSON} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 types =
   topic:
-    url_add:  "#{router.blog}ajaxaddcomment/"
-    url_response: "#{router.blog}ajaxresponsecomment/"
+    url_add: routes.topic.comment
+    url_response: routes.topic.respond
   talk:
-    url_add: "#{router.talk}ajaxaddcomment/"
-    url_response: "#{router.talk}ajaxresponsecomment/"
+    url_add: routes.talk.comment
+    url_response: routes.talk.respond
 
 classes =
   form_loader: 'loader'
@@ -162,7 +161,7 @@ inject = ({pid, id, html}) ->
 
 
 toggle = (obj, commentId) ->
-  url = "#{router.ajax}comment/delete/"
+  url = routes.comment.delete
   params = idComment: commentId
 
   _success = (result) ->

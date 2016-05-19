@@ -2,17 +2,16 @@ $ = require "jquery"
 {assign, delay, first, throttle, isString, forEach} = require "lodash"
 {ajax} = require "core/ajax.coffee"
 {error} = require "core/messages.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 options =
   active: 'active'
   type:
-    stream_comment: url: "#{router.ajax}stream/comment/"
-    stream_topic: url: "#{router.ajax}stream/topic/"
-    blogs_top: url: "#{router.ajax}blogs/top/"
-    blogs_join: url: "#{router.ajax}blogs/join/"
-    blogs_self: url: "#{router.ajax}blogs/self/"
+    stream_comment: url: routes.stream.comment
+    stream_topic: url: routes.stream.topic
+    blogs_top: url: routes.blogs.top
+    blogs_join: url: routes.blogs.joined
+    blogs_self: url: routes.blogs.self
 
 
 showProgress = (content) ->

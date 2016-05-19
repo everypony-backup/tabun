@@ -81,4 +81,4 @@
 {hook run='add_topic_topic_end'}
 
 
-{include file='footer.tpl' sMarkItUpBundle="topics"}
+{include file='footer.tpl' scripts=["topics"]}

@@ -13,7 +13,7 @@
     <meta name="description" content="{$sHtmlDescription}">
     <meta name="keywords" content="{$sHtmlKeywords}">
 
-    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/styles.css">
+    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.css">
 
     <link href="{cfg name='path.static.url'}/local/favicon.ico" rel="shortcut icon"/>
     <link rel="search" type="application/opensearchdescription+xml" href="{router page='search'}opensearch/" title="{cfg name='view.name'}"/>
@@ -31,24 +31,6 @@
         <meta HTTP-EQUIV="Refresh" CONTENT="3; URL={cfg name='path.root.web'}/">
     {/if}
     {include 'analytics.tpl'}
-    <script type="text/javascript">
-        var LIVESTREET_SECURITY_KEY = '{$LIVESTREET_SECURITY_KEY}';
-        var SESSION_ID = '{$_sPhpSessionId}';
-
-        var aRouter = [];
-        {foreach from=$aRouter key=sPage item=sPath}
-        aRouter['{$sPage}'] = '{$sPath}';
-        {/foreach}
-    </script>
-
-    <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
-    <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        ls.lang.load({json var = $aLangJs});
-        ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
-        ls.tools.registry.set('block_stream_show_tip', {json var=$oConfig->Get('block.stream.show_tip')});
-    </script>
-
     {hook run='html_head_end'}
 </head>
 

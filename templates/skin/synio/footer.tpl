@@ -19,8 +19,20 @@
 </div> <!-- /container -->
 
 {include file='toolbar.tpl'}
-{if isset($sMarkItUpBundle)}
-	<script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$sMarkItUpBundle}.bundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var LIVESTREET_SECURITY_KEY = '{$LIVESTREET_SECURITY_KEY}';
+</script>
+<script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
+<script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    ls.lang.load({json var = $aLangJs});
+    ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
+</script>
+{if isset($scripts)}
+    {foreach from=$scripts item=item}
+        <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.bundle.js" type="text/javascript"></script>
+    {/foreach}
 {/if}
 {hook run='body_end'}
 

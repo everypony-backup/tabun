@@ -31,6 +31,9 @@ class ModuleUser_EntityUser extends Entity {
 		if (Config::Get('module.user.captcha_use_registration')) {
 			$this->aValidateRules[] = array('captcha', 'captcha', 'on' => array('registration'));
 		}
+		if (Config::Get('module.user.recaptcha_use_registration')) {
+			$this->aValidateRules[] = array('recaptcha', 'recaptcha', 'on' => array('registration'));
+		}
 
 		parent::__construct($aParam);
 	}

@@ -3,11 +3,11 @@ $ = require "jquery"
 lang = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
+routes = require "lib/routes.coffee"
 
-router = window.aRouter
 
 vote = (idTopic, idAnswer) ->
-  url = "#{router.ajax}vote/question/"
+  url = routes.vote.question
   params =
     idTopic: idTopic
     idAnswer: idAnswer

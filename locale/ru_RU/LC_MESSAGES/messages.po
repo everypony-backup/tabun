@@ -30,6 +30,9 @@ msgstr "Ошибка сервера"
 msgid "network_error"
 msgstr "Ошибка сети"
 
+msgid "incorrect_url"
+msgstr "Ошибка адреса"
+
 msgid "try_later"
 msgstr "Попробуйте позже"
 
@@ -41,3 +44,106 @@ msgid_plural "comments"
 msgstr[0] "комментарий"
 msgstr[1] "комментария"
 msgstr[2] "комментариев"
+
+# Login
+msgid "enter"
+msgstr "Вход"
+
+msgid "registration"
+msgstr "Регистрация"
+
+msgid "reminder"
+msgstr "Восстановление пароля"
+
+msgid "username_or_email"
+msgstr "Логин или эл. почта"
+
+msgid "password"
+msgstr "Пароль"
+
+msgid "keep_me_logged_in"
+msgstr "Запомнить меня"
+
+msgid "trials_exceed_limit"
+msgstr "Превышен лимит попыток входа. Обновите страницу чтобы продолжить."
+
+msgid "sign_in"
+msgstr "Войти"
+
+msgid "username"
+msgstr "Логин"
+
+msgid "email"
+msgstr "Эл. почта"
+
+msgid "repeat_password"
+msgstr "Повторите пароль"
+
+msgid "sign_up"
+msgstr "Зарегистрироваться"
+
+msgid "your_email"
+msgstr "Ваша эл. почта"
+
+msgid "remind_password"
+msgstr "Выслать ссылку на изменение пароля"
+
+msgid "passwords_do_not_match"
+msgstr "Пароли должны совпадать"
+
+msgid "empty_repeated_password"
+msgstr "Необходимо ввести пароль повторно"
+
+msgid "entered_correctly"
+msgstr "Введено верно"
+
+msgid "password_too_short"
+msgstr "Пароль слишком короткий"
+
+msgid "password_too_simple"
+msgstr "Пароль слишком простой"
+
+msgid "username_available"
+msgstr "Логин свободен"
+
+msgid "username_not_available"
+msgstr "Логин занят"
+
+msgid "empty_username"
+msgstr "Необходимо ввести логин"
+
+msgid "invalid_username"
+msgstr "Логин может состоять только из латинских букв, дефиса и знака подчеркивания"
+
+msgid "username_too_short"
+msgstr "Слишком короткий логин"
+
+msgid "username_too_long"
+msgstr "Слишком длинный логин"
+
+msgid "valid_email"
+msgstr "Эл. почта введена верно, на нее будет отправлено письмо"
+
+msgid "invalid_email"
+msgstr "Эл. почта не соответствует формату name@email.ru"
+
+msgid "empty_email"
+msgstr "Необходимо указать адрес эл. почты"
+
+msgid "activation_title"
+msgstr "Активация аккаунта"
+
+msgid "activation_description"
+msgstr "Вы почти зарегистрировались, осталось только активировать аккаунт. Инструкции по активации отправлены по электронной почте."
+
+msgid "validation_error_title"
+msgstr "Ошибка валидации"
+
+msgid "validation_error_description"
+msgstr "Проверьте корректность заполнения полей"
+
+msgid "empty_captcha"
+msgstr "Не пройдена капча. Вы точно не робот?"
+
+msgid "recaptcha_error"
+msgstr "Вы робот!"

@@ -4,8 +4,7 @@ $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 loadRegions = ($country) ->
@@ -20,7 +19,7 @@ loadRegions = ($country) ->
     $region.hide()
     return
 
-  url = "#{router.ajax}geo/get/regions/"
+  url = routes.geo.regions
   params = country: $country.val()
 
   ajax url, params, (result) ->
@@ -41,7 +40,7 @@ loadCities = ($region) ->
     $city.hide()
     return
 
-  url = "#{router.ajax}geo/get/cities/"
+  url = routes.geo.cities
   params = region: $region.val()
 
   ajax url, params, (result) ->

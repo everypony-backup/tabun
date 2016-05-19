@@ -47,3 +47,8 @@ if(file_exists(Config::Get('path.root.server').'/config/config.local.php')) {
 if(file_exists('/etc/config.stable.php')) {
 	Config::LoadFromFile('/etc/config.stable.php', false);
 }
+
+/**
+ * Composer libs
+ */
+// require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");

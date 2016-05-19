@@ -51,4 +51,4 @@
 {/if}
 			
 			
-{include file='footer.tpl' sMarkItUpBundle="comments"}
+{include file='footer.tpl' scripts=["comments"]}

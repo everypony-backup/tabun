@@ -4,8 +4,7 @@ $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
-
-router = window.aRouter
+routes = require "lib/routes.coffee"
 
 
 addToTalk = (idTalk) ->
@@ -16,7 +15,7 @@ addToTalk = (idTalk) ->
     return false
 
   selTalk.val ''
-  url = "#{router.talk}ajaxaddtalkuser/"
+  url = routes.talk.addUser
   params =
     users: sUsers
     idTalk: idTalk
@@ -47,7 +46,7 @@ removeFromTalk = (link, idTalk) ->
     $(@).remove()
 
   idTarget = link.attr('id').replace('speaker_item_', '')
-  url = "#{router.talk}ajaxdeletetalkuser/"
+  url = routes.talk.removeUser
   params =
     idTarget: idTarget
     idTalk: idTalk
@@ -98,7 +97,7 @@ removeFromBlackList = (link) ->
     $(@).remove()
 
   idTarget = link.attr('id').replace('blacklist_item_', '')
-  url = "#{router.talk}ajaxdeletefromblacklist/"
+  url = routes.talk.unBlacklistUser
   params = idTarget: idTarget
 
   ajax url, params, (result) ->
