@@ -208,19 +208,19 @@ class ModuleFavourite extends Module {
 	 * @return array
 	 */
 	public function GetFavouriteOpenCommentsByUserId($sUserId,$iCurrPage,$iPerPage) {
-		if (false === ($data = $this->Cache_Get("comment_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open"))) {
+		$sCacheKey = "comment_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = array(
 				'collection' => $this->oMapper->GetFavouriteOpenCommentsByUserId($sUserId,$iCount,$iCurrPage,$iPerPage),
 				'count'      => $iCount
 			);
 			$this->Cache_Set(
 				$data,
-				"comment_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open",
-				array(
+				$sCacheKey,
+				[
 					"favourite_comment_change",
 					"favourite_comment_change_user_{$sUserId}"
-				),
-				60*60*24*1
+                ]
 			);
 		}
 		return $data;
@@ -232,17 +232,17 @@ class ModuleFavourite extends Module {
 	 * @return array
 	 */
 	public function GetCountFavouriteOpenCommentsByUserId($sUserId) {
-		if (false === ($data = $this->Cache_Get("comment_count_favourite_user_{$sUserId}_open"))) {
+        $sCacheKey = "comment_count_favourite_user_{$sUserId}_open";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetCountFavouriteOpenCommentsByUserId($sUserId);
 			$this->Cache_Set(
 				$data,
-				"comment_count_favourite_user_{$sUserId}_open",
-				array(
+				$sCacheKey,
+				[
 					"favourite_comment_change",
 					"favourite_comment_change_user_{$sUserId}"
-				),
-				60*60*24*1
-			);
+                ]
+            );
 		}
 		return $data;
 	}
