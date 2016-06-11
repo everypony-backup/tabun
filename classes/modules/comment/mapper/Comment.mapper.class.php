@@ -121,13 +121,38 @@ class ModuleComment_MapperComment extends Mapper {
 				ORDER by comment_id desc
 				LIMIT ?d, ?d ";
 		$aComments=array();
-		if ($aRows=$this->oDb->selectPage(
-			$iCount,$sql,$sTargetType,
-			(count($aExcludeTarget)?$aExcludeTarget:DBSIMPLE_SKIP),
-			(count($aExcludeParentTarget)?$aExcludeParentTarget:DBSIMPLE_SKIP),
-			($iCurrPage-1)*$iPerPage, $iPerPage
-		)
-		) {
+
+		// SELECT SQL_CALC_FOUND_ROWS в MySQL сильно тормозит, если нужно выкидывать закрытые блоги
+		// Поэтому отключаем число страниц в пагинации при отсутствии необходимости
+		// И лента комментариев начинает работать шустрее
+
+		$bSimple = Config::Get('misc.simplify_comments_pagination');
+		// Включаем оптимизацию только на страницах 1-395
+		$bSimple = $bSimple && (($iCurrPage-1)*$iPerPage < 20000 - $iPerPage * 5);
+
+		if($bSimple)
+		{
+			// Запрос без SQL_CALC_FOUND_ROWS (быстрый)
+			// В число комментариев подставляем поддельное число (400 страниц)
+			$aRows=$this->oDb->select(
+				$sql,$sTargetType,
+				(count($aExcludeTarget)?$aExcludeTarget:DBSIMPLE_SKIP),
+				(count($aExcludeParentTarget)?$aExcludeParentTarget:DBSIMPLE_SKIP),
+				($iCurrPage-1)*$iPerPage, $iPerPage
+			);
+			$iCount = 20000;
+		} else {
+			// Запрос с SQL_CALC_FOUND_ROWS (медленный)
+			$aRows=$this->oDb->selectPage(
+				$iCount,$sql,$sTargetType,
+				(count($aExcludeTarget)?$aExcludeTarget:DBSIMPLE_SKIP),
+				(count($aExcludeParentTarget)?$aExcludeParentTarget:DBSIMPLE_SKIP),
+				($iCurrPage-1)*$iPerPage, $iPerPage
+			);
+		}
+
+		if ($aRows)
+		{
 			foreach ($aRows as $aRow) {
 				$aComments[]=$aRow['comment_id'];
 			}

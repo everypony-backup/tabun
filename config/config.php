@@ -412,6 +412,11 @@ $config['misc']['ver']['front'] = file_get_contents(dirname(__FILE__) . "/fronte
 $config['misc']['ver']['code'] = file_get_contents(dirname(__FILE__) . "/backend.version");
 $config['misc']['debug'] = false;
 
+// Отключение подсчёта числа страниц для первых страниц ленты комментариев для их ускорения.
+// Так как это по определению костыль, перед включением убедитесь, что есть более
+// 20000 комментариев в открытых блогах во избежание глюков
+$config['misc']['simplify_comments_pagination'] = false;
+
 /**
  * Рекапча
  */
