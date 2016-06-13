@@ -125,7 +125,12 @@ class ModuleSession extends Module {
 	 *
 	 */
 	protected function Save() {
-		$this->Cache_Set($this->aData,$this->sId,array(),Config::Get('sys.session.timeout'));
+		$this->Cache_Set(
+			$this->aData,
+			$this->sId,
+			[],
+            Config::Get('sys.session.timeout')
+        );
 	}
 	/**
 	 * Получает значение из сессии
