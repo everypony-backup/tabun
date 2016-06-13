@@ -314,7 +314,12 @@ class ActionBlog extends Action {
 			 * Нужна доработка, т.к. в этом блоге могут быть топики других юзеров
 			 */
 			if ($oBlog->getType()!=getRequestStr('blog_type')) {
-				$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_update_user_{$oBlog->getOwnerId()}"));
+				$this->Cache_Clean(
+					Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                    [
+                        "topic_update_user_{$oBlog->getOwnerId()}"
+                    ]
+                );
 			}
 			$oBlog->setType(getRequestStr('blog_type'));
 			$oBlog->setLimitRatingTopic(getRequestStr('blog_limit_rating_topic'));
