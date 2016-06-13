@@ -73,11 +73,17 @@ class ModuleLang extends Module {
 		 * Если используется кеширование, то сохраняем данные языкового файла в кеш
 		 */
 		if (Config::Get('sys.cache.use')) {
-			if (false === ($this->aLangMsg = $this->Cache_Get("lang_{$this->sCurrentLang}_".Config::Get('view.skin')))) {
+			$sCacheKey = "lang_{$this->sCurrentLang}_" . Config::Get('view.skin');
+			if (false === ($this->aLangMsg = $this->Cache_Get($sCacheKey))) {
 				$this->aLangMsg=array();
 				$this->LoadLangFiles($this->sDefaultLang);
 				if($this->sCurrentLang!=$this->sDefaultLang) $this->LoadLangFiles($this->sCurrentLang);
-				$this->Cache_Set($this->aLangMsg, "lang_{$this->sCurrentLang}_".Config::Get('view.skin'), array(), 60*60);
+				$this->Cache_Set(
+					$this->aLangMsg,
+					$sCacheKey,
+                    [],
+                    60*60*24*30
+                );
 			}
 		} else {
 			$this->LoadLangFiles($this->sDefaultLang);
