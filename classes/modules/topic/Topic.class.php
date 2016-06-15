@@ -196,7 +196,14 @@ class ModuleTopic extends Module {
 				}
 			}
 			//чистим зависимые кеши
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('topic_new',"topic_update_user_{$oTopic->getUserId()}","topic_new_blog_{$oTopic->getBlogId()}"));
+			$this->Cache_Clean(
+				Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+				[
+                    'topic_new',
+                    "topic_update_user_{$oTopic->getUserId()}",
+                    "topic_new_blog_{$oTopic->getBlogId()}"
+                ]
+            );
 			return $oTopic;
 		}
 		return false;
@@ -229,14 +236,24 @@ class ModuleTopic extends Module {
 	public function DeleteTopic($oTopicId) {
 		if ($oTopicId instanceof ModuleTopic_EntityTopic) {
 			$sTopicId=$oTopicId->getId();
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_update_user_{$oTopicId->getUserId()}"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                [
+                    "topic_update_user_{$oTopicId->getUserId()}"
+                ]
+            );
 		} else {
 			$sTopicId=$oTopicId;
 		}
 		/**
 		 * Чистим зависимые кеши
 		 */
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('topic_update'));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG, 
+            [
+                'topic_update'
+            ]
+        );
 		$this->Cache_Delete("topic_{$sTopicId}");
 		/**
 		 * Если топик успешно удален, удаляем связанные данные
@@ -257,7 +274,12 @@ class ModuleTopic extends Module {
 		/**
 		 * Чистим зависимые кеши
 		 */
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('topic_update'));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG, 
+            [
+                'topic_update'
+            ]
+        );
 		$this->Cache_Delete("topic_{$iTopicId}");
 		/**
 		 * Удаляем контент топика
@@ -336,7 +358,13 @@ class ModuleTopic extends Module {
 				$this->Comment_SetCommentsPublish($oTopic->getId(),'topic',$oTopic->getPublish());
 			}
 			//чистим зависимые кеши			
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('topic_update',"topic_update_user_{$oTopic->getUserId()}"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                [
+                    'topic_update',
+                    "topic_update_user_{$oTopic->getUserId()}"
+                ]
+            );
 			$this->Cache_Delete("topic_{$oTopic->getId()}");
 			return true;
 		}
@@ -377,10 +405,6 @@ class ModuleTopic extends Module {
 		if (!$aTopicId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetTopicsByArrayIdSolid($aTopicId);
-		}
-
 		if (!is_array($aTopicId)) {
 			$aTopicId=array($aTopicId);
 		}
@@ -417,7 +441,7 @@ class ModuleTopic extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aTopics[$oTopic->getId()]=$oTopic;
-				$this->Cache_Set($oTopic, "topic_{$oTopic->getId()}", array(), 60*60*24*4);
+				$this->Cache_Set($oTopic, "topic_{$oTopic->getId()}", array());
 				$aTopicIdNeedStore=array_diff($aTopicIdNeedStore,array($oTopic->getId()));
 			}
 		}
@@ -425,36 +449,13 @@ class ModuleTopic extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aTopicIdNeedStore as $sId) {
-			$this->Cache_Set(null, "topic_{$sId}", array(), 60*60*24*4);
+			$this->Cache_Set(null, "topic_{$sId}", array());
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aTopics=func_array_sort_by_keys($aTopics,$aTopicId);
 		return $aTopics;
-	}
-	/**
-	 * Получить список топиков по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @return array
-	 */
-	public function GetTopicsByArrayIdSolid($aTopicId) {
-		if (!is_array($aTopicId)) {
-			$aTopicId=array($aTopicId);
-		}
-		$aTopicId=array_unique($aTopicId);
-		$aTopics=array();
-		$s=join(',',$aTopicId);
-		if (false === ($data = $this->Cache_Get("topic_id_{$s}"))) {
-			$data = $this->oMapperTopic->GetTopicsByArrayId($aTopicId);
-			foreach ($data as $oTopic) {
-				$aTopics[$oTopic->getId()]=$oTopic;
-			}
-			$this->Cache_Set($aTopics, "topic_id_{$s}", array("topic_update"), 60*60*24*1);
-			return $aTopics;
-		}
-		return $data;
 	}
 	/**
 	 * Получает список топиков из избранного
@@ -504,12 +505,20 @@ class ModuleTopic extends Module {
 			$iPage=1;
 		}
 		$s=serialize($aFilter);
-		if (false === ($data = $this->Cache_Get("topic_filter_{$s}_{$iPage}_{$iPerPage}"))) {
+        $sCacheKey = "topic_filter_{$s}_{$iPage}_{$iPerPage}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = array(
 				'collection'=>$this->oMapperTopic->GetTopics($aFilter,$iCount,$iPage,$iPerPage),
 				'count'=>$iCount
 			);
-			$this->Cache_Set($data, "topic_filter_{$s}_{$iPage}_{$iPerPage}", array('topic_update','topic_new'), 60*60*24*3);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    'topic_update',
+                    'topic_new'
+                ]
+            );
 		}
 		$data['collection']=$this->GetTopicsAdditionalData($data['collection'],$aAllowData);
 		return $data;
@@ -522,9 +531,17 @@ class ModuleTopic extends Module {
 	 */
 	public function GetCountTopicsByFilter($aFilter) {
 		$s=serialize($aFilter);
-		if (false === ($data = $this->Cache_Get("topic_count_{$s}"))) {
+        $sCacheKey = "topic_count_{$s}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperTopic->GetCountTopics($aFilter);
-			$this->Cache_Set($data, "topic_count_{$s}", array('topic_update','topic_new'), 60*60*24*1);
+			$this->Cache_Set(
+                $data, 
+                $sCacheKey,
+                [
+                    'topic_update',
+                    'topic_new'
+                ]
+            );
 		}
 		return 	$data;
 	}
@@ -851,9 +868,16 @@ class ModuleTopic extends Module {
 			$aFilter['blog_type'][]='close';
 		}
 		$s=serialize($aFilter);
-		if (false === ($data = $this->Cache_Get("topic_count_user_{$s}"))) {
+        $sCacheKey = "topic_count_user_{$s}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperTopic->GetCountTopics($aFilter);
-			$this->Cache_Set($data, "topic_count_user_{$s}", array("topic_update_user_{$sUserId}"), 60*60*24);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey, 
+                [
+                    "topic_update_user_{$sUserId}"
+                ]
+            );
 		}
 		return 	$data;
 	}
@@ -980,9 +1004,16 @@ class ModuleTopic extends Module {
 
 		$s=serialize($aCloseBlogs);
 
-		if (false === ($data = $this->Cache_Get("topic_rating_{$sDate}_{$iLimit}_{$s}"))) {
+        $sCacheKey = "topic_rating_{$sDate}_{$iLimit}_{$s}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperTopic->GetTopicsRatingByDate($sDate,$iLimit,$aCloseBlogs);
-			$this->Cache_Set($data, "topic_rating_{$sDate}_{$iLimit}_{$s}", array('topic_update'), 60*60*24*2);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    'topic_update'
+                ]
+            );
 		}
 		$data=$this->GetTopicsAdditionalData($data);
 		return $data;
@@ -1073,9 +1104,17 @@ class ModuleTopic extends Module {
 			: $this->Blog_GetInaccessibleBlogsByUser();
 
 		$s = serialize($aCloseBlogs);
-		if (false === ($data = $this->Cache_Get("topic_tag_{$sTag}_{$iPage}_{$iPerPage}_{$s}"))) {
+        $sCacheKey = "topic_tag_{$sTag}_{$iPage}_{$iPerPage}_{$s}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = array('collection'=>$this->oMapperTopic->GetTopicsByTag($sTag,$aCloseBlogs,$iCount,$iPage,$iPerPage),'count'=>$iCount);
-			$this->Cache_Set($data, "topic_tag_{$sTag}_{$iPage}_{$iPerPage}_{$s}", array('topic_update','topic_new'), 60*60*24*2);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey, 
+                [
+                    'topic_update',
+                    'topic_new'
+                ]
+            );
 		}
 		$data['collection']=$this->GetTopicsAdditionalData($data['collection']);
 		return $data;
@@ -1089,9 +1128,17 @@ class ModuleTopic extends Module {
 	 */
 	public function GetTopicTags($iLimit,$aExcludeTopic=array()) {
 		$s=serialize($aExcludeTopic);
-		if (false === ($data = $this->Cache_Get("tag_{$iLimit}_{$s}"))) {
+        $sCacheKey = "tag_{$iLimit}_{$s}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperTopic->GetTopicTags($iLimit,$aExcludeTopic);
-			$this->Cache_Set($data, "tag_{$iLimit}_{$s}", array('topic_update','topic_new'), 60*60*24*3);
+			$this->Cache_Set(
+                $data, 
+                $sCacheKey, 
+                [
+                    'topic_update',
+                    'topic_new'
+                ]
+            );
 		}
 		return $data;
 	}
@@ -1103,9 +1150,17 @@ class ModuleTopic extends Module {
 	 * @return array
 	 */
 	public function GetOpenTopicTags($iLimit,$iUserId=null) {
-		if (false === ($data = $this->Cache_Get("tag_{$iLimit}_{$iUserId}_open"))) {
+        $sCacheKey = "tag_{$iLimit}_{$iUserId}_open";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperTopic->GetOpenTopicTags($iLimit,$iUserId);
-			$this->Cache_Set($data, "tag_{$iLimit}_{$iUserId}_open", array('topic_update','topic_new'), 60*60*24*3);
+			$this->Cache_Set(
+                $data, 
+                $sCacheKey, 
+				[
+					'topic_update',
+                    'topic_new'
+                ]
+            );
 		}
 		return $data;
 	}
@@ -1117,7 +1172,12 @@ class ModuleTopic extends Module {
 	 */
 	public function increaseTopicCountComment($sTopicId) {
 		$this->Cache_Delete("topic_{$sTopicId}");
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_update"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "topic_update"
+            ]
+        );
 		return $this->oMapperTopic->increaseTopicCountComment($sTopicId);
 	}
 	/**
@@ -1139,16 +1199,6 @@ class ModuleTopic extends Module {
 	 */
 	public function GetFavouriteTopicsByArray($aTopicId,$sUserId) {
 		return $this->Favourite_GetFavouritesByArray($aTopicId,'topic',$sUserId);
-	}
-	/**
-	 * Получить список избранного по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetFavouriteTopicsByArraySolid($aTopicId,$sUserId) {
-		return $this->Favourite_GetFavouritesByArraySolid($aTopicId,'topic',$sUserId);
 	}
 	/**
 	 * Добавляет топик в избранное
@@ -1195,9 +1245,17 @@ class ModuleTopic extends Module {
 	 * @return bool
 	 */
 	public function GetTopicTagsByLike($sTag,$iLimit) {
-		if (false === ($data = $this->Cache_Get("tag_like_{$sTag}_{$iLimit}"))) {
+        $sCacheKey = "tag_like_{$sTag}_{$iLimit}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperTopic->GetTopicTagsByLike($sTag,$iLimit);
-			$this->Cache_Set($data, "tag_like_{$sTag}_{$iLimit}", array("topic_update","topic_new"), 60*60*24*3);
+			$this->Cache_Set(
+                $data, 
+                $sCacheKey, 
+                [
+                    "topic_update",
+                    "topic_new"
+                ]
+            );
 		}
 		return $data;
 	}
@@ -1210,11 +1268,21 @@ class ModuleTopic extends Module {
 	public function SetTopicRead(ModuleTopic_EntityTopicRead $oTopicRead) {
 		if ($this->GetTopicRead($oTopicRead->getTopicId(),$oTopicRead->getUserId())) {
 			$this->Cache_Delete("topic_read_{$oTopicRead->getTopicId()}_{$oTopicRead->getUserId()}");
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_read_user_{$oTopicRead->getUserId()}"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                [
+                    "topic_read_user_{$oTopicRead->getUserId()}"
+                ]
+            );
 			$this->oMapperTopic->UpdateTopicRead($oTopicRead);
 		} else {
 			$this->Cache_Delete("topic_read_{$oTopicRead->getTopicId()}_{$oTopicRead->getUserId()}");
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_read_user_{$oTopicRead->getUserId()}"));
+			$this->Cache_Clean(
+				Zend_Cache::CLEANING_MODE_MATCHING_TAG, 
+				[
+                    "topic_read_user_{$oTopicRead->getUserId()}"
+                ]
+            );
 			$this->oMapperTopic->AddTopicRead($oTopicRead);
 		}
 		return true;
@@ -1254,9 +1322,6 @@ class ModuleTopic extends Module {
 		if (!$aTopicId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetTopicsReadByArraySolid($aTopicId,$sUserId);
-		}
 		if (!is_array($aTopicId)) {
 			$aTopicId=array($aTopicId);
 		}
@@ -1293,7 +1358,11 @@ class ModuleTopic extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aTopicsRead[$oTopicRead->getTopicId()]=$oTopicRead;
-				$this->Cache_Set($oTopicRead, "topic_read_{$oTopicRead->getTopicId()}_{$oTopicRead->getUserId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+                    $oTopicRead, 
+                    "topic_read_{$oTopicRead->getTopicId()}_{$oTopicRead->getUserId()}", 
+                    []
+                );
 				$aTopicIdNeedStore=array_diff($aTopicIdNeedStore,array($oTopicRead->getTopicId()));
 			}
 		}
@@ -1301,37 +1370,17 @@ class ModuleTopic extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aTopicIdNeedStore as $sId) {
-			$this->Cache_Set(null, "topic_read_{$sId}_{$sUserId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+                null, 
+                "topic_read_{$sId}_{$sUserId}", 
+                []
+            );
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aTopicsRead=func_array_sort_by_keys($aTopicsRead,$aTopicId);
 		return $aTopicsRead;
-	}
-	/**
-	 * Получить список просмотром/чтения топиков по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetTopicsReadByArraySolid($aTopicId,$sUserId) {
-		if (!is_array($aTopicId)) {
-			$aTopicId=array($aTopicId);
-		}
-		$aTopicId=array_unique($aTopicId);
-		$aTopicsRead=array();
-		$s=join(',',$aTopicId);
-		if (false === ($data = $this->Cache_Get("topic_read_{$sUserId}_id_{$s}"))) {
-			$data = $this->oMapperTopic->GetTopicsReadByArray($aTopicId,$sUserId);
-			foreach ($data as $oTopicRead) {
-				$aTopicsRead[$oTopicRead->getTopicId()]=$oTopicRead;
-			}
-			$this->Cache_Set($aTopicsRead, "topic_read_{$sUserId}_id_{$s}", array("topic_read_user_{$sUserId}"), 60*60*24*1);
-			return $aTopicsRead;
-		}
-		return $data;
 	}
 	/**
 	 * Проверяет голосовал ли юзер за топик-вопрос
@@ -1357,9 +1406,6 @@ class ModuleTopic extends Module {
 	public function GetTopicsQuestionVoteByArray($aTopicId,$sUserId) {
 		if (!$aTopicId) {
 			return array();
-		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetTopicsQuestionVoteByArraySolid($aTopicId,$sUserId);
 		}
 		if (!is_array($aTopicId)) {
 			$aTopicId=array($aTopicId);
@@ -1397,7 +1443,11 @@ class ModuleTopic extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aTopicsQuestionVote[$oTopicVote->getTopicId()]=$oTopicVote;
-				$this->Cache_Set($oTopicVote, "topic_question_vote_{$oTopicVote->getTopicId()}_{$oTopicVote->getVoterId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+                    $oTopicVote, 
+                    "topic_question_vote_{$oTopicVote->getTopicId()}_{$oTopicVote->getVoterId()}", 
+                    []
+                );
 				$aTopicIdNeedStore=array_diff($aTopicIdNeedStore,array($oTopicVote->getTopicId()));
 			}
 		}
@@ -1405,37 +1455,17 @@ class ModuleTopic extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aTopicIdNeedStore as $sId) {
-			$this->Cache_Set(null, "topic_question_vote_{$sId}_{$sUserId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+                null, 
+                "topic_question_vote_{$sId}_{$sUserId}",
+				[]
+			);
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aTopicsQuestionVote=func_array_sort_by_keys($aTopicsQuestionVote,$aTopicId);
 		return $aTopicsQuestionVote;
-	}
-	/**
-	 * Получить список голосований в топике-опросе по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetTopicsQuestionVoteByArraySolid($aTopicId,$sUserId) {
-		if (!is_array($aTopicId)) {
-			$aTopicId=array($aTopicId);
-		}
-		$aTopicId=array_unique($aTopicId);
-		$aTopicsQuestionVote=array();
-		$s=join(',',$aTopicId);
-		if (false === ($data = $this->Cache_Get("topic_question_vote_{$sUserId}_id_{$s}"))) {
-			$data = $this->oMapperTopic->GetTopicsQuestionVoteByArray($aTopicId,$sUserId);
-			foreach ($data as $oTopicVote) {
-				$aTopicsQuestionVote[$oTopicVote->getTopicId()]=$oTopicVote;
-			}
-			$this->Cache_Set($aTopicsQuestionVote, "topic_question_vote_{$sUserId}_id_{$s}", array("topic_question_vote_user_{$sUserId}"), 60*60*24*1);
-			return $aTopicsQuestionVote;
-		}
-		return $data;
 	}
 	/**
 	 * Добавляет факт голосования за топик-вопрос
@@ -1445,7 +1475,12 @@ class ModuleTopic extends Module {
 	 */
 	public function AddTopicQuestionVote(ModuleTopic_EntityTopicQuestionVote $oTopicQuestionVote) {
 		$this->Cache_Delete("topic_question_vote_{$oTopicQuestionVote->getTopicId()}_{$oTopicQuestionVote->getVoterId()}");
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_question_vote_user_{$oTopicQuestionVote->getVoterId()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "topic_question_vote_user_{$oTopicQuestionVote->getVoterId()}"
+            ]
+        );
 		return $this->oMapperTopic->AddTopicQuestionVote($oTopicQuestionVote);
 	}
 	/**
@@ -1507,7 +1542,13 @@ class ModuleTopic extends Module {
 	 * @return bool
 	 */
 	public function MoveTopicsByArrayId($aTopics,$sBlogId) {
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_update", "topic_new_blog_{$sBlogId}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "topic_update",
+                "topic_new_blog_{$sBlogId}"
+            ]
+        );
 		if ($res=$this->oMapperTopic->MoveTopicsByArrayId($aTopics,$sBlogId)) {
 			// перемещаем теги
 			$this->oMapperTopic->MoveTopicsTagsByArrayId($aTopics,$sBlogId);
@@ -1527,7 +1568,14 @@ class ModuleTopic extends Module {
 	 * @return bool
 	 */
 	public function MoveTopics($sBlogId,$sBlogIdNew) {
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("topic_update", "topic_new_blog_{$sBlogId}", "topic_new_blog_{$sBlogIdNew}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "topic_update",
+                "topic_new_blog_{$sBlogId}",
+                "topic_new_blog_{$sBlogIdNew}"
+            ]
+        );
 		if ($res=$this->oMapperTopic->MoveTopics($sBlogId,$sBlogIdNew)) {
 			// перемещаем теги
 			$this->oMapperTopic->MoveTopicsTags($sBlogId,$sBlogIdNew);

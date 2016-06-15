@@ -198,9 +198,6 @@ class ModuleUser extends Module {
 		if (!$aUserId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetUsersByArrayIdSolid($aUserId);
-		}
 		if (!is_array($aUserId)) {
 			$aUserId=array($aUserId);
 		}
@@ -237,7 +234,11 @@ class ModuleUser extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aUsers[$oUser->getId()]=$oUser;
-				$this->Cache_Set($oUser, "user_{$oUser->getId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+					$oUser, 
+					"user_{$oUser->getId()}", 
+					[]
+				);
 				$aUserIdNeedStore=array_diff($aUserIdNeedStore,array($oUser->getId()));
 			}
 		}
@@ -245,7 +246,11 @@ class ModuleUser extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aUserIdNeedStore as $sId) {
-			$this->Cache_Set(null, "user_{$sId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+				null,
+				"user_{$sId}",
+				[]
+			);
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
@@ -259,31 +264,9 @@ class ModuleUser extends Module {
 	 * @param array $aUserId	Список ID пользователей
 	 * @return array
 	 */
-	public function GetUserItemsByArrayId($aUserId) {
+	public function GetUserItemsByArrayId($aUserId)
+	{
 		return $this->GetUsersByArrayId($aUserId);
-	}
-	/**
-	 * Получение пользователей по списку ID используя общий кеш
-	 *
-	 * @param array $aUserId	Список ID пользователей
-	 * @return array
-	 */
-	public function GetUsersByArrayIdSolid($aUserId) {
-		if (!is_array($aUserId)) {
-			$aUserId=array($aUserId);
-		}
-		$aUserId=array_unique($aUserId);
-		$aUsers=array();
-		$s=join(',',$aUserId);
-		if (false === ($data = $this->Cache_Get("user_id_{$s}"))) {
-			$data = $this->oMapper->GetUsersByArrayId($aUserId);
-			foreach ($data as $oUser) {
-				$aUsers[$oUser->getId()]=$oUser;
-			}
-			$this->Cache_Set($aUsers, "user_id_{$s}", array("user_update","user_new"), 60*60*24*1);
-			return $aUsers;
-		}
-		return $data;
 	}
 	/**
 	 * Список сессий юзеров по ID
@@ -294,9 +277,6 @@ class ModuleUser extends Module {
 	public function GetSessionsByArrayId($aUserId) {
 		if (!$aUserId) {
 			return array();
-		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetSessionsByArrayIdSolid($aUserId);
 		}
 		if (!is_array($aUserId)) {
 			$aUserId=array($aUserId);
@@ -334,7 +314,11 @@ class ModuleUser extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aSessions[$oSession->getUserId()]=$oSession;
-				$this->Cache_Set(array('time'=>time(),'session'=>$oSession), "user_session_{$oSession->getUserId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+					['time'=>time(),'session'=>$oSession], 
+					"user_session_{$oSession->getUserId()}", 
+					[]
+				);
 				$aUserIdNeedStore=array_diff($aUserIdNeedStore,array($oSession->getUserId()));
 			}
 		}
@@ -342,36 +326,17 @@ class ModuleUser extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aUserIdNeedStore as $sId) {
-			$this->Cache_Set(array('time'=>time(),'session'=>null), "user_session_{$sId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+				['time'=>time(),'session'=>null], 
+				"user_session_{$sId}", 
+				[]
+			);
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aSessions=func_array_sort_by_keys($aSessions,$aUserId);
 		return $aSessions;
-	}
-	/**
-	 * Получить список сессий по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aUserId	Список ID пользователей
-	 * @return array
-	 */
-	public function GetSessionsByArrayIdSolid($aUserId) {
-		if (!is_array($aUserId)) {
-			$aUserId=array($aUserId);
-		}
-		$aUserId=array_unique($aUserId);
-		$aSessions=array();
-		$s=join(',',$aUserId);
-		if (false === ($data = $this->Cache_Get("user_session_id_{$s}"))) {
-			$data = $this->oMapper->GetSessionsByArrayId($aUserId);
-			foreach ($data as $oSession) {
-				$aSessions[$oSession->getUserId()]=$oSession;
-			}
-			$this->Cache_Set($aSessions, "user_session_id_{$s}", array("user_session_update"), 60*60*24*1);
-			return $aSessions;
-		}
-		return $data;
 	}
 	/**
 	 * Получает сессию юзера
@@ -407,7 +372,12 @@ class ModuleUser extends Module {
 		if ($sId=$this->oMapper->Add($oUser)) {
 			$oUser->setId($sId);
 			//чистим зависимые кеши
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('user_new'));
+			$this->Cache_Clean(
+				Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+				[
+					'user_new'
+				]
+			);
 			/**
 			 * Создаем персональный блог
 			 */
@@ -454,9 +424,14 @@ class ModuleUser extends Module {
 	 */
 	public function GetUserByLogin($sLogin) {
 		$s=strtolower($sLogin);
-		if (false === ($id = $this->Cache_Get("user_login_{$s}"))) {
+		$sCacheKey = "user_login_{$s}";
+		if (false === ($id = $this->Cache_Get($sCacheKey))) {
 			if ($id = $this->oMapper->GetUserByLogin($sLogin)) {
-				$this->Cache_Set($id, "user_login_{$s}", array(), 60*60*24*1);
+				$this->Cache_Set(
+					$id, 
+					$sCacheKey, 
+					[]
+				);
 			}
 		}
 		return $this->GetUserById($id);
@@ -485,7 +460,12 @@ class ModuleUser extends Module {
 	 */
 	public function Update(ModuleUser_EntityUser $oUser) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('user_update'));
+		$this->Cache_Clean(
+			Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+			[
+				'user_update'
+			]
+		);
 		$this->Cache_Delete("user_{$oUser->getId()}");
 		return $this->oMapper->Update($oUser);
 	}
@@ -585,20 +565,30 @@ class ModuleUser extends Module {
 	protected function UpdateSession() {
 		$this->oSession->setDateLast(date("Y-m-d H:i:s"));
 		$this->oSession->setIpLast(func_getIp());
-		if (false === ($data = $this->Cache_Get("user_session_{$this->oSession->getUserId()}"))) {
-			$data=array(
+		$sCacheKey = "user_session_{$this->oSession->getUserId()}";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
+			$data= [
 				'time'=>time(),
 				'session'=>$this->oSession
-			);
+			];
 		} else {
 			$data['session']=$this->oSession;
 		}
 		if (!Config::Get('sys.cache.use') or $data['time']<time()-60*10) {
 			$data['time']=time();
 			$this->oMapper->UpdateSession($this->oSession);
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('user_session_update'));
+			$this->Cache_Clean(
+				Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+				[
+					'user_session_update'
+				]
+            );
 		}
-		$this->Cache_Set($data, "user_session_{$this->oSession->getUserId()}", array(), 60*60*24*4);
+		$this->Cache_Set(
+			$data, 
+			$sCacheKey, 
+			[]
+		);
 	}
 	/**
 	 * Создание пользовательской сессии
@@ -608,7 +598,12 @@ class ModuleUser extends Module {
 	 * @return bool
 	 */
 	protected function CreateSession(ModuleUser_EntityUser $oUser,$sKey) {
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('user_session_update'));
+		$this->Cache_Clean(
+			Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+			[
+				'user_session_update'
+			]
+		);
 		$this->Cache_Delete("user_session_{$oUser->getId()}");
 		$oSession=Engine::GetEntity('User_Session');
 		$oSession->setUserId($oUser->getId());
@@ -630,11 +625,18 @@ class ModuleUser extends Module {
 	 * @return array
 	 */
 	public function GetUsersByDateLast($iLimit=20) {
+		$sCacheKey = "user_date_last_{$iLimit}";
 		if ($this->IsAuthorization()) {
 			$data=$this->oMapper->GetUsersByDateLast($iLimit);
-		} elseif (false === ($data = $this->Cache_Get("user_date_last_{$iLimit}"))) {
+		} elseif (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetUsersByDateLast($iLimit);
-			$this->Cache_Set($data, "user_date_last_{$iLimit}", array("user_session_update"), 60*60*24*2);
+			$this->Cache_Set(
+				$data, 
+				$sCacheKey, 
+				[
+					"user_session_update"
+                ]
+            );
 		}
 		$data=$this->GetUsersAdditionalData($data);
 		return $data;
@@ -653,7 +655,14 @@ class ModuleUser extends Module {
 		$sKey="user_filter_".serialize($aFilter).serialize($aOrder)."_{$iCurrPage}_{$iPerPage}";
 		if (false === ($data = $this->Cache_Get($sKey))) {
 			$data = array('collection'=>$this->oMapper->GetUsersByFilter($aFilter,$aOrder,$iCount,$iCurrPage,$iPerPage),'count'=>$iCount);
-			$this->Cache_Set($data, $sKey, array("user_update","user_new"), 60*60*24*2);
+			$this->Cache_Set(
+                $data, 
+                $sKey,
+                [
+                    "user_update",
+                    "user_new"
+                ]
+            );
 		}
 		$data['collection']=$this->GetUsersAdditionalData($data['collection'],$aAllowData);
 		return $data;
@@ -674,7 +683,8 @@ class ModuleUser extends Module {
 	 * @return array
 	 */
 	public function GetStatUsers() {
-		if (false === ($aStat = $this->Cache_Get("user_stats"))) {
+        $sCacheKey = "user_stats";
+        if (false === ($aStat = $this->Cache_Get($sCacheKey))) {
 			$aStat['count_all']=$this->oMapper->GetCountUsers();
 			$sDate=date("Y-m-d H:i:s",time()-Config::Get('module.user.time_active'));
 			$aStat['count_active']=$this->oMapper->GetCountUsersActive($sDate);
@@ -684,7 +694,14 @@ class ModuleUser extends Module {
 			$aStat['count_sex_woman']=(isset($aSex['woman']) ? $aSex['woman']['count'] : 0);
 			$aStat['count_sex_other']=(isset($aSex['other']) ? $aSex['other']['count'] : 0);
 
-			$this->Cache_Set($aStat, "user_stats", array("user_update","user_new"), 60*60*24*4);
+			$this->Cache_Set(
+                $aStat,
+                $sCacheKey, 
+                [
+                    "user_update",
+                    "user_new"
+                ]
+            );
 		}
 		return $aStat;
 	}
@@ -696,9 +713,16 @@ class ModuleUser extends Module {
 	 * @return array
 	 */
 	public function GetUsersByLoginLike($sUserLogin,$iLimit) {
-		if (false === ($data = $this->Cache_Get("user_like_{$sUserLogin}_{$iLimit}"))) {
+        $sCacheKey = "user_like_{$sUserLogin}_{$iLimit}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetUsersByLoginLike($sUserLogin,$iLimit);
-			$this->Cache_Set($data, "user_like_{$sUserLogin}_{$iLimit}", array("user_new"), 60*60*24*2);
+			$this->Cache_Set(
+                $data, 
+                $sCacheKey,
+                [
+                    "user_new"
+                ]
+            );
 		}
 		$data=$this->GetUsersAdditionalData($data);
 		return $data;
@@ -713,9 +737,6 @@ class ModuleUser extends Module {
 	public function GetFriendsByArray($aUserId,$sUserId) {
 		if (!$aUserId) {
 			return array();
-		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetFriendsByArraySolid($aUserId,$sUserId);
 		}
 		if (!is_array($aUserId)) {
 			$aUserId=array($aUserId);
@@ -758,7 +779,11 @@ class ModuleUser extends Module {
 				 * Пока не трогаю, ибо этот код все равно не выполняется.
 				 * by Kachaev
 				 */
-				$this->Cache_Set($oFriend, "user_friend_{$oFriend->getFriendId()}_{$oFriend->getUserId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+                    $oFriend, 
+                    "user_friend_{$oFriend->getFriendId()}_{$oFriend->getUserId()}",
+                    []
+                );
 				$aUserIdNeedStore=array_diff($aUserIdNeedStore,array($oFriend->getFriendId()));
 			}
 		}
@@ -766,38 +791,17 @@ class ModuleUser extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aUserIdNeedStore as $sId) {
-			$this->Cache_Set(null, "user_friend_{$sId}_{$sUserId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+                null, 
+                "user_friend_{$sId}_{$sUserId}", 
+				[]
+			);
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aFriends=func_array_sort_by_keys($aFriends,$aUserId);
 		return $aFriends;
-	}
-	/**
-	 * Получить список отношений друзей используя единый кеш
-	 *
-	 * @param  array $aUserId	Список ID пользователей проверяемых на дружбу
-	 * @param  int $sUserId	ID пользователя у которого проверяем друзей
-	 * @return array
-	 */
-	public function GetFriendsByArraySolid($aUserId,$sUserId) {
-		if (!is_array($aUserId)) {
-			$aUserId=array($aUserId);
-		}
-		$aUserId=array_unique($aUserId);
-		$aFriends=array();
-		$s=join(',',$aUserId);
-		if (false === ($data = $this->Cache_Get("user_friend_{$sUserId}_id_{$s}"))) {
-			$data = $this->oMapper->GetFriendsByArrayId($aUserId,$sUserId);
-			foreach ($data as $oFriend) {
-				$aFriends[$oFriend->getFriendId($sUserId)]=$oFriend;
-			}
-
-			$this->Cache_Set($aFriends, "user_friend_{$sUserId}_id_{$s}", array("friend_change_user_{$sUserId}"), 60*60*24*1);
-			return $aFriends;
-		}
-		return $data;
 	}
 	/**
 	 * Получаем привязку друга к юзеру(есть ли у юзера данный друг)
@@ -821,7 +825,13 @@ class ModuleUser extends Module {
 	 */
 	public function AddFriend(ModuleUser_EntityFriend $oFriend) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("friend_change_user_{$oFriend->getUserFrom()}","friend_change_user_{$oFriend->getUserTo()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "friend_change_user_{$oFriend->getUserFrom()}",
+                "friend_change_user_{$oFriend->getUserTo()}"
+            ]
+        );
 		$this->Cache_Delete("user_friend_{$oFriend->getUserFrom()}_{$oFriend->getUserTo()}");
 		$this->Cache_Delete("user_friend_{$oFriend->getUserTo()}_{$oFriend->getUserFrom()}");
 
@@ -835,7 +845,13 @@ class ModuleUser extends Module {
 	 */
 	public function DeleteFriend(ModuleUser_EntityFriend $oFriend) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("friend_change_user_{$oFriend->getUserFrom()}","friend_change_user_{$oFriend->getUserTo()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "friend_change_user_{$oFriend->getUserFrom()}",
+                "friend_change_user_{$oFriend->getUserTo()}"
+            ]
+        );
 		$this->Cache_Delete("user_friend_{$oFriend->getUserFrom()}_{$oFriend->getUserTo()}");
 		$this->Cache_Delete("user_friend_{$oFriend->getUserTo()}_{$oFriend->getUserFrom()}");
 
@@ -851,7 +867,13 @@ class ModuleUser extends Module {
 	 */
 	public function EraseFriend(ModuleUser_EntityFriend $oFriend) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("friend_change_user_{$oFriend->getUserFrom()}","friend_change_user_{$oFriend->getUserTo()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "friend_change_user_{$oFriend->getUserFrom()}",
+                "friend_change_user_{$oFriend->getUserTo()}"
+            ]
+        );
 		$this->Cache_Delete("user_friend_{$oFriend->getUserFrom()}_{$oFriend->getUserTo()}");
 		$this->Cache_Delete("user_friend_{$oFriend->getUserTo()}_{$oFriend->getUserFrom()}");
 		return $this->oMapper->EraseFriend($oFriend);
@@ -864,7 +886,13 @@ class ModuleUser extends Module {
 	 */
 	public function UpdateFriend(ModuleUser_EntityFriend $oFriend) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("friend_change_user_{$oFriend->getUserFrom()}","friend_change_user_{$oFriend->getUserTo()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "friend_change_user_{$oFriend->getUserFrom()}",
+                "friend_change_user_{$oFriend->getUserTo()}"
+            ]
+        );
 		$this->Cache_Delete("user_friend_{$oFriend->getUserFrom()}_{$oFriend->getUserTo()}");
 		$this->Cache_Delete("user_friend_{$oFriend->getUserTo()}_{$oFriend->getUserFrom()}");
 		return $this->oMapper->UpdateFriend($oFriend);
@@ -881,7 +909,13 @@ class ModuleUser extends Module {
 		$sKey="user_friend_{$sUserId}_{$iPage}_{$iPerPage}";
 		if (false === ($data = $this->Cache_Get($sKey))) {
 			$data = array('collection'=>$this->oMapper->GetUsersFriend($sUserId,$iCount,$iPage,$iPerPage),'count'=>$iCount);
-			$this->Cache_Set($data, $sKey, array("friend_change_user_{$sUserId}"), 60*60*24*2);
+			$this->Cache_Set(
+                $data,
+                $sKey,
+                [
+                    "friend_change_user_{$sUserId}"
+                ]
+            );
 		}
 		$data['collection']=$this->GetUsersAdditionalData($data['collection']);
 		return $data;
@@ -896,7 +930,13 @@ class ModuleUser extends Module {
 		$sKey="count_user_friend_{$sUserId}";
 		if (false === ($data = $this->Cache_Get($sKey))) {
 			$data = $this->oMapper->GetCountUsersFriend($sUserId);
-			$this->Cache_Set($data, $sKey, array("friend_change_user_{$sUserId}"), 60*60*24*2);
+			$this->Cache_Set(
+                $data,
+                $sKey,
+                [
+                    "friend_change_user_{$sUserId}"
+                ]
+            );
 		}
 		return $data;
 	}
@@ -931,7 +971,13 @@ class ModuleUser extends Module {
 	 */
 	public function UpdateInvite(ModuleUser_EntityInvite $oInvite) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("invate_new_to_{$oInvite->getUserToId()}","invate_new_from_{$oInvite->getUserFromId()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+                "invate_new_to_{$oInvite->getUserToId()}",
+                "invate_new_from_{$oInvite->getUserFromId()}"
+            ]
+        );
 		return $this->oMapper->UpdateInvite($oInvite);
 	}
 	/**
@@ -988,9 +1034,16 @@ class ModuleUser extends Module {
 	 * @return array
 	 */
 	public function GetUsersInvite($sUserId) {
-		if (false === ($data = $this->Cache_Get("users_invite_{$sUserId}"))) {
+        $sCacheKey = "users_invite_{$sUserId}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetUsersInvite($sUserId);
-			$this->Cache_Set($data, "users_invite_{$sUserId}", array("invate_new_from_{$sUserId}"), 60*60*24*1);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    "invate_new_from_{$sUserId}"
+                ]
+            );
 		}
 		$data=$this->GetUsersAdditionalData($data);
 		return $data;
@@ -1002,9 +1055,16 @@ class ModuleUser extends Module {
 	 * @return ModuleUser_EntityUser|null
 	 */
 	public function GetUserInviteFrom($sUserIdTo) {
-		if (false === ($id = $this->Cache_Get("user_invite_from_{$sUserIdTo}"))) {
+        $sCacheKey = "user_invite_from_{$sUserIdTo}";
+        if (false === ($id = $this->Cache_Get($sCacheKey))) {
 			$id = $this->oMapper->GetUserInviteFrom($sUserIdTo);
-			$this->Cache_Set($id, "user_invite_from_{$sUserIdTo}", array("invate_new_to_{$sUserIdTo}"), 60*60*24*1);
+			$this->Cache_Set(
+                $id,
+                $sCacheKey,
+                [
+                    "invate_new_to_{$sUserIdTo}"
+                ]
+            );
 		}
 		return $this->GetUserById($id);
 	}
@@ -1418,13 +1478,20 @@ class ModuleUser extends Module {
 		$aUserId=array_unique($aUserId);
 		$aNotes=array();
 		$s=join(',',$aUserId);
-		if (false === ($data = $this->Cache_Get("user_notes_{$sUserId}_id_{$s}"))) {
+        $sCacheKey = "user_notes_{$sUserId}_id_{$s}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetUserNotesByArrayUserId($aUserId,$sUserId);
 			foreach ($data as $oNote) {
 				$aNotes[$oNote->getTargetUserId()]=$oNote;
 			}
 
-			$this->Cache_Set($aNotes, "user_notes_{$sUserId}_id_{$s}", array("user_note_change_by_user_{$sUserId}"), 60*60*24*1);
+			$this->Cache_Set(
+                $aNotes,
+                $sCacheKey,
+                [
+                    "user_note_change_by_user_{$sUserId}"
+                ]
+            );
 			return $aNotes;
 		}
 		return $data;
@@ -1437,7 +1504,12 @@ class ModuleUser extends Module {
 	 */
 	public function DeleteUserNoteById($iId) {
 		if ($oNote=$this->GetUserNoteById($iId)) {
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("user_note_change_by_user_{$oNote->getUserId()}"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                [
+                    "user_note_change_by_user_{$oNote->getUserId()}"
+                ]
+            );
 		}
 		return $this->oMapper->DeleteUserNoteById($iId);
 	}
@@ -1452,7 +1524,12 @@ class ModuleUser extends Module {
 			$oNote->setDateAdd(date("Y-m-d H:i:s"));
 		}
 
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("user_note_change_by_user_{$oNote->getUserId()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "user_note_change_by_user_{$oNote->getUserId()}"
+            ]
+        );
 		if ($oNoteOld=$this->GetUserNote($oNote->getTargetUserId(),$oNote->getUserId()) ) {
 			$oNoteOld->setText($oNote->getText());
 			$this->oMapper->UpdateUserNote($oNoteOld);
@@ -1472,9 +1549,16 @@ class ModuleUser extends Module {
 	 * @return array
 	 */
 	public function GetGroupPrefixUser($iPrefixLength=1) {
-		if (false === ($data = $this->Cache_Get("group_prefix_user_{$iPrefixLength}"))) {
+        $sCacheKey = "group_prefix_user_{$iPrefixLength}";
+        if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetGroupPrefixUser($iPrefixLength);
-			$this->Cache_Set($data, "group_prefix_user_{$iPrefixLength}", array("user_new"), 60*60*24*1);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    "user_new"
+                ]
+            );
 		}
 		return $data;
 	}

@@ -496,31 +496,6 @@ class Engine extends LsObject {
 	public function GetPlugins() {
 		return $this->aPlugins;
 	}
-
-	/**
-	 * Проверяет файл на существование, если используется кеширование memcache то кеширует результат работы
-	 *
-	 * @param  string $sFile	Полный путь до файла
-	 * @param  int $iTime	Время жизни кеша
-	 * @return bool
-	 */
-	public function isFileExists($sFile,$iTime=3600) {
-		// пока так
-		return file_exists($sFile);
-
-		if(
-			!$this->isInit('cache')
-			|| !Config::Get('sys.cache.use')
-			|| Config::Get('sys.cache.type') != 'memory'
-		){
-			return file_exists($sFile);
-		}
-		if (false === ($data = $this->Cache_Get("file_exists_{$sFile}"))) {
-			$data=file_exists($sFile);
-			$this->Cache_Set((int)$data, "file_exists_{$sFile}", array(), $iTime);
-		}
-		return $data;
-	}
 	/**
 	 * Вызывает метод нужного модуля
 	 *
@@ -648,7 +623,7 @@ class Engine extends LsObject {
 	 * @return array
 	 */
 	public function getStats() {
-		return array('sql'=>$this->Database_GetStats(),'cache'=>$this->Cache_GetStats(),'engine'=>array('time_load_module'=>round($this->iTimeLoadModule,3)));
+		return array('sql'=>$this->Database_GetStats(),'engine'=>array('time_load_module'=>round($this->iTimeLoadModule,3)));
 	}
 
 	/**

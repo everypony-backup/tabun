@@ -70,14 +70,20 @@ class ModuleLang extends Module {
 	 */
 	protected function InitLang() {
 		/**
-		 * Если используется кеширование через memcaсhed, то сохраняем данные языкового файла в кеш
+		 * Если используется кеширование, то сохраняем данные языкового файла в кеш
 		 */
-		if (Config::Get('sys.cache.type')=='memory') {
-			if (false === ($this->aLangMsg = $this->Cache_Get("lang_{$this->sCurrentLang}_".Config::Get('view.skin')))) {
+		if (Config::Get('sys.cache.use')) {
+			$sCacheKey = "lang_{$this->sCurrentLang}_" . Config::Get('view.skin');
+			if (false === ($this->aLangMsg = $this->Cache_Get($sCacheKey))) {
 				$this->aLangMsg=array();
 				$this->LoadLangFiles($this->sDefaultLang);
 				if($this->sCurrentLang!=$this->sDefaultLang) $this->LoadLangFiles($this->sCurrentLang);
-				$this->Cache_Set($this->aLangMsg, "lang_{$this->sCurrentLang}_".Config::Get('view.skin'), array(), 60*60);
+				$this->Cache_Set(
+					$this->aLangMsg,
+					$sCacheKey,
+                    [],
+                    60*60*24*30
+                );
 			}
 		} else {
 			$this->LoadLangFiles($this->sDefaultLang);

@@ -1,0 +1,13 @@
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/ussignal/redis-cache-zend-framework"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "zf1/zend-cache": "1.12.11",
+    "kalaspuff/redis-cache-zend-framework": "*"
+  }
+}

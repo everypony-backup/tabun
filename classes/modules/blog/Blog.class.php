@@ -141,9 +141,6 @@ class ModuleBlog extends Module {
 		if (!$aBlogId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetBlogsByArrayIdSolid($aBlogId,$aOrder);
-		}
 		if (!is_array($aBlogId)) {
 			$aBlogId=array($aBlogId);
 		}
@@ -180,7 +177,11 @@ class ModuleBlog extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aBlogs[$oBlog->getId()]=$oBlog;
-				$this->Cache_Set($oBlog, "blog_{$oBlog->getId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+					$oBlog,
+					"blog_{$oBlog->getId()}",
+					[]
+				);
 				$aBlogIdNeedStore=array_diff($aBlogIdNeedStore,array($oBlog->getId()));
 			}
 		}
@@ -188,37 +189,17 @@ class ModuleBlog extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aBlogIdNeedStore as $sId) {
-			$this->Cache_Set(null, "blog_{$sId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+                null,
+                "blog_{$sId}",
+                []
+            );
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aBlogs=func_array_sort_by_keys($aBlogs,$aBlogId);
 		return $aBlogs;
-	}
-	/**
-	 * Возвращает список блогов по ID, но используя единый кеш
-	 *
-	 * @param array $aBlogId	Список ID блогов
-	 * @param array|null $aOrder	Сортировка блогов
-	 * @return array
-	 */
-	public function GetBlogsByArrayIdSolid($aBlogId,$aOrder=null) {
-		if (!is_array($aBlogId)) {
-			$aBlogId=array($aBlogId);
-		}
-		$aBlogId=array_unique($aBlogId);
-		$aBlogs=array();
-		$s=join(',',$aBlogId);
-		if (false === ($data = $this->Cache_Get("blog_id_{$s}"))) {
-			$data = $this->oMapperBlog->GetBlogsByArrayId($aBlogId,$aOrder);
-			foreach ($data as $oBlog) {
-				$aBlogs[$oBlog->getId()]=$oBlog;
-			}
-			$this->Cache_Set($aBlogs, "blog_id_{$s}", array("blog_update"), 60*60*24*1);
-			return $aBlogs;
-		}
-		return $data;
 	}
 	/**
 	 * Получить персональный блог юзера
@@ -253,11 +234,25 @@ class ModuleBlog extends Module {
 	 * @return ModuleBlog_EntityBlog|null
 	 */
 	public function GetBlogByUrl($sBlogUrl) {
-		if (false === ($id = $this->Cache_Get("blog_url_{$sBlogUrl}"))) {
+        $sCacheKey = "blog_url_{$sBlogUrl}";
+		if (false === ($id = $this->Cache_Get($sCacheKey))) {
 			if ($id = $this->oMapperBlog->GetBlogByUrl($sBlogUrl)) {
-				$this->Cache_Set($id, "blog_url_{$sBlogUrl}", array("blog_update_{$id}"), 60*60*24*2);
+				$this->Cache_Set(
+                    $id,
+                    $sCacheKey,
+                    [
+                        "blog_update_{$id}"
+                    ]
+                );
 			} else {
-				$this->Cache_Set(null, "blog_url_{$sBlogUrl}", array('blog_update','blog_new'), 60*60);
+				$this->Cache_Set(
+                    null,
+                    $sCacheKey,
+                    [
+                        'blog_update',
+                        'blog_new'
+                    ]
+                );
 			}
 		}
 		return $this->GetBlogById($id);
@@ -269,11 +264,26 @@ class ModuleBlog extends Module {
 	 * @return ModuleBlog_EntityBlog|null
 	 */
 	public function GetBlogByTitle($sTitle) {
-		if (false === ($id = $this->Cache_Get("blog_title_{$sTitle}"))) {
+		$sCacheKey = "blog_title_{$sTitle}";
+        if (false === ($id = $this->Cache_Get($sCacheKey))) {
 			if ($id = $this->oMapperBlog->GetBlogByTitle($sTitle)) {
-				$this->Cache_Set($id, "blog_title_{$sTitle}", array("blog_update_{$id}",'blog_new'), 60*60*24*2);
+				$this->Cache_Set(
+                    $id,
+                    $sCacheKey,
+                    [
+                        "blog_update_{$id}",
+                        'blog_new'
+                    ]
+                );
 			} else {
-				$this->Cache_Set(null, "blog_title_{$sTitle}", array('blog_update','blog_new'), 60*60);
+				$this->Cache_Set(
+                    null,
+                    $sCacheKey,
+                    [
+                        'blog_update',
+                        'blog_new'
+                    ]
+                );
 			}
 		}
 		return $this->GetBlogById($id);
@@ -306,7 +316,10 @@ class ModuleBlog extends Module {
 		if ($sId=$this->oMapperBlog->AddBlog($oBlog)) {
 			$oBlog->setId($sId);
 			//чистим зависимые кеши
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('blog_new'));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                ['blog_new']
+            );
 			return $oBlog;
 		}
 		return false;
@@ -322,7 +335,14 @@ class ModuleBlog extends Module {
 		$res=$this->oMapperBlog->UpdateBlog($oBlog);
 		if ($res) {
 			//чистим зависимые кеши
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('blog_update',"blog_update_{$oBlog->getId()}","topic_update"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                [
+                    'blog_update',
+                    "blog_update_{$oBlog->getId()}",
+                    "topic_update"
+                ]
+            );
 			$this->Cache_Delete("blog_{$oBlog->getId()}");
 			return true;
 		}
@@ -336,7 +356,13 @@ class ModuleBlog extends Module {
 	 */
 	public function AddRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
 		if ($this->oMapperBlog->AddRelationBlogUser($oBlogUser)) {
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("blog_relation_change_{$oBlogUser->getUserId()}","blog_relation_change_blog_{$oBlogUser->getBlogId()}"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                [
+                    "blog_relation_change_{$oBlogUser->getUserId()}",
+                    "blog_relation_change_blog_{$oBlogUser->getBlogId()}"
+                ]
+            );
 			$this->Cache_Delete("blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}");
 			return true;
 		}
@@ -350,7 +376,13 @@ class ModuleBlog extends Module {
 	 */
 	public function DeleteRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
 		if ($this->oMapperBlog->DeleteRelationBlogUser($oBlogUser)) {
-			$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("blog_relation_change_{$oBlogUser->getUserId()}","blog_relation_change_blog_{$oBlogUser->getBlogId()}"));
+			$this->Cache_Clean(
+                Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                [
+                    "blog_relation_change_{$oBlogUser->getUserId()}",
+                    "blog_relation_change_blog_{$oBlogUser->getBlogId()}"
+                ]
+            );
 			$this->Cache_Delete("blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}");
 			return true;
 		}
@@ -407,9 +439,19 @@ class ModuleBlog extends Module {
 			$aFilter['user_role']=$iRole;
 		}
 		$s=serialize($aFilter);
-		if (false === ($data = $this->Cache_Get("blog_relation_user_by_filter_{$s}_{$iPage}_{$iPerPage}"))) {
-			$data = array('collection'=>$this->oMapperBlog->GetBlogUsers($aFilter,$iCount,$iPage,$iPerPage),'count'=>$iCount);
-			$this->Cache_Set($data, "blog_relation_user_by_filter_{$s}_{$iPage}_{$iPerPage}", array("blog_relation_change_blog_{$sBlogId}"), 60*60*24*3);
+        $sCacheKey = "blog_relation_user_by_filter_{$s}_{$iPage}_{$iPerPage}";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
+			$data = [
+                'collection'=>$this->oMapperBlog->GetBlogUsers($aFilter,$iCount,$iPage,$iPerPage),
+                'count'=>$iCount
+            ];
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    "blog_relation_change_blog_{$sBlogId}"
+                ]
+            );
 		}
 		/**
 		 * Достаем дополнительные данные, для этого формируем список юзеров и делаем мульти-запрос
@@ -456,9 +498,17 @@ class ModuleBlog extends Module {
 			$aFilter['user_role']=$iRole;
 		}
 		$s=serialize($aFilter);
-		if (false === ($data = $this->Cache_Get("blog_relation_user_by_filter_$s"))) {
+        $sCacheKey = "blog_relation_user_by_filter_$s";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperBlog->GetBlogUsers($aFilter);
-			$this->Cache_Set($data, "blog_relation_user_by_filter_$s", array("blog_update", "blog_relation_change_{$sUserId}"), 60*60*24*3);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    "blog_update",
+                    "blog_relation_change_{$sUserId}"
+                ]
+            );
 		}
 		/**
 		 * Достаем дополнительные данные, для этого формируем список блогов и делаем мульти-запрос
@@ -516,9 +566,6 @@ class ModuleBlog extends Module {
 		if (!$aBlogId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetBlogUsersByArrayBlogSolid($aBlogId,$sUserId);
-		}
 		if (!is_array($aBlogId)) {
 			$aBlogId=array($aBlogId);
 		}
@@ -555,7 +602,11 @@ class ModuleBlog extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aBlogUsers[$oBlogUser->getBlogId()]=$oBlogUser;
-				$this->Cache_Set($oBlogUser, "blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}", array(), 60*60*24*4);
+				$this->Cache_Set(
+                    $oBlogUser, 
+                    "blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}",
+                    []
+                );
 				$aBlogIdNeedStore=array_diff($aBlogIdNeedStore,array($oBlogUser->getBlogId()));
 			}
 		}
@@ -563,7 +614,11 @@ class ModuleBlog extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aBlogIdNeedStore as $sId) {
-			$this->Cache_Set(null, "blog_relation_user_{$sId}_{$sUserId}", array(), 60*60*24*4);
+			$this->Cache_Set(
+                null, 
+                "blog_relation_user_{$sId}_{$sUserId}",
+                []
+            );
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
@@ -572,37 +627,19 @@ class ModuleBlog extends Module {
 		return $aBlogUsers;
 	}
 	/**
-	 * Получить список отношений блог-юзер по списку айдишников используя общий кеш
-	 *
-	 * @param array $aBlogId	Список ID блогов
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetBlogUsersByArrayBlogSolid($aBlogId,$sUserId) {
-		if (!is_array($aBlogId)) {
-			$aBlogId=array($aBlogId);
-		}
-		$aBlogId=array_unique($aBlogId);
-		$aBlogUsers=array();
-		$s=join(',',$aBlogId);
-		if (false === ($data = $this->Cache_Get("blog_relation_user_{$sUserId}_id_{$s}"))) {
-			$data = $this->oMapperBlog->GetBlogUsersByArrayBlog($aBlogId,$sUserId);
-			foreach ($data as $oBlogUser) {
-				$aBlogUsers[$oBlogUser->getBlogId()]=$oBlogUser;
-			}
-			$this->Cache_Set($aBlogUsers, "blog_relation_user_{$sUserId}_id_{$s}", array("blog_update", "blog_relation_change_{$sUserId}"), 60*60*24*1);
-			return $aBlogUsers;
-		}
-		return $data;
-	}
-	/**
 	 * Обновляет отношения пользователя с блогом
 	 *
 	 * @param ModuleBlog_EntityBlogUser $oBlogUser	Объект отновшения
 	 * @return bool
 	 */
 	public function UpdateRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("blog_relation_change_{$oBlogUser->getUserId()}","blog_relation_change_blog_{$oBlogUser->getBlogId()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [
+				"blog_relation_change_{$oBlogUser->getUserId()}",
+				"blog_relation_change_blog_{$oBlogUser->getBlogId()}"
+			]
+        );
 		$this->Cache_Delete("blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}");
 		return $this->oMapperBlog->UpdateRelationBlogUser($oBlogUser);
 	}
@@ -623,7 +660,14 @@ class ModuleBlog extends Module {
 		$sKey="blog_filter_".serialize($aFilter).serialize($aOrder)."_{$iCurrPage}_{$iPerPage}";
 		if (false === ($data = $this->Cache_Get($sKey))) {
 			$data = array('collection'=>$this->oMapperBlog->GetBlogsByFilter($aFilter,$aOrder,$iCount,$iCurrPage,$iPerPage),'count'=>$iCount);
-			$this->Cache_Set($data, $sKey, array("blog_update","blog_new"), 60*60*24*2);
+			$this->Cache_Set(
+                $data, 
+                $sKey, 
+                [
+                    "blog_update",
+                    "blog_new"
+                ]
+            );
 		}
 		$data['collection']=$this->GetBlogsAdditionalData($data['collection'],$aAllowData);
 		return $data;
@@ -646,9 +690,17 @@ class ModuleBlog extends Module {
 	 * @return array
 	 */
 	public function GetBlogsRatingJoin($sUserId,$iLimit) {
-		if (false === ($data = $this->Cache_Get("blog_rating_join_{$sUserId}_{$iLimit}"))) {
+        $sCacheKey = "blog_rating_join_{$sUserId}_{$iLimit}";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapperBlog->GetBlogsRatingJoin($sUserId,$iLimit);
-			$this->Cache_Set($data, "blog_rating_join_{$sUserId}_{$iLimit}", array('blog_update',"blog_relation_change_{$sUserId}"), 60*60*24);
+			$this->Cache_Set(
+                $data,
+                $sCacheKey,
+                [
+                    'blog_update',
+                    "blog_relation_change_{$sUserId}"
+                ]
+            );
 		}
 		return $data;
 	}
@@ -694,7 +746,8 @@ class ModuleBlog extends Module {
 		if ($oUser->isAdministrator()) {
 			return $this->GetBlogs(true);
 		}
-		if (false === ($aOpenBlogsUser = $this->Cache_Get("blog_accessible_user_{$oUser->getId()}"))) {
+        $sCacheKey = "blog_accessible_user_{$oUser->getId()}";
+		if (false === ($aOpenBlogsUser = $this->Cache_Get($sCacheKey))) {
 			/**
 			 * Заносим блоги, созданные пользователем
 			 */
@@ -704,7 +757,15 @@ class ModuleBlog extends Module {
 			 * (читателем, модератором, или администратором)
 			 */
 			$aOpenBlogsUser=array_merge($aOpenBlogsUser,$this->GetBlogUsersByUserId($oUser->getId(),null,true));
-			$this->Cache_Set($aOpenBlogsUser, "blog_accessible_user_{$oUser->getId()}", array('blog_new','blog_update',"blog_relation_change_{$oUser->getId()}"), 60*60*24);
+			$this->Cache_Set(
+                $aOpenBlogsUser, 
+                $sCacheKey,
+                [
+                    'blog_new',
+                    'blog_update',
+                    "blog_relation_change_{$oUser->getId()}"
+                ]
+            );
 		}
 		return $aOpenBlogsUser;
 	}
@@ -719,7 +780,8 @@ class ModuleBlog extends Module {
 			return array();
 		}
 		$sUserId=$oUser ? $oUser->getId() : 'quest';
-		if (false === ($aCloseBlogs = $this->Cache_Get("blog_inaccessible_user_{$sUserId}"))) {
+        $sCacheKey = "blog_inaccessible_user_{$sUserId}";
+		if (false === ($aCloseBlogs = $this->Cache_Get($sCacheKey))) {
 			$aCloseBlogs = $this->oMapperBlog->GetCloseBlogs();
 
 			if($oUser) {
@@ -739,9 +801,24 @@ class ModuleBlog extends Module {
 			 * Сохраняем в кеш
 			 */
 			if ($oUser) {
-				$this->Cache_Set($aCloseBlogs, "blog_inaccessible_user_{$sUserId}", array('blog_new','blog_update',"blog_relation_change_{$oUser->getId()}"), 60*60*24);
+				$this->Cache_Set(
+                    $aCloseBlogs,
+                    $sCacheKey, 
+                    [
+                        'blog_new',
+                        'blog_update',
+                        "blog_relation_change_{$oUser->getId()}"
+                    ]
+                );
 			} else {
-				$this->Cache_Set($aCloseBlogs, "blog_inaccessible_user_{$sUserId}", array('blog_new','blog_update'), 60*60*24*3);
+				$this->Cache_Set(
+                    $aCloseBlogs,
+                    $sCacheKey, 
+                    [
+                        'blog_new',
+                        'blog_update'
+                    ]
+                );
 			}
 		}
 		return $aCloseBlogs;
@@ -769,11 +846,14 @@ class ModuleBlog extends Module {
 		 * Чистим кеш
 		 */
 		$this->Cache_Clean(
-			Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-			array(
-				"blog_update", "blog_relation_change_blog_{$iBlogId}",
-				"topic_update", "comment_online_update_topic", "comment_update"
-			)
+			Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+			[
+				"blog_update", 
+                "blog_relation_change_blog_{$iBlogId}",
+				"topic_update", 
+                "comment_online_update_topic",
+                "comment_update"
+            ]
 		);
 		$this->Cache_Delete("blog_{$iBlogId}");
 
@@ -884,7 +964,7 @@ class ModuleBlog extends Module {
 	 */
 	public function RecalculateCountTopic() {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('blog_update'));
+		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['blog_update']);
 		return $this->oMapperBlog->RecalculateCountTopic();
 	}
 	/**
@@ -895,7 +975,13 @@ class ModuleBlog extends Module {
 	 */
 	public function RecalculateCountTopicByBlogId($iBlogId) {
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('blog_update',"blog_update_{$iBlogId}"));
+		$this->Cache_Clean(
+			Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+			[
+				'blog_update',
+				"blog_update_{$iBlogId}"
+			]
+		);
 		$this->Cache_Delete("blog_{$iBlogId}");
 		return $this->oMapperBlog->RecalculateCountTopic($iBlogId);
 	}

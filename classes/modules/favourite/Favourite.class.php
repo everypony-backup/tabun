@@ -65,9 +65,6 @@ class ModuleFavourite extends Module {
 		if (!$aTargetId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetFavouritesByArraySolid($aTargetId,$sTargetType,$sUserId);
-		}
 		if (!is_array($aTargetId)) {
 			$aTargetId=array($aTargetId);
 		}
@@ -104,7 +101,11 @@ class ModuleFavourite extends Module {
 				 * Добавляем к результату и сохраняем в кеш
 				 */
 				$aFavourite[$oFavourite->getTargetId()]=$oFavourite;
-				$this->Cache_Set($oFavourite, "favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$sUserId}", array(), 60*60*24*7);
+				$this->Cache_Set(
+					$oFavourite, 
+                    "favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$sUserId}", 
+                    []
+                );
 				$aIdNeedStore=array_diff($aIdNeedStore,array($oFavourite->getTargetId()));
 			}
 		}
@@ -112,38 +113,17 @@ class ModuleFavourite extends Module {
 		 * Сохраняем в кеш запросы не вернувшие результата
 		 */
 		foreach ($aIdNeedStore as $sId) {
-			$this->Cache_Set(null, "favourite_{$sTargetType}_{$sId}_{$sUserId}", array(), 60*60*24*7);
+			$this->Cache_Set(
+                null, 
+                "favourite_{$sTargetType}_{$sId}_{$sUserId}",
+                []
+            );
 		}
 		/**
 		 * Сортируем результат согласно входящему массиву
 		 */
 		$aFavourite=func_array_sort_by_keys($aFavourite,$aTargetId);
 		return $aFavourite;
-	}
-	/**
-	 * Получить список избранного по списку айдишников, но используя единый кеш
-	 *
-	 * @param  array  $aTargetId	Список ID владельцев
-	 * @param  string $sTargetType	Тип владельца
-	 * @param  int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetFavouritesByArraySolid($aTargetId,$sTargetType,$sUserId) {
-		if (!is_array($aTargetId)) {
-			$aTargetId=array($aTargetId);
-		}
-		$aTargetId=array_unique($aTargetId);
-		$aFavourites=array();
-		$s=join(',',$aTargetId);
-		if (false === ($data = $this->Cache_Get("favourite_{$sTargetType}_{$sUserId}_id_{$s}"))) {
-			$data = $this->oMapper->GetFavouritesByArray($aTargetId,$sTargetType,$sUserId);
-			foreach ($data as $oFavourite) {
-				$aFavourites[$oFavourite->getTargetId()]=$oFavourite;
-			}
-			$this->Cache_Set($aFavourites, "favourite_{$sTargetType}_{$sUserId}_id_{$s}", array("favourite_{$sTargetType}_change_user_{$sUserId}"), 60*60*24*1);
-			return $aFavourites;
-		}
-		return $data;
 	}
 	/**
 	 * Получает список таргетов из избранного
@@ -157,19 +137,19 @@ class ModuleFavourite extends Module {
 	 */
 	public function GetFavouritesByUserId($sUserId,$sTargetType,$iCurrPage,$iPerPage,$aExcludeTarget=array()) {
 		$s=serialize($aExcludeTarget);
-		if (false === ($data = $this->Cache_Get("{$sTargetType}_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_{$s}"))) {
+		$sCacheKey = "{$sTargetType}_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_{$s}";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = array(
 				'collection' => $this->oMapper->GetFavouritesByUserId($sUserId,$sTargetType,$iCount,$iCurrPage,$iPerPage,$aExcludeTarget),
 				'count'      => $iCount
 			);
 			$this->Cache_Set(
 				$data,
-				"{$sTargetType}_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_{$s}",
-				array(
+				$sCacheKey,
+				[
 					"favourite_{$sTargetType}_change",
 					"favourite_{$sTargetType}_change_user_{$sUserId}"
-				),
-				60*60*24*1
+				]
 			);
 		}
 		return $data;
@@ -184,16 +164,16 @@ class ModuleFavourite extends Module {
 	 */
 	public function GetCountFavouritesByUserId($sUserId,$sTargetType,$aExcludeTarget=array()) {
 		$s=serialize($aExcludeTarget);
-		if (false === ($data = $this->Cache_Get("{$sTargetType}_count_favourite_user_{$sUserId}_{$s}"))) {
+		$sCacheKey = "{$sTargetType}_count_favourite_user_{$sUserId}_{$s}";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetCountFavouritesByUserId($sUserId,$sTargetType,$aExcludeTarget);
 			$this->Cache_Set(
 				$data,
-				"{$sTargetType}_count_favourite_user_{$sUserId}_{$s}",
-				array(
+				$sCacheKey,
+				[
 					"favourite_{$sTargetType}_change",
 					"favourite_{$sTargetType}_change_user_{$sUserId}"
-				),
-				60*60*24*1
+				]
 			);
 		}
 		return $data;
@@ -208,19 +188,19 @@ class ModuleFavourite extends Module {
 	 * @return array
 	 */
 	public function GetFavouriteOpenCommentsByUserId($sUserId,$iCurrPage,$iPerPage) {
-		if (false === ($data = $this->Cache_Get("comment_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open"))) {
+		$sCacheKey = "comment_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = array(
 				'collection' => $this->oMapper->GetFavouriteOpenCommentsByUserId($sUserId,$iCount,$iCurrPage,$iPerPage),
 				'count'      => $iCount
 			);
 			$this->Cache_Set(
 				$data,
-				"comment_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open",
-				array(
+				$sCacheKey,
+				[
 					"favourite_comment_change",
 					"favourite_comment_change_user_{$sUserId}"
-				),
-				60*60*24*1
+                ]
 			);
 		}
 		return $data;
@@ -232,17 +212,17 @@ class ModuleFavourite extends Module {
 	 * @return array
 	 */
 	public function GetCountFavouriteOpenCommentsByUserId($sUserId) {
-		if (false === ($data = $this->Cache_Get("comment_count_favourite_user_{$sUserId}_open"))) {
+        $sCacheKey = "comment_count_favourite_user_{$sUserId}_open";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetCountFavouriteOpenCommentsByUserId($sUserId);
 			$this->Cache_Set(
 				$data,
-				"comment_count_favourite_user_{$sUserId}_open",
-				array(
+				$sCacheKey,
+				[
 					"favourite_comment_change",
 					"favourite_comment_change_user_{$sUserId}"
-				),
-				60*60*24*1
-			);
+                ]
+            );
 		}
 		return $data;
 	}
@@ -256,7 +236,8 @@ class ModuleFavourite extends Module {
 	 * @return array
 	 */
 	public function GetFavouriteOpenTopicsByUserId($sUserId,$iCurrPage,$iPerPage) {
-		if (false === ($data = $this->Cache_Get("topic_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open"))) {
+		$sCacheKey = "topic_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = array(
 				'collection' => $this->oMapper->GetFavouriteOpenTopicsByUserId($sUserId,$iCount,$iCurrPage,$iPerPage),
 				'count'      => $iCount
@@ -264,11 +245,10 @@ class ModuleFavourite extends Module {
 			$this->Cache_Set(
 				$data,
 				"topic_favourite_user_{$sUserId}_{$iCurrPage}_{$iPerPage}_open",
-				array(
+				[
 					"favourite_topic_change",
 					"favourite_topic_change_user_{$sUserId}"
-				),
-				60*60*24*1
+				]
 			);
 		}
 		return $data;
@@ -280,16 +260,16 @@ class ModuleFavourite extends Module {
 	 * @return array
 	 */
 	public function GetCountFavouriteOpenTopicsByUserId($sUserId) {
-		if (false === ($data = $this->Cache_Get("topic_count_favourite_user_{$sUserId}_open"))) {
+		$sCacheKey = "topic_count_favourite_user_{$sUserId}_open";
+		if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetCountFavouriteOpenTopicsByUserId($sUserId);
 			$this->Cache_Set(
 				$data,
-				"topic_count_favourite_user_{$sUserId}_open",
-				array(
+				$sCacheKey,
+				[
 					"favourite_topic_change",
 					"favourite_topic_change_user_{$sUserId}"
-				),
-				60*60*24*1
+				]
 			);
 		}
 		return $data;
@@ -341,7 +321,12 @@ class ModuleFavourite extends Module {
 		}
 		$this->SetFavouriteTags($oFavourite);
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("favourite_{$oFavourite->getTargetType()}_change_user_{$oFavourite->getUserId()}"));
+		$this->Cache_Clean(
+			Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+			[
+                "favourite_{$oFavourite->getTargetType()}_change_user_{$oFavourite->getUserId()}"
+            ]
+        );
 		$this->Cache_Delete("favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$oFavourite->getUserId()}");
 		return $this->oMapper->AddFavourite($oFavourite);
 	}
@@ -356,7 +341,12 @@ class ModuleFavourite extends Module {
 			$oFavourite->setTags('');
 		}
 		$this->SetFavouriteTags($oFavourite);
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("favourite_{$oFavourite->getTargetType()}_change_user_{$oFavourite->getUserId()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "favourite_{$oFavourite->getTargetType()}_change_user_{$oFavourite->getUserId()}"
+            ]
+        );
 		$this->Cache_Delete("favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$oFavourite->getUserId()}");
 		return $this->oMapper->UpdateFavourite($oFavourite);
 	}
@@ -406,7 +396,12 @@ class ModuleFavourite extends Module {
 	public function DeleteFavourite(ModuleFavourite_EntityFavourite $oFavourite) {
 		$this->SetFavouriteTags($oFavourite,false);
 		//чистим зависимые кеши
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("favourite_{$oFavourite->getTargetType()}_change_user_{$oFavourite->getUserId()}"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "favourite_{$oFavourite->getTargetType()}_change_user_{$oFavourite->getUserId()}"
+            ]
+        );
 		$this->Cache_Delete("favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$oFavourite->getUserId()}");
 		return $this->oMapper->DeleteFavourite($oFavourite);
 	}
@@ -421,7 +416,12 @@ class ModuleFavourite extends Module {
 	public function SetFavouriteTargetPublish($aTargetId,$sTargetType,$iPublish) {
 		if(!is_array($aTargetId)) $aTargetId = array($aTargetId);
 
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("favourite_{$sTargetType}_change"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "favourite_{$sTargetType}_change"
+            ]
+        );
 		return $this->oMapper->SetFavouriteTargetPublish($aTargetId,$sTargetType,$iPublish);
 	}
 	/**
@@ -436,7 +436,12 @@ class ModuleFavourite extends Module {
 		/**
 		 * Чистим зависимые кеши
 		 */
-		$this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array("favourite_{$sTargetType}_change"));
+		$this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                "favourite_{$sTargetType}_change"
+            ]
+        );
 		$this->DeleteTagByTarget($aTargetId,$sTargetType);
 		return $this->oMapper->DeleteFavouriteByTargetId($aTargetId,$sTargetType);
 	}
