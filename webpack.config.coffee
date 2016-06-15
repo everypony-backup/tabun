@@ -14,6 +14,7 @@ vendors = [
   "react"
   "react-bootstrap"
   "react-dom"
+  "bazooka"
 
   # Legacy
   "jquery.jqmodal"
@@ -33,6 +34,7 @@ module.exports =
     main: "./main"
     comments: "./comments"
     topics: "./topics"
+    blogs: "./blogs"
     vendor: vendors
 
   output:
