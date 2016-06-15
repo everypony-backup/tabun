@@ -198,9 +198,6 @@ class ModuleUser extends Module {
 		if (!$aUserId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetUsersByArrayIdSolid($aUserId);
-		}
 		if (!is_array($aUserId)) {
 			$aUserId=array($aUserId);
 		}
@@ -267,39 +264,9 @@ class ModuleUser extends Module {
 	 * @param array $aUserId	Список ID пользователей
 	 * @return array
 	 */
-	public function GetUserItemsByArrayId($aUserId) {
+	public function GetUserItemsByArrayId($aUserId)
+	{
 		return $this->GetUsersByArrayId($aUserId);
-	}
-	/**
-	 * Получение пользователей по списку ID используя общий кеш
-	 *
-	 * @param array $aUserId	Список ID пользователей
-	 * @return array
-	 */
-	public function GetUsersByArrayIdSolid($aUserId) {
-		if (!is_array($aUserId)) {
-			$aUserId=array($aUserId);
-		}
-		$aUserId=array_unique($aUserId);
-		$aUsers=array();
-		$s=join(',',$aUserId);
-		$sCacheKey = "user_id_{$s}";
-		if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapper->GetUsersByArrayId($aUserId);
-			foreach ($data as $oUser) {
-				$aUsers[$oUser->getId()]=$oUser;
-			}
-			$this->Cache_Set(
-				$aUsers, 
-				$sCacheKey,
-				[
-					"user_update",
-					"user_new"
-				]
-			);
-			return $aUsers;
-		}
-		return $data;
 	}
 	/**
 	 * Список сессий юзеров по ID
@@ -310,9 +277,6 @@ class ModuleUser extends Module {
 	public function GetSessionsByArrayId($aUserId) {
 		if (!$aUserId) {
 			return array();
-		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetSessionsByArrayIdSolid($aUserId);
 		}
 		if (!is_array($aUserId)) {
 			$aUserId=array($aUserId);
@@ -373,36 +337,6 @@ class ModuleUser extends Module {
 		 */
 		$aSessions=func_array_sort_by_keys($aSessions,$aUserId);
 		return $aSessions;
-	}
-	/**
-	 * Получить список сессий по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aUserId	Список ID пользователей
-	 * @return array
-	 */
-	public function GetSessionsByArrayIdSolid($aUserId) {
-		if (!is_array($aUserId)) {
-			$aUserId=array($aUserId);
-		}
-		$aUserId=array_unique($aUserId);
-		$aSessions=array();
-		$s=join(',',$aUserId);
-		$sCacheKey = "user_session_id_{$s}";
-		if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapper->GetSessionsByArrayId($aUserId);
-			foreach ($data as $oSession) {
-				$aSessions[$oSession->getUserId()]=$oSession;
-			}
-			$this->Cache_Set(
-				$aSessions, 
-				$sCacheKey, 
-				[
-					"user_session_update"
-				]
-			);
-			return $aSessions;
-		}
-		return $data;
 	}
 	/**
 	 * Получает сессию юзера
@@ -804,9 +738,6 @@ class ModuleUser extends Module {
 		if (!$aUserId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetFriendsByArraySolid($aUserId,$sUserId);
-		}
 		if (!is_array($aUserId)) {
 			$aUserId=array($aUserId);
 		}
@@ -871,37 +802,6 @@ class ModuleUser extends Module {
 		 */
 		$aFriends=func_array_sort_by_keys($aFriends,$aUserId);
 		return $aFriends;
-	}
-	/**
-	 * Получить список отношений друзей используя единый кеш
-	 *
-	 * @param  array $aUserId	Список ID пользователей проверяемых на дружбу
-	 * @param  int $sUserId	ID пользователя у которого проверяем друзей
-	 * @return array
-	 */
-	public function GetFriendsByArraySolid($aUserId,$sUserId) {
-		if (!is_array($aUserId)) {
-			$aUserId=array($aUserId);
-		}
-		$aUserId=array_unique($aUserId);
-		$aFriends=array();
-		$s=join(',',$aUserId);
-		$sCacheKey = "user_friend_{$sUserId}_id_{$s}";
-		if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapper->GetFriendsByArrayId($aUserId,$sUserId);
-			foreach ($data as $oFriend) {
-				$aFriends[$oFriend->getFriendId($sUserId)]=$oFriend;
-			}
-			$this->Cache_Set(
-				$aFriends,
-				$sCacheKey,
-				[
-                    "friend_change_user_{$sUserId}"
-                ]
-            );
-			return $aFriends;
-		}
-		return $data;
 	}
 	/**
 	 * Получаем привязку друга к юзеру(есть ли у юзера данный друг)

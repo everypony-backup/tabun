@@ -85,9 +85,6 @@ class ModuleVote extends Module {
 		if (!$aTargetId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetVoteByArraySolid($aTargetId,$sTargetType,$sUserId);
-		}
 		if (!is_array($aTargetId)) {
 			$aTargetId=array($aTargetId);
 		}
@@ -147,39 +144,6 @@ class ModuleVote extends Module {
 		 */
 		$aVote=func_array_sort_by_keys($aVote,$aTargetId);
 		return $aVote;
-	}
-	/**
-	 * Получить список голосований по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTargetId	Список ID владельцев
-	 * @param string $sTargetType	Тип владельца
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetVoteByArraySolid($aTargetId,$sTargetType,$sUserId) {
-		if (!is_array($aTargetId)) {
-			$aTargetId=array($aTargetId);
-		}
-		$aTargetId=array_unique($aTargetId);
-		$aVote=array();
-		$s=join(',',$aTargetId);
-        $sCacheKey = "vote_{$sTargetType}_{$sUserId}_id_{$s}";
-        if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapper->GetVoteByArray($aTargetId,$sTargetType,$sUserId);
-			foreach ($data as $oVote) {
-				$aVote[$oVote->getTargetId()]=$oVote;
-			}
-			$this->Cache_Set(
-				$aVote,
-                $sCacheKey,
-				[
-                    "vote_update_{$sTargetType}_{$sUserId}",
-                    "vote_update_{$sTargetType}"
-                ]
-			);
-			return $aVote;
-		}
-		return $data;
 	}
 	/**
 	 * Удаляет голосование из базы по списку идентификаторов таргета

@@ -710,16 +710,6 @@ class ModuleComment extends Module {
 		return $this->Favourite_GetFavouritesByArray($aCommentId,'comment',$sUserId);
 	}
 	/**
-	 * Получить список избранного по списку айдишников, но используя единый кеш
-	 *
-	 * @param array  $aCommentId	Список ID комментов
-	 * @param int    $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetFavouriteCommentsByArraySolid($aCommentId,$sUserId) {
-		return $this->Favourite_GetFavouritesByArraySolid($aCommentId,'comment',$sUserId);
-	}
-	/**
 	 * Получает список комментариев из избранного пользователя
 	 *
 	 * @param  int $sUserId	ID пользователя

@@ -405,10 +405,6 @@ class ModuleTopic extends Module {
 		if (!$aTopicId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetTopicsByArrayIdSolid($aTopicId);
-		}
-
 		if (!is_array($aTopicId)) {
 			$aTopicId=array($aTopicId);
 		}
@@ -460,36 +456,6 @@ class ModuleTopic extends Module {
 		 */
 		$aTopics=func_array_sort_by_keys($aTopics,$aTopicId);
 		return $aTopics;
-	}
-	/**
-	 * Получить список топиков по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @return array
-	 */
-	public function GetTopicsByArrayIdSolid($aTopicId) {
-		if (!is_array($aTopicId)) {
-			$aTopicId=array($aTopicId);
-		}
-		$aTopicId=array_unique($aTopicId);
-		$aTopics=array();
-		$s=join(',',$aTopicId);
-        $sCacheKey = "topic_id_{$s}";
-        if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapperTopic->GetTopicsByArrayId($aTopicId);
-			foreach ($data as $oTopic) {
-				$aTopics[$oTopic->getId()]=$oTopic;
-			}
-			$this->Cache_Set(
-                $aTopics,
-                $sCacheKey, 
-                [
-                    "topic_update"
-                ]
-            );
-			return $aTopics;
-		}
-		return $data;
 	}
 	/**
 	 * Получает список топиков из избранного
@@ -1235,16 +1201,6 @@ class ModuleTopic extends Module {
 		return $this->Favourite_GetFavouritesByArray($aTopicId,'topic',$sUserId);
 	}
 	/**
-	 * Получить список избранного по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetFavouriteTopicsByArraySolid($aTopicId,$sUserId) {
-		return $this->Favourite_GetFavouritesByArraySolid($aTopicId,'topic',$sUserId);
-	}
-	/**
 	 * Добавляет топик в избранное
 	 *
 	 * @param ModuleFavourite_EntityFavourite $oFavouriteTopic	Объект избранного
@@ -1366,9 +1322,6 @@ class ModuleTopic extends Module {
 		if (!$aTopicId) {
 			return array();
 		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetTopicsReadByArraySolid($aTopicId,$sUserId);
-		}
 		if (!is_array($aTopicId)) {
 			$aTopicId=array($aTopicId);
 		}
@@ -1430,37 +1383,6 @@ class ModuleTopic extends Module {
 		return $aTopicsRead;
 	}
 	/**
-	 * Получить список просмотром/чтения топиков по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetTopicsReadByArraySolid($aTopicId,$sUserId) {
-		if (!is_array($aTopicId)) {
-			$aTopicId=array($aTopicId);
-		}
-		$aTopicId=array_unique($aTopicId);
-		$aTopicsRead=array();
-		$s=join(',',$aTopicId);
-        $sCacheKey = "topic_read_{$sUserId}_id_{$s}";
-        if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapperTopic->GetTopicsReadByArray($aTopicId,$sUserId);
-			foreach ($data as $oTopicRead) {
-				$aTopicsRead[$oTopicRead->getTopicId()]=$oTopicRead;
-			}
-			$this->Cache_Set(
-                $aTopicsRead, 
-                $sCacheKey, 
-                [
-                    "topic_read_user_{$sUserId}"
-                ]
-            );
-			return $aTopicsRead;
-		}
-		return $data;
-	}
-	/**
 	 * Проверяет голосовал ли юзер за топик-вопрос
 	 *
 	 * @param int $sTopicId	ID топика
@@ -1484,9 +1406,6 @@ class ModuleTopic extends Module {
 	public function GetTopicsQuestionVoteByArray($aTopicId,$sUserId) {
 		if (!$aTopicId) {
 			return array();
-		}
-		if (Config::Get('sys.cache.solid')) {
-			return $this->GetTopicsQuestionVoteByArraySolid($aTopicId,$sUserId);
 		}
 		if (!is_array($aTopicId)) {
 			$aTopicId=array($aTopicId);
@@ -1547,37 +1466,6 @@ class ModuleTopic extends Module {
 		 */
 		$aTopicsQuestionVote=func_array_sort_by_keys($aTopicsQuestionVote,$aTopicId);
 		return $aTopicsQuestionVote;
-	}
-	/**
-	 * Получить список голосований в топике-опросе по списку айдишников, но используя единый кеш
-	 *
-	 * @param array $aTopicId	Список ID топиков
-	 * @param int $sUserId	ID пользователя
-	 * @return array
-	 */
-	public function GetTopicsQuestionVoteByArraySolid($aTopicId,$sUserId) {
-		if (!is_array($aTopicId)) {
-			$aTopicId=array($aTopicId);
-		}
-		$aTopicId=array_unique($aTopicId);
-		$aTopicsQuestionVote=array();
-		$s=join(',',$aTopicId);
-        $sCacheKey = "topic_question_vote_{$sUserId}_id_{$s}";
-        if (false === ($data = $this->Cache_Get($sCacheKey))) {
-			$data = $this->oMapperTopic->GetTopicsQuestionVoteByArray($aTopicId,$sUserId);
-			foreach ($data as $oTopicVote) {
-				$aTopicsQuestionVote[$oTopicVote->getTopicId()]=$oTopicVote;
-			}
-			$this->Cache_Set(
-                $aTopicsQuestionVote, 
-                $sCacheKey, 
-                [
-                    "topic_question_vote_user_{$sUserId}"
-                ]
-            );
-			return $aTopicsQuestionVote;
-		}
-		return $data;
 	}
 	/**
 	 * Добавляет факт голосования за топик-вопрос
