@@ -60,7 +60,7 @@ def topic_index(**kwargs):
     topic_date = kwargs.get('topic_date')
     topic_publish = kwargs.get('topic_publish')
 
-    topic_tags = topic_tags.split(', ')
+    topic_tags = topic_tags.split(',')
 
     es.index(index="tabun", doc_type="topic", id=int(topic_id), body=
         {
