@@ -14,3 +14,9 @@
 
 # Versioning
 /config/*.version
+
+# IDEA files
+*.iml
+
+# OS X tmp
+.DS_Store
