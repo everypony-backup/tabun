@@ -352,6 +352,12 @@ class ActionTopic extends Action {
 			if ($oTopic->getPublish()==1 and $oBlog->getType()!='personal') {
 				$this->Topic_SendNotifyTopicNew($oBlog,$oTopic,$this->oUserCurrent);
 			}
+
+			/**
+			 * Отправляем запрос на индексирование в ElasticSearch
+			 */
+			$this->Elastic_TopicIndex($oTopic);
+
 			/**
 			 * Добавляем событие в ленту
 			 */

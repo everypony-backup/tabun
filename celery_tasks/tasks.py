@@ -7,7 +7,9 @@ from email.utils import COMMASPACE
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
+from elasticsearch import Elasticsearch
 
+es = Elasticsearch()
 
 @task
 def send_mail(**kwargs):
@@ -46,3 +48,30 @@ def send_mail(**kwargs):
     )
     server.quit()
 
+@task
+def topic_index(**kwargs):
+    topic_id = kwargs.get('topic_id')
+    topic_blog_id = kwargs.get('topic_blog_id')
+    topic_user_id = kwargs.get('topic_user_id')
+    topic_type = kwargs.get('topic_type')
+    topic_title = kwargs.get('topic_title')
+    topic_text = kwargs.get('topic_text')
+    topic_tags = kwargs.get('topic_tags')
+    topic_date = kwargs.get('topic_date')
+    topic_publish = kwargs.get('topic_publish')
+
+    topic_tags = topic_tags.split(', ')
+
+    es.index(index="tabun", doc_type="topic", id=int(topic_id), body=
+        {
+            'blog_id': int(topic_blog_id),
+            'user_id': int(topic_user_id),
+            'type': topic_type,
+            'title': topic_title.strip(),
+            'text': topic_text.strip(),
+            'tags': topic_tags,
+            'date': topic_date,
+            'publish': topic_publish
+        })
+
+    print("Called!")
