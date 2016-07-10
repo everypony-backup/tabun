@@ -42,7 +42,7 @@ if ($hDirInclude = opendir($sDirInclude)) {
  * Подгружаем файл конфигурации окружения
  */
 
-$local_config = $_SERVER["CONFIG"];
+$local_config = @$_SERVER["CONFIG"];
 if (file_exists($local_config)) {
     Config::LoadFromFile($local_config, false);
 }
