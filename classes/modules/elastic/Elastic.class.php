@@ -2,12 +2,10 @@
 
 use Predis\Connection\ConnectionException;
 
-require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/vendor/autoload.php');
-require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/celery.php');
 /**
- * Модуль для работы с машиной полнотекстового поиска Sphinx
+ * Модуль для работы Elasticsearch
  *
- * @package modules.sphinx
+ * @package modules.elastic
  * @since 1.0
  */
 class ModuleElastic extends Module {
@@ -19,12 +17,28 @@ class ModuleElastic extends Module {
 	protected $oCeleryClient;
 
 	/**
+	 * Название общего индекса в Elasticsearch
+	 */
+	protected $eIndex;
+
+	/**
+	 * Тип записи топика
+	 */
+	protected $eTopic;
+
+	/**
+	 * Тип записи комментария
+	 */
+	protected $eComment;
+
+
+	/**
 	 * Инициализация модуля
 	 *
 	 */
 	public function Init() {
 		/**
-		 * Настройки Celery клиента для отправки писем
+		 * Настройки Celery клиента для взаимодействия с Elasticsearch
 		 */
 		try{
 			$this->oCeleryClient = new Celery(
@@ -40,6 +54,10 @@ class ModuleElastic extends Module {
 		} catch (ConnectionException $exc) {
 			error_log($exc->getMessage());
 		}
+
+		$this->eIndex = Config::get('module.elastic.index');
+		$this->eTopic = Config::get('module.elastic.topic_key');
+		$this->eComment = Config::get('module.elastic.comment_key');
 	}
 	/**
 	 * Индексирует топик
@@ -53,12 +71,14 @@ class ModuleElastic extends Module {
 		$this->oCeleryClient->PostTask(
 			'tasks.topic_index',
 			[
+				'index' => $this->eIndex,
+				'key' => $this->eTopic,
 				'topic_id' => $oTopic->getId(),
 				'topic_blog_id' => $oTopic->getBlogId(),
 				'topic_user_id' => $oTopic->getUserId(),
 				'topic_type' => $oTopic->getType(),
 				'topic_title' => $oTopic->getTitle(),
-				'topic_text' => $oTopic->getText(), // TODO: clean text
+				'topic_text' => $oTopic->getText(),
 				'topic_tags' => $oTopic->getTags(),
 				'topic_date' => $oTopic->getDateAdd(),
 				'topic_publish' => $oTopic->getPublish(),

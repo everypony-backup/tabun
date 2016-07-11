@@ -228,6 +228,11 @@ $config['module']['userfeed']['count_default'] = 20;    // Число топик
 $config['module']['stream']['count_default'] = 20;      // Число топиков в ленте по умолчанию
 $config['module']['stream']['disable_vote_events'] = false;
 
+// Модуль Elastic
+$config['module']['elastic']['index'] = "tabun"; // Имя индекса в Elasticsearch
+$config['module']['elastic']['topic_key'] = "topic";
+$config['module']['elastic']['comment_key'] = "comment";
+
 // Какие модули должны быть загружены на старте
 $config['module']['autoLoad'] = ['Hook', 'Cache', 'Security', 'Session', 'Lang', 'Message', 'User'];
 /**
@@ -432,4 +437,3 @@ $config['recaptcha']['key'] = '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD';       
 $config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup';     // Google Recaptcha Secret
 $config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
 return $config;
-

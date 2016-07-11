@@ -50,6 +50,8 @@ def send_mail(**kwargs):
 
 @task
 def topic_index(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
     topic_id = kwargs.get('topic_id')
     topic_blog_id = kwargs.get('topic_blog_id')
     topic_user_id = kwargs.get('topic_user_id')
@@ -62,7 +64,7 @@ def topic_index(**kwargs):
 
     topic_tags = topic_tags.split(',')
 
-    es.index(index="tabun", doc_type="topic", id=int(topic_id), body=
+    es.index(index=index, doc_type=key, id=int(topic_id), body=
         {
             'blog_id': int(topic_blog_id),
             'user_id': int(topic_user_id),
