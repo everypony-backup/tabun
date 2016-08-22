@@ -15,6 +15,8 @@
  * @author  Alex Kachayev   
  * @version 1.2
  * @package LiveImage
+ * @todo: Rewrite to use Imagick only
+ * @todo Merge into engine/modules/image/Image.class.php
  */
 
 class LiveImage {
@@ -98,35 +100,55 @@ class LiveImage {
 	 * @var int
 	 */
 	protected $last_err_num=0;
+    /**
+     * ImageMagick instance
+     */
+    private $magic;
+    /**
+     * MIME database
+     */
+    private $fileInfo;
 
 	/**
 	 * Создает объект изображения из переданного файла
 	 *
-	 * @param  string $file
-	 * @return bool
+	 * @param string $sFile
+	 * @return bool|mixed
 	 */
-	public function __construct($file) {
-		if(!$file || !($size=getimagesize($file))) {
+	public function __construct($sFile) {
+        $this->magic = new Imagick();
+        $this->fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+
+		if(!$sFile) {
 			$this->set_last_error(3);
 			return false;
 		}
+
+        $this->magic->readImage($sFile);
+        $sMime = finfo_file($this->fileInfo, $sFile);
+
+        $iFileLength = (int) $this->magic->getImageLength();
+        if(!$iFileLength) {
+            $this->set_last_error(3);
+            return false;
+        }
 		/**
 		 * Определяем тип файла изображения
 		 */
-		switch ($size['mime']) {
+		switch ($sMime) {
 			case 'image/png':
 			case "image/x-png":			
-				$tmp=imagecreatefrompng($file);
+				$tmp=imagecreatefrompng($sFile);
 				$this->format='png';
 				break;
 			case 'image/gif':
-				$tmp=imagecreatefromgif($file);
+				$tmp=imagecreatefromgif($sFile);
 				$this->format='gif';
 				break;
 		    case "image/pjpeg":
 			case "image/jpeg":
 			case "image/jpg":
-				$tmp=imagecreatefromjpeg($file);
+				$tmp=imagecreatefromjpeg($sFile);
 				$this->format='jpg';
 				break;
 			default:
@@ -142,14 +164,23 @@ class LiveImage {
 		}
 
 		$this->image=$tmp;
-		$this->width=$size[0];
-		$this->height=$size[1];
+		$this->width=(int)$this->magic->getImageWidth();
+		$this->height=(int)$this->magic->getImageHeight();
 		$this->truecolor=true;
 		
 		return true;
 	}
+    function __destruct()
+    {
+        if ($this->fileInfo){
+            finfo_close($this->fileInfo);
+        }
+        if ($this->magic){
+            $this->magic->clear();
+        }
+    }
 
-	/**
+    /**
 	 * Resize handle image
 	 *
 	 * @param  int   $width
