@@ -75,7 +75,7 @@ module.exports =
     resizeFoto: '/settings/profile/resize-foto/'
     removeFoto: '/settings/profile/remove-foto/'
     cancelFoto: '/settings/profile/cancel-foto/'
-    uploadImage: '/upload/image/'
+    uploadImage: '/ajax/upload/image/'
   tag:
     autocomplete: '/ajax/autocompleter/tag/'
     main: '/tag/'
