@@ -149,10 +149,15 @@ class ActionSettings extends Action {
 		}
 		/**
 		 * Определяем размер большого фото для подсчета множителя пропорции
+         * @todo: Move processing flow to Image.class
 		 */
 		$fRation=1;
-		if ($aSizeFile=getimagesize($sFile) and isset($aSizeFile[0])) {
-			$fRation=$aSizeFile[0]/200; // 200 - размер превью по которой пользователь определяет область для ресайза
+        $magic = new Imagick();
+        $magic->readImage($sFile);
+        $aSizeFile=(int) $magic->getImageLength();
+        $iImageWidth = $magic->getImageWidth();
+		if ($aSizeFile and $iImageWidth) {
+			$fRation=$iImageWidth/200; // 200 - размер превью по которой пользователь определяет область для ресайза
 			if ($fRation<1) {
 				$fRation=1;
 			}
