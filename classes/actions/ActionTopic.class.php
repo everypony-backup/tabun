@@ -356,7 +356,7 @@ class ActionTopic extends Action {
 			/**
 			 * Отправляем запрос на индексирование в ElasticSearch
 			 */
-			$this->Elastic_TopicIndex($oTopic);
+			$this->SearchIndexer_TopicIndex($oTopic);
 
 			/**
 			 * Добавляем событие в ленту
