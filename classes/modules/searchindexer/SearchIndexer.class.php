@@ -19,17 +19,17 @@ class ModuleSearchIndexer extends Module {
 	/**
 	 * Название общего индекса в Elasticsearch
 	 */
-	protected $eIndex;
+	protected $sIndex;
 
 	/**
 	 * Тип записи топика
 	 */
-	protected $eTopic;
+	protected $sTopic;
 
 	/**
 	 * Тип записи комментария
 	 */
-	protected $eComment;
+	protected $sComment;
 
 
 	/**
@@ -55,9 +55,9 @@ class ModuleSearchIndexer extends Module {
 			error_log($exc->getMessage());
 		}
 
-		$this->eIndex = Config::Get('sys.elastic.index');
-		$this->eTopic = Config::Get('sys.elastic.topic_key');
-		$this->eComment = Config::Get('sys.elastic.comment_key');
+		$this->sIndex = Config::Get('sys.elastic.index');
+		$this->sTopic = Config::Get('sys.elastic.topic_key');
+		$this->sComment = Config::Get('sys.elastic.comment_key');
 	}
 	/**
 	 * Индексирует топик
@@ -71,8 +71,8 @@ class ModuleSearchIndexer extends Module {
 		$this->oCeleryClient->PostTask(
 			'tasks.topic_index',
 			[
-				'index' => $this->eIndex,
-				'key' => $this->eTopic,
+				'index' => $this->sIndex,
+				'key' => $this->sTopic,
 				'topic_id' => $oTopic->getId(),
 				'topic_blog_id' => $oTopic->getBlogId(),
 				'topic_user_id' => $oTopic->getUserId(),
