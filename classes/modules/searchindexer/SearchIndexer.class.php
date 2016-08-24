@@ -55,9 +55,9 @@ class ModuleSearchIndexer extends Module {
 			error_log($exc->getMessage());
 		}
 
-		$this->eIndex = Config::get('module.elastic.index');
-		$this->eTopic = Config::get('module.elastic.topic_key');
-		$this->eComment = Config::get('module.elastic.comment_key');
+		$this->eIndex = Config::Get('sys.elastic.index');
+		$this->eTopic = Config::Get('sys.elastic.topic_key');
+		$this->eComment = Config::Get('sys.elastic.comment_key');
 	}
 	/**
 	 * Индексирует топик

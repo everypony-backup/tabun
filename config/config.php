@@ -228,11 +228,6 @@ $config['module']['userfeed']['count_default'] = 20;    // Число топик
 $config['module']['stream']['count_default'] = 20;      // Число топиков в ленте по умолчанию
 $config['module']['stream']['disable_vote_events'] = false;
 
-// Модуль Elastic
-$config['module']['elastic']['index'] = "tabun"; // Имя индекса в Elasticsearch
-$config['module']['elastic']['topic_key'] = "topic";
-$config['module']['elastic']['comment_key'] = "comment";
-
 // Какие модули должны быть загружены на старте
 $config['module']['autoLoad'] = ['Hook', 'Cache', 'Security', 'Session', 'Lang', 'Message', 'User'];
 /**
@@ -402,9 +397,9 @@ $config['jevix'] = require(dirname(__FILE__) . '/jevix.php');
  * Настройки системы флагов
  */
 $config['flags'] = [];
+
 /**
  * Настройки Celery
- *
  */
 $config['sys']['celery']['host'] = 'localhost';
 $config['sys']['celery']['login'] = '';
@@ -414,6 +409,14 @@ $config['sys']['celery']['exchange'] = 'celery';
 $config['sys']['celery']['binding'] = 'celery';
 $config['sys']['celery']['port'] = 6379;
 $config['sys']['celery']['backend'] = 'redis';
+
+/**
+ * Настройки ElasticSearch
+ */
+$config['sys']['elastic']['host'] = "0.0.0.0";
+$config['sys']['elastic']['index'] = "tabun"; // Имя индекса в Elasticsearch
+$config['sys']['elastic']['topic_key'] = "topic";
+$config['sys']['elastic']['comment_key'] = "comment";
 
 /**
  * Разное
