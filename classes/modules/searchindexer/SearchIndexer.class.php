@@ -85,4 +85,28 @@ class ModuleSearchIndexer extends Module {
 			]
 		);
 	}
+	/**
+	 * Индексирует комментарий
+	 *
+	 * @param string $oComment сущность комментария с данными
+	 */
+	public function CommentIndex(ModuleComment_EntityComment $oComment) {
+		if ($this->oCeleryClient == null) {
+			return;
+		}
+		$this->oCeleryClient->PostTask(
+			'tasks.comment_index',
+			[
+				'index' => $this->sIndex,
+				'key' => $this->sComment,
+				'comment_id' => $oComment->getId(),
+				'comment_target_id' => $oComment->getTargetId(),
+				'comment_target_type' => $oComment->getTargetType(),
+				'comment_user_id' => $oComment->getUserId(),
+				'comment_text' => $oComment->getText(),
+				'comment_date' => $oComment->getDate(),
+				'comment_publish' => $oComment->getPublish(),
+			]
+		);
+	}
 }

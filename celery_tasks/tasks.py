@@ -76,4 +76,24 @@ def topic_index(**kwargs):
             'publish': topic_publish
         })
 
-    print("Called!")
+@task
+def comment_index(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    comment_id = kwargs.get('comment_id')
+    comment_target_id = kwargs.get('comment_target_id')
+    comment_target_type = kwargs.get('comment_target_type')
+    comment_user_id = kwargs.get('comment_user_id')
+    comment_text = kwargs.get('comment_text')
+    comment_date = kwargs.get('comment_date')
+    comment_publish = kwargs.get('comment_publish')
+
+    es.index(index=index, doc_type=key, id=int(comment_id), body=
+        {
+            'target_id': int(comment_target_id),
+            'target_type': comment_target_type,
+            'user_id': int(comment_user_id),
+            'text': comment_text.strip(),
+            'date': comment_date,
+            'publish': comment_publish
+        })
