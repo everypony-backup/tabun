@@ -72,7 +72,18 @@ class ActionSearch extends Action {
                 return false;
             }
 
-
+            /**
+             * Направляем запрос в ElasticSearch, получаем результаты
+             */
+            $aResults = $this->Search_RunQuery($sQuery);
+            if($aResults === false) {
+                /**
+                 * Произошла ошибка при поиске
+                 */
+                $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
+                return false;
+            }
+            var_dump($aResults);
         }
 	}
 	/**

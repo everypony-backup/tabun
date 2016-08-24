@@ -44,6 +44,32 @@ class ModuleSearch extends Module {
         $this->oElasticsearch = Elasticsearch\ClientBuilder::create()->setHosts($this->aHosts)->build();
 	}
 
+    /**
+     * Делает указанный запрос
+     *
+     * @param string $sQuery    Строка запроса
+     * @return array
+     */
+    public function RunQuery($sQuery) {
+        $aParams = [
+            'index' => $this->sIndex,
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'text' => $sQuery
+                    ]
+                ]
+            ]
+        ];
+        try {
+            $aResponse = $this->oElasticsearch->search($aParams);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return $aResponse;
+    }
+
 	/**
 	 * Возвращает число найденых элементов в зависимоти от их типа
 	 *
