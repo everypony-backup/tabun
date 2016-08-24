@@ -4,9 +4,9 @@
 
 {hook run='search_begin'}
 
-<form action="{router page='search'}topics/" class="search">
+<form action="{router page='search'}" class="search">
 	{hook run='search_form_begin'}
-	<input type="text" placeholder="{$aLang.search}" maxlength="255" name="q" class="input-text">
+	<input type="text" placeholder="{$aLang.search}" maxlength="255" name="q" class="input-text" value="{$sQuery}">
 	<input type="submit" value="" title="{$aLang.search_submit}" class="input-submit icon icon-search">
 	{hook run='search_form_end'}
 </form>

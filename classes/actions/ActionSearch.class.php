@@ -53,14 +53,17 @@ class ActionSearch extends Action {
 	 */
 	protected function RegisterEvent() {
 		$this->AddEvent('index','EventIndex');
-		$this->AddEvent('topics','EventTopics');
-		$this->AddEvent('comments','EventComments');
 		$this->AddEvent('opensearch','EventOpenSearch');
 	}
 	/**
 	 * Отображение формы поиска
 	 */
 	function EventIndex(){
+        $query = getRequestStr('q');
+        if($query !== "") {
+            $this->Viewer_Assign('sQuery', $query);
+            $this->Viewer_AddHtmlTitle($query);
+        }
 	}
 	/**
 	 * Обработка стандарта для браузеров Open Search
