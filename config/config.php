@@ -411,9 +411,11 @@ $config['sys']['celery']['port'] = 6379;
 $config['sys']['celery']['backend'] = 'redis';
 
 /**
- * Настройки ElasticSearch
+ * Настройки Elasticsearch
  */
-$config['sys']['elastic']['host'] = "0.0.0.0";
+$config['sys']['elastic']['hosts'] = [
+    "0.0.0.0"
+];
 $config['sys']['elastic']['index'] = "tabun"; // Имя индекса в Elasticsearch
 $config['sys']['elastic']['topic_key'] = "topic";
 $config['sys']['elastic']['comment_key'] = "comment";

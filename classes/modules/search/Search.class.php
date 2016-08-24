@@ -8,17 +8,40 @@
  */
 class ModuleSearch extends Module {
 	/**
-	 * Объект ElasticSearch
-     *
+	 * Объект Elasticsearch
 	 */
 	protected $oElasticsearch = null;
 
-	/**
+    /**
+     * Адреса серверов Elasticsearch
+     */
+    protected $aHosts;
+
+    /**
+     * Название общего индекса в Elasticsearch
+     */
+    protected $sIndex;
+
+    /**
+     * Тип записи топика
+     */
+    protected $sTopic;
+
+    /**
+     * Тип записи комментария
+     */
+    protected $sComment;
+
+    /**
 	 * Инициализация
 	 *
 	 */
 	public function Init() {
-        $this->oElasticsearch = Elasticsearch\ClientBuilder::create()->build();
+        $this->aHosts = Config::Get('sys.elastic.hosts');
+        $this->sIndex = Config::Get('sys.elastic.index');
+        $this->sTopic = Config::Get('sys.elastic.topic_key');
+        $this->sComment = Config::Get('sys.elastic.comment_key');
+        $this->oElasticsearch = Elasticsearch\ClientBuilder::create()->setHosts($this->aHosts)->build();
 	}
 
 	/**
