@@ -16,7 +16,7 @@
 */
 
 /**
- * Экшен обработки поиска по сайту через поисковый движок Sphinx
+ * Экшен обработки поиска по сайту
  *
  * @package actions
  * @since 1.0
@@ -71,6 +71,7 @@ class ActionSearch extends Action {
                 $this->Message_AddErrorSingle($this->Lang_Get('search_error_length'), $this->Lang_Get('error'));
                 return false;
             }
+
 
         }
 	}

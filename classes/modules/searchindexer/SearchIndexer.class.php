@@ -3,9 +3,9 @@
 use Predis\Connection\ConnectionException;
 
 /**
- * Модуль для работы Elasticsearch
+ * Модуль для индексирования записей
  *
- * @package modules.elastic
+ * @package modules.searchindexer
  * @since 1.0
  */
 class ModuleSearchIndexer extends Module {
