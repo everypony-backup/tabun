@@ -710,6 +710,7 @@ return array(
 	 */
 	'search' => 'Поиск',
 	'search_submit' => 'Найти',
+	'search_error_length' => 'Строка запроса должна быть длиной от 2 до 255 символов',
 	'search_results' => 'Результаты поиска',
 	'search_results_empty' => 'Удивительно, но поиск не дал результатов',
 	'search_results_count_topics' => 'постов',

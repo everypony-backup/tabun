@@ -59,10 +59,19 @@ class ActionSearch extends Action {
 	 * Отображение формы поиска
 	 */
 	function EventIndex(){
-        $query = getRequestStr('q');
-        if($query !== "") {
-            $this->Viewer_Assign('sQuery', $query);
-            $this->Viewer_AddHtmlTitle($query);
+        $sQuery = getRequestStr('q');
+        if($sQuery !== "") {
+            $this->Viewer_Assign('sQuery', $sQuery);
+            $this->Viewer_AddHtmlTitle($sQuery);
+
+            /**
+             * Проверяем, чтоб длина запроса была в допустимых пределах
+             */
+            if (!func_check($sQuery, 'text', 2, 255)) {
+                $this->Message_AddErrorSingle($this->Lang_Get('search_error_length'), $this->Lang_Get('error'));
+                return false;
+            }
+
         }
 	}
 	/**
