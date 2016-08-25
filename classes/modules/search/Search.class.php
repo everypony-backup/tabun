@@ -55,14 +55,17 @@ class ModuleSearch extends Module {
             'index' => $this->sIndex,
             'body' => [
                 'query' => [
-                    'match' => [
-                        'text' => $sQuery
+                    'multi_match' => [
+                        'query' => $sQuery,
+                        'fields' => [
+                            'text', 'tags'
+                        ]
                     ]
                 ]
             ]
         ];
         try {
-            $aResponse = $this->oElasticsearch->search($aParams);
+            $aResponse = $this->oElasticsearch->search($aParams)['hits'];
         } catch (Exception $e) {
             return false;
         }

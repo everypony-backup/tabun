@@ -83,6 +83,11 @@ class ActionSearch extends Action {
                 $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
                 return false;
             }
+
+            /*
+             * Устанавливаем количество найденых результатов
+             */
+            $this->Viewer_Assign('iResCount', $aResults['total']);
             var_dump($aResults);
         }
 	}
