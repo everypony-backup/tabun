@@ -11,7 +11,10 @@
 	{hook run='search_form_end'}
 </form>
 
-<h1>Результатов: {$iResCount}</h1>
+<header class="search-header">
+	<h3>Результатов: {$iResCount}</h3>
+</header>
+
 {hook run='search_end'}
 
 {include file='footer.tpl'}
