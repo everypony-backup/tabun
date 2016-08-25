@@ -11,9 +11,11 @@
 	{hook run='search_form_end'}
 </form>
 
-<header class="search-header">
-	<h3>Результатов: {$iResCount}</h3>
-</header>
+{if $iResCount !== null }
+	<header class="search-header">
+		<h3>Результатов: {$iResCount}</h3>
+	</header>
+{/if}
 
 {hook run='search_end'}
 
