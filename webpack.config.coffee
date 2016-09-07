@@ -1,6 +1,5 @@
 path = require 'path'
 webpack = require 'webpack'
-{keys} = require 'lodash'
 fs = require 'fs'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
@@ -15,15 +14,15 @@ vendors = [
   "react"
   "react-bootstrap"
   "react-dom"
-]
 
-aliases =
-  "jquery.jqmodal": path.join __dirname, 'frontend', 'vendor', 'jquery.jqmodal.js'
-  "jquery.ui": path.join __dirname, 'frontend', 'vendor', 'jquery.ui.js'
-  "jquery.form": path.join __dirname, 'frontend', 'vendor', 'jquery.form.js'
-  "jquery.markitup": path.join __dirname, 'frontend', 'vendor', 'jquery.markitup.js'
-  "jquery.jcrop": path.join __dirname, 'frontend', 'vendor', 'jquery.jcrop.js'
-  "jquery.file": path.join __dirname, 'frontend', 'vendor', 'jquery.file.js'
+  # Legacy
+  "jquery.jqmodal"
+  "jquery.ui"
+  "jquery.form"
+  "jquery.markitup"
+  "jquery.jcrop"
+  "jquery.file"
+]
 
 module.exports =
   context: path.join __dirname, 'frontend'
@@ -34,7 +33,7 @@ module.exports =
     main: "./main"
     comments: "./comments"
     topics: "./topics"
-    vendor: Array::concat keys(aliases), vendors
+    vendor: vendors
 
   output:
     path: path.join __dirname, 'static', '[hash]'
@@ -58,9 +57,15 @@ module.exports =
     ]
 
   resolve:
-    alias: aliases
     extensions: ['', '.coffee', '.js', '.styl', '.css']
     modulesDirectories: ['node_modules', 'scripts', 'locale']
+    root: [
+      process.env.NODE_PATH
+      path.resolve(path.join(__dirname, 'frontend', 'vendor'))
+    ]
+
+  resolveLoader:
+    root: process.env.NODE_PATH
 
   plugins: Array::concat(
     if isProduction then [

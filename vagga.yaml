@@ -11,6 +11,17 @@ containers:
     - !EnsureDir /config
     - !Sh "chmod +r /bin/bbsuid"
 
+  static:
+    setup:
+    - !Container _base_alpine
+    - !NpmDependencies
+      file: package.json
+      peer: true
+      optional: true
+      dev: true
+    environ:
+      NODE_PATH: /usr/lib/node_modules
+
   celery:
     setup:
     - !Container _base_alpine
@@ -39,8 +50,10 @@ containers:
     setup:
     - !Container _base_alpine
     - !Install [nginx]
+    - !EnsureDir /storage
     volumes:
       <<: *local_volumes
+      /storage: !Persistent {name: storage}
       /var/log/nginx: !Snapshot
 
   mysql:
@@ -104,6 +117,21 @@ commands:
       mysqladmin --defaults-extra-file=/config/mysql.conf flush-privileges
       mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
 
+  build-static: !Command
+    container: static
+    description: Build static files using webpack
+    run: [webpack, --progress]
+
+  watch-static: !Command
+    container: static
+    description: Watch and auto-rebuild changed static files
+    run: [webpack, --progress, --watch]
+
+  webpack: !Command
+    container: static
+    description: Webpack CLI
+    run: [webpack]
+
   redis: &redis !Command
     container: redis
     description: Run redis server (cache and broker for celery)
@@ -137,6 +165,7 @@ commands:
 
   memcached: &memcached !Command
     container: memcached
+    description: Run memcached
     run: memcached -m128 -uroot -p11211 -l127.0.0.1
 
   php: &php !Command
