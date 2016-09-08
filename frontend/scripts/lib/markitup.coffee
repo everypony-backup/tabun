@@ -78,19 +78,19 @@ aligns = [
   {
     name: 'По левому краю'
     className: 'edit-alignment-left'
-    openWith: '<span align="left">'
+    openWith: '<span class="h-left">'
     closeWith: '</span>'
   }
   {
     name: 'По центру'
     className: 'edit-alignment-center'
-    openWith: '<span align="center">'
+    openWith: '<span class="h-center">'
     closeWith: '</span>'
   }
   {
     name: 'По правому краю'
     className: 'edit-alignment-right'
-    openWith: '<span align="right">'
+    openWith: '<span class="h-right">'
     closeWith: '</span>'
   }
   {separator: '---------------'}

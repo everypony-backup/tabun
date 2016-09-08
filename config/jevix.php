@@ -31,7 +31,14 @@ return [
             ],
             [
                 'img',
-                ['src', 'alt' => '#text', 'title' => '#text', 'align' => ['top', 'right', 'left', 'center'], 'width' => '#int', 'height' => '#int', 'class' => ['smp']]
+                [
+                    'src',
+                    'alt' => '#text',
+                    'title' => '#text',
+                    'width' => '#int',
+                    'height' => '#int',
+                    'class' => ['h-right', 'h-left', 'h-center']
+                ]
             ],
             [
                 'a',
@@ -76,7 +83,20 @@ return [
             ],
             [
                 'span',
-                ['class' => ['spoiler', 'spoiler-title', 'spoiler-body', 'spoiler-gray'], 'align' => ['right', 'left', 'center'], 'onclick' => ['return true;']]
+                [
+                    'class' => [
+                        'spoiler',
+                        'spoiler-title',
+                        'spoiler-body', '
+                        spoiler-gray',
+                        'h-right',
+                        'h-left',
+                        'h-center',
+                    ],
+                    'onclick' => [
+                        'return true;'
+                    ]
+                ]
             ],
         ],
         // Параметры тегов являющиеся обязательными
