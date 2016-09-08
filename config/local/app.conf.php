@@ -1,4 +1,5 @@
 <?php
+$config['path']['root']['web'] = '//' . $_SERVER['HTTP_HOST'];
 $config['db']['params']['host'] = '127.0.0.1';
 $config['db']['params']['port'] = '3306';
 $config['db']['params']['user'] = 'tabun';
