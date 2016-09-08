@@ -29,6 +29,8 @@
 * cправка по отдельным командам — `vagga` без аргументов
 * данные `!Persistent` томов доступны в `.vagga/.volumes/`
 * логи PHP — `.vagga/.volumes/php_log`, рекомендуется `tail -f .vagga/.volumes/php_log/tabun.error.log` в другой консоли для просмотра ошибок
+* загруженные файлы — `.vagga/.volumes/storage`
+* время от времени можно чистить неиспользуемые образы — `vagga _clean --unused`
 
 Почта
 -----

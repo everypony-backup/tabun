@@ -13,7 +13,7 @@ $config['path']['offset_request_url'] = '0';
 $config['sys']['logs']['dir'] = '/log';
 
 $config['path']['uploads']['storage'] = '/storage';
-$config['path']['uploads']['url'] = '//localhost/storage';
+$config['path']['uploads']['url'] = '//localhost:8000/storage';
 
 $config['path']['smarty']['compiled'] = '/tmp/smarty/compiled';
 $config['path']['smarty']['cache'] = '/tmp/smarty/cache';

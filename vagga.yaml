@@ -83,6 +83,7 @@ containers:
       - php5-gettext
       - php5-json
       - php5-curl
+      - php5-imagick@community
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem
       path: /etc/cacert.pem
