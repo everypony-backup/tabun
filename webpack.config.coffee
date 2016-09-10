@@ -51,10 +51,7 @@ module.exports =
       {test: /\.po$/, loader: 'json!po?format=jed1.x'}
       {
         test: /.*\.(gif|png|jpg|jpeg|svg)$/,
-        loaders: Array::concat(
-          if isProduction then ['file?name=img/[hash:4].[ext]'] else ['file?name=img/[name].[ext]']
-          if isProduction then ['image-webpack?optimizationLevel=7&interlaced=false'] else []
-        )
+        loaders: (if isProduction then ['file?name=img/[hash:4].[ext]'] else ['file?name=img/[name].[ext]'])
       }
     ]
 
