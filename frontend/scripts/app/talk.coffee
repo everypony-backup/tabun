@@ -34,7 +34,7 @@ addToTalk = (idTalk) ->
             $('#speaker_list_block').append list
           list.append $ """
             <li id="speaker_item_#{item.sUserId}_area">
-              <a href="#{item.sUserLink}" class="user">#{item.sUserLogin}</a> - <a href="#{window.location.href}#" id="speaker_item_#{item.sUserId}" class="delete">Удалить</a>
+              <a href="#{item.sUserLink}" class="user">#{item.sUserLogin}</a> - <a href="#" id="speaker_item_#{item.sUserId}" class="delete">Удалить</a>
             </li>
             """
   false
