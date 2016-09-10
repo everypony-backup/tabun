@@ -42,7 +42,14 @@ return [
             ],
             [
                 'a',
-                ['href', 'rel' => '#text', 'title' => '#text', 'target' => ['_blank'], 'class' => ['ls-user']]
+                [
+                    'href',
+                    'rel' => '#text',
+                    'name' => '#text',
+                    'title' => '#text',
+                    'target' => ['_blank'],
+                    'class' => ['ls-user'],
+                ]
             ],
             [
                 'cut',
