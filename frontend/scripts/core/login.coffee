@@ -29,10 +29,7 @@ loginAjax = (login, password, remember, callback) ->
     if result.bStateError
       callback 'err', result.sMsg
     else
-      window.location = window.location.protocol +
-        '//' +
-        window.location.hostname +
-        window.location.pathname
+      window.location = result.sUrlRedirect
 
 reminderAjax = (email, callback) ->
   ajax routes.profile.reminder, {'mail': email}, (result) ->
