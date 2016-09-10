@@ -18,7 +18,7 @@ showProgress = (content) ->
   ###*
   * Отображение процесса загрузки
   ###
-  content.height content.height()
+
   content.empty().removeClass("block-loaded").addClass("block-loading")
 
 
