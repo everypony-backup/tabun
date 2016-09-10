@@ -24,7 +24,7 @@ addToTalk = (idTalk) ->
     if result.bStateError
       error null, result.sMsg
     else
-      forEach result.aUsers, (index, item) ->
+      forEach result.aUsers, (item) ->
         if item.bStateError
           notice null, item.sMsg
         else
@@ -34,7 +34,7 @@ addToTalk = (idTalk) ->
             $('#speaker_list_block').append list
           list.append $ """
             <li id="speaker_item_#{item.sUserId}_area">
-              <a href="#{item.sUserLink}" class="user">#{item.sUserLogin}</a> - <a href="#" id="speaker_item_#{item.sUserId}" class="delete">#{lang.get 'delete'}</a>
+              <a href="#{item.sUserLink}" class="user">#{item.sUserLogin}</a> - <a href="#{window.location.href}#" id="speaker_item_#{item.sUserId}" class="delete">Удалить</a>
             </li>
             """
   false
