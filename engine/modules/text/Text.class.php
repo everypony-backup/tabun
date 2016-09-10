@@ -236,7 +236,7 @@ class ModuleText extends Module {
 			$aMatch[3]=str_replace('[<rn>]',"\r\n",$aMatch[3]);
 			$aMatch[3]=str_replace('[<n>]',"\r\n",$aMatch[3]);
 			$sTextShort=$aMatch[1];
-			$sTextNew=$aMatch[1].' <a name="cut"></a> '.$aMatch[3];
+			$sTextNew=$aMatch[1].' <a id="cut"></a> '.$aMatch[3];
 			if (preg_match('/^\s*name\s*=\s*"(.+)"\s*\/?$/Ui',$aMatch[2],$aMatchCut)) {
 				$sTextCut=trim($aMatchCut[1]);
 			}

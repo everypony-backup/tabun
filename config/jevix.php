@@ -45,7 +45,7 @@ return [
                 [
                     'href',
                     'rel' => '#text',
-                    'name' => '#text',
+                    'id' => ['cut'],
                     'title' => '#text',
                     'target' => ['_blank'],
                     'class' => ['ls-user'],
