@@ -47,19 +47,26 @@ class ModuleSearch extends Module {
     /**
      * Делает указанный запрос
      *
+     * @param string $sType    Тип элемента (topic, comment)
      * @param string $sQuery    Строка запроса
      * @return array
      */
-    public function RunQuery($sQuery) {
+    public function RunQuery($sType, $sQuery) {
         $aParams = [
             'index' => $this->sIndex,
+            'type' => $sType,
             'body' => [
                 'query' => [
                     'multi_match' => [
                         'query' => $sQuery,
                         'fields' => [
-                            'text', 'tags'
+                            'title', 'text', 'tags'
                         ]
+                    ]
+                ],
+                'highlight' => [
+                    'fields' => [
+                        'text' => []
                     ]
                 ]
             ]

@@ -28,6 +28,7 @@ class ActionSearch extends Action {
 	 * @var array
 	 */
 	protected $sTypesEnabled = array('topics' => array('topic_publish' => 1), 'comments' => array('comment_delete' => 0));
+	protected $aTypes = array('t' => 'topic', 'c' => 'comment');
 	/**
 	 * Массив результата от Сфинкса
 	 *
@@ -59,9 +60,14 @@ class ActionSearch extends Action {
 	 * Отображение формы поиска
 	 */
 	function EventIndex(){
+        $sType = getRequestStr('t');
+        if($sType == "") $sType = "t";
+        if(!array_key_exists($sType, $this->aTypes)) return;
+
         $sQuery = getRequestStr('q');
         if($sQuery !== "") {
             $this->Viewer_Assign('sQuery', $sQuery);
+            $this->Viewer_Assign('sType', $sType);
             $this->Viewer_AddHtmlTitle($sQuery);
 
             /**
@@ -75,7 +81,7 @@ class ActionSearch extends Action {
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
-            $aResults = $this->Search_RunQuery($sQuery);
+            $aResults = $this->Search_RunQuery($this->aTypes[$sType], $sQuery);
             if($aResults === false) {
                 /**
                  * Произошла ошибка при поиске
@@ -88,6 +94,10 @@ class ActionSearch extends Action {
              * Устанавливаем количество найденых результатов
              */
             $this->Viewer_Assign('iResCount', $aResults['total']);
+
+            if($aResults['total'] > 0) {
+                $this->Viewer_Assign('aResults', $aResults['hits']);
+            }
             var_dump($aResults);
         }
 	}
