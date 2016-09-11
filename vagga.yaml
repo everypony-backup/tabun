@@ -66,7 +66,7 @@ containers:
       <<: *local_volumes
       /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
 
-  php:
+  _php-base:
     setup:
     - !Alpine v3.4
     - !Sh "chmod +r /bin/bbsuid"
@@ -79,23 +79,29 @@ containers:
       - php5-mcrypt
       - php5-memcache
       - php5-redis@testing
-      - php5-xdebug@community
       - php5-gettext
       - php5-json
       - php5-curl
       - php5-imagick@community
+    - !ComposerDependencies
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem
       path: /etc/cacert.pem
-    - !Copy
-      source: /work/config/local/xdebug.ini
-      path: /etc/php5/conf.d/xdebug.ini
-    - !Copy
-      source: /work/config/local/app.pool.conf
-      path: /etc/php5/fpm.d/app.pool.conf
     - !EnsureDir /log
     - !EnsureDir /config
     - !EnsureDir /storage
+
+  php-dev:
+    setup:
+      - !Container _php-base
+      - !Install
+        - php5-xdebug@community
+      - !Copy
+        source: /work/config/local/xdebug.ini
+        path: /etc/php5/conf.d/xdebug.ini
+      - !Copy
+        source: /work/config/local/app.pool.conf
+        path: /etc/php5/fpm.d/app.pool.conf
     volumes:
       <<: *local_volumes
       /storage: !Persistent {name: storage}
@@ -204,7 +210,7 @@ commands:
     run: memcached -m128 -uroot -p11211 -l127.0.0.1
 
   php: &php !Command
-    container: php
+    container: php-dev
     description: Run php-fpm (application)
     user-id: 1
     external-user-id: 0

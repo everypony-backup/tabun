@@ -50,4 +50,5 @@ if (file_exists($local_config)) {
 /**
  * Composer libs
  */
-require_once(dirname(dirname(__FILE__))."/vendor/autoload.php");
+$composer_dir = $_SERVER["COMPOSER_DIR"];
+require_once($composer_dir . "/vendor/autoload.php");
