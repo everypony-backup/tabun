@@ -96,7 +96,15 @@ class ActionSearch extends Action {
             $this->Viewer_Assign('iResCount', $aResults['total']);
 
             if($aResults['total'] > 0) {
-                $this->Viewer_Assign('aResults', $aResults['hits']);
+                /*
+                * Конфигурируем парсер
+                */
+                $this->Text_LoadJevixConfig('search');
+
+                if($sType == 't') {
+                    $aTopics = $this->Topic_GetTopicsAdditionalData(array_column($aResults['hits'], '_id'));
+                }
+
             }
             var_dump($aResults);
         }

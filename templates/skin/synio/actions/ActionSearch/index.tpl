@@ -27,10 +27,13 @@
 		<h3>Результатов: {$iResCount}</h3>
 	</header>
 	<div>
-		{foreach from=$aResults item=aResult}
-			{if $aResult._type == "topic"}topic{/if}
-			{if $aResult._type == "comment"}comment{/if}
-		{/foreach}
+		{if $sType == 't'}
+			{include file='topic_list.tpl'}
+		{elseif $sType == 'c'}
+			{include file='comment_list.tpl'}
+		{else}
+			{hook run='search_result' sType=$sType}
+		{/if}
 	</div>
 {elseif $iResCount !== null}
 	<header class="search-header">
