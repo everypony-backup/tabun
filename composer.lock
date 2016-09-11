@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f6da90b41605fe130bc4e48f8a871e35",
-    "content-hash": "ab3d758851289cb858cfe334a82becb2",
+    "hash": "92bc0e83e2ccbf9803451418f0309879",
+    "content-hash": "966a73bb05046cb854c7d42ebe6ebbd8",
     "packages": [
         {
             "name": "kalaspuff/redis-cache-zend-framework",
@@ -53,17 +53,71 @@
             "time": "2015-05-13 22:19:27"
         },
         {
+            "name": "smarty-gettext/smarty-gettext",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smarty-gettext/smarty-gettext.git",
+                "reference": "7361bcb6913cdfd39e5e37b17c84e08a26da0de2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smarty-gettext/smarty-gettext/zipball/7361bcb6913cdfd39e5e37b17c84e08a26da0de2",
+                "reference": "7361bcb6913cdfd39e5e37b17c84e08a26da0de2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gettext": "*",
+                "ext-pcre": "*",
+                "php": "~5.3|~7.0"
+            },
+            "require-dev": {
+                "azatoth/php-pgettext": "~1.0",
+                "smarty/smarty": "3.1.*"
+            },
+            "suggest": {
+                "azatoth/php-pgettext": "Support msgctxt for {t} via context parameter"
+            },
+            "bin": [
+                "tsmarty2c.php"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "block.t.php",
+                    "function.locale.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1+"
+            ],
+            "authors": [
+                {
+                    "name": "Sagi Bashari",
+                    "email": "sagi@boom.org.il"
+                },
+                {
+                    "name": "Elan Ruusamäe",
+                    "email": "glen@delfi.ee"
+                }
+            ],
+            "description": "Gettext plugin enabling internationalization in Smarty Package files",
+            "homepage": "https://github.com/smarty-gettext/smarty-gettext",
+            "time": "2016-06-13 10:54:04"
+        },
+        {
             "name": "zendframework/zendframework1",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf1.git",
-                "reference": "7e639c9adccd1b8ccfc4c4d66c36924bbd8225ff"
+                "reference": "a90f3a8d71e0788020f730da83674b7312bd3b16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf1/zipball/7e639c9adccd1b8ccfc4c4d66c36924bbd8225ff",
-                "reference": "7e639c9adccd1b8ccfc4c4d66c36924bbd8225ff",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/a90f3a8d71e0788020f730da83674b7312bd3b16",
+                "reference": "a90f3a8d71e0788020f730da83674b7312bd3b16",
                 "shasum": ""
             },
             "require": {
@@ -97,7 +151,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2016-04-13 15:46:27"
+            "time": "2016-09-08 14:54:20"
         },
         {
             "name": "zf1/zend-cache",
