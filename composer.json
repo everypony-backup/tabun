@@ -5,10 +5,10 @@
       "url": "https://github.com/ussignal/redis-cache-zend-framework"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "smarty-gettext/smarty-gettext": "1.4.0",
     "zf1/zend-cache": "1.12.11",
-    "kalaspuff/redis-cache-zend-framework": "*"
+    "massivescale/celery-php": "2.1.1",
+    "kalaspuff/redis-cache-zend-framework": "*@dev"
   }
 }

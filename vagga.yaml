@@ -83,6 +83,8 @@ containers:
       - php5-json
       - php5-curl
       - php5-imagick@community
+      - php5-amqp@testing
+      - php5-bcmath
     - !ComposerDependencies
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem

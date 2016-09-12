@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "92bc0e83e2ccbf9803451418f0309879",
-    "content-hash": "966a73bb05046cb854c7d42ebe6ebbd8",
+    "hash": "3a829e2476357d40bf17bf14bc7c2714",
+    "content-hash": "5df7ac6687c89f4e3e7b53af4460064f",
     "packages": [
         {
             "name": "kalaspuff/redis-cache-zend-framework",
@@ -51,6 +51,110 @@
                 "source": "https://github.com/ussignal/redis-cache-zend-framework/tree/master"
             },
             "time": "2015-05-13 22:19:27"
+        },
+        {
+            "name": "massivescale/celery-php",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gjedeer/celery-php.git",
+                "reference": "d9d2867f5ca6c87c3fb595b267007305da2a47ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gjedeer/celery-php/zipball/d9d2867f5ca6c87c3fb595b267007305da2a47ae",
+                "reference": "d9d2867f5ca6c87c3fb595b267007305da2a47ae",
+                "shasum": ""
+            },
+            "require": {
+                "predis/predis": ">=0.8.5",
+                "videlalvaro/php-amqplib": ">=2.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "celery.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "GDR!",
+                    "email": "info@massivescale.net",
+                    "homepage": "http://massivescale.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP client for Celery task queue",
+            "homepage": "https://github.com/gjedeer/celery-php/",
+            "keywords": [
+                "AMQP",
+                "celery",
+                "cron",
+                "python",
+                "queue",
+                "redis",
+                "task"
+            ],
+            "time": "2015-07-21 20:26:08"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2016-06-16 16:22:20"
         },
         {
             "name": "smarty-gettext/smarty-gettext",
@@ -107,17 +211,88 @@
             "time": "2016-06-13 10:54:04"
         },
         {
-            "name": "zendframework/zendframework1",
-            "version": "dev-master",
+            "name": "videlalvaro/php-amqplib",
+            "version": "v2.6.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zf1.git",
-                "reference": "a90f3a8d71e0788020f730da83674b7312bd3b16"
+                "url": "https://github.com/php-amqplib/php-amqplib.git",
+                "reference": "fa2f0d4410a11008cb36b379177291be7ee9e4f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf1/zipball/a90f3a8d71e0788020f730da83674b7312bd3b16",
-                "reference": "a90f3a8d71e0788020f730da83674b7312bd3b16",
+                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/fa2f0d4410a11008cb36b379177291be7ee9e4f6",
+                "reference": "fa2f0d4410a11008cb36b379177291be7ee9e4f6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "replace": {
+                "videlalvaro/php-amqplib": "self.version"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "scrutinizer/ocular": "^1.1",
+                "squizlabs/php_codesniffer": "^2.5"
+            },
+            "suggest": {
+                "ext-sockets": "Use AMQPSocketConnection"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpAmqpLib\\": "PhpAmqpLib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Alvaro Videla",
+                    "role": "Original Maintainer"
+                },
+                {
+                    "name": "John Kelly",
+                    "email": "johnmkelly86@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Raúl Araya",
+                    "email": "nubeiro@gmail.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Formerly videlalvaro/php-amqplib.  This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
+            "homepage": "https://github.com/php-amqplib/php-amqplib/",
+            "keywords": [
+                "message",
+                "queue",
+                "rabbitmq"
+            ],
+            "abandoned": "php-amqplib/php-amqplib",
+            "time": "2016-04-11 14:30:01"
+        },
+        {
+            "name": "zendframework/zendframework1",
+            "version": "1.12.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zf1.git",
+                "reference": "737ef159654fbbef37cf9af742b2c8f9690c2ece"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/737ef159654fbbef37cf9af742b2c8f9690c2ece",
+                "reference": "737ef159654fbbef37cf9af742b2c8f9690c2ece",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +326,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2016-09-08 14:54:20"
+            "time": "2016-09-08 14:50:34"
         },
         {
             "name": "zf1/zend-cache",
@@ -234,8 +409,10 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "kalaspuff/redis-cache-zend-framework": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

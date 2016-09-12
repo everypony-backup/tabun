@@ -15,8 +15,6 @@
 ---------------------------------------------------------
 */
 
-require_once(Config::Get('path.root.server').'/vendor/autoload.php');
-
 use Predis\Connection\ConnectionException;
 
 /**
