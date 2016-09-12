@@ -1002,7 +1002,7 @@ class ActionBlog extends Action {
 		 * Проверяем текст комментария
 		 */
 		$sText=$this->Text_Parser(getRequestStr('comment_text'));
-		if (!func_check($sText,'text',2,64000)) {
+		if (!func_check($sText,'text',2,3000)) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_add_text_error'),$this->Lang_Get('error'));
 			return;
 		}
