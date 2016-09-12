@@ -48,7 +48,7 @@
 {hook run='comment_tree_end' iTargetId=$iTargetId sTargetType=$sTargetType}
 
 {if $bAllowNewComment}
-	{$sNoticeNotAllow}
+	<div class="comments-not-allowed">{$sNoticeNotAllow}</div>
 {else}
 	{if $oUserCurrent}
 
