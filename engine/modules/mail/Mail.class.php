@@ -15,10 +15,9 @@
 ---------------------------------------------------------
 */
 
-use Predis\Connection\ConnectionException;
+require_once(Config::Get('path.root.server').'/vendor/autoload.php');
 
-require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/vendor/autoload.php');
-require_once(Config::Get('path.root.engine').'/lib/external/celery_bundle/celery.php');
+use Predis\Connection\ConnectionException;
 
 /**
  * Модуль для отправки почты(e-mail) через Celery
