@@ -21,7 +21,11 @@
 	
 	<p><label for="blog_id">{$aLang.topic_create_blog}</label>
 	<select name="blog_id" id="blog_id" onChange="ls.blog.loadInfo(jQuery(this).val());" class="input-width-full">
-		<option value="0">{$aLang.topic_create_blog_personal}</option>
+		{if $sUser == $sAuthor}
+			<option value="0">{$aLang.topic_create_blog_personal}</option>
+		{else}
+			<option value="0">{$aLang.blogs_personal_title} {$sAuthor}</option>
+		{/if}
 		{foreach from=$aBlogsAllow item=oBlog}
 			<option value="{$oBlog->getId()}" {if $_aRequest.blog_id==$oBlog->getId()}selected{/if}>{$oBlog->getTitle()|escape:'html'}</option>
 		{/foreach}
