@@ -33,7 +33,7 @@ module.exports =
   entry:
     main: "./main"
     comments: "./comments"
-    topics: "./topics"
+    editor: "./editor"
     blogs: "./blogs"
     vendor: vendors
 

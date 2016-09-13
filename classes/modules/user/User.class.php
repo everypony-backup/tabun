@@ -358,7 +358,9 @@ class ModuleUser extends Module {
 	public function Shutdown() {
 		if ($this->oUserCurrent) {
 			$this->Viewer_Assign('iUserCurrentCountTalkNew',$this->Talk_GetCountTalkNew($this->oUserCurrent->getId()));
-			$this->Viewer_Assign('iUserCurrentCountTopicDraft',$this->Topic_GetCountDraftTopicsByUserId($this->oUserCurrent->getId()));
+            $iUserCurrentCountTopicDraft = $this->Topic_GetCountDraftTopicsByUserId($this->oUserCurrent->getId());
+			$this->Viewer_Assign('iUserCurrentCountTopicDraft', $iUserCurrentCountTopicDraft);
+			$this->Viewer_AssignJS('iUserCurrentCountTopicDraft', $iUserCurrentCountTopicDraft);
 		}
 		$this->Viewer_Assign('oUserCurrent',$this->oUserCurrent);
 	}

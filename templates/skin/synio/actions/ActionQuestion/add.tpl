@@ -1,19 +1,16 @@
+{include file='header.tpl'}
+{assign var="scripts" value=['editor']}
+
 {if $sEvent=='add'}
-	{include file='header.tpl' menu_content='create'}
+    <div data-bazooka="target_selector"></div>
 {else}
-	{include file='header.tpl'}
 	<h2 class="page-header">{$aLang.topic_question_edit}</h2>
 {/if}
 
 
 {include file='editor.tpl'}
 
-{hook run='add_topic_question_begin'}
-
-
 <form action="" method="POST" enctype="multipart/form-data" id="form-topic-add" class="wrapper-content">
-	{hook run='form_add_topic_question_begin'}
-	
 	<input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
 
 	<p><label for="blog_id">{$aLang.topic_create_blog}</label>
@@ -84,8 +81,6 @@
 
 	<input type="hidden" name="topic_type" value="question" />
 
-	{hook run='form_add_topic_question_end'}
-
 	<button type="submit"  name="submit_topic_publish" id="submit_topic_publish" class="button button-primary h-float-right">{$aLang.topic_create_submit_publish}</button>
 	<button type="submit"  name="submit_preview" onclick="jQuery('#text_preview').parent().show(); ls.topic.preview('form-topic-add','text_preview'); return false;" class="button">{$aLang.topic_create_submit_preview}</button>
 	<button type="submit"  name="submit_topic_save" id="submit_topic_save" class="button">{$aLang.topic_create_submit_save}</button>
@@ -93,7 +88,5 @@
 
 <div class="topic-preview" id="text_preview"></div>
 
-{hook run='add_topic_question_end'}
 
-
-{include file='footer.tpl' scripts=["topics"]}
+{include file='footer.tpl' scripts=$scripts}

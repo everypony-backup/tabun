@@ -20,17 +20,21 @@ module.exports =
     self: '/ajax/blogs/self'
     search: '/blogs/ajax-search/'
   blog:
+    add: '/blog/add/'
     join: '/blog/ajaxblogjoin/'
     invite: '/blog/ajaxaddbloginvite/'
     reinvite: '/blog/ajaxrebloginvite/'
     remove: '/blog/ajaxremovebloginvite/'
     info: '/blog/ajaxbloginfo/'
   topic:
+    add: '/topic/add/'
+    draft: '/topic/saved/'
     comment: '/blog/ajaxaddcomment/'
     respond: '/blog/ajaxresponsecomment/'
   comment:
     delete: '/ajax/comment/delete/'
   talk:
+    add: '/talk/add/'
     comment: '/talk/ajaxaddcomment/'
     respond: '/talk/ajaxresponsecomment/'
     addUser: '/talk/ajaxaddtalkuser/'
@@ -45,6 +49,8 @@ module.exports =
     blog: '/ajax/vote/blog/'
     user: '/ajax/vote/user/'
     question: '/ajax/vote/question/'
+  question:
+    add: '/question/add/'
   favourite:
     topic: '/ajax/favourite/topic/'
     talk: '/ajax/favourite/talk/'
