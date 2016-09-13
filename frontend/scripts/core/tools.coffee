@@ -2,7 +2,7 @@
 # Вспомогательные функции
 ###
 $ = require 'jquery'
-{delay, reduce} = require 'lodash'
+{delay, reduce, assign} = require 'lodash'
 
 {notice, error} = require "./messages.coffee"
 {ajax, ajaxSubmit} = require "./ajax.coffee"
@@ -16,6 +16,9 @@ registry =
 
   set: (sName, data) ->
     _registry[sName] = data
+
+  loadJSON: (jsonData) ->
+    assign(_registry, JSON.parse(jsonData))
 
 textPreview = (textId, save, divPreview) ->
   text = $('#' + textId).val()
