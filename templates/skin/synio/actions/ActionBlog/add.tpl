@@ -1,10 +1,11 @@
-{if $sEvent=='add'}
-	{include file='header.tpl' menu_content='create'}
-{else}
-	{include file='header.tpl'}
-	{include file='menu.blog_edit.tpl'}
-{/if}
+{include file='header.tpl'}
+{assign var="scripts" value=['editor']}
 
+{if $sEvent=='add'}
+    <div data-bazooka="target_selector"></div>
+{else}
+    {include file='menu.blog_edit.tpl'}
+{/if}
 
 {include file='editor.tpl' sImgToLoad='blog_description' sSettingsMarkitup='ls.settings.getMarkitupComment()'}
 	
@@ -17,8 +18,6 @@
 
 
 <form method="post" enctype="multipart/form-data" class="wrapper-content">
-	{hook run='form_add_blog_begin'}
-	
 	<input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
 
 	
@@ -33,7 +32,7 @@
 	
 
 	<p><label for="blog_type">{$aLang.blog_create_type}:</label>
-	<select name="blog_type" id="blog_type" class="input-width-200" onChange="ls.blog.loadInfoType(jQuery(this).val());">
+	<select name="blog_type" id="blog_type" class="input-width-200">
 		<option value="open" {if $_aRequest.blog_type=='open'}selected{/if}>{$aLang.blog_create_type_open}</option>
 		<option value="close" {if $_aRequest.blog_type=='close'}selected{/if}>{$aLang.blog_create_type_close}</option>
 	</select>
@@ -65,11 +64,8 @@
 		<input type="file" name="avatar" id="avatar">
 	</p>
 
-	
-	{hook run='form_add_blog_end'}
-
 	<button type="submit"  name="submit_blog_add" class="button button-primary">{$aLang.blog_create_submit}</button>
 </form>
 
 
-{include file='footer.tpl' scripts=["topics"]}
+{include file='footer.tpl' scripts=$scripts}
