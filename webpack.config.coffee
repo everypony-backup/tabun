@@ -11,9 +11,7 @@ vendors = [
   "jquery.scrollto"
   "jed"
   "immutable"
-  "react"
   "react-bootstrap"
-  "react-dom"
   "bazooka"
 
   # Legacy
@@ -24,11 +22,14 @@ vendors = [
   "jquery.jcrop"
   "jquery.file"
 ]
+if isProduction
+  vendors.push("react", "react-dom")
+else
+  vendors.push("react-lite")
 
-module.exports =
+cfg =
   context: path.join __dirname, 'frontend'
   cache: true
-  devtool: "#source-map"
 
   entry:
     main: "./main"
@@ -44,7 +45,7 @@ module.exports =
 
   module:
     loaders: [
-      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, query: {presets: ['es2015', 'react']}}
+      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, query: {presets: ['es2015', 'react']}, compact: true}
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
@@ -66,11 +67,7 @@ module.exports =
   resolveLoader:
     root: process.env.NODE_PATH
 
-  plugins: Array::concat(
-    if isProduction then [
-      new webpack.optimize.UglifyJsPlugin()
-    ] else []
-    [
+  plugins: [
       new ExtractTextPlugin "[name].css"
       new webpack.optimize.DedupePlugin()
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
@@ -82,4 +79,14 @@ module.exports =
           )
         )
     ]
-  )
+
+if isProduction
+  cfg.resolve.alias =
+    'react': 'react-lite'
+    'react-dom': 'react-lite'
+
+  cfg.plugins.push(new webpack.optimize.UglifyJsPlugin())
+else
+  cfg.devtool = "#source-map"
+
+module.exports = cfg

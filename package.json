@@ -17,6 +17,7 @@
     "jquery.scrollto": "~2.1.1",
     "lodash": "~3.10.1",
     "react": "^0.14.3",
+    "react-lite": "0.15.18",
     "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.3"
   },
