@@ -518,7 +518,8 @@ class ActionQuestion extends Action {
 	public function EventShutdown() {
 		$this->Viewer_Assign('sMenuHeadItemSelect',$this->sMenuHeadItemSelect);
 		$this->Viewer_Assign('sMenuItemSelect',$this->sMenuItemSelect);
-		$this->Viewer_Assign('sMenuSubItemSelect',$this->sMenuSubItemSelect);
-	}
+        $this->Viewer_Assign('sMenuSubItemSelect',$this->sMenuSubItemSelect);
+        $this->Viewer_AssignJS('sMenuItemSelect',$this->sMenuSubItemSelect);
+    }
 }
 ?>

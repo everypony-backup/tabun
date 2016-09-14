@@ -122,6 +122,8 @@ class ActionTopic extends Action {
 		 * Загружаем переменные в шаблон
 		 */
 		$this->Viewer_Assign('aBlogsAllow',$this->Blog_GetBlogsAllowByUser($this->oUserCurrent));
+		$this->Viewer_Assign('sAuthor',$oTopic->getUser()->getLogin());
+		$this->Viewer_Assign('sUser',$this->oUserCurrent->getLogin());
 		$this->Viewer_AddHtmlTitle($this->Lang_Get('topic_topic_edit'));
 		/**
 		 * Устанавливаем шаблон вывода
@@ -192,6 +194,8 @@ class ActionTopic extends Action {
 		 * Загружаем переменные в шаблон
 		 */
 		$this->Viewer_Assign('aBlogsAllow',$this->Blog_GetBlogsAllowByUser($this->oUserCurrent));
+		$this->Viewer_Assign('sAuthor',$this->oUserCurrent->getLogin()); // Считаем, что автор == юзер
+		$this->Viewer_Assign('sUser',$this->oUserCurrent->getLogin());
 		$this->Viewer_AddHtmlTitle($this->Lang_Get('topic_topic_create'));
 		/**
 		 * Обрабатываем отправку формы
@@ -412,8 +416,10 @@ class ActionTopic extends Action {
 		}
 		/**
 		 * Проверяем права на постинг в блог
+		 *
+		 * Если не постим в личный блог автора и нет прав постить в блог, пишем ошибку
 		 */
-		if (!$this->ACL_IsAllowBlog($oBlog,$this->oUserCurrent)) {
+		if (($iBlogId != 0) and !$this->ACL_IsAllowBlog($oBlog,$this->oUserCurrent)) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_create_blog_error_noallow'),$this->Lang_Get('error'));
 			return false;
 		}
@@ -533,6 +539,7 @@ class ActionTopic extends Action {
 	public function EventShutdown() {
 		$this->Viewer_Assign('sMenuHeadItemSelect',$this->sMenuHeadItemSelect);
 		$this->Viewer_Assign('sMenuItemSelect',$this->sMenuItemSelect);
+		$this->Viewer_AssignJS('sMenuItemSelect',$this->sMenuItemSelect);
 		$this->Viewer_Assign('sMenuSubItemSelect',$this->sMenuSubItemSelect);
 	}
 }

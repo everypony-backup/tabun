@@ -1,27 +1,24 @@
+{include file='header.tpl'}
+{assign var="scripts" value=['editor']}
+
 {if $sEvent=='add'}
-	{include file='header.tpl' menu_content='create'}
+    <div data-bazooka="target_selector"></div>
 {else}
-	{include file='header.tpl'}
 	<h2 class="page-header">{$aLang.topic_topic_edit}</h2>
 {/if}
 
-
 {include file='editor.tpl'}
 
-
-{hook run='add_topic_topic_begin'}
-
-
 <form action="" method="POST" enctype="multipart/form-data" id="form-topic-add" class="wrapper-content">
-	{hook run='form_add_topic_topic_begin'}
-
-	
 	<input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
 
-	
 	<p><label for="blog_id">{$aLang.topic_create_blog}</label>
 	<select name="blog_id" id="blog_id" onChange="ls.blog.loadInfo(jQuery(this).val());" class="input-width-full">
-		<option value="0">{$aLang.topic_create_blog_personal}</option>
+		{if $sUser == $sAuthor}
+			<option value="0">{$aLang.topic_create_blog_personal}</option>
+		{else}
+			<option value="0">{$aLang.blogs_personal_title} {$sAuthor}</option>
+		{/if}
 		{foreach from=$aBlogsAllow item=oBlog}
 			<option value="{$oBlog->getId()}" {if $_aRequest.blog_id==$oBlog->getId()}selected{/if}>{$oBlog->getTitle()|escape:'html'}</option>
 		{/foreach}
@@ -66,9 +63,6 @@
 
 	<input type="hidden" name="topic_type" value="topic" />
 	
-	{hook run='form_add_topic_topic_end'}
-	
-	
 	<button type="submit"  name="submit_topic_publish" id="submit_topic_publish" class="button button-primary h-float-right">{$aLang.topic_create_submit_publish}</button>
 	<button type="submit"  name="submit_preview" onclick="ls.topic.preview('form-topic-add','text_preview'); return false;" class="button">{$aLang.topic_create_submit_preview}</button>
 	<button type="submit"  name="submit_topic_save" id="submit_topic_save" class="button">{$aLang.topic_create_submit_save}</button>
@@ -77,8 +71,4 @@
 	
 <div class="topic-preview" style="display: none;" id="text_preview"></div>
 
-
-{hook run='add_topic_topic_end'}
-
-
-{include file='footer.tpl' scripts=["topics"]}
+{include file='footer.tpl' scripts=$scripts}

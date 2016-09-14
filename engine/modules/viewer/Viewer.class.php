@@ -84,6 +84,12 @@ class ModuleViewer extends Module {
 	 * @var array
 	 */
 	protected $aVarsAjax=array();
+    /**
+     * Переменные для передачи в JS
+     *
+     * @var array
+     */
+    protected $aFrontendRegistry=array();
 	/**
 	 * Определяет тип ответа при ajax запросе
 	 *
@@ -223,6 +229,7 @@ class ModuleViewer extends Module {
 		 * Загружаем security-ключ
 		 */
 		$this->Assign("LIVESTREET_SECURITY_KEY",$this->Security_GetSecurityKey());
+        $this->Assign("aFrontendRegistry", json_encode($this->aFrontendRegistry));
 	}
 	/**
 	 * Загружаем содержимое menu-контейнеров
@@ -350,6 +357,15 @@ class ModuleViewer extends Module {
 	public function Assign($sName,$value) {
 		$this->oSmarty->assign($sName, $value);
 	}
+    /**
+     * Загружает переменную JS в шаблон
+     *
+     * @param string $sName	Имя переменной
+     * @param mixed $value	Значение переменной
+     */
+    public function AssignJS($sName, $value) {
+        $this->aFrontendRegistry[$sName]=$value;
+    }
 	/**
 	 * Загружаем переменную в ajax ответ
 	 *

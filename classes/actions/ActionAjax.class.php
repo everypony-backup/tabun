@@ -214,6 +214,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_self'),$this->Lang_Get('attention'));
 			return;
 		}
+        /**
+         * Комментарий не в блоге?
+         */
+        if ($oComment->getTargetType() != 'topic') {
+            $this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_noexists'),$this->Lang_Get('error'));
+            return;
+        }
 		/**
 		 * Пользователь уже голосовал?
 		 */

@@ -39,14 +39,12 @@ recalculateToolbarPos = ->
       unless $('#container').hasClass('no-resize')
         $('#container').addClass 'toolbar-margin'
       $('#toolbar').css
-        'position': 'absolute'
         'right': 0
         'top': $(document).scrollTop() + 175
         'display': 'block'
     else
       $('#container').removeClass 'toolbar-margin'
       $('#toolbar').css
-        'position': 'fixed'
         'right': 0
         'top': 175
         'display': 'block'

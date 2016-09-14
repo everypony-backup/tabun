@@ -27,6 +27,7 @@
 <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+    ls.tools.registry.loadJSON({json var=$aFrontendRegistry});
     ls.lang.load({json var = $aLangJs});
     ls.tools.registry.set('comment_max_tree', {json var=$oConfig->Get('module.comment.max_tree')});
 </script>
