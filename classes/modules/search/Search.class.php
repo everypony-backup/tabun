@@ -34,15 +34,21 @@ class ModuleSearch extends Module
     protected $sComment;
 
     /**
+     * Количество элементов на странице
+     */
+    protected $iPerPage;
+
+    /**
      * Инициализация
      *
      */
     public function Init()
     {
         $this->aHosts = Config::Get('sys.elastic.hosts');
-        $this->sIndex = Config::Get('sys.elastic.index');
-        $this->sTopic = Config::Get('sys.elastic.topic_key');
-        $this->sComment = Config::Get('sys.elastic.comment_key');
+        $this->sIndex = Config::Get('module.search.index');
+        $this->sTopic = Config::Get('module.search.topic_key');
+        $this->sComment = Config::Get('module.search.comment_key');
+        $this->iPerPage = Config::Get('module.search.per_page');
         $this->oElasticsearch = Elasticsearch\ClientBuilder::create()->setHosts($this->aHosts)->build();
     }
 
@@ -51,9 +57,10 @@ class ModuleSearch extends Module
      *
      * @param string $sType Тип элемента (topic, comment)
      * @param string $sQuery Строка запроса
+     * @param int $iPage Страница поиска
      * @return array
      */
-    public function RunQuery($sType, $sQuery)
+    public function RunQuery($sType, $sQuery, $iPage)
     {
         $cacheKey = Config::Get('sys.cache.prefixes.search.key') . "_{$sType}_{$sQuery}";
 
@@ -62,6 +69,8 @@ class ModuleSearch extends Module
             $aParams = [
                 'index' => $this->sIndex,
                 'type' => $sType,
+                'size' => $this->iPerPage,
+                'from' => $this->iPerPage * $iPage,
                 'body' => [
                     'query' => [
                         'multi_match' => [
@@ -80,7 +89,7 @@ class ModuleSearch extends Module
             ];
             try {
                 $aResponse = $this->oElasticsearch->search($aParams)['hits'];
-                $this->Cache_Set($aResponse, $cacheKey, array(), Config::Get('sys.cache.prefixes.search.time'));
+                //$this->Cache_Set($aResponse, $cacheKey, array(), Config::Get('sys.cache.prefixes.search.time'));
             } catch (Exception $e) {
                 return false;
             }

@@ -227,10 +227,16 @@ $config['module']['image']['max_size'] = 30000; // максимальный ра
 // Модуль Security
 $config['module']['security']['hash'] = "";             // "примесь" к строке, хешируемой в качестве security-кода
 
+// Модуль Stream
 $config['module']['userfeed']['count_default'] = 20;    // Число топиков в ленте по умолчанию
 $config['module']['stream']['count_default'] = 20;      // Число топиков в ленте по умолчанию
 $config['module']['stream']['disable_vote_events'] = false;
 
+// Модуль Search
+$config['module']['search']['index'] = "tabun"; // Имя индекса в Elasticsearch
+$config['module']['search']['topic_key'] = "topic";
+$config['module']['search']['comment_key'] = "comment";
+$config['module']['search']['per_page'] = 30;
 // Какие модули должны быть загружены на старте
 $config['module']['autoLoad'] = ['Hook', 'Cache', 'Security', 'Session', 'Lang', 'Message', 'User'];
 /**
@@ -419,9 +425,6 @@ $config['sys']['celery']['backend'] = 'redis';
 $config['sys']['elastic']['hosts'] = [
     "0.0.0.0"
 ];
-$config['sys']['elastic']['index'] = "tabun"; // Имя индекса в Elasticsearch
-$config['sys']['elastic']['topic_key'] = "topic";
-$config['sys']['elastic']['comment_key'] = "comment";
 
 /**
  * Разное
