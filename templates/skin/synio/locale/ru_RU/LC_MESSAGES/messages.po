@@ -173,3 +173,10 @@ msgstr "Блог"
 
 msgid "talk"
 msgstr "Сообщение"
+
+# Pages
+msgid "faq"
+msgstr "FAQ"
+
+msgid "rules"
+msgstr "Правила"
