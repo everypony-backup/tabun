@@ -381,7 +381,7 @@ class ActionTalk extends Action {
 		/**
 		 * Отправляем письмо
 		 */
-		if ($oTalk=$this->Talk_SendTalk($this->Text_Parser(strip_tags(getRequestStr('talk_title'))),$this->Text_Parser(getRequestStr('talk_text')),$this->oUserCurrent,$this->aUsersId)) {
+		if ($oTalk=$this->Talk_SendTalk(strip_tags($this->Text_Parser(getRequestStr('talk_title'), ModuleText::ACT_CREATE)),$this->Text_Parser(getRequestStr('talk_text'), ModuleText::ACT_CREATE),$this->oUserCurrent,$this->aUsersId)) {
 			Router::Location(Router::GetPath('talk').'read/'.$oTalk->getId().'/');
 		} else {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'));
@@ -642,7 +642,7 @@ class ActionTalk extends Action {
 		/**
 		 * Проверяем текст комментария
 		 */
-		$sText=$this->Text_Parser(getRequestStr('comment_text'));
+		$sText=$this->Text_Parser(getRequestStr('comment_text'), ModuleText::ACT_CREATE);
 		if (!func_check($sText,'text',2,Config::Get('module.comment.comment_max_length'))) {
 			$this->Message_AddErrorSingle($this->Lang_Get('talk_comment_add_text_error'),$this->Lang_Get('error'));
 			return;
