@@ -268,6 +268,7 @@ $config['db']['table']['topic_content'] = '___db.table.prefix___topic_content';
 $config['db']['table']['topic_question_vote'] = '___db.table.prefix___topic_question_vote';
 $config['db']['table']['user_administrator'] = '___db.table.prefix___user_administrator';
 $config['db']['table']['comment_online'] = '___db.table.prefix___comment_online';
+$config['db']['table']['comment_change_history'] = '___db.table.prefix___comment_change_history';
 $config['db']['table']['invite'] = '___db.table.prefix___invite';
 $config['db']['table']['page'] = '___db.table.prefix___page';
 $config['db']['table']['city'] = '___db.table.prefix___city';

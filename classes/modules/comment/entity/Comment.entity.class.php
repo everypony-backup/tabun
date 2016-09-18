@@ -358,5 +358,182 @@ class ModuleComment_EntityComment extends Entity {
 	public function setCountFavourite($data) {
 		$this->_aData['comment_count_favourite']=$data;
 	}
+	
+	/**
+	 * Возвращает состояние всех флагов
+	 *
+	 * @return int
+	 */
+	public function getFlags() {
+		return $this->_getDataOne('flags');
+	}
+	
+	/**
+	 * Устаналивает состояние всех флагов
+	 *
+	 * @param int $data
+	 */
+	public function setFlags($data) {
+		$this->_aData['flags']=$data;
+	}
+	
+	/**
+	 * Проверяет, установлены ли все переданные флаги
+	 *
+	 * @param int $mask
+	 * @return bool
+	 */
+	public function isFlagsRaised($mask = -1) {
+		return ($this->_getDataOne('flags') & $mask) === $mask;
+	}
+	
+	/**
+	 * Проверяет, установлен ли хотя бы один из переданных флагов
+	 *
+	 * @param int $mask
+	 * @return bool
+	 */
+	public function isFlagRaised($mask = -1) {
+		return ($this->_getDataOne('flags') & $mask) !== 0;
+	}
+	
+	/**
+	 * Устаналивает флаг или набор флагов
+	 *
+	 * @param int $mask
+	 */
+	public function setFlag($mask) {
+		$this->_aData['flags'] = $this->_getDataOne('flags') | $mask;
+	}
+	
+	/**
+	 * Сбрасывает флаг или набор флагов
+	 *
+	 * @param int $mask
+	 */
+	public function clearFlag($mask) {
+		$this->_aData['flags'] = $this->_getDataOne('flags') & ~$mask;
+	}
+	
+	// флаги
+	const FLAG_HAS_ANSWER      = 4;     // на комментарий есть ответ
+	const FLAG_MODIFIED        = 8;     // комментарий изменён
+	const FLAG_HARD_MODIFIED   = 16;    // комментарий изменён после того как на него ответили
+	const FLAG_LOCK_MODIFY     = 32;    // изменение комментария заблокировано
+
+	/**
+	 * Возвращает ID последнего изменения
+	 *
+	 * @return int|null
+	 */
+	public function getLastModifyId() {
+		return $this->_getDataOne('comment_last_modify_id');
+	}
+	
+	/**
+	 * Возвращает ID автора последнего изменения
+	 *
+	 * @return int|null
+	 */
+	public function getLastModifyUserId() {
+		return $this->_getDataOne('last_modify_user');
+	}
+	
+	/**
+	 * Возвращает время последнего изменения
+	 *
+	 * @return Date|null
+	 */
+	public function getLastModifyDate() {
+		return $this->_getDataOne('last_modify_date');
+	}
+	
+	/**
+	 * Возвращает время блокировки изменения
+	 *
+	 * @return Date|null
+	 */
+	public function getLockModifyDate() {
+		return $this->_getDataOne('lock_modify_date');
+	}
+	
+	/**
+	 * Возвращает ID пользователя, заблокировавшего изменение
+	 *
+	 * @return int|null
+	 */
+	public function getLockModifyUserId() {
+		return $this->_getDataOne('lock_modify_user');
+	}
+	
+	/**
+	 * Устанавливает ID последнего изменения
+	 *
+	 * @param int $id
+	 */
+	public function setLastModifyId($id) {
+		$this->_aData['comment_last_modify_id'] = $id;
+	}
+	
+	/**
+	 * Устанавливает ID автора последнего изменения, устанавливает его время в текущее и возвращает его
+	 *
+	 * @param int $userId
+	 * @return string
+	 */
+	public function touchLastModifyInfo($userId) {
+		$date = date('Y-m-d H:i:s');
+		$this->_aData['last_modify_user'] = $userId;
+		$this->_aData['last_modify_date'] = &$date;
+		return $date;
+	}
+	
+	/**
+	 * Устанавливает ID пользователя, заблокировавшего изменение, и время блокировки
+	 *
+	 * @param int $userId
+	 */
+	public function touchLockModifyInfo($userId) {
+		$this->_aData['lock_modify_user'] = $userId;
+		$this->_aData['lock_modify_date'] = date('Y-m-d H:i:s');
+	}
+	
+	/**
+	 * Возвращает права на изменение комментария без подробностей
+	 *
+	 * @param ModuleUser_EntityUser $oUser
+	 * @return int
+	 */
+	public function getEditAccessMask($oUser) {
+		return $this->ACL_GetCommentEditAllowMask($this, $oUser);
+	}
+	
+	/**
+	 * Проверяет права на изменение комментария. Обёртка для comment.tpl
+	 *
+	 * @param int $accessMask
+	 * @return bool
+	 */
+	public function testAllowEdit($accessMask) {
+		return ($accessMask & ModuleACL::EDIT_ALLOW_FIX) !== 0;
+	}
+	
+	/**
+	 * Проверяет права на блокировку изменения комментария. Обёртка для comment.tpl
+	 *
+	 * @param int $accessMask
+	 * @return bool
+	 */
+	public function testAllowLock($accessMask) {
+		return ($accessMask & ModuleACL::EDIT_ALLOW_LOCK) !== 0;
+	}
+	
+	/**
+	 * Проверяет, был ли комментарий изменён или заблокирован для изменения. Обёртка для comment.tpl
+	 *
+	 * @return bool
+	 */
+	public function isModifiedOrLocked() {
+		return $this->isFlagRaised($this::FLAG_MODIFIED | $this::FLAG_LOCK_MODIFY);
+	}
 }
-?>
