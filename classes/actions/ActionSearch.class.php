@@ -103,6 +103,16 @@ class ActionSearch extends Action {
 
                 if($sType == 't') {
                     $aTopics = $this->Topic_GetTopicsAdditionalData(array_column($aResults['hits'], '_id'));
+                    foreach($aTopics AS $oTopic){
+                        $oTopic->setTextShort($this->Text_JevixParser($oTopic->getText()));
+                    }
+                    $this->Viewer_Assign('aTopics', $aTopics);
+                } else {
+                    $aComments = $this->Comment_GetCommentsAdditionalData(array_column($aResults['hits'], '_id'));
+                    foreach($aComments AS $oComment){
+                        $oComment->setText($this->Text_JevixParser(htmlspecialchars($oComment->getText())));
+                    }
+                    $this->Viewer_Assign('aComments', $aComments);
                 }
 
             }
