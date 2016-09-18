@@ -1193,15 +1193,18 @@ class ActionAjax extends Action {
 		}
 		$this->Hook_Run('comment_delete_after', array('oComment'=>$oComment));
 		/**
-		 * Формируем текст ответа
+		 * Формируем текст ответа и удаляем\возвращаем комментарий в индексе
 		 */
 		if ($bState=(bool)$oComment->getDelete()) {
 			$sMsg=$this->Lang_Get('comment_delete_ok');
 			$sTextToggle=$this->Lang_Get('comment_repair');
+            $this->SearchIndexer_CommentDelete($oComment);
 		} else {
 			$sMsg=$this->Lang_Get('comment_repair_ok');
 			$sTextToggle=$this->Lang_Get('comment_delete');
+            $this->SearchIndexer_CommentIndex($oComment);
 		}
+
 		/**
 		 * Обновление события в ленте активности
 		 */

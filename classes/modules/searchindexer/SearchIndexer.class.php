@@ -59,10 +59,11 @@ class ModuleSearchIndexer extends Module {
 		$this->sTopic = Config::Get('sys.elastic.topic_key');
 		$this->sComment = Config::Get('sys.elastic.comment_key');
 	}
+
 	/**
 	 * Индексирует топик
 	 *
-	 * @param string $oTopic сущность топика с данными
+	 * @param ModuleTopic_EntityTopic $oTopic сущность топика с данными
 	 */
 	public function TopicIndex(ModuleTopic_EntityTopic $oTopic) {
 		if ($this->oCeleryClient == null) {
@@ -81,15 +82,34 @@ class ModuleSearchIndexer extends Module {
 				'topic_text' => $oTopic->getText(),
 				'topic_tags' => $oTopic->getTags(),
 				'topic_date' => $oTopic->getDateAdd(),
-				'topic_publish' => $oTopic->getPublish(),
+				'topic_publish' => $oTopic->getPublish()
 			]
 		);
 	}
 
+    /**
+     * Удаляет топик
+     *
+     * @param ModuleTopic_EntityTopic $oTopic сущность топика с данными
+     */
+    public function TopicDelete(ModuleTopic_EntityTopic $oTopic) {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.topic_delete',
+            [
+                'index' => $this->sIndex,
+                'key' => $this->sTopic,
+                'topic_id' => $oTopic->getId()
+            ]
+        );
+    }
+
 	/**
 	 * Индексирует комментарий
 	 *
-	 * @param string $oComment сущность комментария с данными
+	 * @param ModuleComment_EntityComment $oComment сущность комментария с данными
 	 */
 	public function CommentIndex(ModuleComment_EntityComment $oComment) {
 		if ($this->oCeleryClient == null) {
@@ -106,7 +126,26 @@ class ModuleSearchIndexer extends Module {
 				'comment_user_id' => $oComment->getUserId(),
 				'comment_text' => $oComment->getText(),
 				'comment_date' => $oComment->getDate(),
-				'comment_publish' => $oComment->getPublish(),
+				'comment_publish' => $oComment->getPublish()
+			]
+		);
+	}
+
+	/**
+	 * Удаляет комментарий
+	 *
+	 * @param ModuleComment_EntityComment $oComment сущность комментария с данными
+	 */
+	public function CommentDelete(ModuleComment_EntityComment $oComment) {
+		if ($this->oCeleryClient == null) {
+			return;
+		}
+		$this->oCeleryClient->PostTask(
+			'tasks.comment_delete',
+			[
+				'index' => $this->sIndex,
+				'key' => $this->sComment,
+				'comment_id' => $oComment->getId()
 			]
 		);
 	}

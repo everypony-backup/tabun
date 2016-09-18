@@ -77,6 +77,14 @@ def topic_index(**kwargs):
         })
 
 @task
+def topic_delete(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    topic_id = kwargs.get('topic_id')
+
+    es.delete(index=index, doc_type=key, id=int(topic_id))
+
+@task
 def comment_index(**kwargs):
     index = kwargs.get('index')
     key = kwargs.get('key')
@@ -97,3 +105,11 @@ def comment_index(**kwargs):
             'date': comment_date,
             'publish': comment_publish
         })
+
+@task
+def comment_delete(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    comment_id = kwargs.get('comment_id')
+
+    es.delete(index=index, doc_type=key, id=int(comment_id))
