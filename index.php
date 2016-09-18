@@ -22,7 +22,7 @@ require_once(Config::Get('path.root.engine')."/classes/Engine.class.php");
 
 $locale = Config::Get('locale');
 putenv("LANG=" . $locale);
-setlocale(LC_ALL, $locale.".UTF-8");
+setlocale(LC_ALL, $locale);
 date_default_timezone_set(Config::Get('timezone'));
 
 if (Config::Get('misc.debug')) {
