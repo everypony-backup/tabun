@@ -738,4 +738,3 @@ class ActionSettings extends Action {
 		$this->Hook_Run('action_shutdown_settings');
 	}
 }
-?>
