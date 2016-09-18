@@ -197,15 +197,23 @@ class ModuleText extends Module {
 	 * Парсит текст, применя все парсеры
 	 *
 	 * @param string $sText Исходный текст
+	 * @param int $actionType Тип релевантного парсера
 	 * @return string
 	 */
-	public function Parser($sText) {
+	const ACT_CREATE = 1;
+	const ACT_FIX    = 2;
+	const ACT_UPDATE = 3;
+
+	public function Parser($sText, $actionType = -1) {
 		if (!is_string($sText)) {
 			return '';
 		}
 		$sResult=$this->JevixParser($sText);
 		$sResult=$this->VideoParser($sResult);
-		$sResult=$this->DiceParser($sResult);
+		if($actionType === $this::ACT_CREATE || $actionType === $this::ACT_UPDATE) {
+			// Don't parce dices for edited comments
+            $sResult=$this->DiceParser($sResult);
+		}
 		return $sResult;
 	}
 	/**
