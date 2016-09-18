@@ -58,10 +58,11 @@ cfg =
 
   resolve:
     extensions: ['', '.coffee', '.js', '.styl', '.css']
-    modulesDirectories: ['node_modules', 'scripts', 'locale']
+    modulesDirectories: ['node_modules', 'scripts']
     root: [
       process.env.NODE_PATH
       path.resolve(path.join(__dirname, 'frontend', 'vendor'))
+      path.resolve(path.join(__dirname, 'templates', 'skin', 'synio'))
     ]
 
   resolveLoader:

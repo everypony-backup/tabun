@@ -19,6 +19,8 @@ containers:
       peer: true
       optional: true
       dev: true
+    - !Install
+      - gettext
     environ:
       NODE_PATH: /usr/lib/node_modules
 
@@ -164,6 +166,12 @@ commands:
     container: static
     description: Build static files using webpack
     run: [webpack, --progress]
+
+  compile-locales: !Command
+    container: static
+    description: Comlile locale files
+    work-dir: templates/skin/synio/locale/ru_RU/LC_MESSAGES
+    run: msgfmt *.po
 
   watch-static: !Command
     container: static

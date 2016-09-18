@@ -56,7 +56,6 @@ $config['path']['root']['engine_lib'] = '___path.root.web___/engine/lib';   // �
 $config['path']['static']['url'] = '/static';                               // url для локальных файлов TODO: удалить этот fallback
 $config['path']['uploads']['url'] = '/storage';                             // url для отдачи загруженых файлов
 $config['path']['uploads']['storage'] = '___path.root.server___/storage';   // путь для хранения загруженых файлов
-$config['path']['locale'] = '___path.root.server___/locale';                // файлы l10n
 $config['path']['offset_request_url'] = 0;                                  // иногда помогает если сервер использует внутренние реврайты
 /**
  * Настройки шаблонизатора Smarty
@@ -335,6 +334,7 @@ $config['router']['page']['ajax'] = 'ActionAjax';
 $config['router']['page']['feed'] = 'ActionUserfeed';
 $config['router']['page']['stream'] = 'ActionStream';
 $config['router']['page']['subscribe'] = 'ActionSubscribe';
+$config['router']['page']['page'] = 'ActionPage';
 // Глобальные настройки роутинга
 $config['router']['config']['action_default'] = 'index';
 $config['router']['config']['action_not_found'] = 'error';
@@ -394,8 +394,9 @@ $config['block']['rule_search'] = [
 /**
  * Установка локали
  */
-$config['locale'] = 'ru_RU';
-$config['timezone'] = 'Europe/Moscow';
+$config['locale']['path'] = 'locale';                // файлы l10n
+$config['locale']['lang'] = 'ru_RU';
+$config['locale']['timezone'] = 'Europe/Moscow';
 
 /**
  * Настройки типографа текста Jevix
@@ -447,4 +448,10 @@ $config['module']['user']['recaptcha_use_registration'] = true;                 
 $config['recaptcha']['key'] = '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD';        // Google Recaptcha Key
 $config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup';     // Google Recaptcha Secret
 $config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
+
+/**
+ * Статические страницы
+ */
+$config['page']['show_block_structure'] = false;
+
 return $config;

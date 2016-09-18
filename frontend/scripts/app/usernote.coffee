@@ -6,25 +6,27 @@ routes = require "lib/routes.coffee"
 
 
 showNote = (sText) ->
-  $('#usernote-note').hide()
-  $('#usernote-button-add').show()
+  $('#usernote-note').show()
+  $('#usernote-form').hide()
   $('#usernote-note-text').text sText
+  unless sText
+    $('#usernote-button-add').show()
+    $('#usernote-note').hide()
+  
 
 showForm = ->
   $('#usernote-button-add').hide()
   $('#usernote-note').hide()
   $('#usernote-form').show()
   textArea = $ '#usernote-form-text'
-  textArea.val $('#usernote-form-text').val()
+  textArea.val $('#usernote-note-text').text().trim()
   textArea.focus()
   false
 
 hideForm = ->
   $('#usernote-form').hide()
-  sText = $('#usernote-form-text').val()
+  sText = $('#usernote-note-text').text().trim()
   showNote sText
-  unless sText
-    $('#usernote-button-add').show()
   false
 
 save = (iUserId) ->
