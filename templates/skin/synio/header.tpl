@@ -1,4 +1,4 @@
-{locale path="{cfg name='path.locale'}" domain="messages"}
+{locale path="{cfg name='locale.path'}" domain="messages"}
 <!doctype html>
 <html lang="ru">
 <head>

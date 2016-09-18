@@ -56,7 +56,6 @@ $config['path']['root']['engine_lib'] = '___path.root.web___/engine/lib';   // �
 $config['path']['static']['url'] = '/static';                               // url для локальных файлов TODO: удалить этот fallback
 $config['path']['uploads']['url'] = '/storage';                             // url для отдачи загруженых файлов
 $config['path']['uploads']['storage'] = '___path.root.server___/storage';   // путь для хранения загруженых файлов
-$config['path']['locale'] = '___path.root.server___/locale';                // файлы l10n
 $config['path']['offset_request_url'] = 0;                                  // иногда помогает если сервер использует внутренние реврайты
 /**
  * Настройки шаблонизатора Smarty
@@ -386,8 +385,9 @@ $config['block']['rule_search'] = [
 /**
  * Установка локали
  */
-$config['locale'] = 'ru_RU';
-$config['timezone'] = 'Europe/Moscow';
+$config['locale']['path'] = 'locale';                // файлы l10n
+$config['locale']['lang'] = 'ru_RU';
+$config['locale']['timezone'] = 'Europe/Moscow';
 
 /**
  * Настройки типографа текста Jevix
