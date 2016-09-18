@@ -52,29 +52,35 @@ class ModuleSearch extends Module {
      * @return array
      */
     public function RunQuery($sType, $sQuery) {
-        $aParams = [
-            'index' => $this->sIndex,
-            'type' => $sType,
-            'body' => [
-                'query' => [
-                    'multi_match' => [
-                        'query' => $sQuery,
+        $cacheKey = Config::Get('module.search.entity_prefix')."searchResult_{$sType}_{$sQuery}";
+
+        if(($aResponse = $this->Cache_Get($cacheKey)) === false) { // В кэше не нашлось такого запроса
+            // Выполняем его и сохраняем
+            $aParams = [
+                'index' => $this->sIndex,
+                'type' => $sType,
+                'body' => [
+                    'query' => [
+                        'multi_match' => [
+                            'query' => $sQuery,
+                            'fields' => [
+                                'title', 'text', 'tags'
+                            ]
+                        ]
+                    ],
+                    'highlight' => [
                         'fields' => [
-                            'title', 'text', 'tags'
+                            'text' => []
                         ]
                     ]
-                ],
-                'highlight' => [
-                    'fields' => [
-                        'text' => []
-                    ]
                 ]
-            ]
-        ];
-        try {
-            $aResponse = $this->oElasticsearch->search($aParams)['hits'];
-        } catch (Exception $e) {
-            return false;
+            ];
+            try {
+                $aResponse = $this->oElasticsearch->search($aParams)['hits'];
+                $this->Cache_Set($aResponse, $cacheKey, array(), 60*15);
+            } catch (Exception $e) {
+                return false;
+            }
         }
 
         return $aResponse;
