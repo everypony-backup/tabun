@@ -155,9 +155,12 @@ class ModuleComment extends Module {
 		 * В зависимости от типа target_type достаем данные
 		 */
 		$aTargets=array();
-		//$aTargets['topic']=isset($aAllowData['target']) && is_array($aAllowData['target']) ? $this->Topic_GetTopicsAdditionalData($aTargetId['topic'],$aAllowData['target']) : $this->Topic_GetTopicsAdditionalData($aTargetId['topic']);
-		$aTargets['topic']=$this->Topic_GetTopicsAdditionalData($aTargetId['topic'],array('blog'=>array('owner'=>array()),'user'=>array()));
-		$aVote=array();
+        if (isset($aAllowData['target']) && is_array($aAllowData['target'])) {
+            $aTargets['topic'] = $this->Topic_GetTopicsAdditionalData($aTargetId['topic'], $aAllowData['target']);
+        } else {
+            $aTargets['topic'] = $this->Topic_GetTopicsAdditionalData($aTargetId['topic']);
+        }
+        $aVote=array();
 		if (isset($aAllowData['vote']) and $this->oUserCurrent) {
 			$aVote=$this->Vote_GetVoteByArray($aCommentId,'comment',$this->oUserCurrent->getId());
 		}
@@ -447,14 +450,28 @@ class ModuleComment extends Module {
 	 * Добавляет коммент
 	 *
 	 * @param  ModuleComment_EntityComment $oComment	Объект комментария
+	 * @param  ModuleComment_EntityComment $oCommentParent	Объект комментария-родителя
 	 * @return bool|ModuleComment_EntityComment
 	 */
-	public function AddComment(ModuleComment_EntityComment $oComment) {
+	public function AddComment(ModuleComment_EntityComment $oComment, ModuleComment_EntityComment $oCommentParent=null) {
 		$sId=$this->oMapper->AddComment($oComment);
 		if ($sId) {
 			if ($oComment->getTargetType()=='topic') {
 				$this->Topic_increaseTopicCountComment($oComment->getTargetId());
 			}
+            if($oCommentParent !== null && !$oCommentParent->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER)) {
+                // Установить статус "есть ответ" комментария-родителя
+                $oCommentParent->setFlag(ModuleComment_EntityComment::FLAG_HAS_ANSWER);
+                $this->oMapper->UpdateCommentFlags($oCommentParent);
+                $this->Cache_Clean(
+                    Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                    [
+                        "comment_update",
+                        "comment_update_{$oCommentParent->getTargetType()}_{$oCommentParent->getTargetId()}"
+                    ]
+                );
+                $this->Cache_Delete("comment_{$oCommentParent->getId()}");
+            }
 			//чистим зависимые кеши
 			$this->Cache_Clean(
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
@@ -959,5 +976,43 @@ class ModuleComment extends Module {
 	public function GetCommentItemsByArrayId($aCommentId) {
 		return $this->GetCommentsByArrayId($aCommentId);
 	}
+	/**
+	 * Обновляет флаги коммента
+	 *
+	 * @param  ModuleComment_EntityComment $oComment	Объект комментария
+	 * @return bool
+	 */
+	public function UpdateCommentFlags(ModuleComment_EntityComment $oComment) {
+		if ($this->oMapper->UpdateCommentFlags($oComment)) {
+			//чистим зависимые кеши
+			$this->Cache_Clean(
+				Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+				[
+					"comment_update",
+					"comment_update_{$oComment->getTargetType()}_{$oComment->getTargetId()}"
+				]
+			);
+			$this->Cache_Delete("comment_{$oComment->getId()}");
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Добавляет элемент истории изменений коммента
+	 *
+	 * @param  ModuleComment_EntityCommentHistoryItem $oHistoryItem
+	 * @return int
+	 */
+	public function AddCommentHistoryItem(ModuleComment_EntityCommentHistoryItem $oHistoryItem) {
+		return $this->oMapper->AddCommentHistoryItem($oHistoryItem);
+	}
+    /**
+     * Возвращает текст уведомления о изменении/блокировке
+     *
+     * @return string|null
+     */
+    public function getModifyNoticeHTML($lastModifyDateText = null, $lockModifyDateText = null)
+    {
+        return ''; // TODO: Implement with templates
+    }
 }
-?>
