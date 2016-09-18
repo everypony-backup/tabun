@@ -242,7 +242,7 @@ class ActionQuestion extends Action {
 		 * Теперь можно смело добавлять топик к блогу
 		 */
 		$oTopic->setBlogId($oBlog->getId());
-		$oTopic->setText($this->Text_Parser($oTopic->getTextSource()));
+		$oTopic->setText($this->Text_Parser($oTopic->getTextSource(), ModuleText::ACT_CREATE));
 		$oTopic->setTextShort($oTopic->getText());
 		$oTopic->setCutText(null);
 		/**
@@ -376,7 +376,7 @@ class ActionQuestion extends Action {
 		 * Теперь можно смело редактировать топик
 		 */
 		$oTopic->setBlogId($oBlog->getId());
-		$oTopic->setText($this->Text_Parser($oTopic->getTextSource()));
+		$oTopic->setText($this->Text_Parser($oTopic->getTextSource(), ModuleText::ACT_UPDATE));
 		$oTopic->setTextShort($oTopic->getText());
 		/**
 		 * изменяем вопрос/ответы только если еще никто не голосовал
@@ -522,4 +522,3 @@ class ActionQuestion extends Action {
         $this->Viewer_AssignJS('sMenuItemSelect',$this->sMenuSubItemSelect);
     }
 }
-?>
