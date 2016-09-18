@@ -490,6 +490,12 @@ class ActionTopic extends Action {
 				$this->Blog_RecalculateCountTopicByBlogId($sBlogIdOld);
 			}
 			$this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
+
+            /**
+             * Отправляем запрос на переиндексирование в ElasticSearch
+             */
+            $this->SearchIndexer_TopicIndex($oTopic);
+
 			/**
 			 * Добавляем событие в ленту
 			 */

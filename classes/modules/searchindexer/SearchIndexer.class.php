@@ -85,6 +85,7 @@ class ModuleSearchIndexer extends Module {
 			]
 		);
 	}
+
 	/**
 	 * Индексирует комментарий
 	 *
