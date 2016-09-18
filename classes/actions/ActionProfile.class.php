@@ -865,7 +865,7 @@ class ActionProfile extends Action {
 		/**
 		 * Обрабатываем текст заявки
 		 */
-		$sUserText=$this->Text_Parser($sUserText);
+		$sUserText=$this->Text_Parser($sUserText, ModuleText::ACT_CREATE);
 		/**
 		 * Создаем связь с другом
 		 */
@@ -1114,4 +1114,3 @@ class ActionProfile extends Action {
 		$this->Viewer_Assign('USER_FRIEND_DELETE',ModuleUser::USER_FRIEND_DELETE);
 	}
 }
-?>
