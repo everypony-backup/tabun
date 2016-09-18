@@ -326,6 +326,7 @@ $config['router']['page']['ajax'] = 'ActionAjax';
 $config['router']['page']['feed'] = 'ActionUserfeed';
 $config['router']['page']['stream'] = 'ActionStream';
 $config['router']['page']['subscribe'] = 'ActionSubscribe';
+$config['router']['page']['page'] = 'ActionPage';
 // Глобальные настройки роутинга
 $config['router']['config']['action_default'] = 'index';
 $config['router']['config']['action_not_found'] = 'error';
@@ -432,5 +433,10 @@ $config['module']['user']['recaptcha_use_registration'] = true;                 
 $config['recaptcha']['key'] = '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD';        // Google Recaptcha Key
 $config['recaptcha']['secret'] = '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup';     // Google Recaptcha Secret
 $config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify"; // Google Recaptcha Url
-return $config;
 
+/**
+ * Статические страницы
+ */
+$config['page']['show_block_structure'] = false;
+
+return $config;
