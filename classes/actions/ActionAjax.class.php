@@ -1012,8 +1012,8 @@ class ActionAjax extends Action {
 		 */
 		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
 		$oTopic->setCutText($sTextCut);
-		$oTopic->setText($this->Text_Parser($sTextNew));
-		$oTopic->setTextShort($this->Text_Parser($sTextShort));
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_CREATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_CREATE));
 		/**
 		 * Рендерим шаблон для предпросмотра топика
 		 */
@@ -1043,7 +1043,7 @@ class ActionAjax extends Action {
 		if ($bSave) {
 			$sTextResult=htmlspecialchars($sText);
 		} else {
-			$sTextResult=$this->Text_Parser($sText);
+			$sTextResult=$this->Text_Parser($sText, $bFix ? ModuleText::ACT_FIX : ModuleText::ACT_CREATE);
 		}
 		/**
 		 * Передаем результат в ajax ответ
