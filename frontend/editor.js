@@ -17,7 +17,7 @@ function initTargetSelector(node) {
 }
 
 Baz.register({
-    'target_selector': initTargetSelector
+    'topictype_selector': initTargetSelector
 });
 
 Baz.refresh();

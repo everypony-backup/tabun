@@ -2,7 +2,7 @@
 {assign var="scripts" value=['editor']}
 
 {if $sEvent=='add'}
-    <div data-bazooka="target_selector"></div>
+    <div data-bazooka="topictype_selector"></div>
 {else}
     {include file='menu.blog_edit.tpl'}
 {/if}

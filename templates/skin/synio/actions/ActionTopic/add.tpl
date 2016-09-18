@@ -2,7 +2,7 @@
 {assign var="scripts" value=['editor']}
 
 {if $sEvent=='add'}
-    <div data-bazooka="target_selector"></div>
+    <div data-bazooka="topictype_selector"></div>
 {else}
 	<h2 class="page-header">{$aLang.topic_topic_edit}</h2>
 {/if}
