@@ -79,11 +79,6 @@ class ModuleSearch extends Module
                                 'title', 'text', 'tags'
                             ]
                         ]
-                    ],
-                    'highlight' => [
-                        'fields' => [
-                            'text' => []
-                        ]
                     ]
                 ]
             ];
@@ -93,8 +88,8 @@ class ModuleSearch extends Module
             } catch (Exception $e) {
                 return false;
             }
-        }
 
+        }
         return $aResponse;
     }
 }
