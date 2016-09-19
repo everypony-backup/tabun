@@ -37,13 +37,6 @@
             <a href="{router page='stream'}">{$aLang.stream_menu}</a>
         </li>
 
-        <li>
-            <a href="{router page='page'}faq/">{t}faq{/t}</a>
-        </li>
-        <li>
-            <a href="{router page='page'}rules/">{t}rules{/t}</a>
-        </li>
-
         {hook run='main_menu_item'}
     </ul>
 
