@@ -89,7 +89,7 @@ class ModuleSearch extends Module
             ];
             try {
                 $aResponse = $this->oElasticsearch->search($aParams)['hits'];
-                //$this->Cache_Set($aResponse, $cacheKey, array(), Config::Get('sys.cache.prefixes.search.time'));
+                $this->Cache_Set($aResponse, $cacheKey, array(), Config::Get('sys.cache.prefixes.search.time'));
             } catch (Exception $e) {
                 return false;
             }
