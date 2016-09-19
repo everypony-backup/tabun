@@ -21,3 +21,4 @@
 # OS X tmp
 .DS_Store
 *.pyc
+.vagrant/
