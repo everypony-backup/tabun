@@ -27,20 +27,9 @@ class ActionSearch extends Action {
 	 *
 	 * @var array
 	 */
-	protected $sTypesEnabled = array('topics' => array('topic_publish' => 1), 'comments' => array('comment_delete' => 0));
-	protected $aTypes = array('t' => 'topic', 'c' => 'comment');
-	/**
-	 * Массив результата от Сфинкса
-	 *
-	 * @var null|array
-	 */
-	protected $aSphinxRes = null;
-	/**
-	 * Поиск вернул результат или нет
-	 *
-	 * @var bool
-	 */
-	protected $bIsResults = FALSE;
+	protected $aAllowedType = array('topic', 'comment');
+	protected $aAllowedSort = array('date', 'score', 'rating');
+
 
 	/**
 	 * Инициализация
@@ -61,9 +50,13 @@ class ActionSearch extends Action {
 	 * Отображение формы поиска
 	 */
 	function EventIndex(){
-        $sType = getRequestStr('t');
-        if($sType == "") $sType = "t";
-        if(!array_key_exists($sType, $this->aTypes)) return;
+        $sType = getRequestStr('type');
+        if($sType == "") $sType = "topic";
+        if(!in_array($sType, $this->aAllowedType)) return;
+
+        $sSort = getRequestStr('sort');
+        if($sSort == "") $sSort = "score";
+        if(!in_array($sSort, $this->aAllowedSort)) return;
 
         $sQuery = getRequestStr('q');
         if($sQuery !== "") {
@@ -85,7 +78,11 @@ class ActionSearch extends Action {
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
-            $aResults = $this->Search_RunQuery($this->aTypes[$sType], $sQuery, $iPage - 1);
+            $aParams = [
+                "type" => $sType,
+                "sort" => $sSort
+            ];
+            $aResults = $this->Search_RunQuery($aParams, $sQuery, $iPage - 1);
             if($aResults === false) {
                 /**
                  * Произошла ошибка при поиске
@@ -130,7 +127,8 @@ class ActionSearch extends Action {
                     Router::GetPath('search'),
                     array(
                         'q' => $sQuery,
-                        't' => $sType
+                        'type' => $sType,
+                        'sort' => $sSort
                     )
                 );
                 $this->Viewer_Assign('aPaging', $aPaging);

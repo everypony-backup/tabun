@@ -55,20 +55,20 @@ class ModuleSearch extends Module
     /**
      * Делает указанный запрос
      *
-     * @param string $sType Тип элемента (topic, comment)
+     * @param string $aSearchParams Параметры поиска
      * @param string $sQuery Строка запроса
      * @param int $iPage Страница поиска
      * @return array
      */
-    public function RunQuery($sType, $sQuery, $iPage)
+    public function RunQuery($aSearchParams, $sQuery, $iPage)
     {
-        $cacheKey = Config::Get('sys.cache.prefixes.search.key') . "_{$sType}_{$sQuery}";
+        $cacheKey = Config::Get('sys.cache.prefixes.search.key') . "_".serialize($aSearchParams)."_{$sQuery}";
 
         if (($aResponse = $this->Cache_Get($cacheKey)) === false) { // В кэше не нашлось такого запроса
             // Выполняем его и сохраняем
             $aParams = [
                 'index' => $this->sIndex,
-                'type' => $sType,
+                'type' => $aSearchParams['type'],
                 'size' => $this->iPerPage,
                 'from' => $this->iPerPage * $iPage,
                 'body' => [
@@ -82,6 +82,16 @@ class ModuleSearch extends Module
                     ]
                 ]
             ];
+
+            switch ($aSearchParams['sort']) {
+                case 'date':
+                    $aParams['body']['sort'] = [
+                        'date' => [
+                            'order' => 'desc'
+                        ]
+                    ];
+                    break;
+            }
             try {
                 $aResponse = $this->oElasticsearch->search($aParams)['hits'];
                 $this->Cache_Set($aResponse, $cacheKey, array(), Config::Get('sys.cache.prefixes.search.time'));
