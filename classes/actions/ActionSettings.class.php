@@ -487,6 +487,11 @@ class ActionSettings extends Action {
 					if (getRequestStr('password')==getRequestStr('password_confirm')) {
 						if (validate_password(getRequestStr('password_now'), $this->oUserCurrent->getPassword())) {
 							$this->oUserCurrent->setPassword(create_hash(getRequestStr('password')));
+							/**
+							 * Авторизируем для обновления ключа сессии, который зависит от пароля.
+							 *
+							 */
+							$this->ModuleUser_Authorization($this->oUserCurrent);
 						} else {
 							$bError=true;
 							$this->Message_AddError($this->Lang_Get('settings_profile_password_current_error'),$this->Lang_Get('error'));

@@ -235,8 +235,8 @@ class ModuleUser extends Module {
 				 */
 				$aUsers[$oUser->getId()]=$oUser;
 				$this->Cache_Set(
-					$oUser, 
-					"user_{$oUser->getId()}", 
+					$oUser,
+					"user_{$oUser->getId()}",
 					[]
 				);
 				$aUserIdNeedStore=array_diff($aUserIdNeedStore,array($oUser->getId()));
@@ -315,8 +315,8 @@ class ModuleUser extends Module {
 				 */
 				$aSessions[$oSession->getUserId()]=$oSession;
 				$this->Cache_Set(
-					['time'=>time(),'session'=>$oSession], 
-					"user_session_{$oSession->getUserId()}", 
+					['time'=>time(),'session'=>$oSession],
+					"user_session_{$oSession->getUserId()}",
 					[]
 				);
 				$aUserIdNeedStore=array_diff($aUserIdNeedStore,array($oSession->getUserId()));
@@ -327,8 +327,8 @@ class ModuleUser extends Module {
 		 */
 		foreach ($aUserIdNeedStore as $sId) {
 			$this->Cache_Set(
-				['time'=>time(),'session'=>null], 
-				"user_session_{$sId}", 
+				['time'=>time(),'session'=>null],
+				"user_session_{$sId}",
 				[]
 			);
 		}
@@ -430,8 +430,8 @@ class ModuleUser extends Module {
 		if (false === ($id = $this->Cache_Get($sCacheKey))) {
 			if ($id = $this->oMapper->GetUserByLogin($sLogin)) {
 				$this->Cache_Set(
-					$id, 
-					$sCacheKey, 
+					$id,
+					$sCacheKey,
 					[]
 				);
 			}
@@ -472,6 +472,15 @@ class ModuleUser extends Module {
 		return $this->oMapper->Update($oUser);
 	}
 	/**
+	 * Генерирует ключ для куков
+	 *
+	 * @param ModuleUser_EntityUser $oUser	Объект пользователя
+	 * @return string
+	 */
+	public function GenerateUserKey(ModuleUser_EntityUser $oUser) {
+		return md5($oUser->getLogin().'--'.$oUser->getPassword());
+	}
+	/**
 	 * Авторизовывает юзера
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Объект пользователя
@@ -487,7 +496,7 @@ class ModuleUser extends Module {
 		 * Генерим новый ключ авторизаии для куков
 		 */
 		if(is_null($sKey)){
-			$sKey=md5(func_generator().time().$oUser->getLogin());
+			$sKey=$this->GenerateUserKey($oUser);
 		}
 		/**
 		 * Создаём новую сессию
@@ -513,17 +522,20 @@ class ModuleUser extends Module {
 	 *
 	 */
 	protected function AutoLogin() {
-		if ($this->oUserCurrent) {
-			return;
-		}
-		if (isset($_COOKIE['key']) and is_string($_COOKIE['key']) and $sKey=$_COOKIE['key']) {
-			if ($oUser=$this->GetUserBySessionKey($sKey)) {
-				$this->Authorization($oUser);
-			} else {
-				$this->Logout();
-			}
-		}
-	}
+ 		if ($this->oUserCurrent) {
+ 			if (isset($_COOKIE['key']) and $_COOKIE['key']!=$this->GenerateUserKey($this->oUserCurrent)) {
+ 				$this->Logout();
+ 			}
+ 			return;
+ 		}
+ 		if (isset($_COOKIE['key']) and is_string($_COOKIE['key']) and $sKey=$_COOKIE['key']) {
+ 			if ($oUser=$this->GetUserBySessionKey($sKey) && $sKey==$this->GenerateUserKey($oUser)) {
+ 				$this->Authorization($oUser);
+ 			} else {
+ 				$this->Logout();
+ 			}
+ 		}
+ 	}
 	/**
 	 * Авторизован ли юзер
 	 *
@@ -587,8 +599,8 @@ class ModuleUser extends Module {
             );
 		}
 		$this->Cache_Set(
-			$data, 
-			$sCacheKey, 
+			$data,
+			$sCacheKey,
 			[]
 		);
 	}
@@ -633,8 +645,8 @@ class ModuleUser extends Module {
 		} elseif (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetUsersByDateLast($iLimit);
 			$this->Cache_Set(
-				$data, 
-				$sCacheKey, 
+				$data,
+				$sCacheKey,
 				[
 					"user_session_update"
                 ]
@@ -658,7 +670,7 @@ class ModuleUser extends Module {
 		if (false === ($data = $this->Cache_Get($sKey))) {
 			$data = array('collection'=>$this->oMapper->GetUsersByFilter($aFilter,$aOrder,$iCount,$iCurrPage,$iPerPage),'count'=>$iCount);
 			$this->Cache_Set(
-                $data, 
+                $data,
                 $sKey,
                 [
                     "user_update",
@@ -698,7 +710,7 @@ class ModuleUser extends Module {
 
 			$this->Cache_Set(
                 $aStat,
-                $sCacheKey, 
+                $sCacheKey,
                 [
                     "user_update",
                     "user_new"
@@ -719,7 +731,7 @@ class ModuleUser extends Module {
         if (false === ($data = $this->Cache_Get($sCacheKey))) {
 			$data = $this->oMapper->GetUsersByLoginLike($sUserLogin,$iLimit);
 			$this->Cache_Set(
-                $data, 
+                $data,
                 $sCacheKey,
                 [
                     "user_new"
@@ -782,7 +794,7 @@ class ModuleUser extends Module {
 				 * by Kachaev
 				 */
 				$this->Cache_Set(
-                    $oFriend, 
+                    $oFriend,
                     "user_friend_{$oFriend->getFriendId()}_{$oFriend->getUserId()}",
                     []
                 );
@@ -794,8 +806,8 @@ class ModuleUser extends Module {
 		 */
 		foreach ($aUserIdNeedStore as $sId) {
 			$this->Cache_Set(
-                null, 
-                "user_friend_{$sId}_{$sUserId}", 
+                null,
+                "user_friend_{$sId}_{$sUserId}",
 				[]
 			);
 		}
