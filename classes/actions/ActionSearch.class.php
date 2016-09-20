@@ -29,6 +29,20 @@ class ActionSearch extends Action {
 	 */
     protected $aParams = [];
 
+    /**
+	 * Параметры поиска, зарегистрированные как кодированные
+	 *
+	 * @var array
+	 */
+    protected $aCodedParams = [];
+
+    /**
+     * Стандартная строка кодированных параметров
+     *
+     * @var int
+     */
+    protected $sCodedDefault = 'ts';
+
 	/**
 	 * Инициализация
 	 */
@@ -51,15 +65,20 @@ class ActionSearch extends Action {
         $this->SetTemplateAction('index');
 
         $sQuery = getRequestStr('q');
-        if($sQuery !== "") {
+        if($sQuery !== '') {
             $iPage = intval(preg_replace('#^page([1-9]\d{0,5})$#', '\1', Router::GetActionEvent()));
             if($iPage == 0) $iPage = 1;
 
             /*
              * Регистрируем поисковые параметры
              */
-            $this->RegisterQueryField('type', ['topic', 'comment'], 'topic');
-            $this->RegisterQueryField('sort', ['date', 'score', 'rating'], 'score');
+            $sCoded = getRequestStr('coded');
+            if($sCoded == '') $sCoded = $this->sCodedDefault;
+
+            $this->RegisterCodedQueryParam($sCoded, 0, 'type', ['t' => 'topic', 'c' => 'comment']);
+            $this->RegisterCodedQueryParam($sCoded, 1, 'sort', ['d' => 'date', 's' => 'score', 'r' => 'rating']);
+            //$this->RegisterQueryParam('type', ['topic', 'comment'], 'topic');
+            //$this->RegisterQueryParam('sort', ['date', 'score', 'rating'], 'score');
 
             $this->Viewer_Assign('sQuery', $sQuery);
             $this->Viewer_AddHtmlTitle($sQuery);
@@ -75,7 +94,7 @@ class ActionSearch extends Action {
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
-            $aResults = $this->Search_RunQuery($this->aParams, $sQuery, $iPage - 1);
+            $aResults = $this->Search_RunQuery(array_merge($this->aParams, $this->aCodedParams), $sQuery, $iPage - 1);
             if($aResults === false) {
                 /**
                  * Произошла ошибка при поиске
@@ -95,7 +114,7 @@ class ActionSearch extends Action {
                 */
                 $this->Text_LoadJevixConfig('search');
 
-                if($this->aParams['type'] == 't') {
+                if($this->aCodedParams['type'] == 'topic') {
                     $aTopics = $this->Topic_GetTopicsAdditionalData(array_column($aResults['hits'], '_id'));
                     foreach($aTopics AS $oTopic){
                         $oTopic->setTextShort($this->Text_JevixParser($oTopic->getText()));
@@ -118,14 +137,30 @@ class ActionSearch extends Action {
                     Config::Get('module.search.per_page'),
                     Config::Get('pagination.pages.count'),
                     Router::GetPath('search'),
-                    array_merge(['q' => $sQuery], $this->aParams)
+                    array_merge(['q' => $sQuery, 'coded' => $sCoded], $this->aParams)
                 );
                 $this->Viewer_Assign('aPaging', $aPaging);
             }
         }
 	}
 
-	private function RegisterQueryField($name, array $values, $default) {
+	private function RegisterCodedQueryParam($str, $pos, $name, array $values) {
+        if(strlen($str) !== strlen($this->sCodedDefault)) {
+            $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
+        }
+
+        $val = $str{$pos};
+        if(!in_array($val, array_keys($values))) {
+            $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
+        }
+
+        $var = $values[$val];
+
+        $this->aCodedParams[$name] = $var; // Сохраняем переменную в глобальный список
+        $this->Viewer_Assign('s' . ucfirst($name), $var);
+    }
+
+	private function RegisterQueryParam($name, array $values, $default) {
         $var = getRequestStr($name);
         if($var == "") $var = $default;
 
