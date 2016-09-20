@@ -12,15 +12,15 @@
 		<div>
 			Сортировать по:
 			<span class="input-radio">
-				<input id="radio_sort_date" type="radio" name="sort" value="date" {if $sType == "date"}checked{/if}>
+				<input id="radio_sort_date" type="radio" name="sort" value="date" {if $sSort == "date"}checked{/if}>
 				<label for="radio_sort_date">дате</label>
 			</span>
 			<span class="input-radio">
-				<input id="radio_sort_score" type="radio" name="sort" value="score" {if $sType == "score"}checked{/if}>
+				<input id="radio_sort_score" type="radio" name="sort" value="score" {if $sSort == "score"}checked{/if}>
 				<label for="radio_sort_score">релевантности</label>
 			</span>
 			<span class="input-radio">
-				<input id="radio_sort_rating" type="radio" name="sort" value="rating" {if $sType == "rating"}checked{/if}>
+				<input id="radio_sort_rating" type="radio" name="sort" value="rating" {if $sSort == "rating"}checked{/if}>
 				<label for="radio_sort_rating">рейтингу</label>
 			</span>
 		</div>

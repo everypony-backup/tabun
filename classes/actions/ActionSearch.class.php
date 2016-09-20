@@ -23,13 +23,11 @@
  */
 class ActionSearch extends Action {
 	/**
-	 * Допустимые типы поиска с параметрами
+	 * Зарегистрированные параметры поиска
 	 *
 	 * @var array
 	 */
-	protected $aAllowedType = array('topic', 'comment');
-	protected $aAllowedSort = array('date', 'score', 'rating');
-
+    protected $aParams = [];
 
 	/**
 	 * Инициализация
@@ -50,21 +48,20 @@ class ActionSearch extends Action {
 	 * Отображение формы поиска
 	 */
 	function EventIndex(){
-        $sType = getRequestStr('type');
-        if($sType == "") $sType = "topic";
-        if(!in_array($sType, $this->aAllowedType)) return;
-
-        $sSort = getRequestStr('sort');
-        if($sSort == "") $sSort = "score";
-        if(!in_array($sSort, $this->aAllowedSort)) return;
+        $this->SetTemplateAction('index');
 
         $sQuery = getRequestStr('q');
         if($sQuery !== "") {
             $iPage = intval(preg_replace('#^page([1-9]\d{0,5})$#', '\1', Router::GetActionEvent()));
             if($iPage == 0) $iPage = 1;
-            
+
+            /*
+             * Регистрируем поисковые параметры
+             */
+            $this->RegisterQueryField('type', ['topic', 'comment'], 'topic');
+            $this->RegisterQueryField('sort', ['date', 'score', 'rating'], 'score');
+
             $this->Viewer_Assign('sQuery', $sQuery);
-            $this->Viewer_Assign('sType', $sType);
             $this->Viewer_AddHtmlTitle($sQuery);
 
             /**
@@ -78,11 +75,7 @@ class ActionSearch extends Action {
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
-            $aParams = [
-                "type" => $sType,
-                "sort" => $sSort
-            ];
-            $aResults = $this->Search_RunQuery($aParams, $sQuery, $iPage - 1);
+            $aResults = $this->Search_RunQuery($this->aParams, $sQuery, $iPage - 1);
             if($aResults === false) {
                 /**
                  * Произошла ошибка при поиске
@@ -102,7 +95,7 @@ class ActionSearch extends Action {
                 */
                 $this->Text_LoadJevixConfig('search');
 
-                if($sType == 't') {
+                if($this->aParams['type'] == 't') {
                     $aTopics = $this->Topic_GetTopicsAdditionalData(array_column($aResults['hits'], '_id'));
                     foreach($aTopics AS $oTopic){
                         $oTopic->setTextShort($this->Text_JevixParser($oTopic->getText()));
@@ -125,18 +118,24 @@ class ActionSearch extends Action {
                     Config::Get('module.search.per_page'),
                     Config::Get('pagination.pages.count'),
                     Router::GetPath('search'),
-                    array(
-                        'q' => $sQuery,
-                        'type' => $sType,
-                        'sort' => $sSort
-                    )
+                    array_merge(['q' => $sQuery], $this->aParams)
                 );
                 $this->Viewer_Assign('aPaging', $aPaging);
-
             }
-            $this->SetTemplateAction('index');
         }
 	}
+
+	private function RegisterQueryField($name, array $values, $default) {
+        $var = getRequestStr($name);
+        if($var == "") $var = $default;
+
+        if(!in_array($var, $values)) {
+            $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
+        }
+
+        $this->aParams[$name] = $var; // Сохраняем переменную в глобальный список
+        $this->Viewer_Assign('s' . ucfirst($name), $var);
+    }
 
 	/**
 	 * Обработка стандарта для браузеров Open Search
