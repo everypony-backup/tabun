@@ -79,6 +79,7 @@ containers:
     - !Install
       - php5-fpm@main
       - php5-mysql
+      - php5-pdo_mysql
       - php5-mcrypt
       - php5-memcache
       - php5-redis@testing
@@ -101,6 +102,7 @@ containers:
       - !Container _php-base
       - !Install
         - php5-xdebug@community
+        - php5-cli
       - !Copy
         source: /work/config/local/xdebug.ini
         path: /etc/php5/conf.d/xdebug.ini
@@ -200,10 +202,25 @@ commands:
     description: Watch and auto-rebuild changed static files
     run: [webpack, --progress, --watch]
 
+  reindex: !Command
+    container: php-dev
+    description: Rebuild ES index
+    work-dir: engine/console
+    accepts-arguments: true
+    environ:
+      CONFIG: /config/app.conf.php
+      COMPOSER_DIR: /usr/local/lib/composer
+    run: [php, ls, reindex]
+
   webpack: !Command
     container: static
     description: Webpack CLI
     run: [webpack]
+
+  redis-cli: &redis !Command
+    container: redis
+    description: Run redis CLI
+    run: redis-cli
 
   redis: &redis !Command
     container: redis
