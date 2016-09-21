@@ -7,7 +7,9 @@ from email.utils import COMMASPACE
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
+from elasticsearch import Elasticsearch
 
+es = Elasticsearch()
 
 @task
 def send_mail(**kwargs):
@@ -46,3 +48,68 @@ def send_mail(**kwargs):
     )
     server.quit()
 
+@task
+def topic_index(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    topic_id = kwargs.get('topic_id')
+    topic_blog_id = kwargs.get('topic_blog_id')
+    topic_user_id = kwargs.get('topic_user_id')
+    topic_type = kwargs.get('topic_type')
+    topic_title = kwargs.get('topic_title')
+    topic_text = kwargs.get('topic_text')
+    topic_tags = kwargs.get('topic_tags')
+    topic_date = kwargs.get('topic_date')
+    topic_publish = kwargs.get('topic_publish')
+
+    topic_tags = topic_tags.split(',')
+
+    es.index(index=index, doc_type=key, id=int(topic_id), body=
+        {
+            'blog_id': int(topic_blog_id),
+            'user_id': int(topic_user_id),
+            'type': topic_type,
+            'title': topic_title.strip(),
+            'text': topic_text.strip(),
+            'tags': topic_tags,
+            'date': topic_date,
+            'publish': topic_publish
+        })
+
+@task
+def topic_delete(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    topic_id = kwargs.get('topic_id')
+
+    es.delete(index=index, doc_type=key, id=int(topic_id))
+
+@task
+def comment_index(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    comment_id = kwargs.get('comment_id')
+    comment_target_id = kwargs.get('comment_target_id')
+    comment_target_type = kwargs.get('comment_target_type')
+    comment_user_id = kwargs.get('comment_user_id')
+    comment_text = kwargs.get('comment_text')
+    comment_date = kwargs.get('comment_date')
+    comment_publish = kwargs.get('comment_publish')
+
+    es.index(index=index, doc_type=key, id=int(comment_id), body=
+        {
+            'target_id': int(comment_target_id),
+            'target_type': comment_target_type,
+            'user_id': int(comment_user_id),
+            'text': comment_text.strip(),
+            'date': comment_date,
+            'publish': comment_publish
+        })
+
+@task
+def comment_delete(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    comment_id = kwargs.get('comment_id')
+
+    es.delete(index=index, doc_type=key, id=int(comment_id))

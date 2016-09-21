@@ -33,6 +33,7 @@ containers:
     - !Py3Install
       - celery[redis]
       - beautifulsoup4
+      - elasticsearch
 
   memcached:
     setup:
@@ -78,6 +79,7 @@ containers:
     - !Install
       - php5-fpm@main
       - php5-mysql
+      - php5-pdo_mysql
       - php5-mcrypt
       - php5-memcache
       - php5-redis@testing
@@ -100,6 +102,7 @@ containers:
       - !Container _php-base
       - !Install
         - php5-xdebug@community
+        - php5-cli
       - !Copy
         source: /work/config/local/xdebug.ini
         path: /etc/php5/conf.d/xdebug.ini
@@ -111,6 +114,27 @@ containers:
       /storage: !Persistent {name: storage}
       /log: !Persistent {name: php_log}
       /var/log: !Snapshot
+
+  elastic:
+    setup:
+    - !Ubuntu xenial
+    - !UbuntuUniverse
+    # elastic PGP & Repo
+    - !AptTrust
+      server: pgp.mit.edu
+      keys: [D88E42B4]
+    - !UbuntuRepo
+      url: http://packages.elastic.co/elasticsearch/2.x/debian
+      suite: stable
+      components: [main]
+    - !Install
+      - ca-certificates
+      - ca-certificates-java
+      - openjdk-8-jre-headless
+      - elasticsearch=2.3.3
+    - !EnsureDir /var/elastic
+    volumes:
+      /var/elastic: !Persistent { name: elastic }
 
 commands:
   _init_db: !Command
@@ -178,10 +202,25 @@ commands:
     description: Watch and auto-rebuild changed static files
     run: [webpack, --progress, --watch]
 
+  reindex: !Command
+    container: php-dev
+    description: Rebuild ES index
+    work-dir: engine/console
+    accepts-arguments: true
+    environ:
+      CONFIG: /config/app.conf.php
+      COMPOSER_DIR: /usr/local/lib/composer
+    run: [php, ls, reindex]
+
   webpack: !Command
     container: static
     description: Webpack CLI
     run: [webpack]
+
+  redis-cli: &redis !Command
+    container: redis
+    description: Run redis CLI
+    run: redis-cli
 
   redis: &redis !Command
     container: redis
@@ -226,6 +265,18 @@ commands:
     external-user-id: 0
     run: [php-fpm, -eFO]
 
+  elastic: &elastic !Command
+    description: Run elasticsearch
+    container: elastic
+    user-id: 1
+    external-user-id: 0
+    run:
+    - /usr/share/elasticsearch/bin/elasticsearch
+    - -Des.path.conf=/etc/elasticsearch
+    - -Des.path.logs=/tmp
+    - -Des.path.work=/tmp
+    - -Des.path.data=/var/elastic/data
+
   run: !Supervise
     description: Run full server stack
     kill-unresponsive-after: 5
@@ -237,3 +288,4 @@ commands:
       celery: *celery
       memcached: *memcached
       php: *php
+      elastic: *elastic

@@ -176,6 +176,12 @@ class ActionTopic extends Action {
 		$this->Hook_Run('topic_delete_before', array('oTopic'=>$oTopic));
 		$this->Topic_DeleteTopic($oTopic);
 		$this->Hook_Run('topic_delete_after', array('oTopic'=>$oTopic));
+
+        /**
+         * Удаляем топик из индекса
+         */
+        $this->SearchIndexer_TopicDelete($oTopic);
+
 		/**
 		 * Перенаправляем на страницу со списком топиков из блога этого топика
 		 */
@@ -356,6 +362,12 @@ class ActionTopic extends Action {
 			if ($oTopic->getPublish()==1 and $oBlog->getType()!='personal') {
 				$this->Topic_SendNotifyTopicNew($oBlog,$oTopic,$this->oUserCurrent);
 			}
+
+			/**
+			 * Отправляем запрос на индексирование в ElasticSearch
+			 */
+			$this->SearchIndexer_TopicIndex($oTopic);
+
 			/**
 			 * Добавляем событие в ленту
 			 */
@@ -484,6 +496,12 @@ class ActionTopic extends Action {
 				$this->Blog_RecalculateCountTopicByBlogId($sBlogIdOld);
 			}
 			$this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
+
+            /**
+             * Отправляем запрос на переиндексирование в ElasticSearch
+             */
+            $this->SearchIndexer_TopicIndex($oTopic);
+
 			/**
 			 * Добавляем событие в ленту
 			 */

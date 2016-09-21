@@ -1,0 +1,95 @@
+.search
+  margin-bottom 20px
+  position relative
+  .input-text
+    padding-right 25px
+    width: 100%
+  .input-submit
+    border none
+    width 16px
+    height 16px
+    position absolute
+    top 6px
+    right 5px
+    opacity .7
+    &:hover
+      opacity 1
+  .input-checkbox
+    display: inline-block
+  .input-radio
+    display inline-block
+    margin 0 3px
+    label
+      display inline-block
+      margin 3px
+  .block
+    margin-top: 5px
+
+.search-item
+  margin-bottom 15px
+  .input-text
+    width 100%
+    padding-right 5px
+  .submit
+    width 16px
+    height 16px
+    background url(images/icons-synio.png) -115px -55px no-repeat
+  &.search-item-abc
+    ul
+      overflow hidden
+      zoom 1
+      margin-top 10px
+      li
+        float left
+        a
+          float left
+          color #727a90
+          text-decoration none
+          padding 1px 5px
+          border-radius 3px
+          span
+            border-bottom 1px dotted #727a90
+          &:hover
+            background #64ceff
+            color #fff
+            span
+              border none
+        &.active
+          a
+            color #333
+            &:hover
+              color #333
+              background none
+            span
+              border none
+
+.search-tags
+  margin-bottom 15px
+
+.search-form-wrapper
+  background #f9fbfb
+  padding 15px
+  border-radius 5px
+  margin-bottom 15px
+
+.search-input-wrapper
+  position relative
+  .input-submit
+    position absolute
+    top 3px
+    right 3px
+    width 22px
+    height 22px
+    border none
+    background url(images/icons-synio.png) -319px -24px no-repeat
+    cursor pointer
+    &:hover
+      background-position -341px -24px
+    &:active
+      background-position -363px -24px
+  .input-text
+    padding-right 25px
+
+.search-header
+  h3
+    font-size: 20px
