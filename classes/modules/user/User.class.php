@@ -478,8 +478,26 @@ class ModuleUser extends Module {
 	 * @return string
 	 */
 	public function GenerateUserKey(ModuleUser_EntityUser $oUser) {
-		return md5($oUser->getLogin().'--'.$oUser->getPassword());
+        return base64_encode(pbkdf2(
+            PBKDF2_HASH_ALGORITHM,
+            $oUser->getLogin(),
+            Config::Get('module.security.hash'),
+            PBKDF2_ITERATIONS,
+            PBKDF2_HASH_BYTE_SIZE,
+            true
+        ));
 	}
+
+    /**
+     * Валидирует значение ключа сессии для данного пользователя
+     *
+     * @param ModuleUser_EntityUser $oUser Объект пользователя
+     * @param string $sKey Ключ сессии из cookies
+     * @return bool
+     */
+    public function ValidateUserKey(ModuleUser_EntityUser $oUser, $sKey) {
+        return slow_equals($this->GenerateUserKey($oUser), $sKey);
+    }
 	/**
 	 * Авторизовывает юзера
 	 *
@@ -522,14 +540,15 @@ class ModuleUser extends Module {
 	 *
 	 */
 	protected function AutoLogin() {
- 		if ($this->oUserCurrent) {
- 			if (isset($_COOKIE['key']) and $_COOKIE['key']!=$this->GenerateUserKey($this->oUserCurrent)) {
- 				$this->Logout();
- 			}
+        $sKeyFromCookies = getRequestStr('key', null, 'cookie');
+
+ 		if ($this->oUserCurrent && !$this->ValidateUserKey($this->oUserCurrent, $sKeyFromCookies)) {
+            $this->Logout();
  			return;
  		}
- 		if (isset($_COOKIE['key']) and is_string($_COOKIE['key']) and $sKey=$_COOKIE['key']) {
- 			if ($oUser=$this->GetUserBySessionKey($sKey) && $sKey==$this->GenerateUserKey($oUser)) {
+ 		if ($sKeyFromCookies) {
+			$oUser=$this->GetUserBySessionKey($sKeyFromCookies);
+			if ($oUser && $this->ValidateUserKey($oUser, $sKeyFromCookies)) {
  				$this->Authorization($oUser);
  			} else {
  				$this->Logout();
