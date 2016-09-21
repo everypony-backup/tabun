@@ -62,44 +62,39 @@ class ModuleSearch extends Module
      */
     public function RunQuery($aSearchParams, $sQuery, $iPage)
     {
-        $cacheKey = Config::Get('sys.cache.prefixes.search.key') . "_".serialize($aSearchParams)."_{$sQuery}";
-
-        if (($aResponse = $this->Cache_Get($cacheKey)) === false) { // В кэше не нашлось такого запроса
-            // Выполняем его и сохраняем
-            $aParams = [
-                'index' => $this->sIndex,
-                'type' => $aSearchParams['type'],
-                'size' => $this->iPerPage,
-                'from' => $this->iPerPage * $iPage,
-                'body' => [
-                    'query' => [
-                        'multi_match' => [
-                            'query' => $sQuery,
-                            'fields' => [
-                                'title', 'text', 'tags'
-                            ]
+        // Выполняем его и сохраняем
+        $aParams = [
+            'index' => $this->sIndex,
+            'type' => $aSearchParams['type'],
+            'size' => $this->iPerPage,
+            'from' => $this->iPerPage * $iPage,
+            'body' => [
+                'query' => [
+                    'multi_match' => [
+                        'query' => $sQuery,
+                        'fields' => [
+                            'title', 'text', 'tags'
                         ]
                     ]
                 ]
-            ];
+            ]
+        ];
 
-            switch ($aSearchParams['sort']) {
-                case 'date':
-                    $aParams['body']['sort'] = [
-                        'date' => [
-                            'order' => 'desc'
-                        ]
-                    ];
-                    break;
-            }
-            try {
-                $aResponse = $this->oElasticsearch->search($aParams)['hits'];
-                $this->Cache_Set($aResponse, $cacheKey, array(), Config::Get('sys.cache.prefixes.search.time'));
-            } catch (Exception $e) {
-                return false;
-            }
-
+        switch ($aSearchParams['sort']) {
+            case 'date':
+                $aParams['body']['sort'] = [
+                    'date' => [
+                        'order' => 'desc'
+                    ]
+                ];
+                break;
         }
+        try {
+            $aResponse = $this->oElasticsearch->search($aParams)['hits'];
+        } catch (Exception $e) {
+            return false;
+        }
+
         return $aResponse;
     }
 }

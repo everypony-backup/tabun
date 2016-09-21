@@ -101,8 +101,6 @@ $config['sys']['cache']['lifetime'] = 3600;
 $config['sys']['cache']['automatic_serialization'] = true;
 $config['sys']['cache']['dir'] = '/tmp/';           // каталог для файлового кеша, также используется для временных картинок. По умолчанию подставляем каталог для хранения сессий
 $config['sys']['cache']['prefix'] = 'tabun_cache';  // префикс кеширования, чтоб можно было на одной машине держать несколько сайтов с общим кешевым хранилищем
-$config['sys']['cache']['prefixes']['search']['key'] = 'search';
-$config['sys']['cache']['prefixes']['search']['time'] = 60*15;
 
 /**
  * Настройки логирования
