@@ -218,12 +218,19 @@ class ModuleACL extends Module {
 		 */
 		if($oBlog->getType()=='close') {
 			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId());
-			if(!$oBlogUser || $oBlogUser->getUserRole()<ModuleBlog::BLOG_USER_ROLE_GUEST) {
+			if ($oBlogUser) {
+				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
+					if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
+						return self::CAN_VOTE_BLOG_TRUE;
+					}
+				}
+			} else {
 				return self::CAN_VOTE_BLOG_ERROR_CLOSE;
 			}
-		}
-		if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
-			return self::CAN_VOTE_BLOG_TRUE;
+		} else {
+			if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
+				return self::CAN_VOTE_BLOG_TRUE;
+			}
 		}
 		return self::CAN_VOTE_BLOG_FALSE;
 	}
@@ -235,8 +242,24 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic) {
-		if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
-			return true;
+		/**
+		 * Если блог закрытый, проверяем является ли пользователь его читателем
+		 */
+		if($oTopic->getBlog()->getType()=='close') {
+			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId());
+			if ($oBlogUser) {
+				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
+					if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
+						return true;
+					}
+				}
+			} else {
+				return false;
+			}
+		} else {
+			if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -282,7 +305,7 @@ class ModuleACL extends Module {
 			return true;
 		}
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-			if ($this->ACL_CanAddTopic($oUser,$oBlog) or $oBlogUser->getIsAdministrator() or $oBlogUser->getIsModerator()) {
+			if ($oBlogUser->getTopicPermissions()->check(Permissions::CREATE) and ($this->ACL_CanAddTopic($oUser,$oBlog))) {
 				return true;
 			}
 		}
@@ -308,19 +331,8 @@ class ModuleACL extends Module {
 		if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
 			return true;
 		}
-		/**
-		 * Если модер или админ блога
-		 */
-		if ($this->User_GetUserCurrent() and $this->User_GetUserCurrent()->getId()==$oUser->getId()) {
-			/**
-			 * Для авторизованного пользователя данный код будет работать быстрее
-			 */
-			if ($oTopic->getBlog()->getUserIsAdministrator() or $oTopic->getBlog()->getUserIsModerator()) {
-				return true;
-			}
-		} else {
-			$oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId());
-			if ($oBlogUser and ($oBlogUser->getIsModerator() or $oBlogUser->getIsAdministrator())) {
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
+			if ($oBlogUser->getTopicPermissions()->check(Permissions::UPDATE)) {
 				return true;
 			}
 		}
@@ -347,19 +359,8 @@ class ModuleACL extends Module {
 		if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
 			return true;
 		}
-		/**
-		 * Если модер или админ блога
-		 */
-		if ($this->User_GetUserCurrent() and $this->User_GetUserCurrent()->getId()==$oUser->getId()) {
-			/**
-			 * Для авторизованного пользователя данный код будет работать быстрее
-			 */
-			if ($oTopic->getBlog()->getUserIsAdministrator() or $oTopic->getBlog()->getUserIsModerator()) {
-				return true;
-			}
-		} else {
-			$oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId());
-			if ($oBlogUser and ($oBlogUser->getIsModerator() or $oBlogUser->getIsAdministrator())) {
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
+			if ($oBlogUser->getTopicPermissions()->check(Permissions::DELETE)) {
 				return true;
 			}
 		}
@@ -374,22 +375,26 @@ class ModuleACL extends Module {
 	 */
 	public function IsAllowDeleteBlog($oBlog,$oUser) {
 		/**
-		 * Разрешаем если это админ сайта или автор блога
+		 * Разрешаем если это админ сайта
 		 */
 		if ($oUser->isAdministrator()) {
 			return self::CAN_DELETE_BLOG_WITH_TOPICS;
 		}
 		/**
-		 * Разрешаем удалять администраторам блога и автору, но только пустой
+		 * Разрешаем удалять автору блога, но только пустой
 		 */
-		if($oBlog->getOwnerId()==$oUser->getId()) {
+		if ($oBlog->getOwnerId()==$oUser->getId()) {
 			return self::CAN_DELETE_BLOG_EMPTY_ONLY;
 		}
-
-		$oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId());
-		if($oBlogUser and $oBlogUser->getIsAdministrator()) {
-			return self::CAN_DELETE_BLOG_EMPTY_ONLY;
+		/**
+		 * Разрешаем удалять при наличии разрешения, но только пустой
+		 */
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
+			if ($oBlogUser->getBlogPermissions()->check(Permissions::DELETE)) {
+				return self::CAN_DELETE_BLOG_EMPTY_ONLY;
+			}
 		}
+		
 		return false;
 	}
 	/**
@@ -434,12 +439,12 @@ class ModuleACL extends Module {
 			return true;
 		}
 		/**
-		 * Явлется ли авторизованный пользователь администратором блога
+		 * Разрешаем, если установлено разрешение (кхм...)
 		 */
-		$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId());
-
-		if ($oBlogUser && $oBlogUser->getIsAdministrator()) {
-			return true;
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
+			if ($oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -461,11 +466,12 @@ class ModuleACL extends Module {
 			return true;
 		}
 		/**
-		 * Явлется ли авторизованный пользователь администратором блога
+		 * Разрешаем, если установлено разрешение (кхм...)
 		 */
-		$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId());
-		if ($oBlogUser && $oBlogUser->getIsAdministrator()) {
-			return true;
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
+			if ($oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)) {
+				return true;
+			}
 		}
 		return false;
 	}
