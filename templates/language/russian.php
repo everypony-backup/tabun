@@ -22,6 +22,16 @@
  */
 return array(
 	/**
+	 * Верхнее меню
+	 */
+	'menu_main' => 'Блог',
+	'menu_forum' => 'Форум',
+	'menu_stories' => 'Рассказы',
+	'menu_radio' => 'Радио',
+	'menu_wiki' => 'Вики',
+	'menu_minecraft' => 'Майнкрафт',
+
+	/**
 	 * Блоги
 	 */
 	'blogs' => 'Блоги',
