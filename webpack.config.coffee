@@ -36,6 +36,7 @@ cfg =
     comments: "./comments"
     editor: "./editor"
     blogs: "./blogs"
+    search: "./search"
     vendor: vendors
 
   output:
