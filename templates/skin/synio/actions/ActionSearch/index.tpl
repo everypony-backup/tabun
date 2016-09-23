@@ -45,9 +45,9 @@
 		<h3>Результатов: {$iResCount}</h3>
 	</header>
 	<div>
-		{if $sType == 't'}
+		{if $sType == 'topic'}
 			{include file='topic_list.tpl'}
-		{elseif $sType == 'c'}
+		{elseif $sType == 'comment'}
 			{include file='comment_list.tpl'}
 		{else}
 			{hook run='search_result' sType=$sType}
