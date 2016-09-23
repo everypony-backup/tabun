@@ -80,11 +80,11 @@ class ModuleSearch extends Module
             ]
         ];
 
-        switch ($aSearchParams['sort']) {
+        switch ($aSearchParams['sort_by']) {
             case 'date':
                 $aParams['body']['sort'] = [
                     'date' => [
-                        'order' => 'desc'
+                        'order' => $aSearchParams['sort_dir']
                     ]
                 ];
                 break;
