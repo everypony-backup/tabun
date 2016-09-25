@@ -71,10 +71,7 @@ class ModuleSearch extends Module
             'body' => [
                 'query' => [
                     'multi_match' => [
-                        'query' => $sQuery,
-                        'fields' => [
-                            'title', 'text', 'tags'
-                        ]
+                        'query' => $sQuery
                     ]
                 ]
             ]
@@ -89,6 +86,17 @@ class ModuleSearch extends Module
                 ];
                 break;
         }
+
+        if ($aSearchParams['topic_type_title'] == 'true') {
+            $aParams['body']['query']['multi_match']['fields'][] = 'title';
+        }
+        if ($aSearchParams['topic_type_text'] == 'true') {
+            $aParams['body']['query']['multi_match']['fields'][] = 'text';
+        }
+        if ($aSearchParams['topic_type_tags'] == 'true') {
+            $aParams['body']['query']['multi_match']['fields'][] = 'tags';
+        }
+
         try {
             $aResponse = $this->oElasticsearch->search($aParams)['hits'];
         } catch (Exception $e) {

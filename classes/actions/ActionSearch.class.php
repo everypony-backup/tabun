@@ -41,7 +41,7 @@ class ActionSearch extends Action {
      *
      * @var int
      */
-    protected $sCodedDefault = 'tsd';
+    protected $sCodedDefault = 'tsdttt';
 
 	/**
 	 * Инициализация
@@ -78,6 +78,9 @@ class ActionSearch extends Action {
             $this->RegisterCodedQueryParam($sCoded, 0, 'type', ['t' => 'topic', 'c' => 'comment']);
             $this->RegisterCodedQueryParam($sCoded, 1, 'sort_by', ['d' => 'date', 's' => 'score', 'r' => 'rating']);
             $this->RegisterCodedQueryParam($sCoded, 2, 'sort_dir', ['a' => 'asc', 'd' => 'desc']);
+            $this->RegisterCodedQueryParam($sCoded, 3, 'topic_type_title', ['t' => 'true', 'f' => 'false']);
+            $this->RegisterCodedQueryParam($sCoded, 4, 'topic_type_text', ['t' => 'true', 'f' => 'false']);
+            $this->RegisterCodedQueryParam($sCoded, 5, 'topic_type_tags', ['t' => 'true', 'f' => 'false']);
             //$this->RegisterQueryParam('type', ['topic', 'comment'], 'topic');
             //$this->RegisterQueryParam('sort', ['date', 'score', 'rating'], 'score');
 
