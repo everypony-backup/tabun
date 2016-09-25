@@ -87,13 +87,13 @@ class ModuleSearch extends Module
                 break;
         }
 
-        if ($aSearchParams['topic_type_title'] == 'true') {
+        if ($aSearchParams['topic_type_title'] == true) {
             $aParams['body']['query']['multi_match']['fields'][] = 'title';
         }
-        if ($aSearchParams['topic_type_text'] == 'true') {
+        if ($aSearchParams['topic_type_text'] == true) {
             $aParams['body']['query']['multi_match']['fields'][] = 'text';
         }
-        if ($aSearchParams['topic_type_tags'] == 'true') {
+        if ($aSearchParams['topic_type_tags'] == true) {
             $aParams['body']['query']['multi_match']['fields'][] = 'tags';
         }
 
