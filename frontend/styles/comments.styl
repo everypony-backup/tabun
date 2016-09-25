@@ -280,6 +280,37 @@ div
     display block
     margin-bottom 10px
 
+.modify-notice
+  font-size 7.5pt
+  font-style italic
+  .self-modified
+    color #69b55b
+  .adm-modified
+    color #aaaa00
+  .hard-modified
+    color #d5883c
+
+.comment:not(.editable)
+  .comment-save-edit-bw,
+  .comment-preview-edit-bw,
+  .comment-cancel-edit-bw,
+  .comment-lock-edit-bw
+    display none
+  
+.comment
+  .text.preview
+    margin-bottom 7px
+
+.comment.editable
+  .comment-content
+    .edit-form,
+    .edit-form>label
+      display block
+    .text.current
+      display none
+  .comment-edit-bw
+      display none
+
 .comments-not-allowed
     font-size 16px
     padding 5px 10px

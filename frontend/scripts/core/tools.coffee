@@ -20,11 +20,12 @@ registry =
   loadJSON: (jsonData) ->
     assign(_registry, JSON.parse(jsonData))
 
-textPreview = (textId, save, divPreview) ->
+textPreview = (textId, save, divPreview, fix=false) ->
   text = $('#' + textId).val()
   ajaxOptions =
     text: text
     save: save
+    fix: fix
   ajax routes.preview.text, ajaxOptions, (result) ->
     if !result
       error 'Error', 'Please try again later'

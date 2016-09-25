@@ -33,6 +33,7 @@ module.exports =
     respond: '/blog/ajaxresponsecomment/'
   comment:
     delete: '/ajax/comment/delete/'
+    edit: '/ajax/comment/edit/'
   talk:
     add: '/talk/add/'
     comment: '/talk/ajaxaddcomment/'
