@@ -10,7 +10,7 @@
 			{strip}
 				{if $oTopic->getTagsArray()}
 					{foreach from=$oTopic->getTagsArray() item=sTag name=tags_list}
-						{if !$smarty.foreach.tags_list.first}, {/if}<a rel="tag" href="{router page='tag'}{$sTag|escape:'url'}/">{$sTag|escape:'html'}</a>
+						{if !$smarty.foreach.tags_list.first}, {/if}<a rel="tag" href="{router page='search'}?q={$sTag|escape:'url'}&coded=tsdfft">{$sTag|escape:'html'}</a>
 					{/foreach}
 				{else}
 					{$aLang.topic_tags_empty}
