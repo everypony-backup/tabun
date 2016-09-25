@@ -7,7 +7,7 @@
 	
 	<footer id="footer">
 		<p>Все права принадлежат пони. Весь мир принадлежит пони.</p>
-		<div class="text version h-float-right">
+		<div class="text version">
             <div>Версия Табуна: <strong>{cfg name='misc.ver.code'}</strong></div>
             {if {cfg name='misc.debug'} == true}
                 <div>Версия фронтенда: <strong>{cfg name='misc.ver.front'}</strong></div>
