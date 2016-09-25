@@ -41,7 +41,7 @@ class ActionSearch extends Action {
      *
      * @var int
      */
-    protected $sCodedDefault = 'ts';
+    protected $sCodedDefault = 'tsdttt';
 
 	/**
 	 * Инициализация
@@ -76,11 +76,15 @@ class ActionSearch extends Action {
             if($sCoded == '') $sCoded = $this->sCodedDefault;
 
             $this->RegisterCodedQueryParam($sCoded, 0, 'type', ['t' => 'topic', 'c' => 'comment']);
-            $this->RegisterCodedQueryParam($sCoded, 1, 'sort', ['d' => 'date', 's' => 'score', 'r' => 'rating']);
+            $this->RegisterCodedQueryParam($sCoded, 1, 'sort_by', ['d' => 'date', 's' => 'score', 'r' => 'rating']);
+            $this->RegisterCodedQueryParam($sCoded, 2, 'sort_dir', ['a' => 'asc', 'd' => 'desc']);
+            $this->RegisterCodedQueryParam($sCoded, 3, 'topic_type_title', ['t' => true, 'f' => false]);
+            $this->RegisterCodedQueryParam($sCoded, 4, 'topic_type_text', ['t' => true, 'f' => false]);
+            $this->RegisterCodedQueryParam($sCoded, 5, 'topic_type_tags', ['t' => true, 'f' => false]);
             //$this->RegisterQueryParam('type', ['topic', 'comment'], 'topic');
             //$this->RegisterQueryParam('sort', ['date', 'score', 'rating'], 'score');
 
-            $this->Viewer_Assign('sQuery', $sQuery);
+            $this->Viewer_AssignJS('sQuery', $sQuery);
             $this->Viewer_AddHtmlTitle($sQuery);
 
             /**
@@ -157,7 +161,9 @@ class ActionSearch extends Action {
         $var = $values[$val];
 
         $this->aCodedParams[$name] = $var; // Сохраняем переменную в глобальный список
+
         $this->Viewer_Assign('s' . ucfirst($name), $var);
+        $this->Viewer_AssignJS('s' . ucfirst($name), $var);
     }
 
 	private function RegisterQueryParam($name, array $values, $default) {
@@ -170,6 +176,7 @@ class ActionSearch extends Action {
 
         $this->aParams[$name] = $var; // Сохраняем переменную в глобальный список
         $this->Viewer_Assign('s' . ucfirst($name), $var);
+        $this->Viewer_AssignJS('s' . ucfirst($name), $var);
     }
 
 	/**

@@ -71,24 +71,32 @@ class ModuleSearch extends Module
             'body' => [
                 'query' => [
                     'multi_match' => [
-                        'query' => $sQuery,
-                        'fields' => [
-                            'title', 'text', 'tags'
-                        ]
+                        'query' => $sQuery
                     ]
                 ]
             ]
         ];
 
-        switch ($aSearchParams['sort']) {
+        switch ($aSearchParams['sort_by']) {
             case 'date':
                 $aParams['body']['sort'] = [
                     'date' => [
-                        'order' => 'desc'
+                        'order' => $aSearchParams['sort_dir']
                     ]
                 ];
                 break;
         }
+
+        if ($aSearchParams['topic_type_title'] == true) {
+            $aParams['body']['query']['multi_match']['fields'][] = 'title';
+        }
+        if ($aSearchParams['topic_type_text'] == true) {
+            $aParams['body']['query']['multi_match']['fields'][] = 'text';
+        }
+        if ($aSearchParams['topic_type_tags'] == true) {
+            $aParams['body']['query']['multi_match']['fields'][] = 'tags';
+        }
+
         try {
             $aResponse = $this->oElasticsearch->search($aParams)['hits'];
         } catch (Exception $e) {
