@@ -1061,7 +1061,7 @@ class ActionBlog extends Action {
 		 * Добавляем коммент
 		 */
 		$this->Hook_Run('comment_add_before', array('oCommentNew'=>$oCommentNew,'oCommentParent'=>$oCommentParent,'oTopic'=>$oTopic));
-		if ($this->Comment_AddComment($oCommentNew)) {
+		if ($this->Comment_AddComment($oCommentNew, $oCommentParent)) {
 			$this->Hook_Run('comment_add_after', array('oCommentNew'=>$oCommentNew,'oCommentParent'=>$oCommentParent,'oTopic'=>$oTopic));
 
 			$this->Viewer_AssignAjax('sCommentId',$oCommentNew->getId());

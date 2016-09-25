@@ -77,6 +77,7 @@ class ActionAjax extends Action {
 		$this->AddEventPreg('/^autocompleter$/i','/^user$/','EventAutocompleterUser');
 
 		$this->AddEventPreg('/^comment$/i','/^delete$/','EventCommentDelete');
+		$this->AddEventPreg('/^comment$/i','/^edit$/','EventCommentEdit');
 
 		$this->AddEventPreg('/^geo/i','/^get/','/^regions$/','EventGeoGetRegions');
 		$this->AddEventPreg('/^geo/i','/^get/','/^cities/','EventGeoGetCities');
@@ -1037,6 +1038,7 @@ class ActionAjax extends Action {
 	protected function EventPreviewText() {
 		$sText=getRequestStr('text',null,'post');
 		$bSave=getRequest('save',null,'post');
+		$bFix = getRequest('fix',null,'post') === '1';
 		/**
 		 * Экранировать или нет HTML теги
 		 */
@@ -1216,5 +1218,93 @@ class ActionAjax extends Action {
 		$this->Viewer_AssignAjax('bState',$bState);
 		$this->Viewer_AssignAjax('sTextToggle',$sTextToggle);
 	}
+
+	/**
+	 * Изменение комментария
+	 */
+    protected function EventCommentEdit()
+    {
+        if (!$this->oUserCurrent) {
+            $this->Message_AddErrorSingle(
+                $this->Lang_Get('need_authorization'),
+                $this->Lang_Get('error')
+            );
+            return;
+        }
+        $idComment = (int)getRequestStr('idComment', null, 'post');
+        if (!($oComment = $this->Comment_GetCommentById($idComment))) {
+            $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+            return;
+        }
+        $newText = getRequestStr('newText', null, 'post');
+        $setLock = getRequestStr('setLock', null, 'post') === '1';
+
+        $state_isOK = true;
+        $state_modified = false;
+        $state_locked = false;
+
+        $accessState = $this->ACL_GetCommentEditAccessInfo($oComment, $this->oUserCurrent);
+
+        $newText = $this->Text_Parser($newText, ModuleText::ACT_FIX);
+
+        if ($newText !== $oComment->getText()) {
+            if (($accessState & ModuleACL::EDIT_ALLOW_FIX) !== 0) {
+                if (func_check($newText, 'text', 2, Config::Get('module.comment.comment_max_length'))) {
+                    $oHistoryItem = Engine::GetEntity('Comment_CommentHistoryItem');
+                    $oHistoryItem->setComment($oComment);
+                    $oComment->setText($newText);
+                    $oComment->setTextHash(md5($newText));
+                    $oComment->setFlag(ModuleComment_EntityComment::FLAG_MODIFIED | ($oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER) ? ModuleComment_EntityComment::FLAG_HARD_MODIFIED : 0));
+                    $lastModifyDate = $oComment->touchLastModifyInfo($this->oUserCurrent->getId());
+                    $oHistoryItem->setLastModifyInfo($lastModifyDate, $this->oUserCurrent->getId(), $accessState >> ModuleACL::EDIT_ALLOW_REASON_OFFSET & ModuleACL::EDIT_ALLOW_REASON_MASK);
+                    $state_modified = true;
+                } else {
+                    $this->Message_AddErrorSingle($this->Lang_Get('topic_comment_add_text_error'), $this->Lang_Get('error'));
+                    return;
+                }
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('comment_edit_deny_reason')[$accessState >> ModuleACL::EDIT_DENY_REASON_OFFSET & ModuleACL::EDIT_DENY_REASON_MASK], $this->Lang_Get('access_error'));
+                $state_isOK = false;
+            }
+        }
+        if ($setLock) {
+            if (($accessState & ModuleACL::EDIT_ALLOW_LOCK) !== 0) {
+                if (!$oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_LOCK_MODIFY)) {
+                    $oComment->setFlag(ModuleComment_EntityComment::FLAG_LOCK_MODIFY);
+                    $oComment->touchLockModifyInfo($this->oUserCurrent->getId());
+                    $state_locked = true;
+                }
+            } else {
+                if ($state_isOK) $this->Message_AddErrorSingle($this->Lang_Get('comment_edit_lock_denied'), $this->Lang_Get('access_error'));
+                $state_isOK = false;
+            }
+        }
+        if ($state_isOK) {
+            if ($state_modified || $state_locked) {
+                if ($state_modified) {
+                    $historyItemId = $this->Comment_AddCommentHistoryItem($oHistoryItem);
+                    if ($historyItemId) {
+                        $oComment->setLastModifyId($historyItemId);
+                    } else {
+                        $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+                        return;
+                    }
+                    $noticeId = $state_locked ? 'comment_changedAndLocked' : 'comment_changed';
+                } else {
+                    $noticeId = 'comment_locked';
+                }
+
+                if ($this->Comment_UpdateComment($oComment)) {
+                    $this->Message_AddNoticeSingle($this->Lang_Get($noticeId));
+                } else {
+                    $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+                    return;
+                }
+            } else {
+                $this->Message_AddNoticeSingle($this->Lang_Get('comment_not_changed'), $this->Lang_Get('attention'));
+            }
+        }
+        $this->Viewer_AssignAjax('newText', $oComment->getText());
+        $this->Viewer_AssignAjax('notice', $oComment->getModifyNoticeHTML());
+    }
 }
-?>
