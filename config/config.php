@@ -108,7 +108,6 @@ $config['sys']['cache']['prefix'] = 'tabun_cache';  // префикс кешир
 $config['sys']['logs']['dir'] = '/log';                     // папка с логами приложения
 $config['sys']['logs']['file'] = 'log.log';                 // файл общего лога
 $config['sys']['logs']['sql_query'] = false;                // логировать или нет SQL запросы
-$config['sys']['logs']['sql_query_file'] = 'sql_query.log'; // файл лога SQL запросов
 $config['sys']['logs']['sql_error'] = true;                 // логировать или нет ошибки SQl
 $config['sys']['logs']['sql_error_file'] = 'sql_error.log'; // файл лога ошибок SQL
 /**

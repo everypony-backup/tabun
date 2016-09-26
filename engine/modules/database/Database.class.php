@@ -38,6 +38,7 @@ class ModuleDatabase extends Module {
 
 	protected $aReplicaInstanceSlave=array();
 	protected $aReplicaMasterByTable=array();
+    protected $sQueryLog = '';
 
 	/**
 	 * Инициализация модуля
@@ -131,6 +132,7 @@ class ModuleDatabase extends Module {
 			$aQueryStats['count']+=$aStats['count'];
 		}
 		$aQueryStats['time']=round($aQueryStats['time'],3);
+        $aQueryStats['query_log'] = $this->sQueryLog;
 		return $aQueryStats;
 	}
 	/**
@@ -192,6 +194,10 @@ class ModuleDatabase extends Module {
 		}
 		return array('result'=>false,'errors'=>$aErrors);
 	}
+	public function LogQuery($sStr)
+    {
+        $this->sQueryLog  .= ("\n" . $sStr);
+    }
 	/**
 	 * Проверяет существование таблицы
 	 *
@@ -299,20 +305,8 @@ function databaseErrorHandler($message, $info) {
  */
 function databaseLogger($db, $sql) {
 	/**
-	 * Получаем информацию о запросе и сохраняем её в переменной $msg
-	 */
-	$caller = $db->findLibraryCaller();
-	$msg=print_r($sql,true);
-	$aDsnParsed=$db->getDsnParsed();
-	$sDbPrefix='[DB:'.(isset($aDsnParsed['path']) ? $aDsnParsed['path'] : '').']';
-
-	/**
 	 * Получаем ядро и сохраняем в логе SQL запрос
 	 */
 	$oEngine=Engine::getInstance();
-	$sOldName=$oEngine->Logger_GetFileName();
-	$oEngine->Logger_SetFileName(Config::Get('sys.logs.sql_query_file'));
-	$oEngine->Logger_Debug($sDbPrefix.$msg);
-	$oEngine->Logger_SetFileName($sOldName);
+    $oEngine->Database_LogQuery(print_r($sql,true));
 }
-?>
