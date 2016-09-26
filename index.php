@@ -25,14 +25,5 @@ putenv("LANG=" . $lang);
 setlocale(LC_ALL, $lang);
 date_default_timezone_set(Config::Get('locale.timezone'));
 
-if (Config::Get('misc.debug')) {
-    require_once(Config::Get('path.root.engine').'/lib/internal/ProfilerSimple/Profiler.class.php');
-    $oProfiler=ProfilerSimple::getInstance(Config::Get('sys.logs.dir').'/'.Config::Get('sys.logs.profiler_file'),Config::Get('sys.logs.profiler'));
-    $iTimeId=$oProfiler->Start('full_time');
-    $oRouter=Router::getInstance();
-    $oRouter->Exec();
-    $oProfiler->Stop($iTimeId);
-} else {
-    $oRouter=Router::getInstance();
-    $oRouter->Exec();
-}
+$oRouter=Router::getInstance();
+$oRouter->Exec();

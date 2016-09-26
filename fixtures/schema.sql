@@ -534,27 +534,6 @@ CREATE TABLE `ls_page` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `ls_profiler`
---
-
-DROP TABLE IF EXISTS `ls_profiler`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ls_profiler` (
-  `request_date` datetime NOT NULL,
-  `request_id` varchar(32) NOT NULL,
-  `time_full` double(9,6) NOT NULL,
-  `time_start` double(17,7) NOT NULL,
-  `time_stop` double(17,7) NOT NULL,
-  `time_id` int(11) NOT NULL,
-  `time_pid` int(11) NOT NULL,
-  `time_name` varchar(250) NOT NULL,
-  `time_comment` varchar(250) NOT NULL,
-  PRIMARY KEY (`request_id`,`time_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `ls_reminder`
 --
 

@@ -271,17 +271,7 @@ class Engine extends LsObject {
 	protected function InitModules() {
 		foreach ($this->aModules as $oModule) {
 			if(!$oModule->isInit()) {
-				/**
-				 * Замеряем время инициализации модуля
-				 */
-				if (Config::Get('misc.debug')) {
-					$oProfiler = ProfilerSimple::getInstance();
-					$iTimeId = $oProfiler->Start('InitModule', get_class($oModule));
-				}
 				$this->InitModule($oModule);
-				if (Config::Get('misc.debug')) {
-					$oProfiler->Stop($iTimeId);
-				}
 			}
 		}
 	}
@@ -347,17 +337,7 @@ class Engine extends LsObject {
 	 */
 	protected function ShutdownModules() {
 		foreach ($this->aModules as $sKey => $oModule) {
-			/**
-			 * Замеряем время shutdown`a модуля
-			 */
-			if (Config::Get('misc.debug')) {
-				$oProfiler = ProfilerSimple::getInstance();
-				$iTimeId = $oProfiler->Start('ShutdownModule', get_class($oModule));
-			}
 			$oModule->Shutdown();
-			if (Config::Get('misc.debug')) {
-				$oProfiler->Stop($iTimeId);
-			}
 		}
 	}
 
@@ -511,13 +491,6 @@ class Engine extends LsObject {
 			// comment for ORM testing
 			//throw new Exception("The module has no required method: ".$sModuleName.'->'.$sMethod.'()');
 		}
-		/**
-		 * Замеряем время выполнения метода
-		 */
-		if (Config::Get('misc.debug')) {
-			$oProfiler = ProfilerSimple::getInstance();
-			$iTimeId = $oProfiler->Start('callModule', $sModuleName . '->' . $sMethod . '()');
-		}
 		$sModuleName=strtolower($sModuleName);
 		$aResultHook=array();
 		if (!in_array($sModuleName,array('plugin','hook'))) {
@@ -538,9 +511,6 @@ class Engine extends LsObject {
 
 		if (!in_array($sModuleName,array('plugin','hook'))) {
 			$this->Hook_Run('module_'.$sModuleName.'_'.strtolower($sMethod).'_after',array('result'=>&$result,'params'=>$aArgs));
-		}
-		if (Config::Get('misc.debug')) {
-			$oProfiler->Stop($iTimeId);
 		}
 		return $result;
 	}
