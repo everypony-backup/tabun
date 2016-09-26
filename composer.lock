@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "089c1667eb7c718aaa7a0200617677dd",
-    "content-hash": "4064a1428e69c88e7a375f3393f55b6e",
+    "hash": "9595a3a96795b70fa74d11162e1a7f5f",
+    "content-hash": "b571001eaf5a8263d8488f7c69706d77",
     "packages": [
         {
             "name": "elasticsearch/elasticsearch",
@@ -168,12 +168,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ussignal/redis-cache-zend-framework.git",
-                "reference": "c1b4871098b538603179937d87276e1a6763025b"
+                "reference": "65bdfa098abde74bc74c9a5d101daec8c9b01a97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ussignal/redis-cache-zend-framework/zipball/c1b4871098b538603179937d87276e1a6763025b",
-                "reference": "c1b4871098b538603179937d87276e1a6763025b",
+                "url": "https://api.github.com/repos/ussignal/redis-cache-zend-framework/zipball/65bdfa098abde74bc74c9a5d101daec8c9b01a97",
+                "reference": "65bdfa098abde74bc74c9a5d101daec8c9b01a97",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
             "support": {
                 "source": "https://github.com/ussignal/redis-cache-zend-framework/tree/master"
             },
-            "time": "2015-05-13 22:19:27"
+            "time": "2013-10-03 17:52:14"
         },
         {
             "name": "massivescale/celery-php",
@@ -313,22 +313,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
+                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.3.0"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -342,12 +350,13 @@
                 }
             ],
             "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
             "keywords": [
                 "log",
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2016-09-19 16:02:08"
         },
         {
             "name": "react/promise",
@@ -517,6 +526,57 @@
             ],
             "abandoned": "php-amqplib/php-amqplib",
             "time": "2016-04-11 14:30:01"
+        },
+        {
+            "name": "xxtea/xxtea",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xxtea/xxtea-php.git",
+                "reference": "766edc74ae89454cdaab24ee297fb64a9482698c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xxtea/xxtea-php/zipball/766edc74ae89454cdaab24ee297fb64a9482698c",
+                "reference": "766edc74ae89454cdaab24ee297fb64a9482698c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "xxtea.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ma Bingyao",
+                    "email": "mabingyao@gmail.com",
+                    "homepage": "https://github.com/xxtea/xxtea-php",
+                    "role": "Developer"
+                }
+            ],
+            "description": "XXTEA is a fast and secure encryption algorithm. This is a XXTEA library for PHP.",
+            "homepage": "https://github.com/xxtea/xxtea-php",
+            "keywords": [
+                "crypt",
+                "cryptography",
+                "decrypt",
+                "encrypt",
+                "library",
+                "security",
+                "xxtea"
+            ],
+            "time": "2016-02-13 11:45:07"
         },
         {
             "name": "zendframework/zendframework1",
