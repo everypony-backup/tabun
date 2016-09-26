@@ -475,10 +475,10 @@ class ModuleComment_MapperComment extends Mapper {
 				comment_publish = ?d ,
 				comment_text_hash = ? ,
 				comment_last_modify_id = ?d ,
-				last_modify_user = ?d ,
-				last_modify_date = ? ,
-				lock_modify_user = ?d ,
-				lock_modify_date = ? ,
+				comment_last_modify_user = ?d ,
+				comment_last_modify_date = ? ,
+				comment_lock_modify_user = ?d ,
+				comment_lock_modify_date = ? ,
 				flags = ?d
 			WHERE
 				comment_id = ?d

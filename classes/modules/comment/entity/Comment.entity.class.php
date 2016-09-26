@@ -436,7 +436,7 @@ class ModuleComment_EntityComment extends Entity {
 	 * @return int|null
 	 */
 	public function getLastModifyUserId() {
-		return $this->_getDataOne('last_modify_user');
+		return $this->_getDataOne('comment_last_modify_user');
 	}
 	
 	/**
@@ -445,7 +445,7 @@ class ModuleComment_EntityComment extends Entity {
 	 * @return Date|null
 	 */
 	public function getLastModifyDate() {
-		return $this->_getDataOne('last_modify_date');
+		return $this->_getDataOne('comment_last_modify_date');
 	}
 	
 	/**
@@ -454,7 +454,7 @@ class ModuleComment_EntityComment extends Entity {
 	 * @return Date|null
 	 */
 	public function getLockModifyDate() {
-		return $this->_getDataOne('lock_modify_date');
+		return $this->_getDataOne('comment_lock_modify_date');
 	}
 	
 	/**
@@ -463,7 +463,7 @@ class ModuleComment_EntityComment extends Entity {
 	 * @return int|null
 	 */
 	public function getLockModifyUserId() {
-		return $this->_getDataOne('lock_modify_user');
+		return $this->_getDataOne('comment_lock_modify_user');
 	}
 	
 	/**
@@ -483,8 +483,8 @@ class ModuleComment_EntityComment extends Entity {
 	 */
 	public function touchLastModifyInfo($userId) {
 		$date = date('Y-m-d H:i:s');
-		$this->_aData['last_modify_user'] = $userId;
-		$this->_aData['last_modify_date'] = &$date;
+		$this->_aData['comment_last_modify_user'] = $userId;
+		$this->_aData['comment_last_modify_date'] = &$date;
 		return $date;
 	}
 	
@@ -494,8 +494,8 @@ class ModuleComment_EntityComment extends Entity {
 	 * @param int $userId
 	 */
 	public function touchLockModifyInfo($userId) {
-		$this->_aData['lock_modify_user'] = $userId;
-		$this->_aData['lock_modify_date'] = date('Y-m-d H:i:s');
+		$this->_aData['comment_lock_modify_user'] = $userId;
+		$this->_aData['comment_lock_modify_date'] = date('Y-m-d H:i:s');
 	}
 	
 	/**
