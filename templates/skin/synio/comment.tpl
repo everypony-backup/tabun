@@ -1,5 +1,6 @@
 {assign var="oUser" value=$oComment->getUser()}
 {assign var="oVote" value=$oComment->getVote()}
+{assign var="editAccessMask" value=$oComment->getEditAccessMask($oUserCurrent)}
 
 <section data-id="{$oComment->getId()}" id="comment_id_{$oComment->getId()}" class="comment {if $oComment->isBad()}comment-bad{/if} {if $oComment->getDelete()}comment-deleted{elseif $oUserCurrent and $oComment->getUserId() == $oUserCurrent->getId()} comment-self{elseif $sDateReadLast <= $oComment->getDate()} comment-new{/if}">
     {if $oComment->getRating() < $oConfig->GetValue('module.user.bad_rating')}
@@ -10,7 +11,7 @@
         <a name="comment{$oComment->getId()}"></a>
         <div data-id="{$oComment->getId()}" class="folding"></div>
         <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
-            <div class="text">{$oComment->getText()}</div>
+            <div class="text current">{$oComment->getText()}</div>
         </div>
         <ul class="comment-info">
             <li class="comment-author {if $iAuthorId == $oUser->getId()}comment-topic-author{/if}"
@@ -96,8 +97,16 @@
                     </li>
                 {/if}
 
+                {if $oComment->testAllowEdit($editAccessMask)}
+                    <li class="comment-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.toggleEditForm({$oComment->getId()}, true, {if $oComment->testAllowLock($editAccessMask)}true{else}false{/if});">{$aLang.comment_edit}</a></li>
+                    <li class="comment-save-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.saveEdit({$oComment->getId()});">{$aLang.comment_save_edit}</a></li>
+                    <li class="comment-preview-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.previewEdit({$oComment->getId()});">{$aLang.comment_preview_edit}</a></li>
+                    <li class="comment-cancel-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.toggleEditForm({$oComment->getId()}, false);">{$aLang.comment_cancel_edit}</a></li>
+                {/if}
+
                 {hook run='comment_action' comment=$oComment}
             {/if}
+            <li class="modify-notice">{if $oComment->isModifiedOrLocked()}{$oComment->getModifyNoticeHTML({date_format date=$oComment->getLastModifyDate() format="j F Y, H:i:s"}, {date_format date=$oComment->getLockModifyDate() format="j F Y, H:i:s"})}{/if}</li>
         </ul>
     {else}
         <div id="comment_content_id_{$oComment->getId()}" class="comment-content">

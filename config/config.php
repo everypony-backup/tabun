@@ -147,6 +147,9 @@ $config['acl']['vote']['topic']['rating'] = -5;                         // по�
 $config['acl']['vote']['user']['rating'] = -10;                         // порог рейтинга при котором юзер может голосовать за пользователя
 $config['acl']['vote']['topic']['limit_time'] = 60 * 60 * 24 * 21;      // ограничение времени голосования за топик
 $config['acl']['vote']['comment']['limit_time'] = 60 * 60 * 24 * 7;     // ограничение времени голосования за комментарий
+$config['acl']['edit']['comment']['limit_time'] = 60 * 5;               // ограничение времени редактирования комментария в блоге
+$config['acl']['edit']['talk_comment']['limit_time'] = 60 * 60 * 1;     // ограничение времени редактирования комментария в ЛС
+$config['acl']['edit']['comment']['enable_lock'] = false;               // разрешить блокировку редактирования комментария в блоге
 /**
  * Настройки модулей
  */
@@ -268,6 +271,7 @@ $config['db']['table']['topic_content'] = '___db.table.prefix___topic_content';
 $config['db']['table']['topic_question_vote'] = '___db.table.prefix___topic_question_vote';
 $config['db']['table']['user_administrator'] = '___db.table.prefix___user_administrator';
 $config['db']['table']['comment_online'] = '___db.table.prefix___comment_online';
+$config['db']['table']['comment_change_history'] = '___db.table.prefix___comment_change_history';
 $config['db']['table']['invite'] = '___db.table.prefix___invite';
 $config['db']['table']['page'] = '___db.table.prefix___page';
 $config['db']['table']['city'] = '___db.table.prefix___city';

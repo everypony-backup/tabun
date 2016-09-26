@@ -206,7 +206,7 @@ class ActionBlog extends Action {
 		/**
 		 * Парсим текст на предмет разных ХТМЛ тегов
 		 */
-		$sText=$this->Text_Parser(getRequestStr('blog_description'));
+		$sText=$this->Text_Parser(getRequestStr('blog_description'), ModuleText::ACT_CREATE);
 		$oBlog->setDescription($sText);
 		$oBlog->setType(getRequestStr('blog_type'));
 		$oBlog->setDateAdd(date("Y-m-d H:i:s"));
@@ -307,7 +307,7 @@ class ActionBlog extends Action {
 			/**
 			 * Парсим описание блога на предмет ХТМЛ тегов
 			 */
-			$sText=$this->Text_Parser(getRequestStr('blog_description'));
+			$sText=$this->Text_Parser(getRequestStr('blog_description'), ModuleText::ACT_UPDATE);
 			$oBlog->setDescription($sText);
 			/**
 			 * Сбрасываем кеш, если поменяли тип блога
@@ -1001,7 +1001,7 @@ class ActionBlog extends Action {
 		/**
 		 * Проверяем текст комментария
 		 */
-		$sText=$this->Text_Parser(getRequestStr('comment_text'));
+		$sText=$this->Text_Parser(getRequestStr('comment_text'), ModuleText::ACT_CREATE);
 		if (!func_check($sText,'text',2,Config::Get('module.comment.comment_max_length'))) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_add_text_error'),$this->Lang_Get('error'));
 			return;
@@ -1061,7 +1061,7 @@ class ActionBlog extends Action {
 		 * Добавляем коммент
 		 */
 		$this->Hook_Run('comment_add_before', array('oCommentNew'=>$oCommentNew,'oCommentParent'=>$oCommentParent,'oTopic'=>$oTopic));
-		if ($this->Comment_AddComment($oCommentNew)) {
+		if ($this->Comment_AddComment($oCommentNew, $oCommentParent)) {
 			$this->Hook_Run('comment_add_after', array('oCommentNew'=>$oCommentNew,'oCommentParent'=>$oCommentParent,'oTopic'=>$oTopic));
 
 			$this->Viewer_AssignAjax('sCommentId',$oCommentNew->getId());

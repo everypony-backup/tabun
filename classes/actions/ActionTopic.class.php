@@ -307,8 +307,8 @@ class ActionTopic extends Action {
 		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
 
 		$oTopic->setCutText($sTextCut);
-		$oTopic->setText($this->Text_Parser($sTextNew));
-		$oTopic->setTextShort($this->Text_Parser($sTextShort));
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_CREATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_CREATE));
 		/**
 		 * Публикуем или сохраняем
 		 */
@@ -443,8 +443,8 @@ class ActionTopic extends Action {
 		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
 
 		$oTopic->setCutText($sTextCut);
-		$oTopic->setText($this->Text_Parser($sTextNew));
-		$oTopic->setTextShort($this->Text_Parser($sTextShort));
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_UPDATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_UPDATE));
 		/**
 		 * Публикуем или сохраняем в черновиках
 		 */
@@ -555,4 +555,3 @@ class ActionTopic extends Action {
 		$this->Viewer_Assign('sMenuSubItemSelect',$this->sMenuSubItemSelect);
 	}
 }
-?>

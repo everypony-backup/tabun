@@ -8,6 +8,7 @@ $ = require "jquery"
 {textPreview, registry, prepareJSON} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
+{commentFor} = require "lib/markitup.coffee"
 
 
 types =
@@ -97,6 +98,42 @@ toggleCommentForm = (idComment, bNoFocus) ->
     commentForm.focus()
 
 
+toggleEditForm = (idComment, bOpen, bAllowLock=false) ->
+  contentWrapper = document.getElementById "comment_content_id_#{idComment}"
+  if bOpen
+    preview = document.createElement "div"
+    preview.className = "text preview"
+    preview.id = "comment_preview_edit_#{idComment}"
+    currentText = contentWrapper.querySelector(".text.current")
+    editForm = document.createElement "div"
+    editForm.id = "comment_edit_#{idComment}"
+    editForm.className = "edit-form"
+    edit = document.createElement "textarea"
+    edit.className = "markitup-editor"
+    edit.id = "comment_edit_input_#{idComment}"
+    edit.style.height = (currentText.getBoundingClientRect().height * 1.2 + 40) + "px"
+    edit.value = currentText.innerHTML.replace(/<br[\s]*\/?>\r?\n/gmi, "\n")
+    editForm.appendChild preview
+    editForm.appendChild edit
+    if bAllowLock and document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
+      lockCB = document.createElement "input"
+      lockCB.type = "checkbox"
+      lockLabel = document.createElement "label"
+      lockLabel.appendChild lockCB
+      lockLabel.appendChild document.createTextNode " "+gettext("comment_lock_edit")
+      editForm.appendChild lockLabel
+    contentWrapper.parentNode?.classList.add "editable"
+    contentWrapper.appendChild editForm
+    commentFor edit
+    edit.focus()
+  else
+    closeEditForm idComment, contentWrapper
+  false
+
+closeEditForm = (idComment, contentWrapper) ->
+  $("#comment_edit_#{idComment}").remove()
+  contentWrapper.parentNode?.classList.remove "editable"
+
 load = (idTarget, typeTarget, bFlushNew=true) ->
   idCommentLast = parseInt(newCounter.dataset.idCommentLast) || 0
   objImg = document.getElementById 'update-comments'
@@ -179,6 +216,36 @@ toggle = (obj, commentId) ->
 
   ajax url, params, _success
 
+
+saveEdit = (idComment) ->
+  url = routes.comment.edit
+  editForm = document.getElementById "comment_edit_#{idComment}"
+  params =
+    idComment: idComment
+    newText: editForm?.querySelector("textarea")?.value
+    setLock: if editForm?.querySelector('label>input[type="checkbox"]')?.checked then "1" else "0"
+
+  _success = (result) ->
+    unless result
+      return error gettext("server_error"), gettext("try_later")
+    if result.newText
+      document.querySelector("#comment_content_id_#{idComment} .text.current").innerHTML = result.newText
+    if result.notice
+      document.querySelector("#comment_id_#{idComment} .modify-notice").innerHTML = result.notice
+    if result.bStateError
+      return error result.sMsgTitle, result.sMsg
+    else
+      toggleEditForm idComment, false
+      return notice result.sMsgTitle, result.sMsg
+
+  ajax url, params, _success
+  false
+
+previewEdit = (idComment) ->
+  preview_id = "comment_preview_edit_#{idComment}"
+  document.getElementById(preview_id).innerHTML = ""
+  textPreview "comment_edit_input_#{idComment}", false, preview_id, true
+  return false
 
 preview = ->
   unless commentForm.value
@@ -290,6 +357,9 @@ module.exports = {
   goToParentComment
   toggleCommentForm
   toggle
+  toggleEditForm
+  previewEdit
+  saveEdit
   add
   preview
   load

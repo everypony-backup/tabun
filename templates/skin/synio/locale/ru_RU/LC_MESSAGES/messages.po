@@ -151,6 +151,9 @@ msgstr "Не пройдена капча. Вы точно не робот?"
 msgid "recaptcha_error"
 msgstr "Вы робот!"
 
+msgid "comment_lock_edit"
+msgstr "заблокировать дальнейшее изменение"
+
 
 # Editor
 msgid "create"
