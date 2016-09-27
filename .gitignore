@@ -2,7 +2,7 @@
 __pycache__
 /static/
 /node_modules/
-/locale/**/*.mo
+/templates/skin/synio/locale/**/*.mo
 /var/
 /log/
 .htaccess
