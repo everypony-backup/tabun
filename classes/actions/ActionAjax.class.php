@@ -1295,6 +1295,7 @@ class ActionAjax extends Action {
                 }
 
                 if ($this->Comment_UpdateComment($oComment)) {
+                    $this->SearchIndexer_CommentIndex($oComment); // Переиндексируем комментарий в ElasticSearch
                     $this->Message_AddNoticeSingle($this->Lang_Get($noticeId));
                 } else {
                     $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
