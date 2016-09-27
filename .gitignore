@@ -3,6 +3,7 @@ __pycache__
 /static/
 /node_modules/
 /templates/skin/synio/locale/**/*.mo
+/templates/skin/synio/locale/**/*.json
 /var/
 /log/
 .htaccess

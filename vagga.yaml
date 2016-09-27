@@ -206,6 +206,7 @@ commands:
       msgcat -n -F -o messages.po parts/*
       msgfmt messages.po
       po2json -f jed1.x messages.po messages.json
+      rm messages.po
 
   watch-static: !Command
     container: static
