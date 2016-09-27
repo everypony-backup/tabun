@@ -50,7 +50,7 @@ cfg =
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
-      {test: /\.po$/, loader: 'json!po?format=jed1.x'}
+      {test: /\.json$/, loader: 'json'}
       {
         test: /.*\.(gif|png|jpg|jpeg|svg)$/,
         loaders: (if isProduction then ['file?name=img/[hash:4].[ext]'] else ['file?name=img/[name].[ext]'])
