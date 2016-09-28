@@ -183,34 +183,3 @@ msgstr "FAQ"
 
 msgid "rules"
 msgstr "Правила"
-
-# Search
-msgid "search_sort_by"
-msgstr "Сортировать по:"
-
-msgid "search_sort_by_date"
-msgstr "дате"
-
-msgid "search_sort_by_score"
-msgstr "релеватности"
-
-msgid "search_sort_by_rating"
-msgstr "рейтингу"
-
-msgid "search_sort_dir"
-msgstr "Показывать:"
-
-msgid "search_sort_dir_asc"
-msgstr "по возрастанию"
-
-msgid "search_sort_dir_desc"
-msgstr "по убыванию"
-
-msgid "search_type"
-msgstr "Поиск по:"
-
-msgid "search_type_topic"
-msgstr "топикам"
-
-msgid "search_type_comment"
-msgstr "комментариям"
