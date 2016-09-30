@@ -81,11 +81,6 @@ class ActionSearch extends Action {
             $this->RegisterCodedQueryParam($sCoded, 3, 'topic_type_title', ['t' => true, 'f' => false]);
             $this->RegisterCodedQueryParam($sCoded, 4, 'topic_type_text', ['t' => true, 'f' => false]);
             $this->RegisterCodedQueryParam($sCoded, 5, 'topic_type_tags', ['t' => true, 'f' => false]);
-            //$this->RegisterQueryParam('type', ['topic', 'comment'], 'topic');
-            //$this->RegisterQueryParam('sort', ['date', 'score', 'rating'], 'score');
-
-            $this->Viewer_AssignJS('sQuery', $sQuery);
-            $this->Viewer_AddHtmlTitle($sQuery);
 
             /**
              * Проверяем, чтоб длина запроса была в допустимых пределах
@@ -94,6 +89,10 @@ class ActionSearch extends Action {
                 $this->Message_AddErrorSingle($this->Lang_Get('search_error_length'), $this->Lang_Get('error'));
                 return false;
             }
+
+            $this->Viewer_AssignJS('sQuery', $sQuery);
+            $this->Viewer_AssignJS('sCoded', $sCoded);
+            $this->Viewer_AddHtmlTitle($sQuery);
 
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
@@ -163,20 +162,6 @@ class ActionSearch extends Action {
         $this->aCodedParams[$name] = $var; // Сохраняем переменную в глобальный список
 
         $this->Viewer_Assign('s' . ucfirst($name), $var);
-        $this->Viewer_AssignJS('s' . ucfirst($name), $var);
-    }
-
-	private function RegisterQueryParam($name, array $values, $default) {
-        $var = getRequestStr($name);
-        if($var == "") $var = $default;
-
-        if(!in_array($var, $values)) {
-            $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
-        }
-
-        $this->aParams[$name] = $var; // Сохраняем переменную в глобальный список
-        $this->Viewer_Assign('s' . ucfirst($name), $var);
-        $this->Viewer_AssignJS('s' . ucfirst($name), $var);
     }
 
 	/**
@@ -188,4 +173,3 @@ class ActionSearch extends Action {
 	}
 
 }
-?>
