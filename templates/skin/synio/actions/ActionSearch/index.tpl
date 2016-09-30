@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{include file='header.tpl' styles=['search']}
 
 <h2 class="page-header">{$aLang.search}</h2>
 
