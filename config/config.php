@@ -204,22 +204,6 @@ $config['module']['lang']['delete_undefined'] = true;   // Если устано
 $config['module']['notify']['delayed'] = false;         // Указывает на необходимость использовать режим отложенной рассылки сообщений на email
 $config['module']['notify']['insert_single'] = true;    // Если опция установлена в true, систему будет собирать записи заданий удаленной публикации, для вставки их в базу единым INSERT
 $config['module']['notify']['per_process'] = 1000;      // Количество отложенных заданий, обрабатываемых одним крон-процессом
-// Модуль Image
-$config['module']['image']['allowed_mime'] = [
-    "image/bmp" => "bmp",
-    "image/x-bmp" => "bmp",
-    "image/x-ms-bmp" => "bmp",
-    "image/gif" => "gif",
-    "image/png" => "png",
-    "image/jpeg" => "jpg",
-    "image/pjpeg" => "jpg",
-    "image/svg+xml" => "svg",
-    "image/tiff" => "tiff",
-    "image/x-tiff" => "tiff",
-];
-$config['module']['image']['max_x'] = 10000;
-$config['module']['image']['max_y'] = 20000;
-$config['module']['image']['max_size'] = 30000; // максимальный размер картинки в kB для загрузки по URL
 
 // Модуль Security
 $config['module']['security']['hash'] = "";             // "примесь" к строке, хешируемой в качестве security-кода
@@ -229,11 +213,6 @@ $config['module']['userfeed']['count_default'] = 20;    // Число топик
 $config['module']['stream']['count_default'] = 20;      // Число топиков в ленте по умолчанию
 $config['module']['stream']['disable_vote_events'] = false;
 
-// Модуль Search
-$config['module']['search']['index'] = "tabun"; // Имя индекса в Elasticsearch
-$config['module']['search']['topic_key'] = "topic";
-$config['module']['search']['comment_key'] = "comment";
-$config['module']['search']['per_page'] = 30;
 // Какие модули должны быть загружены на старте
 $config['module']['autoLoad'] = ['Hook', 'Cache', 'Security', 'Session', 'Lang', 'Message', 'User'];
 /**
