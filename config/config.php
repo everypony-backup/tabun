@@ -291,6 +291,7 @@ $config['db']['table']['geo_region'] = '___db.table.prefix___geo_region';
 $config['db']['table']['geo_city'] = '___db.table.prefix___geo_city';
 $config['db']['table']['geo_target'] = '___db.table.prefix___geo_target';
 $config['db']['table']['user_changemail'] = '___db.table.prefix___user_changemail';
+$config['db']['table']['magicrole_block']='___db.table.prefix___magicrule_block';
 
 $config['db']['tables']['engine'] = 'InnoDB';
 /**
@@ -452,5 +453,20 @@ $config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify";
  * Статические страницы
  */
 $config['page']['show_block_structure'] = false;
+
+// Include configs
+foreach (glob("config/configs/*") as $file) {
+    $name = explode('.', str_replace('config/configs/', '', $file));
+    array_pop($name); // Remove extension
+
+    $conf = &$config;
+    foreach($name as $pk)
+    {
+        $conf = &$conf[$pk];
+    }
+    $conf = require($file);
+    unset($conf);
+
+}
 
 return $config;

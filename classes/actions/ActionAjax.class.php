@@ -246,11 +246,32 @@ class ActionAjax extends Action {
 		/**
 		 * Как именно голосует пользователь
 		 */
-		$iValue=getRequestStr('value',null,'post');
+		$iValue=getRequestStr('value', null, 'post');
 		if (!in_array($iValue,array('1','-1'))) {
 			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_value'),$this->Lang_Get('attention'));
 			return;
 		}
+
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'vote_comment',
+            $this->oUserCurrent,
+            [
+                'vote_value' => (int)getRequest('value', null, 'post')
+            ]
+        );
+        if ($mRes !== false) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
+
 		/**
 		 * Голосуем
 		 */
@@ -331,6 +352,26 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_acl'),$this->Lang_Get('attention'));
 			return;
 		}
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'vote_topic',
+            $this->oUserCurrent,
+            [
+                'vote_value' => (int)getRequest('value', null, 'post')
+            ]
+        );
+        if ($mRes !== false) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
+
 		/**
 		 * Голосуем
 		 */
@@ -502,6 +543,27 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
 			return;
 		}
+
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'vote_user',
+            $this->oUserCurrent,
+            [
+                'vote_value' => (int)getRequest('value', null, 'post')
+            ]
+        );
+        if ($mRes !== false) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
+
 		/**
 		 * Голосуем
 		 */
