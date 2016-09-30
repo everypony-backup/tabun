@@ -1,5 +1,7 @@
 path = require 'path'
 webpack = require 'webpack'
+poststylus = require 'poststylus'
+postUse = require "postcss-use"
 fs = require 'fs'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
@@ -80,6 +82,13 @@ cfg =
           )
         )
     ]
+  stylus:
+    preferPathResolver: 'webpack'
+    use: [
+      require('bootstrap-styl')()
+      poststylus([ postUse({ modules: ['postcss-selector-namespace']}) ])
+    ]
+    compress: true
 
 if isProduction
   cfg.resolve.alias =
