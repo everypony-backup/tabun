@@ -453,4 +453,19 @@ $config['recaptcha']['url'] = "https://www.google.com/recaptcha/api/siteverify";
  */
 $config['page']['show_block_structure'] = false;
 
+// Include configs
+foreach (glob("config/configs/*") as $file) {
+    $name = explode('.', str_replace('config/configs/', '', $file));
+    array_pop($name); // Remove extension
+
+    $conf = &$config;
+    foreach($name as $pk)
+    {
+        $conf = &$conf[$pk];
+    }
+    $conf = require($file);
+    unset($conf);
+
+}
+
 return $config;
