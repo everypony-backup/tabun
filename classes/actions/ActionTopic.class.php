@@ -335,6 +335,23 @@ class ActionTopic extends Action {
 		if (getRequest('topic_forbid_comment')) {
 			$oTopic->setForbidComment(1);
 		}
+
+        /**
+         * Можно ли создавать топики?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'create_topic',
+            $this->oUserCurrent
+        );
+        if ($mRes !== false) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('module.magicrule.check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
 		/**
 		 * Запускаем выполнение хуков
 		 */

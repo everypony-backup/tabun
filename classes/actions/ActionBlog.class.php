@@ -1043,6 +1043,23 @@ class ActionBlog extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_spam'),$this->Lang_Get('error'));
 			return;
 		}
+
+		/**
+		 * Можно ли пользователю писать комменты?
+		 */
+		$mRes = $this->Magicrule_CheckRuleAction(
+			'create_comment',
+			$this->oUserCurrent
+		);
+		if ($mRes !== false) {
+			if (is_string($mRes)) {
+				$this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+				return Router::Action('error');
+			} else {
+				$this->Message_AddErrorSingle($this->Lang_Get('module.magicrule.check_rule_action_error'), $this->Lang_Get('attention'));
+				return Router::Action('error');
+			}
+		}
 		/**
 		 * Создаём коммент
 		 */
