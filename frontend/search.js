@@ -10,9 +10,7 @@ function initSearchConfigurator(node) {
     ReactDOM.render(
         <SearchConfigurator
             query={registry.get("sQuery")}
-            sort_by={registry.get("sSortBy")}
-            sort_dir={registry.get("sSortDir")}
-            type={registry.get("sType")}
+            coded={registry.get("sCoded")}
         />,
         node
     );

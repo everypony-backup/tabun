@@ -1,13 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
 import routes from 'lib/routes';
-import {gettext as _, ngettext} from 'core/lang';
+import {gettext as _} from 'core/lang';
+import {decodeSearchParams} from './logic.js';
 
 export default class SearchConfigurator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            params: decodeSearchParams(props.coded),
+            query: props.query
         };
     }
 
