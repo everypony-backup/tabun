@@ -11,7 +11,6 @@ vendors = [
   "jquery.scrollto"
   "jed"
   "immutable"
-  "react-bootstrap"
   "bazooka"
 
   # Legacy
