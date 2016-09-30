@@ -1,8 +1,26 @@
 import React from 'react';
+import {map} from 'lodash';
 import classNames from 'classnames';
 import routes from 'lib/routes';
 import {gettext as _} from 'core/lang';
 import {decodeSearchParams} from './logic.js';
+
+export class NamedRadioGroup extends React.Component {
+
+    render() {
+        const buttons = map(this.props.buttons, (label, name) => {
+            const className = classNames("btn btn-default", {"active": this.props.selected == name});
+            return <button type="button" className={className} key={name}>{label}</button>;
+        });
+
+        return (
+            <div className="btn-group btn-group-sm input-group" role="group">
+                <div className="input-group-addon">{this.props.groupName}</div>
+                {buttons}
+            </div>
+        );
+    }
+}
 
 export default class SearchConfigurator extends React.Component {
     constructor(props) {
@@ -23,7 +41,7 @@ export default class SearchConfigurator extends React.Component {
                                 <div className="btn-group">
                                     <button className="btn btn-default dropdown-toggle" type="button">
                                         <span>Искать в…</span>
-                                        <span className="caret" />
+                                        <span className="caret"/>
                                     </button>
                                     <ul className="dropdown-menu" role="menu">
                                         <li><a href="#">топиках</a></li>
@@ -38,19 +56,18 @@ export default class SearchConfigurator extends React.Component {
                         </div>
                     </div>
                     <div className="form-group col-lg-6">
-                        <div className="btn-group btn-group-sm input-group" role="group">
-                            <div className="input-group-addon">Сортировать по:</div>
-                            <button type="button" className="btn btn-default">дате</button>
-                            <button type="button" className="btn btn-default active">релевантности</button>
-                            <button type="button" className="btn btn-default">рейтингу</button>
-                        </div>
+                        <NamedRadioGroup
+                            groupName="Сортировать по:"
+                            buttons={{date: "дате", score: "релевантности", rating: "рейтингу"}}
+                            selected="score"
+                        />
                     </div>
                     <div className="form-group col-lg-6">
-                        <div className="btn-group btn-group-sm input-group" role="group">
-                            <div className="input-group-addon">Упорядочить по:</div>
-                            <button type="button" className="btn btn-default active">возрастанию</button>
-                            <button type="button" className="btn btn-default">убыванию</button>
-                        </div>
+                        <NamedRadioGroup
+                            groupName="Упорядочить по:"
+                            buttons={{asc: "возрастанию", desc: "убыванию"}}
+                            selected="desc"
+                        />
                     </div>
                 </form>
             </div>
