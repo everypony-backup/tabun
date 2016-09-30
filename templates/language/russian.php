@@ -1200,5 +1200,6 @@ return array(
 	'commentEditNotice_descChanged_byAuthor' => 'Последнее изменение – автором %%date%%',
 	'commentEditNotice_descChanged_byAdminFull' => 'Последнее изменение – адм. %%user%% %%date%%',
 	'commentEditNotice_descLocked_byAdminFull' => 'Заблокирован для изменения адм. %%user%% %%date%%',
+
+	'check_rule_action_error' => 'Вам не разрешено данное действие',
 );
-?>
