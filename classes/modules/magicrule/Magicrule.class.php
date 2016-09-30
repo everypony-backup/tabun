@@ -230,7 +230,7 @@ class ModuleMagicrule extends ModuleORM {
         }
         $sTarget=$oVote->getTargetType();
         $sType=$this->aVoteMirrow[$oVote->getDirection()];
-        $aGroups=(array)Config::Get('plugin.magicrule.block_rule_vote');
+        $aGroups=(array)Config::Get('module.magicrule.block_rule_vote');
         foreach($aGroups as $aRule) {
             if (!in_array($sTarget,$aRule['target'])) {
                 continue;

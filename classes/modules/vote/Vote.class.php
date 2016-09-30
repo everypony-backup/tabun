@@ -54,6 +54,9 @@ class ModuleVote extends Module {
                     "vote_update_{$oVote->getTargetType()}_{$oVote->getVoterId()}"
                 ]
             );
+
+            // Проверка условий голосования - не пора ли ограничить юзера?
+            $this->Magicrule_CheckForCreateBlockVote($oVote);
 			return true;
 		}
 		return false;

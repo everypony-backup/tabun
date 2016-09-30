@@ -5,7 +5,7 @@
  * Reworked by SparklingFire
  */
 
-class ModuleMain_MapperMagicrule extends Mapper {
+class ModuleMagicrule_MapperMagicrule extends Mapper {
 
     public function GetCountVote($iUserId,$sTargetType,$sDate) {
         $sql = "
