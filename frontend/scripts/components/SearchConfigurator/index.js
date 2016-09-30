@@ -22,6 +22,57 @@ export class NamedRadioGroup extends React.Component {
     }
 }
 
+export class NamedDropdown extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {opened: false};
+        this.toggle = this.toggle.bind(this);
+        this.hide = this.hide.bind(this);
+    }
+
+    toggle() {
+        this.setState({opened: !this.state.opened})
+    }
+
+    hide() {
+        this.setState({opened: false})
+    }
+
+    render() {
+        const choices = map(this.props.choices, (label, name) => {
+            const className = classNames({"active": this.props.selected == name});
+            return (
+                <li className={className} onClick={this.hide}>
+                    <a key={name}>{label}</a>
+                </li>
+            );
+        });
+
+        return (
+            <div className="input-group-btn">
+                <div
+                    className={classNames("overlay", {"h-hidden": !this.state.opened})}
+                    onClick={this.hide}
+                ></div>
+                <div className={classNames("btn-group", {"open": this.state.opened})}>
+                    <button
+                        className="btn btn-default dropdown-toggle"
+                        type="button"
+                        onClick={this.toggle}
+                    >
+                        <span>{this.props.groupName}</span>
+                        <span className="caret"/>
+                    </button>
+                    <ul className="dropdown-menu" role="menu">
+                        {choices}
+                    </ul>
+                </div>
+            </div>
+        );
+    }
+}
+
 export default class SearchConfigurator extends React.Component {
     constructor(props) {
         super(props);
@@ -37,18 +88,11 @@ export default class SearchConfigurator extends React.Component {
                 <form>
                     <div className="form-group col-lg-12">
                         <div className="input-group">
-                            <div className="input-group-btn">
-                                <div className="btn-group">
-                                    <button className="btn btn-default dropdown-toggle" type="button">
-                                        <span>Искать в…</span>
-                                        <span className="caret"/>
-                                    </button>
-                                    <ul className="dropdown-menu" role="menu">
-                                        <li><a href="#">топиках</a></li>
-                                        <li><a href="#">комментариях</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <NamedDropdown
+                                groupName="Искать в…"
+                                choices={{topic: "топиках", comments: "комментариях"}}
+                                selected="topic"
+                            />
                             <input type="search" className="form-control" placeholder="Что ищем?"/>
                             <div className="input-group-btn">
                                 <button className="btn btn-primary btn-block">Искать!</button>
