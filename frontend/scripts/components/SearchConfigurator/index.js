@@ -13,99 +13,44 @@ export default class SearchConfigurator extends React.Component {
 
     render() {
         return (
-            <form className="search">
-                <input
-                    type="text"
-                    placeholder={_("search")}
-                    maxLength="255"
-                    name="q"
-                    className="input-text"
-                />
-                <input type="submit" value="" className="input-submit icon icon-search" />
-                <div className="block">
-                    <SearchConfig_SortSelector />
-                    <SearchConfig_SortDirSelector />
-                    <SearchConfig_TypeSelector />
-                </div>
-            </form>
-        )
-    }
-}
-
-class SearchConfig_SortSelector extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
-
-    render() {
-        return (
-            <div>
-                {_("search_sort_by")}
-                <label className="input-radio">
-                    <input type="radio" name="sort" value="date" />
-                    {_("search_sort_by_date")}
-                </label>
-                <label className="input-radio">
-                    <input type="radio" name="sort" value="score" />
-                    {_("search_sort_by_score")}
-                </label>
-                <label className="input-radio">
-                    <input type="radio" name="sort" value="rating" />
-                    {_("search_sort_by_rating")}
-                </label>
-            </div>
-        )
-    }
-}
-
-class SearchConfig_SortDirSelector extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
-
-    render() {
-        return (
-            <div>
-                {_("search_sort_dir")}
-                <label className="input-radio">
-                    <input type="radio" name="sort_dir" value="asc" />
-                    {_("search_sort_dir_asc")}
-                </label>
-                <label className="input-radio">
-                    <input type="radio" name="sort_dir" value="desc" />
-                    {_("search_sort_dir_desc")}
-                </label>
-            </div>
-        )
-    }
-}
-
-class SearchConfig_TypeSelector extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
-
-    render() {
-        return (
-            <div>
-                {_("search_type")}
-                <label className="input-radio">
-                    <input type="radio" name="type" value="topic" />
-                    {_("search_type_topic")}
-                </label>
-                <label className="input-radio">
-                    <input type="radio" name="type" value="comment" />
-                    {_("search_type_comment")}
-                </label>
+            <div className="bs row">
+                <form>
+                    <div className="form-group col-lg-12">
+                        <div className="input-group">
+                            <div className="input-group-btn">
+                                <div className="btn-group">
+                                    <button className="btn btn-default dropdown-toggle" type="button">
+                                        <span>Искать в…</span>
+                                        <span className="caret" />
+                                    </button>
+                                    <ul className="dropdown-menu" role="menu">
+                                        <li><a href="#">топиках</a></li>
+                                        <li><a href="#">комментариях</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <input type="search" className="form-control" placeholder="Что ищем?"/>
+                            <div className="input-group-btn">
+                                <button className="btn btn-primary btn-block">Искать!</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group col-lg-6">
+                        <div className="btn-group btn-group-sm input-group" role="group">
+                            <div className="input-group-addon">Сортировать по:</div>
+                            <button type="button" className="btn btn-default">дате</button>
+                            <button type="button" className="btn btn-default active">релевантности</button>
+                            <button type="button" className="btn btn-default">рейтингу</button>
+                        </div>
+                    </div>
+                    <div className="form-group col-lg-6">
+                        <div className="btn-group btn-group-sm input-group" role="group">
+                            <div className="input-group-addon">Упорядочить по:</div>
+                            <button type="button" className="btn btn-default active">возрастанию</button>
+                            <button type="button" className="btn btn-default">убыванию</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         )
     }
