@@ -93,7 +93,7 @@ export default class SearchConfigurator extends React.Component {
                                 choices={{topic: "топиках", comments: "комментариях"}}
                                 selected="topic"
                             />
-                            <input type="search" className="form-control" placeholder="Что ищем?"/>
+                            <input type="search" className="form-control" placeholder="Что ищем?" value={this.state.query}/>
                             <div className="input-group-btn">
                                 <button className="btn btn-primary btn-block">Искать!</button>
                             </div>
