@@ -125,3 +125,16 @@ getCountFormField = (value) ->
 removeFormField = (obj) ->
   $(obj).parent('.js-user-field-item').detach()
   false
+
+module.exports = {
+  showAddForm
+  showEditForm
+  applyForm
+  addUserfield
+  updateUserfield
+  deleteUserfield
+  addFormField
+  changeFormField
+  getCountFormField
+  removeFormField
+}
