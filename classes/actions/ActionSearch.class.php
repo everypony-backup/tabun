@@ -64,23 +64,25 @@ class ActionSearch extends Action {
 	function EventIndex(){
         $this->SetTemplateAction('index');
 
+        /*
+         * Регистрируем поисковые параметры
+         */
+        $sCoded = getRequestStr('coded');
+        if($sCoded == '') $sCoded = $this->sCodedDefault;
+
+        $this->RegisterCodedQueryParam($sCoded, 0, 'type', ['t' => 'topic', 'c' => 'comment']);
+        $this->RegisterCodedQueryParam($sCoded, 1, 'sort_by', ['d' => 'date', 's' => 'score', 'r' => 'rating']);
+        $this->RegisterCodedQueryParam($sCoded, 2, 'sort_dir', ['a' => 'asc', 'd' => 'desc']);
+        $this->RegisterCodedQueryParam($sCoded, 3, 'topic_type_title', ['t' => true, 'f' => false]);
+        $this->RegisterCodedQueryParam($sCoded, 4, 'topic_type_text', ['t' => true, 'f' => false]);
+        $this->RegisterCodedQueryParam($sCoded, 5, 'topic_type_tags', ['t' => true, 'f' => false]);
+
+        $this->Viewer_AssignJS('sCoded', $sCoded);
+
         $sQuery = getRequestStr('q');
         if($sQuery !== '') {
             $iPage = intval(preg_replace('#^page([1-9]\d{0,5})$#', '\1', Router::GetActionEvent()));
             if($iPage == 0) $iPage = 1;
-
-            /*
-             * Регистрируем поисковые параметры
-             */
-            $sCoded = getRequestStr('coded');
-            if($sCoded == '') $sCoded = $this->sCodedDefault;
-
-            $this->RegisterCodedQueryParam($sCoded, 0, 'type', ['t' => 'topic', 'c' => 'comment']);
-            $this->RegisterCodedQueryParam($sCoded, 1, 'sort_by', ['d' => 'date', 's' => 'score', 'r' => 'rating']);
-            $this->RegisterCodedQueryParam($sCoded, 2, 'sort_dir', ['a' => 'asc', 'd' => 'desc']);
-            $this->RegisterCodedQueryParam($sCoded, 3, 'topic_type_title', ['t' => true, 'f' => false]);
-            $this->RegisterCodedQueryParam($sCoded, 4, 'topic_type_text', ['t' => true, 'f' => false]);
-            $this->RegisterCodedQueryParam($sCoded, 5, 'topic_type_tags', ['t' => true, 'f' => false]);
 
             /**
              * Проверяем, чтоб длина запроса была в допустимых пределах
@@ -91,7 +93,6 @@ class ActionSearch extends Action {
             }
 
             $this->Viewer_AssignJS('sQuery', $sQuery);
-            $this->Viewer_AssignJS('sCoded', $sCoded);
             $this->Viewer_AddHtmlTitle($sQuery);
 
             /**
