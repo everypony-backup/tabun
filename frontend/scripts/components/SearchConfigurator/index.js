@@ -2,8 +2,9 @@ import React from 'react';
 import {default as mutate} from 'react-addons-update';
 import {map} from 'lodash';
 import classNames from 'classnames';
+import {search as searchRoute} from 'lib/routes';
 import {gettext as _} from 'core/lang';
-import {decodeSearchParams} from './logic.js';
+import {encodeSearchParams, decodeSearchParams} from './logic.js';
 
 export class NamedRadioGroup extends React.Component {
 
@@ -113,6 +114,7 @@ export default class SearchConfigurator extends React.Component {
         this.handleQueryType = this.handleQueryType.bind(this);
         this.handleSortDir = this.handleSortDir.bind(this);
         this.handleSortType = this.handleSortType.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleQueryInput (event) {
@@ -140,6 +142,18 @@ export default class SearchConfigurator extends React.Component {
             this.state,
             {params: {sort: {type: {$set: value}}}}
         ));
+    }
+
+    handleSubmit () {
+        const params = {
+            q: this.state.query,
+            coded: encodeSearchParams(this.state.params)
+        };
+        const query = Object
+            .keys(params)
+            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+            .join('&');
+        document.location.replace(`${searchRoute}?${query}`);
     }
 
     render() {

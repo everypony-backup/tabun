@@ -51,3 +51,7 @@ export function decodeSearchParams(encodedParams) {
     }
     return result;
 }
+
+export function encodeSearchParams(rawParams) {
+    return ""
+}

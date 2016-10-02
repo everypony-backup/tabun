@@ -90,3 +90,4 @@ module.exports =
     autocomplete: '/ajax/autocompleter/user/'
     search: '/people/ajax-search/'
   userfields: '/admin/userfields/'
+  search: '/search'
