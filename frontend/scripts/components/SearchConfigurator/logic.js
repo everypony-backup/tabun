@@ -1,5 +1,15 @@
 export default class SearhParams {
 
+    static get SORT_DIRS() {
+        return ['desc', 'asc']
+    }
+    static get SORT_TYPES() {
+        return ['date', 'score', 'rating']
+    }
+    static get QUERY_TYPES() {
+        return ['topic', 'comment']
+    }
+
     constructor(encodedParams) {
         const [
             queryType,

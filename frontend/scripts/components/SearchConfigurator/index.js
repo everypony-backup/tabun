@@ -1,4 +1,5 @@
 import React from 'react';
+import {transform} from 'lodash';
 import {search as searchRoute} from 'lib/routes';
 import {gettext as _} from 'core/lang';
 
@@ -8,15 +9,34 @@ import {NamedDropdown, NamedRadioGroup} from './views.js';
 export default class SearchConfigurator extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             params: new SearhParams(props.coded),
             query: props.query || ""
         };
+
         this.handleQueryInput = this.handleQueryInput.bind(this);
         this.handleQueryType = this.handleQueryType.bind(this);
         this.handleSortDir = this.handleSortDir.bind(this);
         this.handleSortType = this.handleSortType.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+
+        this.sortDirs = transform(
+            SearhParams.SORT_DIRS,
+            (acc, value, key) => {acc[key] =_(`search_sort_dir_${value}`)},
+            {}
+        );
+        this.sortTypes = transform(
+            SearhParams.SORT_TYPES,
+            (acc, value, key) => {acc[key] =_(`search_sort_by_${value}`)},
+            {}
+        );
+        this.queryTypes = transform(
+            SearhParams.QUERY_TYPES,
+            (acc, value, key) => {acc[key] =_(`search_type_${value}`)},
+            {}
+        );
     }
 
     handleQueryInput (event) {
@@ -61,15 +81,15 @@ export default class SearchConfigurator extends React.Component {
                 <div className="form-group col-lg-12">
                     <div className="input-group">
                         <NamedDropdown
-                            groupName="Искать в"
-                            choices={{topic: "топиках", comment: "комментариях"}}
+                            groupName={_('search_query_type')}
+                            choices={this.queryTypes}
                             selected={this.state.params.queryType}
                             onChange={this.handleQueryType}
                         />
                         <input
                             type="search"
                             className="form-control"
-                            placeholder="Что ищем?"
+                            placeholder={_('search_placeholder')}
                             value={this.state.query}
                             onChange={this.handleQueryInput}
                         />
@@ -84,16 +104,16 @@ export default class SearchConfigurator extends React.Component {
                 </div>
                 <div className="form-group col-lg-6">
                     <NamedRadioGroup
-                        groupName="Сортировать по:"
-                        buttons={{date: "дате", score: "релевантности", rating: "рейтингу"}}
+                        groupName={_('search_sort_by')}
+                        buttons={this.sortTypes}
                         selected={this.state.params.sortType}
                         onChange={this.handleSortType}
                     />
                 </div>
                 <div className="form-group col-lg-6">
                     <NamedRadioGroup
-                        groupName="Упорядочить по:"
-                        buttons={{asc: "возрастанию", desc: "убыванию"}}
+                        groupName={_('search_sort_dir')}
+                        buttons={this.sortDirs}
                         selected={this.state.params.sortDir}
                         onChange={this.handleSortDir}
                     />

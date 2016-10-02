@@ -30,19 +30,22 @@ msgid "search_sort_by_rating"
 msgstr "рейтингу"
 
 msgid "search_sort_dir"
-msgstr "Показывать:"
+msgstr "Упорядочить по:"
 
 msgid "search_sort_dir_asc"
-msgstr "по возрастанию"
+msgstr "возрастанию"
 
 msgid "search_sort_dir_desc"
-msgstr "по убыванию"
+msgstr "убыванию"
 
-msgid "search_type"
-msgstr "Поиск по:"
+msgid "search_query_type"
+msgstr "Искать в"
+
+msgid "search_placeholder"
+msgstr "Что ищем?"
 
 msgid "search_type_topic"
-msgstr "топикам"
+msgstr "топиках"
 
 msgid "search_type_comment"
-msgstr "комментариям"
+msgstr "комментариях"
