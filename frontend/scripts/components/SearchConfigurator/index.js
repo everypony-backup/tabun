@@ -47,25 +47,33 @@ export class NamedDropdown extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {opened: false};
+        this.state = {
+            opened: false,
+            selected: props.selected
+        };
         this.toggle = this.toggle.bind(this);
-        this.hide = this.hide.bind(this);
+        this.change = this.change.bind(this);
+    }
+
+    change(event) {
+        const val = event.target.name;
+        this.setState({
+            opened: false,
+            selected: val
+        });
+        this.props.onChange(val);
     }
 
     toggle() {
         this.setState({opened: !this.state.opened})
     }
 
-    hide() {
-        this.setState({opened: false})
-    }
-
     render() {
         const choices = map(this.props.choices, (label, name) => {
-            const className = classNames({"active": this.props.selected == name});
+            const className = classNames({"active": this.state.selected == name});
             return (
-                <li className={className} onClick={this.hide}>
-                    <a key={name}>{label}</a>
+                <li className={className} key={name} onClick={this.change}>
+                    <a name={name}>{label}</a>
                 </li>
             );
         });
@@ -82,7 +90,7 @@ export class NamedDropdown extends React.Component {
                         type="button"
                         onClick={this.toggle}
                     >
-                        <span>{this.props.groupName}</span>
+                        <span>{this.props.groupName}&nbsp;{this.props.choices[this.state.selected]}&nbsp;</span>
                         <span className="caret"/>
                     </button>
                     <ul className="dropdown-menu" role="menu">
@@ -110,7 +118,7 @@ export default class SearchConfigurator extends React.Component {
                     <div className="form-group col-lg-12">
                         <div className="input-group">
                             <NamedDropdown
-                                groupName="Искать в…"
+                                groupName="Искать в"
                                 choices={{topic: "топиках", comments: "комментариях"}}
                                 selected="topic"
                             />
