@@ -1,5 +1,4 @@
 import React from 'react';
-import {default as mutate} from 'react-addons-update';
 import {map} from 'lodash';
 import classNames from 'classnames';
 import {search as searchRoute} from 'lib/routes';
@@ -161,7 +160,7 @@ export default class SearchConfigurator extends React.Component {
                         <NamedDropdown
                             groupName="Искать в"
                             choices={{topic: "топиках", comments: "комментариях"}}
-                            selected="topic"
+                            selected={this.state.params.queryType}
                             onChange={this.handleQueryType}
                         />
                         <input
@@ -184,7 +183,7 @@ export default class SearchConfigurator extends React.Component {
                     <NamedRadioGroup
                         groupName="Сортировать по:"
                         buttons={{date: "дате", score: "релевантности", rating: "рейтингу"}}
-                        selected="score"
+                        selected={this.state.params.sortType}
                         onChange={this.handleSortType}
                     />
                 </div>
@@ -192,7 +191,7 @@ export default class SearchConfigurator extends React.Component {
                     <NamedRadioGroup
                         groupName="Упорядочить по:"
                         buttons={{asc: "возрастанию", desc: "убыванию"}}
-                        selected="desc"
+                        selected={this.state.params.sortDir}
                         onChange={this.handleSortDir}
                     />
                 </div>
