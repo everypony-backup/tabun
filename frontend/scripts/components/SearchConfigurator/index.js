@@ -4,7 +4,7 @@ import {map} from 'lodash';
 import classNames from 'classnames';
 import {search as searchRoute} from 'lib/routes';
 import {gettext as _} from 'core/lang';
-import {encodeSearchParams, decodeSearchParams} from './logic.js';
+import SearhParams from './logic.js';
 
 export class NamedRadioGroup extends React.Component {
 
@@ -107,7 +107,7 @@ export default class SearchConfigurator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            params: decodeSearchParams(props.coded),
+            params: new SearhParams(props.coded),
             query: props.query || ""
         };
         this.handleQueryInput = this.handleQueryInput.bind(this);
@@ -123,32 +123,28 @@ export default class SearchConfigurator extends React.Component {
     }
 
     handleQueryType (value) {
-        this.setState(mutate(
-            this.state,
-            {params: {type: {$set: value}}}
-        ));
+        const newParams = this.state.params;
+        newParams.queryType = value;
+        this.setState({params: newParams});
     }
 
     handleSortDir (value) {
-        this.setState(mutate(
-            this.state,
-            {params: {sort: {direction: {$set: value}}}}
-        ));
+        const newParams = this.state.params;
+        newParams.sortDir = value;
+        this.setState({params: newParams});
     }
 
-
     handleSortType (value) {
-        this.setState(mutate(
-            this.state,
-            {params: {sort: {type: {$set: value}}}}
-        ));
+        const newParams = this.state.params;
+        newParams.sortType = value;
+        this.setState({params: newParams});
     }
 
     handleSubmit () {
         const params = {
             q: this.state.query,
             v: this.props.version,
-            с: encodeSearchParams(this.state.params)
+            с: this.state.params.toString()
         };
         const query = Object
             .keys(params)

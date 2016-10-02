@@ -1,57 +1,75 @@
-export function decodeSearchParams(encodedParams) {
-    const [
-        type,
-        sortBy,
-        sortDir,
-        ..._
-    ] = encodedParams.split("");
+export default class SearhParams {
 
-    const result = {
-        type: null,
-        sort: {
-            type: null,
-            direction: null
-        },
-        fields: {
-            topic: {
-                title: true,
-                text: true,
-                tags: true,
-            }
+    constructor(encodedParams) {
+        const [
+            queryType,
+            sortType,
+            sortDir,
+            ..._
+        ] = encodedParams.split("");
+
+        switch (queryType) {
+            case "t":
+                this.queryType  = "topic";
+                break;
+            case "c":
+                this.queryType = "comment";
+                break;
         }
-    };
 
-    switch (type) {
-        case "t":
-            result.type = "topic";
-            break;
-        case "c":
-            result.type = "comment";
-            break;
+        switch (sortType) {
+            case "d":
+                this.sortType = "date";
+                break;
+            case "s":
+                this.sortType = "score";
+                break;
+            case "r":
+                this.sortType = "rating";
+                break;
+        }
+        switch (sortDir) {
+            case "a":
+                this.sortDir = "asc";
+                break;
+            case "d":
+                this.sortDir = "desc";
+                break;
+        }
     }
+    toString () {
+        let queryType = "-";
+        let sortType = "-";
+        let sortDir = "-";
 
-    switch (sortBy) {
-        case "d":
-            result.sort.type = "date";
-            break;
-        case "s":
-            result.sort.type = "score";
-            break;
-        case "r":
-            result.sort.type = "rating";
-            break;
-    }
-    switch (sortDir) {
-        case "a":
-            result.sort.direction = "asc";
-            break;
-        case "d":
-            result.sort.direction = "desc";
-            break;
-    }
-    return result;
-}
+        switch (this.queryType) {
+            case "topic":
+                queryType  = "t";
+                break;
+            case "comment":
+                queryType = "c";
+                break;
+        }
+        switch (this.sortType) {
+            case "date":
+                sortType = "d";
+                break;
+            case "score":
+                sortType = "s";
+                break;
+            case "rating":
+                sortType = "r";
+                break;
+        }
+        switch (this.sortDir) {
+            case "asc":
+                sortDir = "a";
+                break;
+            case "desc":
+                sortDir = "d";
+                break;
+        }
 
-export function encodeSearchParams(rawParams) {
-    return ""
+        return `${queryType}${sortType}${sortDir}ttt`
+    }
 }
