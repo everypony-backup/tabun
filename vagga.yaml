@@ -35,11 +35,6 @@ containers:
       - beautifulsoup4
       - elasticsearch
 
-  memcached:
-    setup:
-    - !Container _base_alpine
-    - !Install [memcached]
-
   redis:
     setup:
     - !Container _base_alpine
@@ -81,7 +76,6 @@ containers:
       - php5-mysql
       - php5-pdo_mysql
       - php5-mcrypt
-      - php5-memcache
       - php5-redis@testing
       - php5-gettext
       - php5-json
@@ -265,11 +259,6 @@ commands:
     work-dir: celery_tasks
     run: celery worker --config=celeryconfig --pool=solo
 
-  memcached: &memcached !Command
-    container: memcached
-    description: Run memcached
-    run: memcached -m128 -uroot -p11211 -l127.0.0.1
-
   php: &php !Command
     container: php-dev
     description: Run php-fpm (application)
@@ -298,6 +287,5 @@ commands:
       mysql: *mysql
       mail: *mail
       celery: *celery
-      memcached: *memcached
       php: *php
       elastic: *elastic
