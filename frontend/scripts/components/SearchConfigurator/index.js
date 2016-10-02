@@ -159,7 +159,7 @@ export default class SearchConfigurator extends React.Component {
                     <div className="input-group">
                         <NamedDropdown
                             groupName="Искать в"
-                            choices={{topic: "топиках", comments: "комментариях"}}
+                            choices={{topic: "топиках", comment: "комментариях"}}
                             selected={this.state.params.queryType}
                             onChange={this.handleQueryType}
                         />
