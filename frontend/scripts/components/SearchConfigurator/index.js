@@ -2,7 +2,6 @@ import React from 'react';
 import {default as mutate} from 'react-addons-update';
 import {map} from 'lodash';
 import classNames from 'classnames';
-import routes from 'lib/routes';
 import {gettext as _} from 'core/lang';
 import {decodeSearchParams} from './logic.js';
 
@@ -146,44 +145,45 @@ export default class SearchConfigurator extends React.Component {
     render() {
         return (
             <div className="bs row">
-                <form>
-                    <div className="form-group col-lg-12">
-                        <div className="input-group">
-                            <NamedDropdown
-                                groupName="Искать в"
-                                choices={{topic: "топиках", comments: "комментариях"}}
-                                selected="topic"
-                                onChange={this.handleQueryType}
-                            />
-                            <input
-                                type="search"
-                                className="form-control"
-                                placeholder="Что ищем?"
-                                value={this.state.query}
-                                onChange={this.handleQueryInput}
-                            />
-                            <div className="input-group-btn">
-                                <button className="btn btn-primary btn-block">Искать!</button>
-                            </div>
+                <div className="form-group col-lg-12">
+                    <div className="input-group">
+                        <NamedDropdown
+                            groupName="Искать в"
+                            choices={{topic: "топиках", comments: "комментариях"}}
+                            selected="topic"
+                            onChange={this.handleQueryType}
+                        />
+                        <input
+                            type="search"
+                            className="form-control"
+                            placeholder="Что ищем?"
+                            value={this.state.query}
+                            onChange={this.handleQueryInput}
+                        />
+                        <div className="input-group-btn">
+                            <button
+                                className="btn btn-primary btn-block"
+                                onClick={this.handleSubmit}
+                            >Искать!</button>
                         </div>
                     </div>
-                    <div className="form-group col-lg-6">
-                        <NamedRadioGroup
-                            groupName="Сортировать по:"
-                            buttons={{date: "дате", score: "релевантности", rating: "рейтингу"}}
-                            selected="score"
-                            onChange={this.handleSortType}
-                        />
-                    </div>
-                    <div className="form-group col-lg-6">
-                        <NamedRadioGroup
-                            groupName="Упорядочить по:"
-                            buttons={{asc: "возрастанию", desc: "убыванию"}}
-                            selected="desc"
-                            onChange={this.handleSortDir}
-                        />
-                    </div>
-                </form>
+                </div>
+                <div className="form-group col-lg-6">
+                    <NamedRadioGroup
+                        groupName="Сортировать по:"
+                        buttons={{date: "дате", score: "релевантности", rating: "рейтингу"}}
+                        selected="score"
+                        onChange={this.handleSortType}
+                    />
+                </div>
+                <div className="form-group col-lg-6">
+                    <NamedRadioGroup
+                        groupName="Упорядочить по:"
+                        buttons={{asc: "возрастанию", desc: "убыванию"}}
+                        selected="desc"
+                        onChange={this.handleSortDir}
+                    />
+                </div>
             </div>
         )
     }
