@@ -7,10 +7,31 @@ import {decodeSearchParams} from './logic.js';
 
 export class NamedRadioGroup extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: props.selected
+        };
+        this.change = this.change.bind(this);
+    }
+
+    change(event) {
+        const val = event.target.value;
+        event.target.blur();
+        this.setState({selected: val});
+        this.props.onChange(val);
+    }
+
     render() {
         const buttons = map(this.props.buttons, (label, name) => {
-            const className = classNames("btn btn-default", {"active": this.props.selected == name});
-            return <button type="button" className={className} key={name}>{label}</button>;
+            const className = classNames("btn btn-default", {"active": this.state.selected == name});
+            return <button
+                type="button"
+                className={className}
+                key={name}
+                value={name}
+                onClick={this.change}
+            >{label}</button>;
         });
 
         return (
