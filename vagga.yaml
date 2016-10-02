@@ -195,8 +195,9 @@ commands:
   _clean-old-static: !Command
     container: static
     description: Clean static files
-    work-dir: /work/static
-    run: rm -rf *
+    run: |
+     mkdir -vp /work/static
+     rm -rf /work/static/*
 
   compile-locales: !Command
     container: static
