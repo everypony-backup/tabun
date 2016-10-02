@@ -143,7 +143,7 @@ export default class SearchConfigurator extends React.Component {
         const params = {
             q: this.state.query,
             v: this.props.version,
-            с: this.state.params.toString()
+            c: this.state.params.toString()
         };
         const query = Object
             .keys(params)
