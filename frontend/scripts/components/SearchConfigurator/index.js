@@ -179,6 +179,7 @@ export default class SearchConfigurator extends React.Component {
                             <button
                                 className="btn btn-primary btn-block"
                                 onClick={this.handleSubmit}
+                                disabled={this.state.query.length === 0}
                             >Искать!</button>
                         </div>
                     </div>
