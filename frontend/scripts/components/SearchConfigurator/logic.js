@@ -8,7 +8,7 @@ export function decodeSearchParams(encodedParams) {
 
     const result = {
         type: null,
-        sorting: {
+        sort: {
             type: null,
             direction: null
         },
@@ -32,21 +32,21 @@ export function decodeSearchParams(encodedParams) {
 
     switch (sortBy) {
         case "d":
-            result.sorting.type = "date";
+            result.sort.type = "date";
             break;
         case "s":
-            result.sorting.type = "score";
+            result.sort.type = "score";
             break;
         case "r":
-            result.sorting.type = "rating";
+            result.sort.type = "rating";
             break;
     }
     switch (sortDir) {
         case "a":
-            result.sorting.direction = "asc";
+            result.sort.direction = "asc";
             break;
         case "d":
-            result.sorting.direction = "desc";
+            result.sort.direction = "desc";
             break;
     }
     return result;

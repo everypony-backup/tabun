@@ -1,4 +1,5 @@
 import React from 'react';
+import {default as mutate} from 'react-addons-update';
 import {map} from 'lodash';
 import classNames from 'classnames';
 import routes from 'lib/routes';
@@ -107,14 +108,39 @@ export default class SearchConfigurator extends React.Component {
         super(props);
         this.state = {
             params: decodeSearchParams(props.coded),
-            query: props.query
+            query: props.query || ""
         };
         this.handleQueryInput = this.handleQueryInput.bind(this);
+        this.handleQueryType = this.handleQueryType.bind(this);
+        this.handleSortDir = this.handleSortDir.bind(this);
+        this.handleSortType = this.handleSortType.bind(this);
     }
 
     handleQueryInput (event) {
         // in-time validation/tooltips/help goes here
         this.setState({query: event.target.value});
+    }
+
+    handleQueryType (value) {
+        this.setState(mutate(
+            this.state,
+            {params: {type: {$set: value}}}
+        ));
+    }
+
+    handleSortDir (value) {
+        this.setState(mutate(
+            this.state,
+            {params: {sort: {direction: {$set: value}}}}
+        ));
+    }
+
+
+    handleSortType (value) {
+        this.setState(mutate(
+            this.state,
+            {params: {sort: {type: {$set: value}}}}
+        ));
     }
 
     render() {
@@ -127,6 +153,7 @@ export default class SearchConfigurator extends React.Component {
                                 groupName="Искать в"
                                 choices={{topic: "топиках", comments: "комментариях"}}
                                 selected="topic"
+                                onChange={this.handleQueryType}
                             />
                             <input
                                 type="search"
@@ -145,6 +172,7 @@ export default class SearchConfigurator extends React.Component {
                             groupName="Сортировать по:"
                             buttons={{date: "дате", score: "релевантности", rating: "рейтингу"}}
                             selected="score"
+                            onChange={this.handleSortType}
                         />
                     </div>
                     <div className="form-group col-lg-6">
@@ -152,6 +180,7 @@ export default class SearchConfigurator extends React.Component {
                             groupName="Упорядочить по:"
                             buttons={{asc: "возрастанию", desc: "убыванию"}}
                             selected="desc"
+                            onChange={this.handleSortDir}
                         />
                     </div>
                 </form>
