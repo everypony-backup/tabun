@@ -30,6 +30,13 @@ class ActionSearch extends Action {
     protected $aParams = [];
 
     /**
+     * Версия параметров поиска (для сохранения обратной совместимости)
+     *
+     * @var array
+     */
+    const PARAM_VERSION = 1;
+
+    /**
 	 * Параметры поиска, зарегистрированные как кодированные
 	 *
 	 * @var array
@@ -67,7 +74,7 @@ class ActionSearch extends Action {
         /*
          * Регистрируем поисковые параметры
          */
-        $sCoded = getRequestStr('coded');
+        $sCoded = getRequestStr('c');
         if($sCoded == '') $sCoded = $this->sCodedDefault;
 
         $this->RegisterCodedQueryParam($sCoded, 0, 'type', ['t' => 'topic', 'c' => 'comment']);
@@ -78,6 +85,7 @@ class ActionSearch extends Action {
         $this->RegisterCodedQueryParam($sCoded, 5, 'topic_type_tags', ['t' => true, 'f' => false]);
 
         $this->Viewer_AssignJS('sCoded', $sCoded);
+        $this->Viewer_AssignJS('sParamVersion', self::PARAM_VERSION);
 
         $sQuery = getRequestStr('q');
         if($sQuery !== '') {
@@ -141,7 +149,14 @@ class ActionSearch extends Action {
                     Config::Get('module.search.per_page'),
                     Config::Get('pagination.pages.count'),
                     Router::GetPath('search'),
-                    array_merge(['q' => $sQuery, 'coded' => $sCoded], $this->aParams)
+                    array_merge(
+                        [
+                            'q' => $sQuery,
+                            'c' => $sCoded,
+                            'v' => self::PARAM_VERSION
+                        ],
+                        $this->aParams
+                    )
                 );
                 $this->Viewer_Assign('aPaging', $aPaging);
             }
@@ -158,11 +173,8 @@ class ActionSearch extends Action {
             $this->Message_AddErrorSingle($this->Lang_Get('search_error'), $this->Lang_Get('error'));
         }
 
-        $var = $values[$val];
+        $this->aCodedParams[$name] =  $values[$val]; // Сохраняем переменную в глобальный список
 
-        $this->aCodedParams[$name] = $var; // Сохраняем переменную в глобальный список
-
-        $this->Viewer_Assign('s' . ucfirst($name), $var);
     }
 
 	/**

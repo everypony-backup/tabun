@@ -147,7 +147,8 @@ export default class SearchConfigurator extends React.Component {
     handleSubmit () {
         const params = {
             q: this.state.query,
-            coded: encodeSearchParams(this.state.params)
+            v: this.props.version,
+            с: encodeSearchParams(this.state.params)
         };
         const query = Object
             .keys(params)

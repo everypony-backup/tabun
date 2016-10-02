@@ -11,6 +11,7 @@ function initSearchConfigurator(node) {
         <SearchConfigurator
             query={registry.get("sQuery")}
             coded={registry.get("sCoded")}
+            version={registry.get("sParamVersion")}
         />,
         node
     );
