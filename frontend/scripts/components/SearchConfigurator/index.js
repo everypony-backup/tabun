@@ -109,6 +109,12 @@ export default class SearchConfigurator extends React.Component {
             params: decodeSearchParams(props.coded),
             query: props.query
         };
+        this.handleQueryInput = this.handleQueryInput.bind(this);
+    }
+
+    handleQueryInput (event) {
+        // in-time validation/tooltips/help goes here
+        this.setState({query: event.target.value});
     }
 
     render() {
@@ -122,7 +128,13 @@ export default class SearchConfigurator extends React.Component {
                                 choices={{topic: "топиках", comments: "комментариях"}}
                                 selected="topic"
                             />
-                            <input type="search" className="form-control" placeholder="Что ищем?" value={this.state.query}/>
+                            <input
+                                type="search"
+                                className="form-control"
+                                placeholder="Что ищем?"
+                                value={this.state.query}
+                                onChange={this.handleQueryInput}
+                            />
                             <div className="input-group-btn">
                                 <button className="btn btn-primary btn-block">Искать!</button>
                             </div>
