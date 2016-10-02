@@ -24,17 +24,17 @@ export default class SearchConfigurator extends React.Component {
 
         this.sortDirs = transform(
             SearhParams.SORT_DIRS,
-            (acc, value, key) => {acc[key] =_(`search_sort_dir_${value}`)},
+            (acc, value) => {acc[value] =_(`search_sort_dir_${value}`)},
             {}
         );
         this.sortTypes = transform(
             SearhParams.SORT_TYPES,
-            (acc, value, key) => {acc[key] =_(`search_sort_by_${value}`)},
+            (acc, value) => {acc[value] =_(`search_sort_by_${value}`)},
             {}
         );
         this.queryTypes = transform(
             SearhParams.QUERY_TYPES,
-            (acc, value, key) => {acc[key] =_(`search_type_${value}`)},
+            (acc, value) => {acc[value] =_(`search_type_${value}`)},
             {}
         );
     }
