@@ -17,9 +17,10 @@
     "jquery.scrollto": "~2.1.1",
     "bootstrap-styl": "5.0.7",
     "lodash": "~3.10.1",
-    "react": "^0.14.3",
+    "react": "~15.3",
+    "react-addons-update": "15.3",
     "react-lite": "0.15.18",
-    "react-dom": "^0.14.3"
+    "react-dom": "~15.3"
   },
   "devDependencies": {
     "webpack": "~1.10.5",
