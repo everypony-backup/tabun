@@ -10,6 +10,7 @@ routes = require "lib/routes.coffee"
 favTargets =
   comment: 'idComment'
   topic: 'idTopic'
+  talk: 'idTalk'
   user: 'idUser'
 
 
