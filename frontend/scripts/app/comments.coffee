@@ -296,19 +296,21 @@ goToNextComment = ->
 
 
 scrollToComment = (commentId) ->
-  previousViewedComment = document.getElementById "comment_id_#{currentViewedCommentId}"
-  if previousViewedComment
-    previousViewedComment.classList.remove classes.current
-
   comment = document.getElementById "comment_id_#{commentId}"
   unless comment
     return
 
   scrollTo comment, 300, offset: -250
 
-  newComments = newComments.delete commentId
-  setCountNewComment newComments.size
+  if currentViewedCommentId
+    previousViewedComment = document.getElementById "comment_id_#{currentViewedCommentId}"
+    if previousViewedComment
+      previousViewedComment.classList.remove classes.current
 
+  if newCounter
+    newComments = newComments.delete commentId
+    setCountNewComment newComments.size
+  
   comment.classList.remove classes.new
   comment.classList.add classes.current
 
@@ -316,11 +318,11 @@ scrollToComment = (commentId) ->
 
 
 goToParentComment = (id, pid) ->
-  $('.' + classes.comment_goto_child).hide().find('a').unbind()
-  $('#comment_id_' + pid).find('.' + classes.comment_goto_child).show().find('a').bind 'click', ->
-    $(this).parent('.' + classes.comment_goto_child).hide()
-    scrollToComment id
   scrollToComment pid
+  goToChild = $('#comment_id_'+pid+' .goto-comment-child>a')
+  $(goToChild).parent().show()
+  $(goToChild).attr('href','#'+id)
+  $(goToChild).attr('onclick', '{ls.comments.scrollToComment('+id+');$(this).parent().hide();$(this).attr("onclick","")}')
 
 initEvent = ->
   $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
@@ -355,6 +357,7 @@ init = ->
 module.exports = {
   init
   goToParentComment
+  scrollToComment
   toggleCommentForm
   toggle
   toggleEditForm
