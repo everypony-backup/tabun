@@ -19,6 +19,7 @@ return [
     'usernote_per_page' => 100,
     'profile_photo_width' => 250,
     'name_max' => 30,
+    'about_max' => 3000,
     'captcha_use_registration' => false,
     'recaptcha_use_registration' => true,
     'bad_rating' => -10

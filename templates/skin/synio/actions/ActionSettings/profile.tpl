@@ -64,7 +64,7 @@
 		<dl class="form-item">
 			<dt><label for="profile_name">{$aLang.settings_profile_name}:</label></dt>
 			<dd>
-				<input type="text" name="profile_name" id="profile_name" value="{$oUserCurrent->getProfileName()|escape:'html'}" class="input-text input-width-250">
+				<input type="text" name="profile_name" id="profile_name" value="{$oUserCurrent->getProfileName()|escape:'html'}" class="input-text input-width-250" maxlength="{$oConfig->GetValue('module.user.name_max')}">
 			</dd>
 		</dl>
 		
@@ -108,7 +108,7 @@
 		
 		<br />
 		<label for="profile_about" style="margin-bottom: 7px">{$aLang.settings_profile_about}:</label>
-		<textarea name="profile_about" id="profile_about" class="input-text input-width-full" rows="7">{$oUserCurrent->getProfileAbout()|escape:'html'}</textarea>
+		<textarea name="profile_about" id="profile_about" class="input-text input-width-full" rows="7" maxlength="{$oConfig->GetValue('module.user.about_max')}">{$oUserCurrent->getProfileAbout()|escape:'html'}</textarea>
 		<br />
 		<br />
 		<br />
