@@ -2,7 +2,7 @@ minimum-vagga: v0.6.1
 
 _templates:
   local_volumes: &local_volumes
-  /config: !BindRO /work/config/local
+    /config: !BindRO /work/config/local
 
 containers:
   _base_alpine:
