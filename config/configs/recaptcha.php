@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'key' => '6LftnB8TAAAAAIt6Fh42c7OusIOctL9uFIjpm-TD',
-    'secret' => '6LftnB8TAAAAANPR7AVuLydz16EmiHY_PmwsFuup',
+    'key' => '6Ld1_QgUAAAAAMh-JiWgux_6CERc4aATQs0iK-J2',
+    'secret' => '6Ld1_QgUAAAAAAAAmZSDhjvskUNHFsZniIdwkn5S',
     'url' => 'https://www.google.com/recaptcha/api/siteverify'
 ];
