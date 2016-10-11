@@ -262,7 +262,7 @@ class ActionAjax extends Action {
                 'vote_value' => (int)getRequest('value', null, 'post')
             ]
         );
-        if ($mRes !== false) {
+        if ($mRes !== true) {
             if (is_string($mRes)) {
                 $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
                 return Router::Action('error');
@@ -362,7 +362,7 @@ class ActionAjax extends Action {
                 'vote_value' => (int)getRequest('value', null, 'post')
             ]
         );
-        if ($mRes !== false) {
+        if ($mRes !== true) {
             if (is_string($mRes)) {
                 $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
                 return Router::Action('error');
@@ -554,7 +554,7 @@ class ActionAjax extends Action {
                 'vote_value' => (int)getRequest('value', null, 'post')
             ]
         );
-        if ($mRes !== false) {
+        if ($mRes !== true) {
             if (is_string($mRes)) {
                 $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
                 return Router::Action('error');

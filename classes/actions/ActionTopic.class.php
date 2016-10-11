@@ -343,7 +343,7 @@ class ActionTopic extends Action {
             'create_topic',
             $this->oUserCurrent
         );
-        if ($mRes !== false) {
+        if ($mRes !== true) {
             if (is_string($mRes)) {
                 $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
                 return Router::Action('error');
