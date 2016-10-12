@@ -42,6 +42,7 @@ allComments = new OrderedSet()
 newCounter = null
 allCounter = null
 commentForm = null
+originalTitle = document.title
 
 toggleCommentFormState = (state) ->
   submitButton = document.getElementById "comment-button-submit"
@@ -267,8 +268,10 @@ preview = ->
 setCountNewComment = (count) ->
   newCounter.textContent = count
   if count
+    document.title = count + ' | ' + originalTitle
     newCounter.classList.remove "h-hidden"
   else
+    document.title = originalTitle
     newCounter.classList.add "h-hidden"
 
 
