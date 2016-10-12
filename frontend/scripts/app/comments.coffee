@@ -328,10 +328,11 @@ goToParentComment = (id, pid) ->
   $(goToChild).attr('onclick', '{ls.comments.scrollToComment('+id+');$(this).parent().hide();$(this).attr("onclick","")}')
 
 initEvent = ->
-  $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
-    key = keyCode or which
-    if ctrlKey and key == 13
-      $('#comment-button-submit').click()
+  if commentForm
+    $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
+      key = keyCode or which
+      if ctrlKey and key == 13
+        $('#comment-button-submit').click()
 
   $(document).on "click", '.folding', ({target}) ->
     wrappers = document
@@ -347,6 +348,16 @@ initEvent = ->
       target.classList.add classes.folded
       forEach wrappers, (wrapper) -> wrapper.classList.add 'h-hidden'
 
+  if newCounter
+    $(document).keydown (e) ->
+      if !$("textarea:focus,input:focus").length
+        key = e.keyCode or e.which
+        if [32,45].indexOf(key) != -1
+          e.preventDefault()
+          $(newCounter).click()
+        else if [13,46].indexOf(key) != -1
+          e.preventDefault()
+          $("#update-comments").click()
 
 init = ->
   newCounter = document.getElementById "new_comments_counter"
