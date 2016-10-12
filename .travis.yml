@@ -1,0 +1,34 @@
+language: generic
+dist: trusty
+sudo: required
+
+cache:
+  directories:
+    - $HOME/.cache/vagga
+
+addons:
+  ssh_known_hosts: $deploy_host:$deploy_port
+
+install:
+  - "echo ubuntu-mirror: http://mirrors.us.kernel.org/ubuntu/ > ~/.vagga.yaml"
+  - "echo alpine-mirror: http://mirrors.gigenet.com/alpinelinux/ >> ~/.vagga.yaml"
+  - "echo cache-dir: ~/.cache/vagga >> ~/.vagga.yaml"
+  - "echo travis:100000:65536 | sudo tee /etc/subuid | sudo tee /etc/subgid"
+  - sudo apt-get install uidmap -y
+  - curl http://files.zerogw.com/vagga/vagga-install-testing.sh | sh
+
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_6a519e1377ad_key -iv $encrypted_6a519e1377ad_iv -in deploy/deploy_rsa.enc -out /tmp/deploy_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/deploy_rsa
+  - ssh-add /tmp/deploy_rsa
+
+script:
+  - vagga _build _base_alpine
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./deploy/script.sh --project tabun-trunk --destination /srv/images --server staging.everypony.ru --containers "redis app python mysql"
+  on:
+    branch: travis
