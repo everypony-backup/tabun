@@ -359,7 +359,13 @@ init = ->
         #проверяем нажата ли левая кнопка
         if e.which != 1 then return
         selection = window.getSelection()
-        text = selection.toString()
+        text = selection
+          .toString()
+          .replace(/&/g,"&amp;")
+          .replace(/</g,"&lt;")
+          .replace(/>/g,"&gt;")
+          .replace(/"/g,"&quot;")
+          .replace(/'/g,"&#039;")
         if !text then return
         #ищем родительский комментарий
         parentComment = $(selection.anchorNode.parentElement).parentsUntil(".comment").filter(".comment-content")
@@ -370,7 +376,7 @@ init = ->
         y = e.clientY + $(window).scrollTop()
         #создаём элемент если нужно
         if !$("#quote").length 
-          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp</i>цитировать<s>&nbsp</s></div>')
+          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<s>&nbsp;</s></div>')
         quote = $("#quote")
         $(quote).attr("data-quote",text)
         $(quote).attr("data-parent-id",parentID)
