@@ -353,6 +353,60 @@ init = ->
   setCountAllComment parseAllCommentTree()
   setCountNewComment parseNewCommentTree()
   toggleCommentForm iCurrentShowFormComment
+  if commentForm
+    $(document)
+      .on('mouseup', (e) -> 
+        #проверяем нажата ли левая кнопка
+        if e.which != 1 then return
+        selection = window.getSelection()
+        text = selection.toString()
+        if !text then return
+        #ищем родительский комментарий
+        parentComment = $(selection.anchorNode.parentElement).parentsUntil(".comment").filter(".comment-content")
+        parentID = 0
+        if parentComment.length 
+          parentID = parentComment.attr("id").replace("comment_content_id_","")
+        x = e.clientX + $(window).scrollLeft()
+        y = e.clientY + $(window).scrollTop()
+        #создаём элемент если нужно
+        if !$("#quote").length 
+          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp</i>цитировать<s>&nbsp</s></div>')
+        quote = $("#quote")
+        $(quote).attr("data-quote",text)
+        $(quote).attr("data-parent-id",parentID)
+        $(quote).css('left',x)
+        $(quote).css('top',y)
+        $(quote).show()
+      )
+      .on('mousedown', ->
+        $("#quote").hide()
+      )
+      .on('mouseup', '#quote', (e) ->
+        e.stopPropagation()
+        if $("#reply").hasClass("h-hidden")
+          iCurrentShowFormComment = $(this).attr("data-parent-id")
+          toggleCommentForm(iCurrentShowFormComment,false)
+        #ищем каретку в форме редактирования
+        caret = commentForm.selectionStart
+        if isNaN caret
+          commentForm.value += '<blockquote>'+$(this).attr("data-quote")+'</blockquote>'
+        else
+          commentForm.value = 
+            commentForm.value.substring(0,caret) +
+            '<blockquote>'+$(this).attr("data-quote")+'</blockquote>' +
+            commentForm.value.substring(caret)
+        $(this).hide()
+        #если форма редактирования не видна, мотаем
+        commentFormPosition = $(commentForm).offset().top
+        windowPosition = $(window).scrollTop()
+        if (commentFormPosition + commentForm.getClientRects()[0].height < windowPosition) || (commentFormPosition > (windowPosition + $(window).height()))
+          scrollToComment(iCurrentShowFormComment)
+      )
+      .on('mousedown','#quote', (e) ->
+        e.stopPropagation()
+      )
+
+
 
 module.exports = {
   init
