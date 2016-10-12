@@ -4,24 +4,22 @@
 
 <div data-bazooka="search_configurator"></div>
 
-{if $iResCount > 0}
-	<header class="search-header">
+<header class="search-header">
+	{if $iResCount > 0}
 		<h3>Результатов: {$iResCount}</h3>
-	</header>
-	<div>
-		{if $sType == 'topic'}
-			{include file='topic_list.tpl'}
-		{elseif $sType == 'comment'}
-			{include file='comment_list.tpl'}
-		{else}
-			{hook run='search_result' sType=$sType}
-		{/if}
-	</div>
-{elseif $iResCount !== null}
-	<header class="search-header">
+	{else}
 		<h3>Нет результатов</h3>
-	</header>
-{/if}
+	{/if}
+</header>
 
+<div>
+	{if isset($aTopics)}
+		{include file='topic_list.tpl'}
+	{elseif isset($aComments)}
+		{include file='comment_list.tpl'}
+	{else}
+
+	{/if}
+</div>
 
 {include file='footer.tpl' scripts=["search"]}
