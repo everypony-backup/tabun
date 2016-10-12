@@ -41,9 +41,9 @@ a
 .spoiler-gray
   background-color #CCC
   color #CCC
-  a,a:visited
+  a,a:visited,a.ls-user[href]
     color #ccc
-  img
+  img,.ls-user::before
     opacity 0
   &:hover
     background-color transparent
@@ -51,7 +51,9 @@ a
     a
       background-color transparent
       color #0099FF
-    img 
+    a.ls-user
+      color #555
+    img,.ls-user::before
       opacity inherit
 
 h1, h2, h3, h4, h5, h6
