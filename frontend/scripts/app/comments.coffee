@@ -358,6 +358,16 @@ initEvent = ->
         else if [13,46].indexOf(key) != -1
           e.preventDefault()
           $("#update-comments").click()
+    updateButton = document.getElementById("update-comments")
+    if updateButton
+      topicID = parseInt($(updateButton).attr("onclick").match(/\d+/)[0])
+      topicType = $(updateButton).attr("onclick").match(/\'.*\'/)[0].replace(/'/g,"")
+      autoUpdate = ->
+        if document.visibilityState != 'hidden' then return
+        if !$("#reply").hasClass("h-hidden") then return
+        if $(updateButton).hasClass("active") then return
+        load(topicID,topicType,false)
+      setInterval(autoUpdate,60000)
 
 init = ->
   newCounter = document.getElementById "new_comments_counter"
