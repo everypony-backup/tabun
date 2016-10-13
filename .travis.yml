@@ -7,7 +7,7 @@ cache:
     - $HOME/.cache/vagga
 
 addons:
-  ssh_known_hosts: $deploy_host:$deploy_port
+  ssh_known_hosts: internal.everypony.ru:142
 
 install:
   - "echo ubuntu-mirror: http://mirrors.us.kernel.org/ubuntu/ > ~/.vagga.yaml"
