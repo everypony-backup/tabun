@@ -77,7 +77,7 @@ cfg =
       () ->
         @plugin("done", (stats) ->
           fs.writeFileSync(
-            path.join(__dirname, "config", "frontend.version"),
+            path.join(__dirname, "frontend.version"),
             stats.hash
           )
         )
