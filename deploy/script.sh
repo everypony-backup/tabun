@@ -53,23 +53,24 @@ exit 0;
 sync_container() {
     local NAME="$1"
     local CONTAINER_NAME=${NAME}-deploy
+    local LINK_DEST=${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest
 
     # Build container
     ${VAGGA} _build ${CONTAINER_NAME}
 
     # Get version
-    VERSION="$($VAGGA _version_hash --short $CONTAINER_NAME)"
+    VERSION=`${VAGGA} _version_hash --short ${CONTAINER_NAME}`
 
     # Copy image to server
     rsync -a \
         --checksum \
         -e "ssh -p $PORT" \
-        --link-dest=${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest/ \
+        --link-dest=${LINK_DEST}/ \
         .vagga/${CONTAINER_NAME}/ \
         ${USER}@${SERVER}:${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.${VERSION}
 
     # Link as latest image
-    ssh ${USER}@${SERVER} -p ${PORT} ln -sfn ${CONTAINER_NAME}.${VERSION} ${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest
+    ssh ${USER}@${SERVER} -p ${PORT} ln -sfn ${CONTAINER_NAME}.${VERSION} ${LINK_DEST}
 
     # Add to config
     cat <<END | ssh ${USER}@${SERVER} -p ${PORT} tee -a ${DESTINATION}/${PROJECT}/config.yaml
