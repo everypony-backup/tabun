@@ -32,7 +32,9 @@ deploy:
   script: >
     ./deploy/script.sh
     --project tabun-trunk
-    --containers "redis app python mysql"
+    --containers "redis"
+    --type trunk
+    --dry-run
     --destination $deploy_destination
     --server $deploy_host
     --port $deploy_port

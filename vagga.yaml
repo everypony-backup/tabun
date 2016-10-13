@@ -3,6 +3,15 @@ minimum-vagga: v0.6.1
 _templates:
   local_volumes: &local_volumes
     /config: !BindRO /work/config/local
+  snippets:
+    - &prod_stuff
+      - !Copy
+        source: /work/config
+        path: /config
+      - !EnsureDir /lithos
+      - !Copy
+        source: /work/lithos
+        path: /lithos
 
 containers:
   _base_alpine:
@@ -43,6 +52,11 @@ containers:
     volumes:
       <<: *local_volumes
       /storage: !Persistent {name: redis}
+
+  redis-deploy:
+    setup:
+    - !Container redis
+    - !*Unpack [*prod_stuff]
 
   nginx:
     setup:
