@@ -27,16 +27,15 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: >
-    echo $deploy_user
-#    ./deploy/script.sh
-#    --project tabun-trunk
-#    --containers "redis"
-#    --type trunk
-#    --dry-run
-#    --destination $deploy_destination
-#    --server $deploy_host
-#    --port $deploy_port
-#    --user $deploy_user
+  script: >-
+    ./deploy/script.sh
+    --project tabun-trunk
+    --containers "redis"
+    --type trunk
+    --dry-run
+    --destination $deploy_destination
+    --server $deploy_host
+    --port $deploy_port
+    --user $deploy_user
   on:
     branch: travis
