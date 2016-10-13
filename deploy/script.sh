@@ -8,6 +8,7 @@ do
         -p|--project)       PROJECT=$2; shift;;
         -d|--destination)   DESTINATION=$2; shift;;
         -c|--containers)    CONTAINERS=$2; shift;;
+        -t|--type)          TYPE=$2; shift;;
         -s|--server)        SERVER=$2; shift;;
         -P|--port)          PORT=$2; shift;;
         -u|--user)          USER=$2; shift;;
@@ -21,6 +22,7 @@ done
 VAGGA=${VAGGA:-vagga}
 PORT=${PORT:-22}
 DRY_RUN=${DRY_RUN:-false}
+TYPE=${TYPE:-production}
 
 usage(){
 cat <<'EOT'
@@ -37,9 +39,12 @@ Usage:
 Options:
    -p, --project        Project instance
    -d, --destination    Path to images on server
+   -c, --containers     Containers list
+   -t, --type           Suffix for each container
    -s, --server         Server to deploy
    -P, --port           SSH port
    -u, --user           SSH user
+   -x, --dry-run        Switch or not app wersion after deploy
    -h, --help           Show this help
 EOT
 exit 0;
@@ -47,7 +52,7 @@ exit 0;
 
 sync_container() {
     local NAME="$1"
-    local CONTAINER_NAME=${NAME}-deploy
+    local CONTAINER_NAME=${NAME}-${TYPE}
 
     # Build container
     ${VAGGA} _build ${CONTAINER_NAME}
