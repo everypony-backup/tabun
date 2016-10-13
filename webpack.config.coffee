@@ -1,5 +1,7 @@
 path = require 'path'
 webpack = require 'webpack'
+poststylus = require 'poststylus'
+postUse = require "postcss-use"
 fs = require 'fs'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
@@ -11,7 +13,6 @@ vendors = [
   "jquery.scrollto"
   "jed"
   "immutable"
-  "react-bootstrap"
   "bazooka"
 
   # Legacy
@@ -36,6 +37,7 @@ cfg =
     comments: "./comments"
     editor: "./editor"
     blogs: "./blogs"
+    search: "./search"
     vendor: vendors
 
   output:
@@ -49,7 +51,7 @@ cfg =
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
-      {test: /\.po$/, loader: 'json!po?format=jed1.x'}
+      {test: /\.json$/, loader: 'json'}
       {
         test: /.*\.(gif|png|jpg|jpeg|svg)$/,
         loaders: (if isProduction then ['file?name=img/[hash:4].[ext]'] else ['file?name=img/[name].[ext]'])
@@ -58,10 +60,11 @@ cfg =
 
   resolve:
     extensions: ['', '.coffee', '.js', '.styl', '.css']
-    modulesDirectories: ['node_modules', 'scripts', 'locale']
+    modulesDirectories: ['node_modules', 'scripts']
     root: [
       process.env.NODE_PATH
       path.resolve(path.join(__dirname, 'frontend', 'vendor'))
+      path.resolve(path.join(__dirname, 'templates', 'skin', 'synio'))
     ]
 
   resolveLoader:
@@ -79,6 +82,13 @@ cfg =
           )
         )
     ]
+  stylus:
+    preferPathResolver: 'webpack'
+    use: [
+      require('bootstrap-styl')()
+      poststylus([ postUse({ modules: ['postcss-selector-namespace']}) ])
+    ]
+    compress: true
 
 if isProduction
   cfg.resolve.alias =

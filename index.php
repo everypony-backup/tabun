@@ -20,19 +20,10 @@ chdir(dirname(__FILE__));
 require_once("./config/loader.php");
 require_once(Config::Get('path.root.engine')."/classes/Engine.class.php");
 
-$locale = Config::Get('locale');
-putenv("LANG=" . $locale);
-setlocale(LC_ALL, $locale.".UTF-8");
-date_default_timezone_set(Config::Get('timezone'));
+$lang = Config::Get('locale.lang');
+putenv("LANG=" . $lang);
+setlocale(LC_ALL, $lang);
+date_default_timezone_set(Config::Get('locale.timezone'));
 
-if (Config::Get('misc.debug')) {
-    require_once(Config::Get('path.root.engine').'/lib/internal/ProfilerSimple/Profiler.class.php');
-    $oProfiler=ProfilerSimple::getInstance(Config::Get('sys.logs.dir').'/'.Config::Get('sys.logs.profiler_file'),Config::Get('sys.logs.profiler'));
-    $iTimeId=$oProfiler->Start('full_time');
-    $oRouter=Router::getInstance();
-    $oRouter->Exec();
-    $oProfiler->Stop($iTimeId);
-} else {
-    $oRouter=Router::getInstance();
-    $oRouter->Exec();
-}
+$oRouter=Router::getInstance();
+$oRouter->Exec();

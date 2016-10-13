@@ -18,14 +18,14 @@ toggleJoin = (obj, idBlog) ->
       return
     notice null, result.sMsg
     obj = $(obj)
-    text = if result.bState then lang.get('blog_leave') else lang.get('blog_join')
-    obj.empty().text text
+    text = if result.bState then 'покинуть блог' else 'вступить в блог'
+    unless obj.attr "data-only-text"
+      obj.attr "title", text
+      return obj.toggleClass 'active'
+    obj = obj.add '#button-blog-join-first-'+idBlog+',#button-blog-join-second-'+idBlog
+    obj.text text
     obj.toggleClass 'active'
     $("#blog_user_count_#{idBlog}").text result.iCountUser
-    unless obj.data "onlyText"
-      label = if result.bState then lang.get 'blog_leave' else lang.get 'blog_join'
-      obj.html """<i class="icon-synio-join"></i><span>#{label}</span>"""
-      obj.toggleClass 'active', result.bState
 
 
 addInvite = (idBlog) ->

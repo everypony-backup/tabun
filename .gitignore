@@ -1,8 +1,9 @@
 /config/config.local.php
+__pycache__
 /static/
 /node_modules/
-/locale/**/*.mo
-.idea
+/templates/skin/synio/locale/**/*.mo
+/templates/skin/synio/locale/**/*.json
 /var/
 /log/
 .htaccess
@@ -17,7 +18,10 @@
 
 # IDEA files
 *.iml
+.idea
 
 # OS X tmp
 .DS_Store
+._.DS_Store
 *.pyc
+.vagrant/

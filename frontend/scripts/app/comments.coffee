@@ -8,6 +8,7 @@ $ = require "jquery"
 {textPreview, registry, prepareJSON} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
+{commentFor} = require "lib/markitup.coffee"
 
 
 types =
@@ -97,6 +98,42 @@ toggleCommentForm = (idComment, bNoFocus) ->
     commentForm.focus()
 
 
+toggleEditForm = (idComment, bOpen, bAllowLock=false) ->
+  contentWrapper = document.getElementById "comment_content_id_#{idComment}"
+  if bOpen
+    preview = document.createElement "div"
+    preview.className = "text preview"
+    preview.id = "comment_preview_edit_#{idComment}"
+    currentText = contentWrapper.querySelector(".text.current")
+    editForm = document.createElement "div"
+    editForm.id = "comment_edit_#{idComment}"
+    editForm.className = "edit-form"
+    edit = document.createElement "textarea"
+    edit.className = "markitup-editor"
+    edit.id = "comment_edit_input_#{idComment}"
+    edit.style.height = (currentText.getBoundingClientRect().height * 1.2 + 40) + "px"
+    edit.value = currentText.innerHTML.replace(/<br[\s]*\/?>\r?\n/gmi, "\n")
+    editForm.appendChild preview
+    editForm.appendChild edit
+    if bAllowLock and document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
+      lockCB = document.createElement "input"
+      lockCB.type = "checkbox"
+      lockLabel = document.createElement "label"
+      lockLabel.appendChild lockCB
+      lockLabel.appendChild document.createTextNode " "+gettext("comment_lock_edit")
+      editForm.appendChild lockLabel
+    contentWrapper.parentNode?.classList.add "editable"
+    contentWrapper.appendChild editForm
+    commentFor edit
+    edit.focus()
+  else
+    closeEditForm idComment, contentWrapper
+  false
+
+closeEditForm = (idComment, contentWrapper) ->
+  $("#comment_edit_#{idComment}").remove()
+  contentWrapper.parentNode?.classList.remove "editable"
+
 load = (idTarget, typeTarget, bFlushNew=true) ->
   idCommentLast = parseInt(newCounter.dataset.idCommentLast) || 0
   objImg = document.getElementById 'update-comments'
@@ -180,6 +217,36 @@ toggle = (obj, commentId) ->
   ajax url, params, _success
 
 
+saveEdit = (idComment) ->
+  url = routes.comment.edit
+  editForm = document.getElementById "comment_edit_#{idComment}"
+  params =
+    idComment: idComment
+    newText: editForm?.querySelector("textarea")?.value
+    setLock: if editForm?.querySelector('label>input[type="checkbox"]')?.checked then "1" else "0"
+
+  _success = (result) ->
+    unless result
+      return error gettext("server_error"), gettext("try_later")
+    if result.newText
+      document.querySelector("#comment_content_id_#{idComment} .text.current").innerHTML = result.newText
+    if result.notice
+      document.querySelector("#comment_id_#{idComment} .modify-notice").innerHTML = result.notice
+    if result.bStateError
+      return error result.sMsgTitle, result.sMsg
+    else
+      toggleEditForm idComment, false
+      return notice result.sMsgTitle, result.sMsg
+
+  ajax url, params, _success
+  false
+
+previewEdit = (idComment) ->
+  preview_id = "comment_preview_edit_#{idComment}"
+  document.getElementById(preview_id).innerHTML = ""
+  textPreview "comment_edit_input_#{idComment}", false, preview_id, true
+  return false
+
 preview = ->
   unless commentForm.value
     return
@@ -229,19 +296,21 @@ goToNextComment = ->
 
 
 scrollToComment = (commentId) ->
-  previousViewedComment = document.getElementById "comment_id_#{currentViewedCommentId}"
-  if previousViewedComment
-    previousViewedComment.classList.remove classes.current
-
   comment = document.getElementById "comment_id_#{commentId}"
   unless comment
     return
 
   scrollTo comment, 300, offset: -250
 
-  newComments = newComments.delete commentId
-  setCountNewComment newComments.size
+  if currentViewedCommentId
+    previousViewedComment = document.getElementById "comment_id_#{currentViewedCommentId}"
+    if previousViewedComment
+      previousViewedComment.classList.remove classes.current
 
+  if newCounter
+    newComments = newComments.delete commentId
+    setCountNewComment newComments.size
+  
   comment.classList.remove classes.new
   comment.classList.add classes.current
 
@@ -249,11 +318,11 @@ scrollToComment = (commentId) ->
 
 
 goToParentComment = (id, pid) ->
-  $('.' + classes.comment_goto_child).hide().find('a').unbind()
-  $('#comment_id_' + pid).find('.' + classes.comment_goto_child).show().find('a').bind 'click', ->
-    $(this).parent('.' + classes.comment_goto_child).hide()
-    scrollToComment id
   scrollToComment pid
+  goToChild = $('#comment_id_'+pid+' .goto-comment-child>a')
+  $(goToChild).parent().show()
+  $(goToChild).attr('href','#'+id)
+  $(goToChild).attr('onclick', '{ls.comments.scrollToComment('+id+');$(this).parent().hide();$(this).attr("onclick","")}')
 
 initEvent = ->
   $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
@@ -284,12 +353,76 @@ init = ->
   setCountAllComment parseAllCommentTree()
   setCountNewComment parseNewCommentTree()
   toggleCommentForm iCurrentShowFormComment
+  if commentForm
+    $(document)
+      .on('mouseup', (e) -> 
+        #проверяем нажата ли левая кнопка
+        if e.which != 1 then return
+        selection = window.getSelection()
+        text = selection
+          .toString()
+          .replace(/&/g,"&amp;")
+          .replace(/</g,"&lt;")
+          .replace(/>/g,"&gt;")
+          .replace(/"/g,"&quot;")
+          .replace(/'/g,"&#039;")
+        if !text then return
+        #ищем родительский комментарий
+        parentComment = $(selection.anchorNode.parentElement).parentsUntil(".comment").filter(".comment-content")
+        parentID = 0
+        if parentComment.length 
+          parentID = parentComment.attr("id").replace("comment_content_id_","")
+        x = e.clientX + $(window).scrollLeft()
+        y = e.clientY + $(window).scrollTop()
+        #создаём элемент если нужно
+        if !$("#quote").length 
+          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<s>&nbsp;</s></div>')
+        quote = $("#quote")
+        $(quote).attr("data-quote",text)
+        $(quote).attr("data-parent-id",parentID)
+        $(quote).css('left',x)
+        $(quote).css('top',y)
+        $(quote).show()
+      )
+      .on('mousedown', ->
+        $("#quote").hide()
+      )
+      .on('mouseup', '#quote', (e) ->
+        e.stopPropagation()
+        if $("#reply").hasClass("h-hidden")
+          iCurrentShowFormComment = $(this).attr("data-parent-id")
+          toggleCommentForm(iCurrentShowFormComment,false)
+        #ищем каретку в форме редактирования
+        caret = commentForm.selectionStart
+        if isNaN caret
+          commentForm.value += '<blockquote>'+$(this).attr("data-quote")+'</blockquote>'
+        else
+          commentForm.value = 
+            commentForm.value.substring(0,caret) +
+            '<blockquote>'+$(this).attr("data-quote")+'</blockquote>' +
+            commentForm.value.substring(caret)
+        $(this).hide()
+        #если форма редактирования не видна, мотаем
+        commentFormPosition = $(commentForm).offset().top
+        windowPosition = $(window).scrollTop()
+        if (commentFormPosition + commentForm.getClientRects()[0].height < windowPosition) || (commentFormPosition > (windowPosition + $(window).height()))
+          scrollToComment(iCurrentShowFormComment)
+      )
+      .on('mousedown','#quote', (e) ->
+        e.stopPropagation()
+      )
+
+
 
 module.exports = {
   init
   goToParentComment
+  scrollToComment
   toggleCommentForm
   toggle
+  toggleEditForm
+  previewEdit
+  saveEdit
   add
   preview
   load

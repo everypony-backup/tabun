@@ -1,16 +1,25 @@
-{include file='header.tpl'}
+{include file='header.tpl' styles=['search']}
 
 <h2 class="page-header">{$aLang.search}</h2>
 
-{hook run='search_begin'}
+<div data-bazooka="search_configurator"></div>
 
-<form action="{router page='search'}topics/" class="search">
-	{hook run='search_form_begin'}
-	<input type="text" placeholder="{$aLang.search}" maxlength="255" name="q" class="input-text">
-	<input type="submit" value="" title="{$aLang.search_submit}" class="input-submit icon icon-search">
-	{hook run='search_form_end'}
-</form>
+<header class="search-header">
+	{if $iResCount > 0}
+		<h3>Результатов: {$iResCount}</h3>
+	{else}
+		<h3>Нет результатов</h3>
+	{/if}
+</header>
 
-{hook run='search_end'}
+<div>
+	{if isset($aTopics)}
+		{include file='topic_list.tpl'}
+	{elseif isset($aComments)}
+		{include file='comment_list.tpl'}
+	{else}
 
-{include file='footer.tpl'}
+	{/if}
+</div>
+
+{include file='footer.tpl' scripts=["search"]}

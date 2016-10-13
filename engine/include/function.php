@@ -73,7 +73,10 @@ function getRequest($sName,$default=null,$sType=null) {
 		case 'post':
 			$aStorage = $_POST;
 			break;
-	}
+        case 'cookie':
+            $aStorage = $_COOKIE;
+            break;
+    }
 
 	if (isset($aStorage[$sName])) {
 		if (is_string($aStorage[$sName])) {

@@ -2,7 +2,7 @@ minimum-vagga: v0.6.1
 
 _templates:
   local_volumes: &local_volumes
-  /config: !BindRO /work/config/local
+    /config: !BindRO /work/config/local
 
 containers:
   _base_alpine:
@@ -19,6 +19,8 @@ containers:
       peer: true
       optional: true
       dev: true
+    - !Install
+      - gettext
     environ:
       NODE_PATH: /usr/lib/node_modules
 
@@ -31,11 +33,7 @@ containers:
     - !Py3Install
       - celery[redis]
       - beautifulsoup4
-
-  memcached:
-    setup:
-    - !Container _base_alpine
-    - !Install [memcached]
+      - elasticsearch
 
   redis:
     setup:
@@ -76,14 +74,13 @@ containers:
     - !Install
       - php5-fpm@main
       - php5-mysql
+      - php5-pdo_mysql
       - php5-mcrypt
-      - php5-memcache
       - php5-redis@testing
       - php5-gettext
       - php5-json
       - php5-curl
       - php5-imagick@community
-      - php5-amqp@testing
       - php5-bcmath
     - !ComposerDependencies
     - !Download
@@ -98,6 +95,7 @@ containers:
       - !Container _php-base
       - !Install
         - php5-xdebug@community
+        - php5-cli
       - !Copy
         source: /work/config/local/xdebug.ini
         path: /etc/php5/conf.d/xdebug.ini
@@ -109,6 +107,27 @@ containers:
       /storage: !Persistent {name: storage}
       /log: !Persistent {name: php_log}
       /var/log: !Snapshot
+
+  elastic:
+    setup:
+    - !Ubuntu xenial
+    - !UbuntuUniverse
+    # elastic PGP & Repo
+    - !AptTrust
+      server: pgp.mit.edu
+      keys: [D88E42B4]
+    - !UbuntuRepo
+      url: http://packages.elastic.co/elasticsearch/2.x/debian
+      suite: stable
+      components: [main]
+    - !Install
+      - ca-certificates
+      - ca-certificates-java
+      - openjdk-8-jre-headless
+      - elasticsearch=2.3.3
+    - !EnsureDir /var/elastic
+    volumes:
+      /var/elastic: !Persistent { name: elastic }
 
 commands:
   _init_db: !Command
@@ -161,19 +180,52 @@ commands:
       mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
 
   build-static: !Command
+    prerequisites: [_clean-old-static, compile-locales]
     container: static
     description: Build static files using webpack
     run: [webpack, --progress]
+
+  _clean-old-static: !Command
+    container: static
+    description: Clean static files
+    run: |
+     mkdir -vp /work/static
+     rm -rf /work/static/*
+
+  compile-locales: !Command
+    container: static
+    description: Comlile locale files
+    work-dir: templates/skin/synio/locale/ru_RU/LC_MESSAGES
+    run: |
+      msgcat -n -F -o messages.po parts/*
+      msgfmt messages.po
+      po2json -f jed1.x messages.po messages.json
+      rm messages.po
 
   watch-static: !Command
     container: static
     description: Watch and auto-rebuild changed static files
     run: [webpack, --progress, --watch]
 
+  reindex: !Command
+    container: php-dev
+    description: Rebuild ES index
+    work-dir: engine/console
+    accepts-arguments: true
+    environ:
+      CONFIG: /config/app.conf.php
+      COMPOSER_DIR: /usr/local/lib/composer
+    run: [php, ls, reindex]
+
   webpack: !Command
     container: static
     description: Webpack CLI
     run: [webpack]
+
+  redis-cli: &redis !Command
+    container: redis
+    description: Run redis CLI
+    run: redis-cli
 
   redis: &redis !Command
     container: redis
@@ -206,17 +258,24 @@ commands:
     work-dir: celery_tasks
     run: celery worker --config=celeryconfig --pool=solo
 
-  memcached: &memcached !Command
-    container: memcached
-    description: Run memcached
-    run: memcached -m128 -uroot -p11211 -l127.0.0.1
-
   php: &php !Command
     container: php-dev
     description: Run php-fpm (application)
     user-id: 1
     external-user-id: 0
     run: [php-fpm, -eFO]
+
+  elastic: &elastic !Command
+    description: Run elasticsearch
+    container: elastic
+    user-id: 1
+    external-user-id: 0
+    run:
+    - /usr/share/elasticsearch/bin/elasticsearch
+    - -Des.path.conf=/etc/elasticsearch
+    - -Des.path.logs=/tmp
+    - -Des.path.work=/tmp
+    - -Des.path.data=/var/elastic/data
 
   run: !Supervise
     description: Run full server stack
@@ -227,5 +286,5 @@ commands:
       mysql: *mysql
       mail: *mail
       celery: *celery
-      memcached: *memcached
       php: *php
+      elastic: *elastic

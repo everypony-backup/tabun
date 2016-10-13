@@ -487,6 +487,11 @@ class ActionSettings extends Action {
 					if (getRequestStr('password')==getRequestStr('password_confirm')) {
 						if (validate_password(getRequestStr('password_now'), $this->oUserCurrent->getPassword())) {
 							$this->oUserCurrent->setPassword(create_hash(getRequestStr('password')));
+							/**
+							 * Авторизируем для обновления ключа сессии, который зависит от пароля.
+							 *
+							 */
+							$this->ModuleUser_Authorization($this->oUserCurrent);
 						} else {
 							$bError=true;
 							$this->Message_AddError($this->Lang_Get('settings_profile_password_current_error'),$this->Lang_Get('error'));
@@ -578,7 +583,7 @@ class ActionSettings extends Action {
 			 */
 			if (func_check(getRequestStr('profile_name'),'text',2,Config::Get('module.user.name_max'))) {
 				$this->oUserCurrent->setProfileName(getRequestStr('profile_name'));
-			} else {
+			} elseif (func_check(getRequestStr('profile_name'),'text',0,2)) {
 				$this->oUserCurrent->setProfileName(null);
 			}
 			/**
@@ -600,9 +605,9 @@ class ActionSettings extends Action {
 			/**
 			 * Проверяем информацию о себе
 			 */
-			if (func_check(getRequestStr('profile_about'),'text',1,3000)) {
+			if (func_check(getRequestStr('profile_about'),'text',1,Config::Get('module.user.about_max'))) {
 				$this->oUserCurrent->setProfileAbout($this->Text_Parser(getRequestStr('profile_about')));
-			} else {
+			} elseif (func_check(getRequestStr('profile_about'),'text',0,1)) {
 				$this->oUserCurrent->setProfileAbout(null);
 			}
 			/**
@@ -733,4 +738,3 @@ class ActionSettings extends Action {
 		$this->Hook_Run('action_shutdown_settings');
 	}
 }
-?>

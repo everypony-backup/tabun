@@ -75,8 +75,14 @@ init = ->
 
   # Despoil
   $('#despoil').on 'click', ->
-    forEach $('.spoiler-body'), (node) ->
-      node.style.display = 'block'
+    if $(this).text().trim() == 'Despoil'
+      $(this).text('Spoil')
+      forEach $('.spoiler-body'), (node) ->
+        node.style.display = 'block'
+    else
+      $(this).text('Despoil')
+      forEach $('.spoiler-body'), (node) ->
+        node.style.display = 'none'
 
   # Toolbar repositioning
   recalculateToolbarPos()

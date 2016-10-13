@@ -3,7 +3,7 @@ Jed = require 'jed'
 
 messages = {}
 
-i18n = new Jed require "ru_RU/LC_MESSAGES/messages.po"
+i18n = new Jed require "locale/ru_RU/LC_MESSAGES/messages.json"
 
 
 String::tr = (a, p) ->

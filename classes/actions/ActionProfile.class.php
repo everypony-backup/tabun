@@ -509,7 +509,6 @@ class ActionProfile extends Action {
 	 * Добавление пользователя в друзья, по отправленной заявке
 	 */
 	public function EventFriendOffer() {
-		require_once Config::Get('path.root.engine').'/lib/external/XXTEA/encrypt.php';
 		/**
 		 * Из реквеста дешефруем ID польователя
 		 */
@@ -865,7 +864,7 @@ class ActionProfile extends Action {
 		/**
 		 * Обрабатываем текст заявки
 		 */
-		$sUserText=$this->Text_Parser($sUserText);
+		$sUserText=$this->Text_Parser($sUserText, ModuleText::ACT_CREATE);
 		/**
 		 * Создаем связь с другом
 		 */
@@ -891,7 +890,6 @@ class ActionProfile extends Action {
 				)
 			);
 
-			require_once Config::Get('path.root.engine').'/lib/external/XXTEA/encrypt.php';
 			$sCode=$this->oUserCurrent->getId().'_'.$oUser->getId();
 			$sCode=rawurlencode(base64_encode(xxtea_encrypt($sCode, Config::Get('module.talk.encrypt'))));
 
@@ -1114,4 +1112,3 @@ class ActionProfile extends Action {
 		$this->Viewer_Assign('USER_FRIEND_DELETE',ModuleUser::USER_FRIEND_DELETE);
 	}
 }
-?>

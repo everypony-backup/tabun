@@ -251,5 +251,6 @@ topics = -> $('.markitup-editor').markItUp topic
 
 comments = -> $('.markitup-editor').markItUp comment
 
+commentFor = (editbox) -> $(editbox).markItUp comment
 
-module.exports = {topics, comments}
+module.exports = {topics, comments, commentFor}

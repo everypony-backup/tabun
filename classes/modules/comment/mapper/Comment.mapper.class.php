@@ -473,11 +473,33 @@ class ModuleComment_MapperComment extends Mapper {
 				comment_count_favourite= ?d,
 				comment_delete = ?d ,
 				comment_publish = ?d ,
-				comment_text_hash = ?
+				comment_text_hash = ? ,
+				comment_last_modify_id = ?d ,
+				comment_last_modify_user = ?d ,
+				comment_last_modify_date = ? ,
+				comment_lock_modify_user = ?d ,
+				comment_lock_modify_date = ? ,
+				flags = ?d
 			WHERE
 				comment_id = ?d
 		";
-		if ($this->oDb->query($sql,$oComment->getText(),$oComment->getRating(),$oComment->getCountVote(),$oComment->getCountFavourite(),$oComment->getDelete(),$oComment->getPublish(),$oComment->getTextHash(),$oComment->getId())) {
+		if ($this->oDb->query(
+		    $sql,
+            $oComment->getText(),
+            $oComment->getRating(),
+            $oComment->getCountVote(),
+            $oComment->getCountFavourite(),
+            $oComment->getDelete(),
+            $oComment->getPublish(),
+            $oComment->getTextHash(),
+            $oComment->getLastModifyId(),
+            $oComment->getLastModifyUserId(),
+            $oComment->getLastModifyDate(),
+            $oComment->getLockModifyUserId(),
+            $oComment->getLockModifyDate(),
+            $oComment->getFlags(),
+            $oComment->getId())
+        ) {
 			return true;
 		}
 		return false;
@@ -753,6 +775,48 @@ class ModuleComment_MapperComment extends Mapper {
 			}
 		}
 		return $aResult;
+	}
+	
+	/**
+	 * Обновляет флаги коммента
+	 *
+	 * @param  ModuleComment_EntityComment $oComment	Объект комментария
+	 * @return bool
+	 */
+	public function UpdateCommentFlags(ModuleComment_EntityComment $oComment) {
+		$sql = 'UPDATE '.Config::Get('db.table.comment').' SET flags=?d WHERE comment_id=?d';
+		return (bool) $this->oDb->query($sql, $oComment->getFlags(), $oComment->getId());
+	}
+	/**
+	 * Добавляет элемент истории изменений коммента
+	 *
+	 * @param  ModuleComment_EntityCommentHistoryItem $oHistoryItem
+	 * @return int
+	 */
+	public function AddCommentHistoryItem(ModuleComment_EntityCommentHistoryItem $oHistoryItem) {
+		$sql = 'INSERT INTO '.Config::Get('db.table.comment_change_history').' (
+			flags,
+			`comment`,
+			`text`,
+			text_crc32,
+			validFrom,
+			validator,
+			invalidFrom,
+			invalidator,
+			invalidatorType
+		) VALUES (?d, ?d, ?, ?d, ?, ?d, ?, ?d, ?d)';
+		$data = $oHistoryItem->getData();
+		return $this->oDb->query($sql,
+			$data['flags'],
+			$data['comment'],
+			$data['text'],
+			$data['text_crc32'],
+			$data['validFrom'],
+			$data['validator'],
+			$data['invalidFrom'],
+			$data['invalidator'],
+			$data['invalidatorType']
+		);
 	}
 }
 ?>

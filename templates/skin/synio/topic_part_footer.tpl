@@ -10,7 +10,7 @@
 			{strip}
 				{if $oTopic->getTagsArray()}
 					{foreach from=$oTopic->getTagsArray() item=sTag name=tags_list}
-						{if !$smarty.foreach.tags_list.first}, {/if}<a rel="tag" href="{router page='tag'}{$sTag|escape:'url'}/">{$sTag|escape:'html'}</a>
+						{if !$smarty.foreach.tags_list.first}, {/if}<a rel="tag" href="{router page='search'}?q={$sTag|escape:'url'}&coded=tsdfft">{$sTag|escape:'html'}</a>
 					{/foreach}
 				{else}
 					{$aLang.topic_tags_empty}
@@ -36,11 +36,9 @@
 					{date_format date=$oTopic->getDateAdd() format='j F Y, H:i'}
 				</time>
 			</li>
-			<li class="topic-info-favourite favourite {if $oUserCurrent && $oTopic->getIsFavourite()}active{/if}" onclick="return ls.favourite.toggle({$oTopic->getId()},this,'topic');">
-				<i id="fav_topic_{$oTopic->getId()}">{if $oTopic->getIsFavourite()}{t}favourite_in{/t}{else}{t}favourite_add{/t}{/if}</i>
-				{if $oTopic->getCountFavourite()>0}
-					<span class="favourite-count" id="fav_count_topic_{$oTopic->getId()}">{$oTopic->getCountFavourite()}</span>
-                {/if}
+			<li class="topic-info-favourite">
+				<div class="favourite {if $oUserCurrent && $oTopic->getIsFavourite()}active{/if}" onclick="return ls.favourite.toggle({$oTopic->getId()},this,'topic');">{if $oTopic->getIsFavourite()}{t}favourite_in{/t}{else}{t}favourite_add{/t}{/if}</div>
+				<span class="favourite-count" id="fav_count_topic_{$oTopic->getId()}">{if $oTopic->getCountFavourite() > 0}{$oTopic->getCountFavourite()}{/if}</span>
 			</li>
 
 			{if $bTopicList}

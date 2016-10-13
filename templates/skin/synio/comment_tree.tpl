@@ -78,7 +78,7 @@
 			</form>
 		</div>
 	{else}
-		{$aLang.comment_unregistered}
+		<div class="comments-not-allowed">{$aLang.comment_unregistered}</div>
 	{/if}
 {/if}	
 

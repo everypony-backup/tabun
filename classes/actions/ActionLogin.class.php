@@ -49,6 +49,7 @@ class ActionLogin extends Action {
 		$this->AddEvent('ajax-login','EventAjaxLogin');
 		$this->AddEvent('ajax-reminder','EventAjaxReminder');
 		$this->AddEvent('ajax-reactivation','EventAjaxReactivation');
+		$this->AddEvent('ajax-prosody','EventAjaxProsody');
 	}
 	/**
 	 * Ajax авторизация
@@ -100,6 +101,36 @@ class ActionLogin extends Action {
 		}
 		$this->Message_AddErrorSingle($this->Lang_Get('user_login_bad'));
 	}
+
+	/**
+	 * Авторизация для xmpp Сервера
+	 *
+	 * Внутренее API
+	 */
+	protected function EventAjaxProsody()
+	{
+		$this->Viewer_SetResponseAjax('json', true, false);
+		$sProsodyKey = getRequestStr('key', '');
+
+		if (!slow_equals($sProsodyKey, Config::Get('general.prosody.key'))) {
+			$this->Viewer_AssignAjax('status', 'fail');
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'));
+			return;
+		}
+
+		$sLogin = getRequestStr('username');
+		$sPassword = getRequestStr('password');
+
+		if ($oUser = $this->User_GetUserByLogin($sLogin)) {
+			if (validate_password($sPassword, $oUser->getPassword())) {
+				$this->Viewer_AssignAjax('status', 'ok');
+				return;
+			}
+		}
+		$this->Viewer_AssignAjax('status', 'fail');
+		$this->Message_AddErrorSingle($this->Lang_Get('user_login_bad'));
+	}
+
 	/**
 	 * Повторный запрос активации
 	 */

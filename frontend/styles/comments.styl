@@ -43,7 +43,7 @@
 .comment-wrapper
   position relative
   .comment-wrapper
-    padding-left 16px
+    padding-left 14px
   .reply
     margin-left 40px
 
@@ -280,9 +280,78 @@ div
     display block
     margin-bottom 10px
 
+.modify-notice
+  font-size 7.5pt
+  font-style italic
+  .self-modified
+    color #69b55b
+  .adm-modified
+    color #aaaa00
+  .hard-modified
+    color #d5883c
+
+.comment:not(.editable)
+  .comment-save-edit-bw,
+  .comment-preview-edit-bw,
+  .comment-cancel-edit-bw,
+  .comment-lock-edit-bw
+    display none
+  
+.comment
+  .text.preview
+    margin-bottom 7px
+
+.comment.editable
+  .comment-content
+    .edit-form,
+    .edit-form>label
+      display block
+    .text.current
+      display none
+  .comment-edit-bw
+      display none
+
 .comments-not-allowed
     font-size 16px
     padding 5px 10px
     border-radius 5px
     border 1px solid #e3e3e3
     background-color #eee
+
+.comment-bad 
+  .text 
+    color #ccc
+    img, iframe
+      opacity 0
+    a
+      color #ccc
+
+.comment-bad:hover 
+  .text
+    color inherit
+    img, iframe
+      opacity inherit
+    a
+      color #09f
+    .ls-user
+      color black
+
+#quote
+  background #fff
+  color #333
+  position absolute
+  display inline-block
+  font 12px/15px Arial
+  border 1px solid #777
+  border-radius 5px
+  cursor pointer
+#quote:hover
+  background-color #eef
+#quote>i,#quote>s
+  display inline-block
+  background-image url(images/markitup/edit-quotation.png)
+  height 16px
+  width 16px
+  text-indent 1000px
+#quote>s
+  transform rotate(180deg)

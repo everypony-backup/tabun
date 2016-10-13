@@ -1,4 +1,4 @@
-{locale path="{cfg name='path.locale'}" domain="messages"}
+{locale path="{cfg name='locale.path'}" domain="messages"}
 <!doctype html>
 <html lang="ru">
 <head>
@@ -14,6 +14,11 @@
     <meta name="keywords" content="{$sHtmlKeywords}">
 
     <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.css">
+    {if isset($styles)}
+        {foreach from=$styles item=item}
+            <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.css">
+        {/foreach}
+    {/if}
 
     <link href="{cfg name='path.static.url'}/local/favicon.ico" rel="shortcut icon"/>
     <link rel="search" type="application/opensearchdescription+xml" href="{router page='search'}opensearch/" title="{cfg name='view.name'}"/>

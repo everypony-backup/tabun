@@ -1,4 +1,4 @@
-{if	$bIsShowStatsPerformance and ({cfg name='misc.debug'} == true) and $oUserCurrent and $oUserCurrent->isAdministrator()}
+{if	$bIsShowStatsPerformance and ({cfg name='misc.debug'} == true)}
 	<div class="stat-performance">
 		{hook run='statistics_performance_begin'}
 		<table>
@@ -7,13 +7,7 @@
 					<h4>MySql</h4>
 					query: <strong>{$aStatsPerformance.sql.count}</strong><br />
 					time: <strong>{$aStatsPerformance.sql.time}</strong>
-				</td>
-				<td>
-					<h4>Cache</h4>
-					query: <strong>{$aStatsPerformance.cache.count}</strong><br />
-					&mdash; set: <strong>{$aStatsPerformance.cache.count_set}</strong><br />
-					&mdash; get: <strong>{$aStatsPerformance.cache.count_get}</strong><br />
-					time: <strong>{$aStatsPerformance.cache.time}</strong>
+					queries: <pre>{$aStatsPerformance.sql.query_log}</pre>
 				</td>
 				<td>
 					<h4>PHP</h4>	

@@ -176,6 +176,12 @@ class ActionTopic extends Action {
 		$this->Hook_Run('topic_delete_before', array('oTopic'=>$oTopic));
 		$this->Topic_DeleteTopic($oTopic);
 		$this->Hook_Run('topic_delete_after', array('oTopic'=>$oTopic));
+
+        /**
+         * Удаляем топик из индекса
+         */
+        $this->SearchIndexer_TopicDelete($oTopic);
+
 		/**
 		 * Перенаправляем на страницу со списком топиков из блога этого топика
 		 */
@@ -301,8 +307,8 @@ class ActionTopic extends Action {
 		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
 
 		$oTopic->setCutText($sTextCut);
-		$oTopic->setText($this->Text_Parser($sTextNew));
-		$oTopic->setTextShort($this->Text_Parser($sTextShort));
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_CREATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_CREATE));
 		/**
 		 * Публикуем или сохраняем
 		 */
@@ -329,6 +335,23 @@ class ActionTopic extends Action {
 		if (getRequest('topic_forbid_comment')) {
 			$oTopic->setForbidComment(1);
 		}
+
+        /**
+         * Можно ли создавать топики?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'create_topic',
+            $this->oUserCurrent
+        );
+        if ($mRes !== true) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
 		/**
 		 * Запускаем выполнение хуков
 		 */
@@ -356,6 +379,12 @@ class ActionTopic extends Action {
 			if ($oTopic->getPublish()==1 and $oBlog->getType()!='personal') {
 				$this->Topic_SendNotifyTopicNew($oBlog,$oTopic,$this->oUserCurrent);
 			}
+
+			/**
+			 * Отправляем запрос на индексирование в ElasticSearch
+			 */
+			$this->SearchIndexer_TopicIndex($oTopic);
+
 			/**
 			 * Добавляем событие в ленту
 			 */
@@ -431,8 +460,8 @@ class ActionTopic extends Action {
 		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
 
 		$oTopic->setCutText($sTextCut);
-		$oTopic->setText($this->Text_Parser($sTextNew));
-		$oTopic->setTextShort($this->Text_Parser($sTextShort));
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_UPDATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_UPDATE));
 		/**
 		 * Публикуем или сохраняем в черновиках
 		 */
@@ -484,6 +513,12 @@ class ActionTopic extends Action {
 				$this->Blog_RecalculateCountTopicByBlogId($sBlogIdOld);
 			}
 			$this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
+
+            /**
+             * Отправляем запрос на переиндексирование в ElasticSearch
+             */
+            $this->SearchIndexer_TopicIndex($oTopic);
+
 			/**
 			 * Добавляем событие в ленту
 			 */
@@ -537,4 +572,3 @@ class ActionTopic extends Action {
 		$this->Viewer_Assign('sMenuSubItemSelect',$this->sMenuSubItemSelect);
 	}
 }
-?>

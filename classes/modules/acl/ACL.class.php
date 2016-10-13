@@ -475,5 +475,111 @@ class ModuleACL extends Module {
 		}
 		return false;
 	}
+
+    // флаги разрешения редактирования
+    const EDIT_ALLOW_FIX = 1;
+    const EDIT_ALLOW_LOCK = 2;
+    // причина разрешения редактирования
+    const EDIT_ALLOWED_AS_AUTHOR = 0x4;
+    const EDIT_ALLOWED_AS_BLOG_ADMIN = 0x8;
+    const EDIT_ALLOWED_AS_ADMIN = 0xC;
+    const EDIT_ALLOW_REASON_OFFSET = 2;
+    const EDIT_ALLOW_REASON_MASK = 3;
+    // флаги ошибок
+    const EDIT_DENIED_DUE_OWNERSHIP = 0x10;
+    const EDIT_DENIED_DUE_ANSWER = 0x20;
+    const EDIT_DENIED_DUE_OUTDATE = 0x40;
+    const EDIT_DENIED_DUE_LOCK = 0x80;
+    const EDIT_DENY_REASON_OFFSET = 4;
+    const EDIT_DENY_REASON_MASK = 0xF;
+
+    /**
+     * Проверяет, может ли пользователь изменить комментарий и заблокировать его дальнейшее изменение
+     *
+     * @param  ModuleComment_EntityComment $oComment Комментарий
+     * @param  ModuleUser_EntityUser $oUser Пользователь
+     * @return int
+     */
+    public function GetCommentEditAllowMask($oComment, $oUser)
+    {
+        if (!$oUser) {
+            return 0;
+        }
+
+        $userIsNotAuthor = $oComment->getUserId() != $oUser->getId();
+
+        if ($oUser->isAdministrator()) {
+            return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+        }
+
+        /*
+         * TODO: target=classes.Target
+         * Если кроме Topic и Talk появится что-то ещё — переделать блоки,
+         * использующие $targetIsTopic и $oComment->getTarget()
+         */
+        $targetIsTopic = $oComment->getTargetType() === 'topic';
+
+        if ($targetIsTopic && $oComment->getTarget()->getBlog()->getUserIsAdministrator()) {
+            return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+        } else {
+            $editExpiredLimit = Config::Get($targetIsTopic ? 'acl.edit.comment.limit_time' : 'acl.edit.talk_comment.limit_time');
+            $bEditCondition = (
+                $userIsNotAuthor ||
+                $oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER) ||
+                $oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_LOCK_MODIFY) ||
+                strtotime($oComment->getDate()) <= time() - $editExpiredLimit
+            );
+            return $bEditCondition ? 0 : $this::EDIT_ALLOW_FIX;
+        }
+    }
+
+    public function GetCommentEditAccessInfo($oComment, $oUser)
+    {
+        if (!$oUser) {
+            return 0;
+        }
+
+        $userIsNotAuthor = $oComment->getUserId() != $oUser->getId();
+
+        /*
+         * TODO: target=classes.Target
+         * Если кроме Topic и Talk появится что-то ещё — переделать блоки,
+         * использующие $targetIsTopic и $oComment->getTarget()
+         */
+        $targetIsTopic = $oComment->getTargetType() === 'topic';
+        $editExpiredLimit = Config::Get($targetIsTopic ? 'acl.edit.comment.limit_time' : 'acl.edit.talk_comment.limit_time');
+
+        $deny_flags = 0;
+
+        if ($userIsNotAuthor) {
+            $deny_flags |= $this::EDIT_DENIED_DUE_OWNERSHIP;
+        }
+        if ($oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER)) {
+            $deny_flags |= $this::EDIT_DENIED_DUE_ANSWER;
+        }
+        if ($oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_LOCK_MODIFY)) {
+            $deny_flags |= $this::EDIT_DENIED_DUE_LOCK;
+        }
+        if (strtotime($oComment->getDate()) <= time() - $editExpiredLimit) {
+            $deny_flags |= $this::EDIT_DENIED_DUE_OUTDATE;
+        }
+        if ($deny_flags === 0) {
+            return $this::EDIT_ALLOW_FIX | $this::EDIT_ALLOWED_AS_AUTHOR;
+        } else {
+            // TODO: Implement more precise ACL here
+            if ($oUser->isAdministrator()) {
+                return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_ADMIN;
+            } else if ($targetIsTopic && $oComment->getTarget()->getBlog()->getUserIsAdministrator()) {
+                return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_BLOG_ADMIN;
+            } else {
+                return $deny_flags;
+            }
+        }
+    }
+
+    public function GetAdminCommentEditAllowMask($userIsNotAuthor)
+    {
+        return $this::EDIT_ALLOW_FIX | ($userIsNotAuthor && Config::Get('acl.edit.comment.enable_lock') ? $this::EDIT_ALLOW_LOCK : 0);
+    }
 }
 ?>
