@@ -43,6 +43,13 @@ containers:
       - celery[redis]
       - beautifulsoup4
       - elasticsearch
+    - !EnsureDir /app
+    volumes:
+      <<: *local_volumes
+      /app: !BindRO /work/celery_tasks
+    environ:
+      PYTHONPATH: /config/celeryconfig:/app
+      CELERY_CONFIG_MODULE: cfg
 
   redis:
     setup:
@@ -269,8 +276,7 @@ commands:
     user-id: 1
     group-id: 1
     external-user-id: 0
-    work-dir: celery_tasks
-    run: celery worker --config=celeryconfig --pool=solo
+    run: celery worker --pool=solo
 
   php: &php !Command
     container: php-dev
