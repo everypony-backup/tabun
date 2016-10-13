@@ -51,6 +51,15 @@ containers:
       PYTHONPATH: /config/celeryconfig:/app
       CELERY_CONFIG_MODULE: cfg
 
+  celery-deploy:
+    setup:
+    - !Container celery
+    - !*Unpack [*prod_stuff]
+    - !Copy
+      source: /work/celery_tasks
+      path: /app
+    - !Sh python3 -m compileall /app
+
   redis:
     setup:
     - !Container _base_alpine
