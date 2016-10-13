@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 while [ $# -gt 0 ]
 do
@@ -26,7 +26,7 @@ TYPE=${TYPE:-production}
 
 usage(){
 cat <<'EOT'
-Deploy script
+Simple deploy script
 
 Usage:
     ./script.sh \
@@ -55,13 +55,13 @@ sync_container() {
     local CONTAINER_NAME=${NAME}-deploy
     local LINK_DEST=${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest
 
-    # Build container
+    echo "Build ${NAME}"
     ${VAGGA} _build ${CONTAINER_NAME}
 
-    # Get version
     VERSION=`${VAGGA} _version_hash --short ${CONTAINER_NAME}`
+    echo "Got version: ${VERSION}"
 
-    # Copy image to server
+    echo "Copying image to server"
     rsync -a \
         --checksum \
         -e "ssh -p $PORT" \
@@ -69,10 +69,11 @@ sync_container() {
         .vagga/${CONTAINER_NAME}/ \
         ${USER}@${SERVER}:${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.${VERSION}
 
-    # Link as latest image
+    echo "Link as latest image ${CONTAINER_NAME}.${VERSION} -> ${LINK_DEST}"
     ssh ${USER}@${SERVER} -p ${PORT} ln -sfn ${CONTAINER_NAME}.${VERSION} ${LINK_DEST}
 
-    # Add to config
+    echo "Generated config"
+    echo
     cat <<END | ssh ${USER}@${SERVER} -p ${PORT} tee -a ${DESTINATION}/${PROJECT}/config.yaml
 ${NAME}:
     kind: Daemon
@@ -83,21 +84,23 @@ END
 }
 
 deploy(){
-    # Create dir, if neccessary
-    ssh ${USER}@${SERVER} -p ${PORT} mkdir -p ${DESTINATION}/${PROJECT}
+    echo "Create dir, if neccessary"
+    ssh ${USER}@${SERVER} -p ${PORT} mkdir -vp ${DESTINATION}/${PROJECT}
 
-    # Remove old config
-    ssh ${USER}@${SERVER} -p ${PORT} rm -f ${DESTINATION}/${PROJECT}/config.yaml
+    echo "Remove old config"
+    ssh ${USER}@${SERVER} -p ${PORT} rm -vf ${DESTINATION}/${PROJECT}/config.yaml
 
-    # Sync each container
     for CONTAINER in ${CONTAINERS}; do
+        echo "Syncing ${CONTAINER}"
+        echo "===================="
         sync_container ${CONTAINER}
+        echo "===================="
     done
 
-    # Switch to new config
     if [ "$DRY_RUN" = "true" ]; then
         echo "Skipped version switch"
     else
+        echo "Switch to new config"
         ssh -t ${USER}@${SERVER} -p ${PORT} sudo lithos_switch ${PROJECT} ${DESTINATION}/${PROJECT}/config.yaml
     fi
 }
