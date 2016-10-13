@@ -89,7 +89,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	/**
 	 * Возвращает права пользователя на операции с блогом
 	 *
-	 * @return int|null
+	 * @return Permissions
 	 */
 	public function getBlogPermissions() {
 		$mPerm = $this->_getDataOne('user_blog_permissions');
@@ -99,7 +99,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	/**
 	 * Возвращает права пользователя на операции с топиками в блоге
 	 *
-	 * @return int|null
+	 * @return Permissions
 	 */
 	public function getTopicPermissions() {
 		$mPerm = $this->_getDataOne('user_topic_permissions');
@@ -109,7 +109,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	/**
 	 * Возвращает права пользователя на операции с комментами в блоге
 	 *
-	 * @return int|null
+	 * @return Permissions
 	 */
 	public function getCommentPermissions() {
 		$mPerm = $this->_getDataOne('user_comment_permissions');
@@ -119,7 +119,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	/**
 	 * Возвращает права пользователя на операции с голосами в блоге (ко блогу, к топикам и к комментам)
 	 *
-	 * @return int|null
+	 * @return Permissions
 	 */
 	public function getVotePermissions() {
 		$mPerm = $this->_getDataOne('user_vote_permissions');

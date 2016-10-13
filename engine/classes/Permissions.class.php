@@ -36,7 +36,7 @@ class Permissions {
 	 * Меняет указанные разрешения
 	 */
 	public function patch($iPermissionsMask, $bAllow) {
-		$this->iPermissions = (($iPermissionsMask & (int)$bAllow) | (~$iPermissionsMask & $this->iPermissions)) & 15; 
+		$this->iPermissions = (($iPermissionsMask * (int)$bAllow) | (~$iPermissionsMask & $this->iPermissions)) & 15; 
 	}
 	/**
 	 * Проверяет указанные разрешения
