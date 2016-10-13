@@ -29,6 +29,13 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: ./deploy/script.sh --project tabun-trunk --destination /srv/images --server staging.everypony.ru --containers "redis app python mysql"
+  script: >
+    ./deploy/script.sh
+    --project tabun-trunk
+    --containers "redis app python mysql"
+    --destination $deploy_destination
+    --server $deploy_host
+    --port $deploy_port
+    --user $deploy_user
   on:
     branch: travis

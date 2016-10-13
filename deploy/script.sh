@@ -20,7 +20,6 @@ do
 done
 
 VAGGA=${VAGGA:-vagga}
-USER=${USER:-deploy}
 PORT=${PORT:-22}
 
 usage(){
@@ -32,6 +31,7 @@ Usage:
         --project tabun-trunk \
         --destination /srv/images \
         --server staging.everypony.ru \
+        --user deploy \
         --containers "redis app python mysql"
 
 Options:
@@ -56,6 +56,7 @@ deploy(){
 
 if  [ -z ${PROJECT+x} ] ||
     [ -z ${SERVER+x} ] ||
+    [ -z ${USER+x} ] ||
     [ -z ${CONTAINERS+x} ] ||
     [ -z ${DESTINATION+x} ]; then
     usage
