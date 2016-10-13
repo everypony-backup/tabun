@@ -6,9 +6,6 @@ cache:
   directories:
     - $HOME/.cache/vagga
 
-addons:
-  ssh_known_hosts: internal.everypony.ru:142
-
 install:
   - "echo ubuntu-mirror: http://mirrors.us.kernel.org/ubuntu/ > ~/.vagga.yaml"
   - "echo alpine-mirror: http://mirrors.gigenet.com/alpinelinux/ >> ~/.vagga.yaml"
@@ -18,6 +15,7 @@ install:
   - curl http://files.zerogw.com/vagga/vagga-install-testing.sh | sh
 
 before_deploy:
+  - ssh-keyscan -p $deploy_port -H $deploy_host 2>&1 | tee -a $HOME/.ssh/known_hosts
   - openssl aes-256-cbc -K $encrypted_6a519e1377ad_key -iv $encrypted_6a519e1377ad_iv -in deploy/deploy_rsa.enc -out /tmp/deploy_rsa -d
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/deploy_rsa
