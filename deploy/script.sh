@@ -55,7 +55,6 @@ sync_container() {
     local CONTAINER_NAME=${NAME}-deploy
     local LINK_DEST=${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest
 
-    echo "Build ${NAME}"
     ${VAGGA} _build ${CONTAINER_NAME}
 
     VERSION=`${VAGGA} _version_hash --short ${CONTAINER_NAME}`
@@ -63,6 +62,7 @@ sync_container() {
 
     echo "Copying image to server"
     rsync -a \
+        --info=progress2 \
         --checksum \
         -e "ssh -p $PORT" \
         --link-dest=${LINK_DEST}/ \
