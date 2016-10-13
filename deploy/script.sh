@@ -40,7 +40,7 @@ Options:
    -p, --project        Project instance
    -d, --destination    Path to images on server
    -c, --containers     Containers list
-   -t, --type           Suffix for each container
+   -t, --type           Environment type (trunk/production/testing/etc.)
    -s, --server         Server to deploy
    -P, --port           SSH port
    -u, --user           SSH user
@@ -52,7 +52,7 @@ exit 0;
 
 sync_container() {
     local NAME="$1"
-    local CONTAINER_NAME=${NAME}-${TYPE}
+    local CONTAINER_NAME=${NAME}-deploy
 
     # Build container
     ${VAGGA} _build ${CONTAINER_NAME}
@@ -76,7 +76,7 @@ sync_container() {
 ${NAME}:
     kind: Daemon
     instances: 1
-    config: /lithos/${NAME}.yaml
+    config: /lithos/${TYPE}/${NAME}.yaml
     image: ${CONTAINER_NAME}.${VERSION}
 END
 }
