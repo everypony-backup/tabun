@@ -19,7 +19,7 @@
  * Operations with Config object
  */
 require_once(dirname(dirname(__FILE__)) . "/engine/lib/internal/ConfigSimple/Config.class.php");
-Config::LoadFromFile(dirname(__FILE__) . '/config.php');
+Config::LoadFromFile(dirname(__FILE__) . '/application.php');
 
 /**
  * Инклудим все *.php файлы из каталога {path.root.engine}/include/ - это файлы ядра
