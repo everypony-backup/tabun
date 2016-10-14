@@ -127,7 +127,7 @@ containers:
       - mariadb-client
     volumes:
       <<: *local_volumes
-      /var/lib/mysql: !Persistent {name: mysql, init-command: _populate_db}
+      /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
 
   _php-base:
     setup:
@@ -228,7 +228,7 @@ commands:
     run: git describe --always --dirty=-dev > /work/backend.version
 
   _init_db: !Command
-    description: Initialize MySQL database
+    description: Initialize and populate MySQL database
     container: mysql
     environ:
       DB_HOST: 127.0.0.1
@@ -243,20 +243,6 @@ commands:
       mysql --defaults-extra-file=/config/mysql.conf -e "CREATE USER '$DB_USERNAME'@'$DB_HOST' IDENTIFIED BY '$DB_PASSWORD';"
       mysql --defaults-extra-file=/config/mysql.conf -e "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'$DB_HOST';"
       mysqladmin --defaults-extra-file=/config/mysql.conf flush-privileges
-      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
-
-  _populate_db: !Command
-    prerequisites: [_init_db]
-    description: Populate database
-    container: mysql
-    environ:
-      DB_HOST: 127.0.0.1
-      DB_DATABASE: tabun
-      DB_USERNAME: tabun
-      DB_PASSWORD: tabun
-    run: |
-      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
-      while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
 
       MYSQL="mysql --defaults-extra-file=/config/mysql.conf --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE"
 
