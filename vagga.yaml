@@ -148,6 +148,7 @@ containers:
       - php5-imagick@community
       - php5-bcmath
     - !ComposerDependencies
+      optimize_autoloader: true
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem
       path: /etc/cacert.pem
