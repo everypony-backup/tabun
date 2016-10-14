@@ -192,7 +192,7 @@ containers:
           msgfmt messages.po
           rm -vr messages.po parts
       - !BuildDeps [git]
-      - !Sh git describe --tags --dirty=-dev > /app/backend.version
+      - !Sh git describe --always > /app/backend.version
       - !Build
         container: static-deploy
         source: /static
@@ -225,7 +225,7 @@ containers:
 commands:
   _write-version: !Command
     container: php-dev
-    run: git describe --tags --dirty=-dev > /work/backend.version
+    run: git describe --always --dirty=-dev > /work/backend.version
 
   _init_db: !Command
     description: Initialize MySQL database
