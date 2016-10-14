@@ -127,7 +127,7 @@ containers:
       - mariadb-client
     volumes:
       <<: *local_volumes
-      /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
+      /var/lib/mysql: !Persistent {name: mysql, init-command: _populate_db}
 
   _php-base:
     setup:
@@ -245,8 +245,35 @@ commands:
       mysqladmin --defaults-extra-file=/config/mysql.conf flush-privileges
       mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
 
-  _load_fixtures: !Command
-    description: Load fixtures into database
+  _populate_db: !Command
+    prerequisites: [_init_db]
+    description: Populate database
+    container: mysql
+    environ:
+      DB_HOST: 127.0.0.1
+      DB_DATABASE: tabun
+      DB_USERNAME: tabun
+      DB_PASSWORD: tabun
+    run: |
+      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
+      while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
+
+      MYSQL="mysql --defaults-extra-file=/config/mysql.conf --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE"
+
+      for migration in $(ls -v /work/fixtures/migrations) ; do
+        echo "Applying migration $migration"
+        $MYSQL < /work/fixtures/migrations/$migration
+      done
+
+      for data in $(ls -v /work/fixtures/data) ; do
+        echo "Populating database with $data"
+        $MYSQL < /work/fixtures/data/$data
+      done
+
+      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
+
+  _load_fixture: !Command
+    description: Load fixture into database
     container: mysql
     environ:
       DB_HOST: 127.0.0.1
