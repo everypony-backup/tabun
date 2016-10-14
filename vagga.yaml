@@ -60,7 +60,10 @@ containers:
       NODE_ENV: production
     - !RunAs
       work-dir: /tmp
-      script: webpack --color --output-path /static
+      script: webpack --color
+    - !Copy
+      source: /tmp/static
+      path: /static
     - !Copy
       source: /tmp/frontend.version
       path: /static/frontend.version
