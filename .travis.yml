@@ -30,7 +30,8 @@ deploy:
   script: >-
     ./deploy/script.sh
     --project tabun-trunk
-    --containers "redis celery static php"
+    --blobs "static"
+    --containers "redis celery php"
     --type trunk
     --dry-run
     --destination $deploy_destination
