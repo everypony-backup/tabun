@@ -172,6 +172,35 @@ containers:
       /log: !Persistent {name: php_log}
       /var/log: !Snapshot
 
+  php-deploy:
+    setup:
+      - !Container _php-base
+      - !*Unpack [*prod_stuff]
+      - !Copy
+        source: /work/config/trunk/php
+        path: /etc/php5
+      - !EnsureDir /app
+      - !Copy
+        source: /work
+        path: /app
+        include-regex: ^(classes|settings|engine|templates)/*
+      - !BuildDeps [gettext]
+      - !RunAs
+        work-dir: /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+        script: |
+          msgcat -n -F -o messages.po parts/*
+          msgfmt messages.po
+          rm -vr messages.po parts
+      - !BuildDeps [git]
+      - !Sh git describe --tags --dirty=-dev > /app/backend.version
+      - !Build
+        container: static-deploy
+        source: /static
+        temporary-mount: /mnt
+      - !Copy
+        source: /mnt/frontend.version
+        path: /app/frontend.version
+
   elastic:
     setup:
     - !Ubuntu xenial
