@@ -62,7 +62,7 @@ containers:
       work-dir: /tmp
       script: webpack --color --output-path /static
     - !Copy
-      source: /work/frontend.version
+      source: /tmp/frontend.version
       path: /static/frontend.version
     data-dirs: [/static]
 
