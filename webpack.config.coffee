@@ -63,6 +63,7 @@ cfg =
     modulesDirectories: ['node_modules', 'scripts']
     root: [
       process.env.NODE_PATH
+      path.resolve(__dirname)
       path.resolve(path.join(__dirname, 'frontend', 'vendor'))
       path.resolve(path.join(__dirname, 'templates', 'skin', 'synio'))
     ]
