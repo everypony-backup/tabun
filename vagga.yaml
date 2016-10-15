@@ -134,6 +134,14 @@ containers:
     volumes:
       /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
 
+  mysql-deploy:
+    setup:
+    - !Container mysql-dev
+    - !*Unpack [*prod_stuff]
+    - !Copy
+      source: /work/config/trunk/mysql
+      path: /etc/mysql
+
   _php-base:
     setup:
     - !Container _base_alpine
