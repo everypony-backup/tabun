@@ -21,21 +21,21 @@ before_deploy:
   - ssh-add /tmp/deploy_rsa
 
 script:
-  - vagga _build redis-deploy
-  - vagga _build celery-deploy
-  - vagga _build php-deploy
-  - vagga _build mysql-deploy
-  - vagga _build static-deploy
+  - vagga _build redis-trunk
+  - vagga _build celery-trunk
+  - vagga _build php-trunk
+  - vagga _build mysql-trunk
+  - vagga _build static-trunk
 
 deploy:
   provider: script
   skip_cleanup: true
   script: >-
     ./deploy/script.sh
-    --project tabun-trunk
+    --project tabun
+    --type trunk
     --blobs "static"
     --containers "redis celery php mysql"
-    --type trunk
     --destination $deploy_destination
     --server $deploy_host
     --port $deploy_port

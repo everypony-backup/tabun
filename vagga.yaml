@@ -4,14 +4,19 @@ _templates:
   local_volumes: &local_volumes
     /config: !BindRO /work/config/local
   snippets:
-    - &prod_stuff
+    - &trunk_stuff
       - !Copy
-        source: /work/config
+        source: /work/config/trunk
         path: /config
       - !EnsureDir /lithos
       - !Copy
-        source: /work/lithos
+        source: /work/lithos/trunk
         path: /lithos
+    - &host_resolution
+      - !EnsureDir /state
+      - !Sh |
+          /bin/ln -sfn /state/hosts /etc/hosts
+          /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
 
 containers:
   _base_alpine:
@@ -38,7 +43,7 @@ containers:
     environ:
       NODE_PATH: /usr/lib/node_modules
 
-  static-deploy:
+  static-trunk:
     setup:
     - !Container frontend
     - !EnsureDir /static
@@ -91,18 +96,16 @@ containers:
       CELERY_MAILER_HOST: localhost
       CELERY_MAILER_PORT: 1025
 
-  celery-deploy:
+  celery-trunk:
     setup:
     - !Container celery
-    - !*Unpack [*prod_stuff]
+    - !*Unpack
+      - *trunk_stuff
+      - *host_resolution
     - !Copy
       source: /work/celery_tasks
       path: /app
     - !Sh python3 -m compileall /app
-    - !EnsureDir /state
-    - !Sh |
-        /bin/ln -sfn /state/hosts /etc/hosts
-        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -115,14 +118,12 @@ containers:
       <<: *local_volumes
       /storage: !Persistent {name: redis}
 
-  redis-deploy:
+  redis-trunk:
     setup:
     - !Container redis
-    - !*Unpack [*prod_stuff]
-    - !EnsureDir /state
-    - !Sh |
-        /bin/ln -sfn /state/hosts /etc/hosts
-        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+    - !*Unpack
+      - *trunk_stuff
+      - *host_resolution
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -149,17 +150,15 @@ containers:
     volumes:
       /storage: !Persistent {name: mysql, init-command: _init_db}
 
-  mysql-deploy:
+  mysql-trunk:
     setup:
     - !Container mysql-dev
-    - !*Unpack [*prod_stuff]
+    - !*Unpack
+      - *trunk_stuff
+      - *host_resolution
     - !Copy
-      source: /work/config/trunk/mysql
+      source: /config/mysql
       path: /etc/mysql
-    - !EnsureDir /state
-    - !Sh |
-        /bin/ln -sfn /state/hosts /etc/hosts
-        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -201,12 +200,14 @@ containers:
       /log: !Persistent {name: php_log}
       /var/log: !Snapshot
 
-  php-deploy:
+  php-trunk:
     setup:
       - !Container _php-base
-      - !*Unpack [*prod_stuff]
+      - !*Unpack
+        - *trunk_stuff
+        - *host_resolution
       - !Copy
-        source: /work/config/trunk/php
+        source: /config/php
         path: /etc/php5
       - !EnsureDir /app
       - !Copy
@@ -226,16 +227,12 @@ containers:
       - !BuildDeps [git]
       - !Sh git describe --always > /app/backend.version
       - !Build
-        container: static-deploy
+        container: static-trunk
         source: /static
         temporary-mount: /mnt
       - !Copy
         source: /mnt/frontend.version
         path: /app/frontend.version
-      - !EnsureDir /state
-      - !Sh |
-          /bin/ln -sfn /state/hosts /etc/hosts
-          /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 

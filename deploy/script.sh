@@ -55,7 +55,9 @@ sync_container() {
     local NAME="$1"
     local NO_CONFIG="$2"
     local CONTAINER_NAME=${NAME}-${TYPE}
-    local LINK_DEST=${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest
+    local PROJECT_NAME=${PROJECT}-${TYPE}
+
+    local LINK_DEST=${DESTINATION}/${PROJECT_NAME}/${CONTAINER_NAME}.latest
 
     ${VAGGA} _build ${CONTAINER_NAME}
 
@@ -69,7 +71,7 @@ sync_container() {
         -e "ssh -p $PORT" \
         --link-dest=${LINK_DEST}/ \
         .vagga/${CONTAINER_NAME}/ \
-        ${USER}@${SERVER}:${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.${VERSION}
+        ${USER}@${SERVER}:${DESTINATION}/${PROJECT_NAME}/${CONTAINER_NAME}.${VERSION}
 
     echo "Link as latest image ${CONTAINER_NAME}.${VERSION} -> ${LINK_DEST}"
     ssh ${USER}@${SERVER} -p ${PORT} ln -sfn ${CONTAINER_NAME}.${VERSION} ${LINK_DEST}
@@ -79,7 +81,7 @@ sync_container() {
     else
         echo "Generated config"
         echo
-    cat <<END | ssh ${USER}@${SERVER} -p ${PORT} tee -a ${DESTINATION}/${PROJECT}/config.yaml
+    cat <<END | ssh ${USER}@${SERVER} -p ${PORT} tee -a ${DESTINATION}/${PROJECT_NAME}/config.yaml
 ${NAME}:
     kind: Daemon
     instances: 1
@@ -90,11 +92,12 @@ END
 }
 
 deploy(){
+    local PROJECT_NAME=${PROJECT}-${TYPE}
     echo "Create dir, if neccessary"
-    ssh ${USER}@${SERVER} -p ${PORT} mkdir -vp ${DESTINATION}/${PROJECT}
+    ssh ${USER}@${SERVER} -p ${PORT} mkdir -vp ${DESTINATION}/${PROJECT_NAME}
 
     echo "Remove old config"
-    ssh ${USER}@${SERVER} -p ${PORT} rm -vf ${DESTINATION}/${PROJECT}/config.yaml
+    ssh ${USER}@${SERVER} -p ${PORT} rm -vf ${DESTINATION}/${PROJECT_NAME}/config.yaml
 
     for BLOB in ${BLOBS}; do
         echo "Syncing blob ${BLOB}"
@@ -114,7 +117,7 @@ deploy(){
         echo "Skipped version switch"
     else
         echo "Switch to new config"
-        ssh -t ${USER}@${SERVER} -p ${PORT} sudo lithos_switch ${PROJECT} ${DESTINATION}/${PROJECT}/config.yaml
+        ssh -t ${USER}@${SERVER} -p ${PORT} sudo lithos_switch ${PROJECT_NAME} ${DESTINATION}/${PROJECT_NAME}/config.yaml
     fi
 }
 

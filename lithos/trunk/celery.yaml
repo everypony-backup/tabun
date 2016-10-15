@@ -6,7 +6,7 @@ fileno-limit: 50ki
 memory-limit: 512Mi
 cpu-shares: 1024
 environ:
-  PYTHONPATH: /config/trunk/celeryconfig:/app
+  PYTHONPATH: /config/celeryconfig:/app
   CELERY_CONFIG_MODULE: cfg
   CELERY_MAILER_HOST: localhost
   CELERY_MAILER_PORT: 25
