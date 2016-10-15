@@ -23,6 +23,8 @@ $config['misc']['debug'] = true;
 $config['misc']['twicher']['url'] = 'http://127.0.0.1:5000/quotes/twitchy';
 $config['sys']['elastic']['hosts'] = ["127.0.0.1"];
 
+$config['sys']['celery']['host'] = '127.0.0.1';
+$config['sys']['celery']['port'] = 6579;
 $config['sys']['celery']['db'] = 1;
 
 return $config;
