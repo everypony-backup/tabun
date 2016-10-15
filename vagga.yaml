@@ -119,14 +119,16 @@ containers:
       /storage: !Persistent {name: storage}
       /var/log/nginx: !Snapshot
 
-  mysql:
+  mysql-dev:
     setup:
     - !Container _base_alpine
     - !Install
       - mariadb
       - mariadb-client
+    - !Copy
+      source: /work/config/local/mysql
+      path: /etc/mysql
     volumes:
-      <<: *local_volumes
       /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
 
   _php-base:
@@ -229,7 +231,7 @@ commands:
 
   _init_db: !Command
     description: Initialize and populate MySQL database
-    container: mysql
+    container: mysql-dev
     environ:
       DB_HOST: 127.0.0.1
       DB_DATABASE: tabun
@@ -237,14 +239,14 @@ commands:
       DB_PASSWORD: tabun
     run: |
       mysql_install_db
-      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
+      mysqld_safe --skip-syslog --no-auto-restart
       while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
-      mysqladmin --defaults-extra-file=/config/mysql.conf create $DB_DATABASE
-      mysql --defaults-extra-file=/config/mysql.conf -e "CREATE USER '$DB_USERNAME'@'$DB_HOST' IDENTIFIED BY '$DB_PASSWORD';"
-      mysql --defaults-extra-file=/config/mysql.conf -e "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'$DB_HOST';"
-      mysqladmin --defaults-extra-file=/config/mysql.conf flush-privileges
+      mysqladmin create $DB_DATABASE
+      mysql -e "CREATE USER '$DB_USERNAME'@'$DB_HOST' IDENTIFIED BY '$DB_PASSWORD';"
+      mysql -e "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'$DB_HOST';"
+      mysqladmin flush-privileges
 
-      MYSQL="mysql --defaults-extra-file=/config/mysql.conf --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE"
+      MYSQL="mysql --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE"
 
       for migration in $(ls -v /work/fixtures/migrations) ; do
         echo "Applying migration $migration"
@@ -256,11 +258,11 @@ commands:
         $MYSQL < /work/fixtures/data/$data
       done
 
-      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
+      mysqladmin shutdown
 
   _load_fixture: !Command
     description: Load fixture into database
-    container: mysql
+    container: mysql-dev
     environ:
       DB_HOST: 127.0.0.1
       DB_DATABASE: tabun
@@ -268,7 +270,7 @@ commands:
       DB_PASSWORD: tabun
     accepts-arguments: true
     run: |
-      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
+      mysqld_safe --skip-syslog --no-auto-restart
       while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
       if [ "$#" = 1 ] ; then
         case "$1" in
@@ -281,13 +283,9 @@ commands:
             viewer=cat
             ;;
         esac
-        $viewer $1 | mysql \
-          --defaults-extra-file=/config/mysql.conf \
-          --user=$DB_USERNAME \
-          --password=$DB_PASSWORD \
-          --database=$DB_DATABASE
+        $viewer $1 | mysql --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE
       fi
-      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
+      mysqladmin shutdown
 
   build-static: !Command
     prerequisites: [_clean-old-static, compile-locales]
@@ -348,11 +346,11 @@ commands:
     run: nginx -c /config/nginx.conf
 
   mysql: &mysql !Command
-    container: mysql
+    container: mysql-dev
     description: Run mysql database server
     user-id: 1
     external-user-id: 0
-    run: mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --console --debug-gdb
+    run: mysqld_safe --skip-syslog --console --debug-gdb
 
   mail: &mail !Command
     container: celery
