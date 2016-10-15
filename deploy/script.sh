@@ -54,7 +54,7 @@ exit 0;
 sync_container() {
     local NAME="$1"
     local NO_CONFIG="$2"
-    local CONTAINER_NAME=${NAME}-deploy
+    local CONTAINER_NAME=${NAME}-${TYPE}
     local LINK_DEST=${DESTINATION}/${PROJECT}/${CONTAINER_NAME}.latest
 
     ${VAGGA} _build ${CONTAINER_NAME}
@@ -83,7 +83,7 @@ sync_container() {
 ${NAME}:
     kind: Daemon
     instances: 1
-    config: /lithos/${TYPE}/${NAME}.yaml
+    config: /lithos/${NAME}.yaml
     image: ${CONTAINER_NAME}.${VERSION}
 END
     fi
