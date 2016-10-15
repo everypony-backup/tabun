@@ -21,7 +21,11 @@ before_deploy:
   - ssh-add /tmp/deploy_rsa
 
 script:
-  - vagga _build _base_alpine
+  - vagga _build redis-deploy
+  - vagga _build celery-deploy
+  - vagga _build php-deploy
+  - vagga _build mysql-deploy
+  - vagga _build static-deploy
 
 deploy:
   provider: script
