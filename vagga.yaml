@@ -17,6 +17,9 @@ containers:
   _base_alpine:
     setup:
     - !Alpine v3.4
+    - !AlpineRepo {branch: edge, repo: main, tag: main}
+    - !AlpineRepo {branch: edge, repo: testing, tag: testing}
+    - !AlpineRepo {branch: edge, repo: community, tag: community}
     - !EnsureDir /config
     - !Sh "chmod +r /bin/bbsuid"
 
@@ -133,11 +136,7 @@ containers:
 
   _php-base:
     setup:
-    - !Alpine v3.4
-    - !Sh "chmod +r /bin/bbsuid"
-    - !AlpineRepo {branch: edge, repo: main, tag: main}
-    - !AlpineRepo {branch: edge, repo: testing, tag: testing}
-    - !AlpineRepo {branch: edge, repo: community, tag: community}
+    - !Container _base_alpine
     - !Install
       - php5-fpm@main
       - php5-mysql
@@ -155,7 +154,6 @@ containers:
       url: https://curl.haxx.se/ca/cacert.pem
       path: /etc/cacert.pem
     - !EnsureDir /log
-    - !EnsureDir /config
     - !EnsureDir /storage
 
   php-dev:
