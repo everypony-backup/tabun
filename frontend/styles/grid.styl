@@ -1,17 +1,24 @@
 #container
+  position relative
+  overflow hidden
   background url(images/content-bg.jpg) no-repeat scroll 0 80px #FFFFFF
   margin 0 auto
   max-width 1600px
-  min-width 950px
   &.toolbar-margin
     padding 0
 
 #header
   background url(images/menu-bg.jpg) no-repeat scroll 0 0 #E8EBFC
-  min-height 51px
-  padding 0 18px 0 26px
+  min-height 70px
+  padding 0 42px 0 26px
   position relative
+  overflow hidden
   z-index 1
+  ul
+    display flex
+    flex-flow row
+    flex-wrap wrap
+    justify-content left
 
 #nav
   min-height 26px
@@ -20,9 +27,9 @@
   position relative
 
 #wrapper
+  display flex
+  flex-flow row-reverse
   overflow hidden
-  zoom 1
-  padding 10px 16px 20px 26px
   margin-bottom 60px
   &.no-sidebar
     background-image none
@@ -34,18 +41,8 @@
       margin-right 0
       width 100%
 
-#content-wrapper
-  float left
-  width 70%
-
 #content
   position relative
-
-#sidebar
-  float right
-  width 25%
-  position relative
-  z-index 1
 
 #footer
   color #eee
@@ -53,82 +50,273 @@
   font-size 16px
   padding 12px 0 8px 0
   overflow hidden
-  zoom 1
   background #1d2a4f url(images/header-bg.jpg) no-repeat 0 0
   a
     color #eee
   .version
     margin-top 8px
 
-body
-  &.widemode
-    #content-wrapper
-      width 100%
-    #sidebar
-      display none
-
 #c-header
   height 80px
-  padding 0 16px 0 0
   font-family Georgia, Times, serif
   background #1d2a4f url(images/header-bg.jpg) no-repeat 0 0
   .main-menu
-    padding 35px 0 0 26px
     color #cdcae9
-    line-height 24px
+    line-height 21px
+    padding 20px 0 0 26px
     li
-      float left
-      display inline
-      font-size 22px
-      padding 5px 20px 0 0
+      display inline-block
+      font-size 20px
+      line-height 1.2em
+      margin-right 20px
       a
         color #fafae8
         &:hover
           color fff
     li#logolink
-      font-size 35px
-      padding 0 46px 0 0
+      font-size 36px
+      padding 0 42px 0 0
       white-space nowrap
+      a
+        color #cdcae9
+        text-decoration none
   & .rss, & .twitter
-    float right
+    position absolute
+    top 15px
+    right 15px
     width 32px
     height 32px
-    margin 0 0.6em
     &:hover
       background-position 0 -32px
   .rss
     background url(images/rss.png)
   .twitter
     background url(images/twitter.png)
+    right 52px
 
-#logolink
-  a
-    color #cdcae9 !important
-    text-decoration none
+@media (min-width:1025px) and (max-width:1100px)
+  #running_ponies
+    img:nth-of-type(5)
+      display none
 
-.servicelinks
-  float left
-  width 100%
-  height 20px
-  padding 4px 0 0
-  a
-    font-family Verdana, Arial, sans-serif
-    float right
-    font-size 10px
-    color #e6e9f2
-    margin 0 0 0 9px
-    text-decoration none
+@media (min-width:1025px)
+  #wrapper
+    padding 10px 16px 20px 26px
+  #content-wrapper
+    width 70%
+    margin-right 5%
+  #sidebar
+    width 25%
 
-.tabun-yes
-  margin-top -3px
-  a
-    font-size 28px
-    color #66ab1b!important
-    text-decoration none!important
+@media (min-width:769px) and (max-width:1024px)
+  #wrapper
+    padding 10px 10px 20px 10px
+  #content-wrapper
+    width 70%
+    margin-right 2%
+  #sidebar
+    width 28%
+  #running_ponies
+    img:nth-of-type(5)
+      display none
+  #reply
+    margin-left 20px
+  .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
+    padding-left 0
 
-.container-light
-  width 400px!important
-  min-width 400px!important
-  max-width 400px!important
-  padding 40px
+@media (min-width:769px)
+  body.widemode
+    #content-wrapper
+      width 100%
+    #sidebar
+      display none
 
+@media (max-width:768px)
+  #reply
+    margin-left 0
+  #wrapper
+    margin 0
+  #comments
+    margin-bottom 0
+  #modal_write
+    position absolute
+    width 100%
+    height auto
+    margin 0
+    left 0
+    top 150px
+    .modal-content
+      padding 0 5px!important
+      .write-list
+        display flex
+        flex-flow row
+        flex-wrap wrap
+        justify-content space-between
+        align-items center
+        li
+          margin 0 5px!important
+          padding 0!important
+
+@media (min-width:568px) and (max-width:769px)
+  #c-header
+    .main-menu
+      padding-top 5px
+      li:first-of-type
+        width 100%
+  #header
+    overflow visible
+    .auth,#dropdown-user
+      background #F4F4F6
+      display none
+      top 15px
+      right 0
+      z-index 200
+      width 32%
+  #wrapper
+    width 140%
+    padding 10px 5px 20px 5px
+  #content-wrapper
+    width 70%
+  #sidebar
+    width 30%
+    position relative
+    top 0
+    left 100%
+    z-index 5
+    background #F4F4F6
+  .comment-wrapper
+    padding-left 10px!important
+  .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
+    padding-left 0
+  .comment-info
+    li
+      margin-right 10px
+  body.widemode
+    #header
+      .auth,#dropdown-user
+        display inline-block
+    #sidebar
+      left -30%
+    #toolbar
+      display none
+
+@media (max-width:567px)
+  #wrapper
+    padding 10px 5px 20px 5px
+  #content-wrapper
+    width 100%
+    display block
+  #sidebar
+    width 100%
+    display none
+  #header
+    padding 0 5px
+    margin 0
+    ul
+      width 100%
+    .auth,#dropdown-user,.modal.modal-login
+      display none
+  #c-header
+    height 50px
+    padding 5px 5px 0 5px
+    .main-menu
+      padding 0
+      display flex
+      flex-flow row
+      flex-wrap wrap
+      justify-content space-between
+      li
+        display none
+        font-size 18px
+        line-height 18px
+        padding  0 2px 
+      #logolink
+        padding 0
+        display block
+        width 100%
+        padding 0
+        text-align center
+        line-height 36px
+    .rss,.twitter
+      top 5px
+      right 5px
+      width 16px
+      height 16px
+      background-size 16px 32px
+      &:hover
+        background-position 0 -16px
+    .twitter
+      top 21px
+  #footer
+    padding-bottom 40px
+  .topic
+    margin-bottom 20px!important
+  .comments-header
+    .subscribe
+      position static
+  .comment-wrapper
+    padding-left 10px!important
+  .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
+    padding-left 0
+  .comment-info
+    li
+      margin-right 5px
+  #widemode
+    right inherit
+    left 0
+    width 100%
+    border-radius 0
+    padding 5px
+    text-align right
+    a#up-switch,a#down-switch
+      bottom 0
+  #toolbar
+    position fixed
+    display inline-block
+    bottom 0
+    left 0
+    height 25px
+    right inherit
+    top inherit
+    z-index 101
+    .toolbar-topic
+      border 0 transparent solid
+      margin 0
+      padding  5px
+      a
+        height 19px
+        width 32px
+        display inline-block
+        i
+          transform rotate(90deg)
+    .toolbar-update
+      border 0 transparent solid
+      padding 5px
+      width auto
+      display flex
+      flex-flow row
+      align-items center
+      #new_comments_counter
+        padding:0 10px
+  body.widemode
+    #sidebar
+      display block
+    #content-wrapper
+      display none
+    #c-header
+      .main-menu
+        li
+          display inline-block
+      #logolink,.rss,.twitter
+        display none
+    #header 
+      ul.auth
+        display flex
+        padding-top 15px
+      #dropdown-user
+        display inline-block
+        right 10px
+        top 0
+    #header
+      .nav,#nav
+        display none
