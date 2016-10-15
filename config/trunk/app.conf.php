@@ -8,14 +8,13 @@ $config['db']['params']['dbname'] = 'tabun_trunk';
 $config['db']['tables']['engine'] = 'InnoDB';
 $config['db']['table']['prefix'] = 'ls_';
 
-$config['path']['offset_request_url'] = '0';
 $config['path']['uploads']['storage'] = '/storage';
 $config['path']['uploads']['url'] = '//cdn.everypony.ru/tabun-trunk-storage';
 $config['path']['static']['url'] = '//cdn.everypony.ru/tabun-trunk-static';
 $config['path']['smarty']['compiled'] = '/tmp/smarty/compiled';
 $config['path']['smarty']['cache'] = '/tmp/smarty/cache';
 
-$config['sys']['elastic']['hosts'] = ["127.0.0.1"];
+$config['sys']['elastic']['hosts'] = ["127.0.0.1:9210"];
 
 $config['sys']['celery']['host'] = '127.0.0.1';
 $config['sys']['celery']['port'] = 6579;
