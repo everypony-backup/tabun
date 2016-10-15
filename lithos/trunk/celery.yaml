@@ -1,5 +1,7 @@
 user-id: 1
 group-id: 1
+volumes:
+  /state: !Statedir {}
 fileno-limit: 50ki
 memory-limit: 512Mi
 cpu-shares: 1024

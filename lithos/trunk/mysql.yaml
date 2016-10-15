@@ -1,6 +1,7 @@
 user-id: 1
 group-id: 1
 volumes:
+  /state: !Statedir {}
   /tmp: !Tmpfs
     size: 128Mi
     mode: 0o1777

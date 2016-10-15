@@ -4,6 +4,7 @@ fileno-limit: 100ki
 memory-limit: 4Gi
 cpu-shares: 1024
 volumes:
+  /state: !Statedir {}
   /tmp: !Tmpfs
     size: 256Mi
     mode: 0o1777

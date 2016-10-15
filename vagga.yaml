@@ -99,6 +99,12 @@ containers:
       source: /work/celery_tasks
       path: /app
     - !Sh python3 -m compileall /app
+    - !EnsureDir /state
+    - !Sh |
+        /bin/ln -sfn /state/hosts /etc/hosts
+        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
   redis:
     setup:
@@ -113,6 +119,12 @@ containers:
     setup:
     - !Container redis
     - !*Unpack [*prod_stuff]
+    - !EnsureDir /state
+    - !Sh |
+        /bin/ln -sfn /state/hosts /etc/hosts
+        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
   nginx:
     setup:
@@ -144,6 +156,12 @@ containers:
     - !Copy
       source: /work/config/trunk/mysql
       path: /etc/mysql
+    - !EnsureDir /state
+    - !Sh |
+        /bin/ln -sfn /state/hosts /etc/hosts
+        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
   _php-base:
     setup:
@@ -214,6 +232,12 @@ containers:
       - !Copy
         source: /mnt/frontend.version
         path: /app/frontend.version
+      - !EnsureDir /state
+      - !Sh |
+          /bin/ln -sfn /state/hosts /etc/hosts
+          /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+      resolv-conf-path: /state/resolv.conf
+      hosts-file-path: /state/hosts
 
   elastic:
     setup:
