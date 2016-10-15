@@ -93,16 +93,14 @@
   .topic-info
     overflow hidden
     line-height 11px
+    display flex
+    flex-flow row
+    align-items center
     li
-      float left
+      display inline-block
       padding 6px 11px 6px 0
     .topic-info-author
       padding-left 24px
-  .topic-info-author
-    .avatar
-      position absolute
-      margin -4px 0 0 0
-      left 0
 
 .topic-info-vote
   padding 0
@@ -135,7 +133,6 @@ li
     color #828a93
     cursor pointer
     .favourite
-      float left
       text-decoration underline
       font-style normal
       &:hover
@@ -164,7 +161,6 @@ li
       margin-bottom 15px
       dl
         overflow hidden
-        zoom 1
         dt
           float left
           width 80px
@@ -177,6 +173,7 @@ li
             height 21px
             overflow hidden
             background #ccc url(images/poll.jpg) no-repeat 0 0
+            background-size auto 21px
   .poll-total
     position relative
     color #818189
