@@ -131,8 +131,9 @@ containers:
     - !Copy
       source: /work/config/local/mysql
       path: /etc/mysql
+    - !EnsureDir /storage
     volumes:
-      /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
+      /storage: !Persistent {name: mysql, init-command: _init_db}
 
   mysql-deploy:
     setup:
