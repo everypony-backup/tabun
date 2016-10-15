@@ -184,6 +184,9 @@ containers:
         source: /work
         path: /app
         include-regex: ^(classes|settings|engine|templates)/*
+      - !Copy
+        source: /work/index.php
+        path: /app/index.php
       - !BuildDeps [gettext]
       - !RunAs
         work-dir: /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
