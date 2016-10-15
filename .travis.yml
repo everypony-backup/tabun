@@ -4,12 +4,11 @@ sudo: required
 
 cache:
   directories:
-    - $HOME/.cache/vagga
+    - .vagga/.cache
 
 install:
   - "echo ubuntu-mirror: http://mirrors.us.kernel.org/ubuntu/ > ~/.vagga.yaml"
   - "echo alpine-mirror: http://mirrors.gigenet.com/alpinelinux/ >> ~/.vagga.yaml"
-  - "echo cache-dir: ~/.cache/vagga >> ~/.vagga.yaml"
   - "echo travis:100000:65536 | sudo tee /etc/subuid | sudo tee /etc/subgid"
   - sudo apt-get install uidmap -y
   - curl http://files.zerogw.com/vagga/vagga-install-testing.sh | sh
