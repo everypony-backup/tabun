@@ -30,7 +30,8 @@ Simple deploy script
 
 Usage:
     ./script.sh \
-        --project tabun-trunk \
+        --project tabun \
+        --type trunk \
         --destination /srv/images \
         --server staging.everypony.ru \
         --user deploy \
