@@ -1368,6 +1368,8 @@ class ActionAjax extends Action {
             }
         }
         $this->Viewer_AssignAjax('newText', $oComment->getText());
-        $this->Viewer_AssignAjax('notice', $oComment->getModifyNoticeHTML());
+		$this->Viewer_Assign('LS',$this);
+		$this->Viewer_Assign('oComment',$oComment);
+        $this->Viewer_AssignAjax('notice', $this->Viewer_Fetch('comment_modify_notice.tpl'));
     }
 }

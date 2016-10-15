@@ -1006,13 +1006,4 @@ class ModuleComment extends Module {
 	public function AddCommentHistoryItem(ModuleComment_EntityCommentHistoryItem $oHistoryItem) {
 		return $this->oMapper->AddCommentHistoryItem($oHistoryItem);
 	}
-    /**
-     * Возвращает текст уведомления о изменении/блокировке
-     *
-     * @return string|null
-     */
-    public function getModifyNoticeHTML($lastModifyDateText = null, $lockModifyDateText = null)
-    {
-        return ''; // TODO: Implement with templates
-    }
 }
