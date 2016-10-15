@@ -1,5 +1,5 @@
 <?php
-$config['path']['root']['web'] = $_SERVER['HTTP_HOST'];
+$config['path']['root']['web'] = '//' . $_SERVER['HTTP_HOST'];
 $config['db']['params']['host'] = '127.0.0.1';
 $config['db']['params']['port'] = '4406';
 $config['db']['params']['user'] = 'tabun_trunk';
