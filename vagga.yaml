@@ -88,6 +88,8 @@ containers:
     environ:
       PYTHONPATH: /config/celeryconfig:/app
       CELERY_CONFIG_MODULE: cfg
+      CELERY_MAILER_HOST: localhost
+      CELERY_MAILER_PORT: 1025
 
   celery-deploy:
     setup:

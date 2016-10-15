@@ -1,18 +1,28 @@
+from os import environ
 import smtplib
-from celery.decorators import task
+
 from email.header import Header
 from email.utils import formataddr
 from email.utils import formatdate
 from email.utils import COMMASPACE
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from bs4 import BeautifulSoup
+from celery.decorators import task
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch()
 
+SMTP_HOST = environ.get("CELERY_MAILER_HOST")
+SMTP_PORT = environ.get("CELERY_MAILER_PORT")
+
+
 @task
 def send_mail(**kwargs):
+    assert SMTP_HOST
+    assert SMTP_PORT
+
     recipients = kwargs.get('recipients')
 
     from_email = kwargs.get('from_email')
@@ -40,13 +50,14 @@ def send_mail(**kwargs):
         part2 = MIMEText(body.encode('utf-8'), 'html', 'utf-8')
         message.attach(part2)
 
-    server = smtplib.SMTP('127.0.0.1', 1025)
+    server = smtplib.SMTP(SMTP_HOST, int(SMTP_PORT))
     server.sendmail(
         from_email,
         [pair[1] for pair in recipients],
         message.as_string()
     )
     server.quit()
+
 
 @task
 def topic_index(**kwargs):
