@@ -12,7 +12,7 @@ volumes:
     mkdir: true
     mode: 0o700
     user: 1
-    group: 0
+    group: 1
   /log: !Persistent
     path: /log/php
     mkdir: true
