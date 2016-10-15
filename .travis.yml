@@ -35,7 +35,7 @@ deploy:
     --project tabun
     --type trunk
     --blobs "static"
-    --containers "redis celery php mysql"
+    --containers "redis celery php mysql elastic"
     --destination $deploy_destination
     --server $deploy_host
     --port $deploy_port

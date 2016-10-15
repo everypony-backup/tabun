@@ -1,0 +1,27 @@
+user-id: 1
+group-id: 1
+volumes:
+  /state: !Statedir {}
+fileno-limit: 50ki
+memory-limit: 3Gi
+cpu-shares: 1024
+environ:
+  ES_HOME_DIR: /storage
+  ES_XMS: 256
+  ES_XMX: 2048
+workdir: /app
+executable: /bin/sh
+arguments:
+- -c
+- |
+  java -server \
+  -Xms${ES_XMS}M -Xmx${ES_XMX}M \
+  -Djna.nosys=true \
+  -XX:+DisableExplicitGC \
+  -Djava.awt.headless=true \
+  -Dfile.encoding=utf-8 \
+  -Des.path.conf=/etc/elasticsearch \
+  -Des.path.home=${ES_HOME_DIR} \
+  -cp /usr/share/java/elasticsearch/lib/elasticsearch-2.3.5.jar:/usr/share/java/elasticsearch/lib/* \
+  org.elasticsearch.bootstrap.Elasticsearch start
+- --

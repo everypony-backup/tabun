@@ -250,6 +250,18 @@ containers:
       /storage: !Persistent {name: elastic}
       /etc/elasticsearch: !BindRO /work/config/local/elasticsearch
 
+  elastic-trunk:
+    setup:
+      - !Container elastic-dev
+      - !*Unpack
+        - *trunk_stuff
+        - *host_resolution
+      - !Copy
+        source: /config/elasticsearch
+        path: /etc/elasticsearch
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
 commands:
   _write-version: !Command
     container: php-dev
