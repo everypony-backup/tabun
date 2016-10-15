@@ -13,8 +13,8 @@ $config['path']['offset_request_url'] = '0';
 $config['sys']['logs']['dir'] = '/log';
 
 $config['path']['uploads']['storage'] = '/storage';
-$config['path']['uploads']['url'] = '//cdn.everypony.ru/tabun-trunk/storage';
-$config['path']['static']['url'] = '//cdn.everypony.ru/tabun-trunk/static';
+$config['path']['uploads']['url'] = '//cdn.everypony.ru/tabun-trunk-storage';
+$config['path']['static']['url'] = '//cdn.everypony.ru/tabun-trunk-static';
 
 $config['path']['smarty']['compiled'] = '/tmp/smarty/compiled';
 $config['path']['smarty']['cache'] = '/tmp/smarty/cache';
