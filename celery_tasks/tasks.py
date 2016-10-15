@@ -75,17 +75,18 @@ def topic_index(**kwargs):
 
     topic_tags = topic_tags.split(',')
 
-    es.index(index=index, doc_type=key, id=int(topic_id), body=
-        {
-            'blog_id': int(topic_blog_id),
-            'user_id': int(topic_user_id),
-            'type': topic_type,
-            'title': topic_title.strip(),
-            'text': topic_text.strip(),
-            'tags': topic_tags,
-            'date': topic_date,
-            'publish': topic_publish
-        })
+    doc_body = {
+        'blog_id': int(topic_blog_id),
+        'user_id': int(topic_user_id),
+        'type': topic_type,
+        'title': topic_title.strip(),
+        'text': topic_text.strip(),
+        'tags': topic_tags,
+        'date': topic_date,
+        'publish': topic_publish
+    }
+    es.index(index=index, doc_type=key, id=int(topic_id), body=doc_body)
+
 
 @task
 def topic_delete(**kwargs):
@@ -94,6 +95,7 @@ def topic_delete(**kwargs):
     topic_id = kwargs.get('topic_id')
 
     es.delete(index=index, doc_type=key, id=int(topic_id))
+
 
 @task
 def comment_index(**kwargs):
@@ -107,15 +109,16 @@ def comment_index(**kwargs):
     comment_date = kwargs.get('comment_date')
     comment_publish = kwargs.get('comment_publish')
 
-    es.index(index=index, doc_type=key, id=int(comment_id), body=
-        {
-            'target_id': int(comment_target_id),
-            'target_type': comment_target_type,
-            'user_id': int(comment_user_id),
-            'text': comment_text.strip(),
-            'date': comment_date,
-            'publish': comment_publish
-        })
+    doc_body = {
+        'target_id': int(comment_target_id),
+        'target_type': comment_target_type,
+        'user_id': int(comment_user_id),
+        'text': comment_text.strip(),
+        'date': comment_date,
+        'publish': comment_publish
+    }
+    es.index(index=index, doc_type=key, id=int(comment_id), body=doc_body)
+
 
 @task
 def comment_delete(**kwargs):
