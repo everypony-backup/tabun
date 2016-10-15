@@ -4,12 +4,6 @@ volumes:
   /tmp: !Tmpfs
     size: 128Mi
     mode: 0o1777
-  /log: !Persistent
-    path: /log/mysql
-    mkdir: true
-    mode: 0o700
-    user: 1
-    group: 1
   /storage: !Persistent
     path: /storage/mysql
     mkdir: true
