@@ -61,3 +61,13 @@
 Либо, применение патча:
 
     vagga _load_fixture my/patches/31337_info.sql
+
+Фикстуры
+--------
+
+При заполнении базы данных для тестирования доступно четыре аккаунта:
+
+    Celestia:celestia
+    Luna:constellations
+    Sparkle:scrolls
+    Spitfire:feathers
