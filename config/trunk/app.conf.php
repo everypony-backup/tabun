@@ -5,7 +5,7 @@ $config['db']['params']['port'] = '4406';
 $config['db']['params']['user'] = 'tabun_trunk';
 $config['db']['params']['pass'] = 'tabun_trunk';
 $config['db']['params']['type']   = 'mysql';
-$config['db']['params']['dbname'] = 'tabun';
+$config['db']['params']['dbname'] = 'tabun_trunk';
 $config['db']['tables']['engine'] = 'InnoDB';
 $config['db']['table']['prefix'] = 'ls_';
 
