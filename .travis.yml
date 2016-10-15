@@ -36,10 +36,9 @@ deploy:
     --blobs "static"
     --containers "redis celery php mysql"
     --type trunk
-    --dry-run
     --destination $deploy_destination
     --server $deploy_host
     --port $deploy_port
     --user $deploy_user
   on:
-    branch: travis
+    branch: branch-1.3
