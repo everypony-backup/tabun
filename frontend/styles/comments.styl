@@ -18,17 +18,6 @@
   &.comment-list
     .comment
       margin-bottom 12px
-      padding-left 0
-      .comment-content
-        margin-bottom 5px
-        &:after
-          top -12px
-          left 25px
-          border-color transparent transparent #e7ebed
-        &:before
-          top -11px
-          left 25px
-          border-color transparent transparent #fff
       .comment-info
         li
           &.vote
@@ -48,7 +37,7 @@
     margin-left 40px
 
 .comment-preview
-  padding 5px 10px 6px
+  padding 5px 10px 16px
   margin-bottom 10px
   background #fafafa
   border 1px solid #eee
@@ -61,19 +50,19 @@
 
 .comment
   min-height 48px
-  padding 0 0 6px
+  padding 0 0 10px
   position relative
   background #fff
   .deleted
-    padding 5px 10px
+    padding 16px 10px
     color #777
     background #f4f4f4
   .comment-avatar
     position absolute
-    top 0
-    left 5px
-    width 20px
-    height 20px
+    top -5px
+    left 0
+    width 18px
+    height 18px
   .folding
     width 13px
     height 13px
@@ -146,20 +135,19 @@
       display none
 
 .comment-info
-  padding 0 70px 7px 0
-  line-height 12px
+  display flex
+  flex-flow row
+  flex-wrap wrap
+  align-items flex-end
+  padding 0 50px 0 25px
+  line-height 13px
   position relative
-  top -2px
-  overflow hidden
-  zoom 1
+  overflow visible
   font-size 11px
   li
-    float left
     height 18px
-    padding-top 3px
-    margin-right 13px
+    margin-right 15px
     &.comment-author
-      padding-left 30px
       a
         font-weight bold
         color #444
@@ -182,10 +170,20 @@
       a
         color #a2b6cd
         text-decoration none
+        display inline-block
+        width 14px
+        height 14px
+        text-indent 20px
+        overflow hidden
+        background transparent url(images/jquery-ui/ui-icons_2e83ff_256x240.png) no-repeat
+      &.goto-comment-parent
+        a
+          background-position -161px -193px
+      &.goto-comment-child
+        a 
+          background-position -129px -193px
     .favourite-count
       color #a2b6cd
-      position relative
-      top -2px
     &.vote
       position absolute
       top 0
@@ -231,7 +229,7 @@ div
 
 .comment-content
   background-color #f7f7f7
-  margin-bottom 5px
+  margin-bottom 10px
   border 1px solid #e7ebed
   padding 5px 10px
   border-radius 5px
@@ -241,7 +239,7 @@ div
       background #fff
       border-color #ccc
       padding 5px 10px
-      margin 5px 0 5px 0
+      margin 5px 0
       & + br
         display none
   &:after
@@ -281,7 +279,7 @@ div
     margin-bottom 10px
 
 .modify-notice
-  font-size 7.5pt
+  font-size 10px
   font-style italic
   .self-modified
     color #69b55b
@@ -350,6 +348,7 @@ div
 #quote>i,#quote>s
   display inline-block
   background-image url(images/markitup/edit-quotation.png)
+  background-size 16px 16px
   height 16px
   width 16px
   text-indent 1000px
