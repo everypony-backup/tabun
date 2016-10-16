@@ -278,8 +278,8 @@ $config['sys']['elastic']['hosts'] = [
  * Разное
  */
 $config['misc']['ga'] = '';
-$config['misc']['ver']['front'] = file_get_contents(dirname(__FILE__) . "/frontend.version");
-$config['misc']['ver']['code'] = file_get_contents(dirname(__FILE__) . "/backend.version");
+$config['misc']['ver']['front'] = file_get_contents(dirname(dirname(__FILE__)) . "/frontend.version");
+$config['misc']['ver']['code'] = file_get_contents(dirname(dirname(__FILE__)) . "/backend.version");
 $config['misc']['debug'] = false;
 
 // Отключение подсчёта числа страниц для первых страниц ленты комментариев для их ускорения.
@@ -293,8 +293,8 @@ $config['misc']['simplify_comments_pagination'] = false;
 $config['page']['show_block_structure'] = false;
 
 // Include configs
-foreach (glob("config/configs/*") as $file) {
-    $name = explode('.', str_replace('config/configs/', '', $file));
+foreach (glob("settings/parts.d/*") as $file) {
+    $name = explode('.', str_replace('settings/parts.d/', '', $file));
     array_pop($name); // Remove extension
 
     $conf = &$config;

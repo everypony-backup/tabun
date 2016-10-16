@@ -3,17 +3,36 @@ minimum-vagga: v0.6.1
 _templates:
   local_volumes: &local_volumes
     /config: !BindRO /work/config/local
+  snippets:
+    - &trunk_stuff
+      - !Copy
+        source: /work/config/trunk
+        path: /config
+      - !EnsureDir /lithos
+      - !Copy
+        source: /work/lithos/trunk
+        path: /lithos
+    - &host_resolution
+      - !EnsureDir /state
+      - !Sh |
+          /bin/ln -sfn /state/hosts /etc/hosts
+          /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
 
 containers:
   _base_alpine:
     setup:
     - !Alpine v3.4
+    - !AlpineRepo {branch: edge, repo: main, tag: main}
+    - !AlpineRepo {branch: edge, repo: testing, tag: testing}
+    - !AlpineRepo {branch: edge, repo: community, tag: community}
     - !EnsureDir /config
     - !Sh "chmod +r /bin/bbsuid"
 
-  static:
+  frontend:
     setup:
     - !Container _base_alpine
+    - !Env
+      TRAVIS: true
     - !NpmDependencies
       file: package.json
       peer: true
@@ -23,6 +42,39 @@ containers:
       - gettext
     environ:
       NODE_PATH: /usr/lib/node_modules
+
+  static-trunk:
+    setup:
+    - !Container frontend
+    - !EnsureDir /static
+    - !Copy
+      source: /work/frontend
+      path: /tmp/frontend
+    - !Copy
+      source: /work/templates/skin/synio/locale
+      path: /tmp/locale
+    - !RunAs
+      work-dir: /tmp/locale/ru_RU/LC_MESSAGES
+      script: |
+        msgcat -n -F -o messages.po parts/*
+        msgfmt messages.po
+        po2json -f jed1.x messages.po messages.json
+    - !Copy
+      source: /work/webpack.config.coffee
+      path: /tmp/webpack.config.coffee
+    - !Env
+      NODE_PATH: /usr/lib/node_modules
+      NODE_ENV: production
+    - !RunAs
+      work-dir: /tmp
+      script: webpack --color
+    - !Copy
+      source: /tmp/static
+      path: /static
+    - !Copy
+      source: /tmp/frontend.version
+      path: /static/frontend.version
+    data-dirs: [/static]
 
   celery:
     setup:
@@ -34,6 +86,28 @@ containers:
       - celery[redis]
       - beautifulsoup4
       - elasticsearch
+    - !EnsureDir /app
+    volumes:
+      <<: *local_volumes
+      /app: !BindRO /work/celery_tasks
+    environ:
+      PYTHONPATH: /config/celeryconfig:/app
+      CELERY_CONFIG_MODULE: cfg
+      CELERY_MAILER_HOST: localhost
+      CELERY_MAILER_PORT: 1025
+
+  celery-trunk:
+    setup:
+    - !Container celery
+    - !*Unpack
+      - *trunk_stuff
+      - *host_resolution
+    - !Copy
+      source: /work/celery_tasks
+      path: /app
+    - !Sh python3 -m compileall /app
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
   redis:
     setup:
@@ -43,6 +117,15 @@ containers:
     volumes:
       <<: *local_volumes
       /storage: !Persistent {name: redis}
+
+  redis-trunk:
+    setup:
+    - !Container redis
+    - !*Unpack
+      - *trunk_stuff
+      - *host_resolution
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
   nginx:
     setup:
@@ -54,23 +137,34 @@ containers:
       /storage: !Persistent {name: storage}
       /var/log/nginx: !Snapshot
 
-  mysql:
+  mysql-dev:
     setup:
     - !Container _base_alpine
     - !Install
       - mariadb
       - mariadb-client
+    - !Copy
+      source: /work/config/local/mysql
+      path: /etc/mysql
+    - !EnsureDir /storage
     volumes:
-      <<: *local_volumes
-      /var/lib/mysql: !Persistent {name: mysql, init-command: _init_db}
+      /storage: !Persistent {name: mysql, init-command: _init_db}
+
+  mysql-trunk:
+    setup:
+    - !Container mysql-dev
+    - !*Unpack
+      - *trunk_stuff
+      - *host_resolution
+    - !Copy
+      source: /config/mysql
+      path: /etc/mysql
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
   _php-base:
     setup:
-    - !Alpine v3.4
-    - !Sh "chmod +r /bin/bbsuid"
-    - !AlpineRepo {branch: edge, repo: main, tag: main}
-    - !AlpineRepo {branch: edge, repo: testing, tag: testing}
-    - !AlpineRepo {branch: edge, repo: community, tag: community}
+    - !Container _base_alpine
     - !Install
       - php5-fpm@main
       - php5-mysql
@@ -83,11 +177,11 @@ containers:
       - php5-imagick@community
       - php5-bcmath
     - !ComposerDependencies
+      optimize_autoloader: true
     - !Download
       url: https://curl.haxx.se/ca/cacert.pem
       path: /etc/cacert.pem
     - !EnsureDir /log
-    - !EnsureDir /config
     - !EnsureDir /storage
 
   php-dev:
@@ -96,43 +190,86 @@ containers:
       - !Install
         - php5-xdebug@community
         - php5-cli
+        - git
       - !Copy
-        source: /work/config/local/xdebug.ini
-        path: /etc/php5/conf.d/xdebug.ini
-      - !Copy
-        source: /work/config/local/app.pool.conf
-        path: /etc/php5/fpm.d/app.pool.conf
+        source: /work/config/local/php
+        path: /etc/php5
     volumes:
       <<: *local_volumes
       /storage: !Persistent {name: storage}
       /log: !Persistent {name: php_log}
       /var/log: !Snapshot
 
-  elastic:
+  php-trunk:
     setup:
-    - !Ubuntu xenial
-    - !UbuntuUniverse
-    # elastic PGP & Repo
-    - !AptTrust
-      server: pgp.mit.edu
-      keys: [D88E42B4]
-    - !UbuntuRepo
-      url: http://packages.elastic.co/elasticsearch/2.x/debian
-      suite: stable
-      components: [main]
-    - !Install
-      - ca-certificates
-      - ca-certificates-java
-      - openjdk-8-jre-headless
-      - elasticsearch=2.3.3
-    - !EnsureDir /var/elastic
+      - !Container _php-base
+      - !*Unpack
+        - *trunk_stuff
+        - *host_resolution
+      - !Copy
+        source: /config/php
+        path: /etc/php5
+      - !EnsureDir /app
+      - !Copy
+        source: /work
+        path: /app
+        include-regex: ^(classes|settings|engine|templates)/*
+      - !Copy
+        source: /work/index.php
+        path: /app/index.php
+      - !BuildDeps [gettext]
+      - !RunAs
+        work-dir: /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+        script: |
+          msgcat -n -F -o messages.po parts/*
+          msgfmt messages.po
+          rm -vr messages.po parts
+      - !BuildDeps [git]
+      - !Sh git describe --always > /app/backend.version
+      - !Build
+        container: static-trunk
+        source: /static
+        temporary-mount: /mnt
+      - !Copy
+        source: /mnt/frontend.version
+        path: /app/frontend.version
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
+  elastic-dev:
+    setup:
+      - !Container _base_alpine
+      - !Install
+        - openjdk8-jre@community
+        - java-jna@community
+        - elasticsearch@community
+      - !EnsureDir /log
+      - !EnsureDir /storage
     volumes:
-      /var/elastic: !Persistent { name: elastic }
+      /log: !Persistent {name: elastic_log}
+      /storage: !Persistent {name: elastic}
+      /etc/elasticsearch: !BindRO /work/config/local/elasticsearch
+
+  elastic-trunk:
+    setup:
+      - !Container elastic-dev
+      - !*Unpack
+        - *trunk_stuff
+        - *host_resolution
+      - !Copy
+        source: /config/elasticsearch
+        path: /etc/elasticsearch
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
 
 commands:
+  _write-version: !Command
+    container: php-dev
+    run: git describe --always --dirty=-dev > /work/backend.version
+
   _init_db: !Command
-    description: Initialize MySQL database
-    container: mysql
+    description: Initialize and populate MySQL database
+    container: mysql-dev
     environ:
       DB_HOST: 127.0.0.1
       DB_DATABASE: tabun
@@ -140,17 +277,30 @@ commands:
       DB_PASSWORD: tabun
     run: |
       mysql_install_db
-      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
+      mysqld_safe --skip-syslog --no-auto-restart
       while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
-      mysqladmin --defaults-extra-file=/config/mysql.conf create $DB_DATABASE
-      mysql --defaults-extra-file=/config/mysql.conf -e "CREATE USER '$DB_USERNAME'@'$DB_HOST' IDENTIFIED BY '$DB_PASSWORD';"
-      mysql --defaults-extra-file=/config/mysql.conf -e "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'$DB_HOST';"
-      mysqladmin --defaults-extra-file=/config/mysql.conf flush-privileges
-      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
+      mysqladmin create $DB_DATABASE
+      mysql -e "CREATE USER '$DB_USERNAME'@'$DB_HOST' IDENTIFIED BY '$DB_PASSWORD';"
+      mysql -e "GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'$DB_HOST';"
+      mysqladmin flush-privileges
 
-  _load_fixtures: !Command
-    description: Load fixtures into database
-    container: mysql
+      MYSQL="mysql --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE"
+
+      for migration in $(ls -v /work/fixtures/migrations) ; do
+        echo "Applying migration $migration"
+        $MYSQL < /work/fixtures/migrations/$migration
+      done
+
+      for data in $(ls -v /work/fixtures/data) ; do
+        echo "Populating database with $data"
+        $MYSQL < /work/fixtures/data/$data
+      done
+
+      mysqladmin shutdown
+
+  _load_fixture: !Command
+    description: Load fixture into database
+    container: mysql-dev
     environ:
       DB_HOST: 127.0.0.1
       DB_DATABASE: tabun
@@ -158,7 +308,7 @@ commands:
       DB_PASSWORD: tabun
     accepts-arguments: true
     run: |
-      mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --no-auto-restart
+      mysqld_safe --skip-syslog --no-auto-restart
       while [ ! -f /tmp/mysqld.pid ]; do sleep 0.1; done
       if [ "$#" = 1 ] ; then
         case "$1" in
@@ -171,29 +321,25 @@ commands:
             viewer=cat
             ;;
         esac
-        $viewer $1 | mysql \
-          --defaults-extra-file=/config/mysql.conf \
-          --user=$DB_USERNAME \
-          --password=$DB_PASSWORD \
-          --database=$DB_DATABASE
+        $viewer $1 | mysql --user=$DB_USERNAME --password=$DB_PASSWORD --database=$DB_DATABASE
       fi
-      mysqladmin --defaults-extra-file=/config/mysql.conf shutdown
+      mysqladmin shutdown
 
   build-static: !Command
     prerequisites: [_clean-old-static, compile-locales]
-    container: static
+    container: frontend
     description: Build static files using webpack
     run: [webpack, --progress]
 
   _clean-old-static: !Command
-    container: static
+    container: frontend
     description: Clean static files
     run: |
      mkdir -vp /work/static
      rm -rf /work/static/*
 
   compile-locales: !Command
-    container: static
+    container: frontend
     description: Comlile locale files
     work-dir: templates/skin/synio/locale/ru_RU/LC_MESSAGES
     run: |
@@ -203,7 +349,7 @@ commands:
       rm messages.po
 
   watch-static: !Command
-    container: static
+    container: frontend
     description: Watch and auto-rebuild changed static files
     run: [webpack, --progress, --watch]
 
@@ -238,11 +384,11 @@ commands:
     run: nginx -c /config/nginx.conf
 
   mysql: &mysql !Command
-    container: mysql
+    container: mysql-dev
     description: Run mysql database server
     user-id: 1
     external-user-id: 0
-    run: mysqld_safe --defaults-extra-file=/config/mysql.conf --skip-syslog --console --debug-gdb
+    run: mysqld_safe --skip-syslog --console --debug-gdb
 
   mail: &mail !Command
     container: celery
@@ -255,10 +401,10 @@ commands:
     user-id: 1
     group-id: 1
     external-user-id: 0
-    work-dir: celery_tasks
-    run: celery worker --config=celeryconfig --pool=solo
+    run: celery worker --pool=solo
 
   php: &php !Command
+    prerequisites: [_write-version]
     container: php-dev
     description: Run php-fpm (application)
     user-id: 1
@@ -267,15 +413,24 @@ commands:
 
   elastic: &elastic !Command
     description: Run elasticsearch
-    container: elastic
+    container: elastic-dev
     user-id: 1
     external-user-id: 0
-    run:
-    - /usr/share/elasticsearch/bin/elasticsearch
-    - -Des.path.conf=/etc/elasticsearch
-    - -Des.path.logs=/tmp
-    - -Des.path.work=/tmp
-    - -Des.path.data=/var/elastic/data
+    environ:
+      ES_HOME_DIR: /storage
+      ES_XMS: 256
+      ES_XMX: 2048
+    run: |
+      java -server \
+      -Xms${ES_XMS}M -Xmx${ES_XMX}M \
+      -Djna.nosys=true \
+      -XX:+DisableExplicitGC \
+      -Djava.awt.headless=true \
+      -Dfile.encoding=utf-8 \
+      -Des.path.conf=/etc/elasticsearch \
+      -Des.path.home=${ES_HOME_DIR} \
+      -cp /usr/share/java/elasticsearch/lib/elasticsearch-2.3.5.jar:/usr/share/java/elasticsearch/lib/* \
+      org.elasticsearch.bootstrap.Elasticsearch start
 
   run: !Supervise
     description: Run full server stack

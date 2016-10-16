@@ -1,4 +1,4 @@
-CREATE TABLE `ls_comment_change_history` (
+CREATE TABLE IF NOT EXISTS `ls_comment_change_history` (
   `id`              INT(16) UNSIGNED     NOT NULL AUTO_INCREMENT,
   `flags`           SMALLINT(5) UNSIGNED NOT NULL,
   `comment`         INT(16) UNSIGNED     NOT NULL,

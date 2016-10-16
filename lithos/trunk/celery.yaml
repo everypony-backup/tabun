@@ -1,0 +1,17 @@
+user-id: 1
+group-id: 1
+volumes:
+  /state: !Statedir {}
+fileno-limit: 50ki
+memory-limit: 512Mi
+cpu-shares: 1024
+environ:
+  PYTHONPATH: /config/celeryconfig:/app
+  CELERY_CONFIG_MODULE: cfg
+  CELERY_MAILER_HOST: localhost
+  CELERY_MAILER_PORT: 25
+workdir: /app
+executable: /usr/bin/celery
+arguments:
+- worker
+- --pool=solo
