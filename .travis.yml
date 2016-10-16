@@ -51,7 +51,7 @@ deploy:
       --project tabun
       --type production
       --blobs "static"
-      --containers "redis celery"
+      --containers "redis celery php"
       --destination $deploy_destination
       --server $deploy_host
       --port $deploy_port
