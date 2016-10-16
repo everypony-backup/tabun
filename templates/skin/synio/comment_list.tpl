@@ -60,7 +60,6 @@
                                 title="{$aLang.comment_goto_parent}">↑</a>
                         </li>
                     {/if}
-					<li class="modify-notice">{if $oComment->isModifiedOrLocked()}{include file='comment_modify_notice.tpl' bGetShort=true}{/if}</li>
                     <li>
                         {if $oBlog}
                             <a href="{$oBlog->getUrlFull()}" class="blog-name">{$oBlog->getTitle()|escape:'html'}</a>
@@ -69,6 +68,7 @@
                         <a href="{$oTopic->getUrl()}" class="comment-path-topic">{$oTopic->getTitle()|escape:'html'}</a>
                         <a href="{$oTopic->getUrl()}#comments"  class="comment-path-comments">{$oTopic->getCountComment()}</a>
                     </li>
+					<li class="modify-notice">{if $oComment->isModifiedOrLocked()}{include file='comment_modify_notice.tpl' bGetShort=true}{/if}</li>
                 </ul>
             </div>
         </section>
