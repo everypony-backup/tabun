@@ -17,9 +17,9 @@
 			{assign var="editor" value=$LS->User_GetUserById($editorId)}
 			{if $editor != null}{assign var="editorName" value=$editor->getLogin()}{/if}
 			{assign var="desc" value="`$desc``$LS->Lang_Get('commentEditNotice_descChanged_byAdminFull', ['user' => $editorName,'date' => {date_format date=$oComment->getLastModifyDate() format="j F Y, H:i:s"}])`"}
-			{if $isHardModified}
-				{assign var="desc" value="`$desc``$LS->Lang_Get('commentEditNotice_suffixHard')`"}
-			{/if}
+		{/if}
+		{if $isHardModified}
+			{assign var="desc" value="`$desc``$LS->Lang_Get('commentEditNotice_suffixHard')`"}
 		{/if}
 	{else}
 		{assign var="lastModifyId" value="0"}
