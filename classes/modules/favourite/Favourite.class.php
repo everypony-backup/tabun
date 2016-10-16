@@ -289,7 +289,7 @@ class ModuleFavourite extends Module {
 			$oTopic = $this->Topic_GetTopicById($oFavourite->getTargetId());
 			$oBlog = $this->Blog_getBlogById($oTopic->getBlogId());
 			if($oBlog->getType() == 'invite' || $oBlog->getType() == 'close') {
-				if( is_null( $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId()) ))
+				if( is_null( $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId()) ) && $oUser->getId() !== $oBlog->getOwnerId() && !$oUser->isAdministrator() )
 					return false;
 			}
 		}
@@ -300,7 +300,7 @@ class ModuleFavourite extends Module {
 				$oTopic =       $this->Topic_GetTopicById($oComment->getTargetId());
                         	$oBlog =        $this->Blog_getBlogById($oTopic->getBlogId());
                         	if($oBlog->getType() == 'invite' || $oBlog->getType() == 'close') {
-                                	if( is_null( $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId()) ))
+                                	if( is_null( $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId()) ) && $oUser->getId() !== $oBlog->getOwnerId() && !$oUser->isAdministrator() )
                                         	return false;
                         	}
 			}
