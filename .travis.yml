@@ -43,3 +43,18 @@ deploy:
       --user $deploy_user
     on:
       branch: development
+
+  - provider: script
+    skip_cleanup: true
+    script: >-
+      ./deploy/script.sh
+      --project tabun
+      --type production
+      --blobs "static"
+      --containers "redis celery"
+      --destination $deploy_destination
+      --server $deploy_host
+      --port $deploy_port
+      --user $deploy_user
+    on:
+      branch: branch-1.3  # Will be replaced to "master" later
