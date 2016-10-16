@@ -1,34 +1,31 @@
 .vote-topic
-  height 24px
   overflow hidden
   font-size 18px
-  float left
+  display flex
+  flex-flow row
+  align-items center
   .vote-item
     cursor pointer
     overflow hidden
-    display block
-    float left
-    height 22px
-    margin-top 2px
+    display inline-block
 
-.vote-up
-  background transparent url(images/up.png) no-repeat 0 5px
-  width 16px
+.vote-up,.vote-down
+  background transparent url(images/up.png) no-repeat
+  height 15px
+  width 12px
   opacity 0.5
 
 .vote-down
-  background transparent url(images/down.png) no-repeat 0 6px
-  width 16px
-  opacity 0.5
+  background-image url(images/down.png)
+  margin-bottom -2px
 
 .vote-up:hover, .vote-down:hover
   opacity 1
 
 .vote-count
-  padding 0 6px 0 3px
-  line-height 23px
+  padding 0 5px 0 4px
+  line-height 18px
   font-size 18px
-  margin-top 1px
   span
     i
       font-style normal
