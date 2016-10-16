@@ -121,8 +121,9 @@
       display none
   #reply
     margin-left 20px
-  .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
-    padding-left 0
+  #comments
+    .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
+      padding-left 0
 
 @media (min-width:769px)
   body.widemode
@@ -184,10 +185,11 @@
     left 100%
     z-index 5
     background #F4F4F6
-  .comment-wrapper
-    padding-left 10px!important
-  .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
-    padding-left 0
+  #comments
+    .comment-wrapper
+      padding-left 10px
+    .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
+      padding-left 0
   .comment-info
     li
       margin-right 10px
@@ -251,16 +253,17 @@
     padding-bottom 40px
   .topic
     margin-bottom 20px!important
-  .comments-header
-    .subscribe
-      position static
-  .comment-wrapper
-    padding-left 10px!important
-  .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
-    padding-left 0
-  .comment-info
-    li
-      margin-right 5px
+  #comments
+    .comments-header
+      .subscribe
+        position static
+    .comment-wrapper
+      padding-left 10px
+    .comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper>.comment-wrapper 
+      padding-left 0
+    .comment-info
+      li
+        margin-right 5px
   #widemode
     right inherit
     left 0
