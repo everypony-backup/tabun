@@ -8,6 +8,7 @@ _templates:
       - !Copy
         source: /work/config/trunk
         path: /config
+      - !EnsureDir /log
       - !EnsureDir /lithos
       - !Copy
         source: /work/lithos/trunk
@@ -17,6 +18,7 @@ _templates:
         source: /work/config/production
         path: /config
       - !EnsureDir /local
+      - !EnsureDir /log
       - !EnsureDir /lithos
       - !Copy
         source: /work/lithos/production
