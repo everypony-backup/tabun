@@ -225,6 +225,18 @@ containers:
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
+  mysql-production:
+    setup:
+    - !Container mysql-dev
+    - !*Unpack
+      - *production_stuff
+      - *host_resolution
+    - !Copy
+      source: /config/mysql
+      path: /etc/mysql
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
   _php-base:
     setup:
     - !Container _base_alpine
