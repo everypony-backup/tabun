@@ -23,6 +23,7 @@ volumes:
     mode: 0o700
     user: 1
     group: 1
+  /local: !Readonly /local
 workdir: /app
 executable: /usr/bin/php-fpm
 arguments:
