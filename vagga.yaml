@@ -298,6 +298,42 @@ containers:
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
+  php-production:
+    setup:
+      - !Container _php-base
+      - !*Unpack
+        - *production_stuff
+        - *host_resolution
+      - !Copy
+        source: /config/php
+        path: /etc/php5
+      - !EnsureDir /app
+      - !Copy
+        source: /work
+        path: /app
+        include-regex: ^(classes|settings|engine|templates)/*
+      - !Copy
+        source: /work/index.php
+        path: /app/index.php
+      - !BuildDeps [gettext]
+      - !RunAs
+        work-dir: /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+        script: |
+          msgcat -n -F -o messages.po parts/*
+          msgfmt messages.po
+          rm -vr messages.po parts
+      - !BuildDeps [git]
+      - !Sh git describe --always > /app/backend.version
+      - !Build
+        container: static-production
+        source: /static
+        temporary-mount: /mnt
+      - !Copy
+        source: /mnt/frontend.version
+        path: /app/frontend.version
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
   elastic-dev:
     setup:
       - !Container _base_alpine
