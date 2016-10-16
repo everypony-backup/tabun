@@ -26,6 +26,7 @@ script:
   - vagga _build php-trunk
   - vagga _build mysql-trunk
   - vagga _build static-trunk
+  - vagga _build elastic-trunk
 
 deploy:
   provider: script
