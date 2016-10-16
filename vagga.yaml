@@ -16,6 +16,7 @@ _templates:
       - !Copy
         source: /work/config/production
         path: /config
+      - !EnsureDir /local
       - !EnsureDir /lithos
       - !Copy
         source: /work/lithos/production
