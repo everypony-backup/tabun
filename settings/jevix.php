@@ -94,8 +94,8 @@ return [
                     'class' => [
                         'spoiler',
                         'spoiler-title',
-                        'spoiler-body', '
-                        spoiler-gray',
+                        'spoiler-body', 
+                        'spoiler-gray',
                         'h-right',
                         'h-left',
                         'h-center',
