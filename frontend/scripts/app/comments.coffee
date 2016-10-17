@@ -352,7 +352,6 @@ init = ->
   initEvent()
   setCountAllComment parseAllCommentTree()
   setCountNewComment parseNewCommentTree()
-  toggleCommentForm iCurrentShowFormComment
   if commentForm
     $(document)
       .on('mouseup', (e) -> 
