@@ -377,7 +377,7 @@ containers:
 
   elastic-production:
     setup:
-      - !Container elastic-production
+      - !Container elastic-dev
       - !*Unpack
         - *production_stuff
         - *host_resolution
