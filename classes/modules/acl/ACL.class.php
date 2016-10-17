@@ -513,7 +513,7 @@ class ModuleACL extends Module {
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
 
-        if ($targetIsTopic && $oComment->getTarget()->getBlog()->getUserIsAdministrator()) {
+        if ($targetIsTopic && ($oBlog=$oComment->getTarget()->getBlog()) != null && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
             return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
         } else {
             $editExpiredLimit = Config::Get($targetIsTopic ? 'acl.edit.comment.limit_time' : 'acl.edit.talk_comment.limit_time');
@@ -563,7 +563,7 @@ class ModuleACL extends Module {
             // TODO: Implement more precise ACL here
             if ($oUser->isAdministrator()) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_ADMIN;
-            } else if ($targetIsTopic && $oComment->getTarget()->getBlog()->getUserIsAdministrator()) {
+            } else if ($targetIsTopic && ($oBlog=$oComment->getTarget()->getBlog()) != null && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_BLOG_ADMIN;
             } else {
                 return $deny_flags;
