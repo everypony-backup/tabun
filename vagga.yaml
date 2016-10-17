@@ -316,6 +316,7 @@ containers:
   php-production:
     setup:
       - !Container _php-base
+      - !Install [php5-xcache@main]
       - !*Unpack
         - *production_stuff
         - *host_resolution
