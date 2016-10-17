@@ -375,6 +375,18 @@ containers:
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
+  elastic-production:
+    setup:
+      - !Container elastic-production
+      - !*Unpack
+        - *production_stuff
+        - *host_resolution
+      - !Copy
+        source: /config/elasticsearch
+        path: /etc/elasticsearch
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
 commands:
   _write-version: !Command
     container: php-dev
