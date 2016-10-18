@@ -49,6 +49,7 @@ init = ->
     else
       iCurrentTopic = parseInt(vars.goTopic) - 1
     goNextTopic()
+  $("#toolbar").show()
 
   # Up/down
   $('#up-switch').on 'click', -> $.scrollTo 0, 1000
