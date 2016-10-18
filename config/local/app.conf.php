@@ -36,6 +36,8 @@ $config['sys']['mail']['from_name'] = 'Tabun [local]';
 $config['sys']['logs']['dir'] = '/log';
 
 $config['misc']['debug'] = true;
-$config['misc']['twicher']['url'] = 'http://127.0.0.1:5000/quotes/twitchy';
+
+$config['misc']['services']['twicher'] = 'http://127.0.0.1:5000/quotes/twitchy';
+
 
 return $config;
