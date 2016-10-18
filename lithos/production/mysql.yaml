@@ -1,0 +1,30 @@
+user-id: 1
+group-id: 1
+volumes:
+  /state: !Statedir {}
+  /tmp: !Persistent
+    path: /storage/mysql_tmp
+    mkdir: true
+    mode: 0o700
+    user: 1
+    group: 1
+  /storage: !Persistent
+    path: /storage/mysql
+    mkdir: true
+    mode: 0o700
+    user: 1
+    group: 1
+  /log: !Persistent
+    path: /log/mysql
+    mkdir: true
+    mode: 0o700
+    user: 1
+    group: 1
+fileno-limit: 200ki
+memory-limit: 25Gi  # Will be decreased later
+cpu-shares: 1024
+executable: /usr/bin/mysqld_safe
+arguments:
+- --skip-syslog
+- --console
+- --debug-gdb

@@ -14,7 +14,7 @@ __pycache__
 /vendor/
 
 # Versioning
-/config/*.version
+/*.version
 
 # IDEA files
 *.iml

@@ -1,18 +1,28 @@
+from os import environ
 import smtplib
-from celery.decorators import task
+
 from email.header import Header
 from email.utils import formataddr
 from email.utils import formatdate
 from email.utils import COMMASPACE
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from bs4 import BeautifulSoup
+from celery.decorators import task
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch()
 
+SMTP_HOST = environ.get("CELERY_MAILER_HOST")
+SMTP_PORT = environ.get("CELERY_MAILER_PORT")
+
+
 @task
 def send_mail(**kwargs):
+    assert SMTP_HOST
+    assert SMTP_PORT
+
     recipients = kwargs.get('recipients')
 
     from_email = kwargs.get('from_email')
@@ -40,13 +50,14 @@ def send_mail(**kwargs):
         part2 = MIMEText(body.encode('utf-8'), 'html', 'utf-8')
         message.attach(part2)
 
-    server = smtplib.SMTP('127.0.0.1', 1025)
+    server = smtplib.SMTP(SMTP_HOST, int(SMTP_PORT))
     server.sendmail(
         from_email,
         [pair[1] for pair in recipients],
         message.as_string()
     )
     server.quit()
+
 
 @task
 def topic_index(**kwargs):
@@ -64,17 +75,18 @@ def topic_index(**kwargs):
 
     topic_tags = topic_tags.split(',')
 
-    es.index(index=index, doc_type=key, id=int(topic_id), body=
-        {
-            'blog_id': int(topic_blog_id),
-            'user_id': int(topic_user_id),
-            'type': topic_type,
-            'title': topic_title.strip(),
-            'text': topic_text.strip(),
-            'tags': topic_tags,
-            'date': topic_date,
-            'publish': topic_publish
-        })
+    doc_body = {
+        'blog_id': int(topic_blog_id),
+        'user_id': int(topic_user_id),
+        'type': topic_type,
+        'title': topic_title.strip(),
+        'text': topic_text.strip(),
+        'tags': topic_tags,
+        'date': topic_date,
+        'publish': topic_publish
+    }
+    es.index(index=index, doc_type=key, id=int(topic_id), body=doc_body)
+
 
 @task
 def topic_delete(**kwargs):
@@ -83,6 +95,7 @@ def topic_delete(**kwargs):
     topic_id = kwargs.get('topic_id')
 
     es.delete(index=index, doc_type=key, id=int(topic_id))
+
 
 @task
 def comment_index(**kwargs):
@@ -96,15 +109,16 @@ def comment_index(**kwargs):
     comment_date = kwargs.get('comment_date')
     comment_publish = kwargs.get('comment_publish')
 
-    es.index(index=index, doc_type=key, id=int(comment_id), body=
-        {
-            'target_id': int(comment_target_id),
-            'target_type': comment_target_type,
-            'user_id': int(comment_user_id),
-            'text': comment_text.strip(),
-            'date': comment_date,
-            'publish': comment_publish
-        })
+    doc_body = {
+        'target_id': int(comment_target_id),
+        'target_type': comment_target_type,
+        'user_id': int(comment_user_id),
+        'text': comment_text.strip(),
+        'date': comment_date,
+        'publish': comment_publish
+    }
+    es.index(index=index, doc_type=key, id=int(comment_id), body=doc_body)
+
 
 @task
 def comment_delete(**kwargs):
