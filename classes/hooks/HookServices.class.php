@@ -5,6 +5,7 @@ class HookServices extends Hook
     public function RegisterHook()
     {
         $this->AddHook('template_quotes', 'Quotes', __CLASS__, -100);
+        $this->AddHook('template_donations', 'Donations', __CLASS__, -100);
     }
 
     private function getJSON($sServiceName) {
@@ -44,4 +45,30 @@ class HookServices extends Hook
 
     }
 
+    public function Donations()
+    {
+        $aDecoded = $this->getJSON("donations");
+
+        $callback = function ($sUser) {
+            if($oUser=$this->User_GetUserByLogin($sUser)) {
+                return [
+                    'login' => $oUser->getLogin(),
+                    'url' => $oUser->getUserWebPath(),
+                    'avatar_url' => $oUser->getProfileAvatarPath(24),
+                ];
+            } else {
+                return [
+                    'login' => htmlspecialchars($sUser),
+                    'url' => "#",
+                    'avatar_url' => false
+                ];
+            }
+
+        };
+        $aDonaters = array_map($callback, $aDecoded);
+
+        $this->Viewer_Assign('aDonaters', $aDonaters);
+
+		return $this->Viewer_Fetch('donation_list.tpl');
+    }
 }

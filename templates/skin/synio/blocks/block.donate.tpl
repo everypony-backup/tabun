@@ -1,6 +1,6 @@
 <section class="block block-type-tags">
     <header class="block-header sep"><h3>Пожертвования</h3></header>
-    <div class="donatequote">{hook run='donatetop'}</div>
+    {hook run='donations'}
 </section>
 
 <div class="donate">
