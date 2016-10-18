@@ -380,14 +380,14 @@ init = ->
         if !$("#quote").length 
           $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>')
         quote = $("#quote")
-        $(quote).attr("data-quote",text)
-        $(quote).attr("data-parent-id",parentID)
-        $(quote).css('left',x+'px')
-        $(quote).css('top',y+'px')
-        $(quote).show()
+        if text != $(quote).attr("data-quote")
+          $(quote).attr("data-quote",text)
+          $(quote).attr("data-parent-id",parentID)
+          $(quote).css('left',x+'px')
+          $(quote).css('top',y+'px')
+          $(quote).show()
       )
       .on('mousedown', ->
-        window.getSelection().removeAllRanges()  
         $("#quote").hide()
       )
       .on('mouseup', '#quote', (e) ->
@@ -423,6 +423,8 @@ init = ->
             scrollTo(targetForm, 300, {offset: -250})
       )
       .on('mousedown','#quote', (e) ->
+        if e.which != 1
+          $(this).hide()
         e.stopPropagation()
       )
 
