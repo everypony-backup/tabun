@@ -157,6 +157,11 @@
         li
           margin 0 5px!important
           padding 0!important
+  #wrapper
+    .table
+      tr
+        td,.cell-tab-inner
+          padding 3px 0
 
 @media (min-width:568px) and (max-width:769px)
   #c-header
@@ -323,6 +328,18 @@
           font-weight bold
         strong
           width 100%
+    .table.table-blogs
+      tr
+        .cell-join
+          width 20px
+        .cell-readers,.cell-rating
+          width 40px
+    .table.table-users
+      tr
+        .cell-name+th,.cell-name+td
+          width 20px
+        .cell-skill,.cell-rating
+          width 40px
   body.widemode
     #sidebar
       display block
