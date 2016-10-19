@@ -4,7 +4,7 @@ return [
     'rule_index_blog' => [
         'action' => ['index', 'blog' => ['{topics}', '{topic}', '{blog}']],
         'blocks' => [
-            'right' => ['sidetop', 'search', 'stream', 'donate', 'herdmind', 'blogs'],
+            'right' => ['sidetop', 'search', 'stream', 'donate', 'banners', 'herdmind', 'blogs'],
         ]
     ],
     'rule_topic_type' => [
