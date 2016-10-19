@@ -139,32 +139,6 @@
     margin 0
   #comments
     margin-bottom 0
-  #modal_write,#window_upload_img
-    position fixed
-    width 100%
-    height auto
-    margin 0
-    left 0
-    .modal-content
-      padding 5px 5px 15px 5px!important
-  #modal_write
-    top 150px
-    .write-list
-      display flex
-      flex-flow row
-      flex-wrap wrap
-      justify-content space-between
-      align-items center
-      li
-        margin 0 5px!important
-        padding 0!important
-  #window_upload_img
-    top 50px
-    .modal-header
-      text-align center
-    .modal-content
-      .nav.nav-pills.nav-pills-tabs
-        justify-content center
   #wrapper
     .table
       tr
@@ -186,6 +160,9 @@
       right 0
       z-index 200
       width 32%
+    .auth
+      width 44%
+      height 75px
   #wrapper
     width 140%
     padding 10px 5px 20px 5px
@@ -213,6 +190,8 @@
   .comment-info
     li
       margin-right 10px
+  #modal_write,#window_upload_img
+    top 50px
   body.widemode
     #header
       .auth,#dropdown-user
@@ -369,6 +348,44 @@
         padding 10px 3px 20px 3px
     select
       max-width 100%!important
+  #modal_write,#window_upload_img
+    position fixed
+    width 100%
+    height auto
+    margin 0
+    left 0
+    .modal-content
+      padding 5px 5px 15px 5px!important
+  #modal_write
+    top 150px
+    .write-list
+      display flex
+      flex-flow row
+      flex-wrap wrap
+      justify-content space-between
+      align-items center
+      li
+        margin 0 5px!important
+        padding 0!important
+  #window_upload_img
+    top 50px
+    .modal-header
+      text-align center
+    .modal-content
+      .nav.nav-pills.nav-pills-tabs
+        justify-content center
+  #window_login_form
+    position static
+    z-index 0
+    .login.login-modal
+      position fixed
+      z-index 3000
+      left 0
+      top 50px
+      width 100%
+      .login-container
+        width 96%
+        padding 10px 5px
   body.widemode
     #sidebar
       display block
