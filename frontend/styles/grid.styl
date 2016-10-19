@@ -139,24 +139,32 @@
     margin 0
   #comments
     margin-bottom 0
-  #modal_write
-    position absolute
+  #modal_write,#window_upload_img
+    position fixed
     width 100%
     height auto
     margin 0
     left 0
-    top 150px
     .modal-content
-      padding 0 5px!important
-      .write-list
-        display flex
-        flex-flow row
-        flex-wrap wrap
-        justify-content space-between
-        align-items center
-        li
-          margin 0 5px!important
-          padding 0!important
+      padding 5px 5px 15px 5px!important
+  #modal_write
+    top 150px
+    .write-list
+      display flex
+      flex-flow row
+      flex-wrap wrap
+      justify-content space-between
+      align-items center
+      li
+        margin 0 5px!important
+        padding 0!important
+  #window_upload_img
+    top 50px
+    .modal-header
+      text-align center
+    .modal-content
+      .nav.nav-pills.nav-pills-tabs
+        justify-content center
   #wrapper
     .table
       tr
