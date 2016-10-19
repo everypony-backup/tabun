@@ -280,6 +280,7 @@ containers:
   php-trunk:
     setup:
       - !Container _php-base
+      - !Install [openssl]
       - !*Unpack
         - *trunk_stuff
         - *host_resolution
