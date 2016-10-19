@@ -6,6 +6,7 @@ class HookServices extends Hook
     {
         $this->AddHook('template_quotes', 'Quotes', __CLASS__, -100);
         $this->AddHook('template_donations', 'Donations', __CLASS__, -100);
+        $this->AddHook('template_banners', 'Banners', __CLASS__, -100);
     }
 
     private function getJSON($sServiceName) {
@@ -70,5 +71,14 @@ class HookServices extends Hook
         $this->Viewer_Assign('aDonaters', $aDonaters);
 
 		return $this->Viewer_Fetch('donation_list.tpl');
+    }
+
+    public function Banners()
+    {
+        $aBanners = $this->getJSON("banners");
+
+        $this->Viewer_Assign('aBanners', $aBanners);
+
+        return $this->Viewer_Fetch('banners_list.tpl');
     }
 }
