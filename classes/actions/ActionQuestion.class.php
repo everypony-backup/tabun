@@ -242,9 +242,14 @@ class ActionQuestion extends Action {
 		 * Теперь можно смело добавлять топик к блогу
 		 */
 		$oTopic->setBlogId($oBlog->getId());
-		$oTopic->setText($this->Text_Parser($oTopic->getTextSource(), ModuleText::ACT_CREATE));
-		$oTopic->setTextShort($oTopic->getText());
-		$oTopic->setCutText(null);
+		/**
+		 * Получаем и устанавливаем разрезанный текст по тегу <cut>
+		 */
+		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
+
+		$oTopic->setCutText($sTextCut);
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_CREATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_CREATE));
 		/**
 		 * Варианты ответов
 		 */
@@ -376,8 +381,14 @@ class ActionQuestion extends Action {
 		 * Теперь можно смело редактировать топик
 		 */
 		$oTopic->setBlogId($oBlog->getId());
-		$oTopic->setText($this->Text_Parser($oTopic->getTextSource(), ModuleText::ACT_UPDATE));
-		$oTopic->setTextShort($oTopic->getText());
+		/**
+		 * Получаем и устанавливаем разрезанный текст по тегу <cut>
+		 */
+		list($sTextShort,$sTextNew,$sTextCut) = $this->Text_Cut($oTopic->getTextSource());
+
+		$oTopic->setCutText($sTextCut);
+		$oTopic->setText($this->Text_Parser($sTextNew, ModuleText::ACT_UPDATE));
+		$oTopic->setTextShort($this->Text_Parser($sTextShort, ModuleText::ACT_UPDATE));
 		/**
 		 * изменяем вопрос/ответы только если еще никто не голосовал
 		 */
