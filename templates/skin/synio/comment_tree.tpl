@@ -24,10 +24,6 @@
 	{foreach from=$aComments item=oComment name=rublist}
 		{assign var="cmtlevel" value=$oComment->getLevel()}
 		
-		{if $cmtlevel>$oConfig->GetValue('module.comment.max_tree')}
-			{assign var="cmtlevel" value=$oConfig->GetValue('module.comment.max_tree')}
-		{/if}
-		
 		{if $nesting < $cmtlevel} 
 		{elseif $nesting > $cmtlevel}    	
 			{section name=closelist1  loop=$nesting-$cmtlevel+1}</div>{/section}
