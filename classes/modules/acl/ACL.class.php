@@ -512,11 +512,16 @@ class ModuleACL extends Module {
          * использующие $targetIsTopic и $oComment->getTarget()
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
+        if ($targetIsTopic) {
+            $oBlog = $oComment->getTarget()->getBlog();
+            $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
+        } else {
+            $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
+        }
 
-        if ($targetIsTopic && ($oBlog=$oComment->getTarget()->getBlog()) != null && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
+        if ($targetIsTopic && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
             return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
         } else {
-            $editExpiredLimit = Config::Get($targetIsTopic ? 'acl.edit.comment.limit_time' : 'acl.edit.talk_comment.limit_time');
             $bEditCondition = (
                 $userIsNotAuthor ||
                 $oComment->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER) ||
@@ -541,7 +546,12 @@ class ModuleACL extends Module {
          * использующие $targetIsTopic и $oComment->getTarget()
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
-        $editExpiredLimit = Config::Get($targetIsTopic ? 'acl.edit.comment.limit_time' : 'acl.edit.talk_comment.limit_time');
+        if ($targetIsTopic) {
+            $oBlog = $oComment->getTarget()->getBlog();
+            $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
+        } else {
+            $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
+        }
 
         $deny_flags = 0;
 
@@ -563,7 +573,7 @@ class ModuleACL extends Module {
             // TODO: Implement more precise ACL here
             if ($oUser->isAdministrator()) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_ADMIN;
-            } else if ($targetIsTopic && ($oBlog=$oComment->getTarget()->getBlog()) != null && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
+            } else if ($targetIsTopic && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_BLOG_ADMIN;
             } else {
                 return $deny_flags;

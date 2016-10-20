@@ -68,7 +68,7 @@
                         <a href="{$oTopic->getUrl()}" class="comment-path-topic">{$oTopic->getTitle()|escape:'html'}</a>
                         <a href="{$oTopic->getUrl()}#comments"  class="comment-path-comments">{$oTopic->getCountComment()}</a>
                     </li>
-					<li class="modify-notice">{if $oComment->isModifiedOrLocked()}{include file='comment_modify_notice.tpl' bGetShort=true}{/if}</li>
+					{include file='comment_modify_notice.tpl' bGetShort=true}
                 </ul>
             </div>
         </section>

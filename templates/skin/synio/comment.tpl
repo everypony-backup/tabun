@@ -106,7 +106,7 @@
 
                 {hook run='comment_action' comment=$oComment}
             {/if}
-            <li class="modify-notice">{if $oComment->isModifiedOrLocked()}{include file='comment_modify_notice.tpl'}{/if}</li>
+            {include file='comment_modify_notice.tpl'}
         </ul>
     {else}
         <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
