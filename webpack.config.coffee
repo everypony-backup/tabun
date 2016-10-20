@@ -63,6 +63,7 @@ cfg =
     modulesDirectories: ['node_modules', 'scripts']
     root: [
       process.env.NODE_PATH
+      path.resolve(__dirname)
       path.resolve(path.join(__dirname, 'frontend', 'vendor'))
       path.resolve(path.join(__dirname, 'templates', 'skin', 'synio'))
     ]
@@ -77,7 +78,7 @@ cfg =
       () ->
         @plugin("done", (stats) ->
           fs.writeFileSync(
-            path.join(__dirname, "config", "frontend.version"),
+            path.join(__dirname, "frontend.version"),
             stats.hash
           )
         )

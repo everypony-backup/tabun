@@ -59,7 +59,7 @@
 		</h4>
 		
 		
-		<div id="reply" class="reply">		
+		<div id="reply" class="reply h-hidden">
 			<form method="post" id="form_comment" onsubmit="return false;" enctype="multipart/form-data">
 				{hook run='form_add_comment_begin'}
 				

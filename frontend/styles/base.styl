@@ -43,7 +43,7 @@ a
   color #CCC
   a,a:visited,a.ls-user[href]
     color #ccc
-  img,.ls-user::before
+  .ls-user::before
     opacity 0
   &:hover
     background-color transparent
@@ -53,8 +53,15 @@ a
       color #0099FF
     a.ls-user
       color #555
-    img,.ls-user::before
+    .ls-user::before
       opacity inherit
+    img
+      filter inherit
+      -webkit-filter inherit
+  &:not(:hover)
+    img
+      filter contrast(0%) brightness(159.375%)
+      -webkit-filter contrast(0%) brightness(159.375%)
 
 h1, h2, h3, h4, h5, h6
   color #444
