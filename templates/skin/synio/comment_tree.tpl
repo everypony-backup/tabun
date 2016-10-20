@@ -35,7 +35,7 @@
 			</div>
 		{/if}
 
-		<div class="comment-wrapper" id="comment_wrapper_id_{$oComment->getId()}">
+		<div class="comment-wrapper comment-level-{$cmtlevel}" id="comment_wrapper_id_{$oComment->getId()}">
 
 		{include file='comment.tpl'}
 		{assign var="nesting" value=$cmtlevel}
