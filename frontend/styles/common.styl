@@ -1,35 +1,31 @@
 .vote-topic
-  height 24px
   overflow hidden
   font-size 18px
-  float left
-  zoom 1
+  display flex
+  flex-flow row
+  align-items center
   .vote-item
     cursor pointer
     overflow hidden
-    display block
-    float left
-    height 22px
-    margin-top 2px
+    display inline-block
 
-.vote-up
-  background transparent url(images/up.png) no-repeat 0 5px
-  width 16px
+.vote-up,.vote-down
+  background transparent url(images/up.png) no-repeat
+  height 15px
+  width 12px
   opacity 0.5
 
 .vote-down
-  background transparent url(images/down.png) no-repeat 0 6px
-  width 16px
-  opacity 0.5
+  background-image url(images/down.png)
+  margin-bottom -2px
 
 .vote-up:hover, .vote-down:hover
   opacity 1
 
 .vote-count
-  padding 0 6px 0 3px
-  line-height 23px
+  padding 0 5px 0 4px
+  line-height 18px
   font-size 18px
-  margin-top 1px
   span
     i
       font-style normal
@@ -78,41 +74,33 @@
 
 .pagination
   overflow hidden
-  zoom 1
   ul
+    display inline-block
     overflow hidden
-    zoom 1
     line-height 1em
-    float left
     margin-top 5px
     li
-      float left
+      display inline-block
       margin-right 5px
       span
         color #aaa
-      a
+      span,a
+        padding 4px 6px
       &.active
         span
           color #333
           border 1px solid #eee
           border-radius 4px
+      &.prev
+        span,a
+        padding-left 0
       i
         opacity .5
       &.next
         margin-right 50px
 
-.pagination ul li span,
-.pagination ul li a
-  float left
-  padding 4px 6px
-
-.pagination ul li.prev span,
-.pagination ul li.prev a
-  padding-left 0
-
 .actions
   overflow hidden
-  zoom 1
   margin-bottom 10px
   font-size 11px
   li
@@ -121,7 +109,8 @@
 
 .toolbar
   position fixed
-  top 136px
+  top 35%
+  right 0
   z-index 20
   display none
   section
@@ -196,7 +185,6 @@
 
 .user-list-avatar
   overflow hidden
-  zoom 1
   li
     width 48px
     overflow hidden
@@ -275,7 +263,6 @@
     padding 7px 0 10px 58px
     border-bottom 1px solid #eee
     position relative
-    zoom 1
     p
       padding-top 2px
       font-size 11px
@@ -294,7 +281,6 @@
 
 .wrapper
   overflow hidden
-  zoom 1
 
 .wrapper-content
   h3
@@ -367,7 +353,6 @@
 
 .page-header-menu
   overflow hidden
-  zoom 1
   margin-bottom 10px
   .page-header
     float left

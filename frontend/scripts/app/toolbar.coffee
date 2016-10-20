@@ -33,22 +33,6 @@ goPrevTopic = ->
       $.scrollTo topic, 500
   false
 
-recalculateToolbarPos = ->
-  if $('#toolbar section').length
-    if $(document).width() <= 1100
-      unless $('#container').hasClass('no-resize')
-        $('#container').addClass 'toolbar-margin'
-      $('#toolbar').css
-        'right': 0
-        'top': $(document).scrollTop() + 175
-        'display': 'block'
-    else
-      $('#container').removeClass 'toolbar-margin'
-      $('#toolbar').css
-        'right': 0
-        'top': 175
-        'display': 'block'
-
 init = ->
   vars = []
   hash = undefined
@@ -65,6 +49,7 @@ init = ->
     else
       iCurrentTopic = parseInt(vars.goTopic) - 1
     goNextTopic()
+  $("#toolbar").show()
 
   # Up/down
   $('#up-switch').on 'click', -> $.scrollTo 0, 1000
@@ -83,10 +68,5 @@ init = ->
       $(this).text('Despoil')
       forEach $('.spoiler-body'), (node) ->
         node.style.display = 'none'
-
-  # Toolbar repositioning
-  recalculateToolbarPos()
-  $(window).on 'resize', throttle recalculateToolbarPos, 300
-  $(window).on 'scroll', throttle (-> if $(document).width() <= 1100 then recalculateToolbarPos()), 300
 
 module.exports = {init, goPrevTopic, goNextTopic}
