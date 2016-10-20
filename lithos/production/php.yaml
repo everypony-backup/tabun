@@ -5,18 +5,11 @@ memory-limit: 8Gi
 cpu-shares: 1024
 volumes:
   /state: !Statedir {}
-  /tmp: !Persistent
-    path: /storage/php_tmp
-    mkdir: true
-    mode: 0o700
-    user: 1
-    group: 1
+  /tmp: !Tmpfs
+    size: 256Mi
+    mode: 0o1777
   /storage: !Persistent
-    path: /storage/php
-    mkdir: true
-    mode: 0o700
-    user: 1
-    group: 1
+    path: /external
   /log: !Persistent
     path: /log/php
     mkdir: true

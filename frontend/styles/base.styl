@@ -1,5 +1,4 @@
 body
-  min-width 800px
   font-size 12px
   font-family Arial, sans-serif
   line-height 18px
@@ -14,6 +13,9 @@ a
   color #0099FF
   &:hover
     color #f00
+
+img,iframe
+  max-width 100%
 
 .text
   a
@@ -43,7 +45,7 @@ a
   color #CCC
   a,a:visited,a.ls-user[href]
     color #ccc
-  img,.ls-user::before
+  .ls-user::before
     opacity 0
   &:hover
     background-color transparent
@@ -53,8 +55,15 @@ a
       color #0099FF
     a.ls-user
       color #555
-    img,.ls-user::before
+    .ls-user::before
       opacity inherit
+    img
+      filter inherit
+      -webkit-filter inherit
+  &:not(:hover)
+    img
+      filter contrast(0%) brightness(159.375%)
+      -webkit-filter contrast(0%) brightness(159.375%)
 
 h1, h2, h3, h4, h5, h6
   color #444
@@ -89,22 +98,10 @@ div
   overflow hidden
   width 100%
   margin-bottom 10px
+  display flex
+  flex-flow row
+  justify-content space-between
   white-space nowrap
-
-@media (max-width:1100px)
-  #running_ponies 
-    img:nth-of-type(5)
-      display none
-
-@media (max-width:880px)
-  #running_ponies 
-    img:nth-of-type(4)
-      display none
-
-@media (max-width:660px)
-  #running_ponies 
-    img:nth-of-type(3)
-      display none
 
 #widemode
   background-color #FFFFFF
@@ -115,6 +112,10 @@ div
   right 0
   z-index 100
   border 1px solid #CCCCCC
+  display flex
+  justify-content flex-end
+  flex-flow row
+  align-items center
   a
     text-decoration underline
     cursor pointer
@@ -132,9 +133,6 @@ a[title="Читать дальше"]
   display inline-block
   width 25px
   height 25px
-  vertical-align bottom
-  bottom -3px
-  position relative
   background url(images/icons-synio.png) no-repeat scroll -294px -23px transparent
 
 #down-switch
@@ -165,18 +163,6 @@ h2
       color #949aa1
 
 #header
-  .site-name
-    font-size 25px
-    line-height 1em
-    float left
-    padding-top 11px
-    margin-right 30px
-    margin-left 18px
-    a
-      color #fff
-      text-decoration none
-      &:hover
-        color #eee
   .new-messages
     position relative
     color #fff
@@ -189,14 +175,27 @@ h2
     i
       position relative
       top -1px
+  .auth
+    display inline-block
+    position absolute
+    right 20px
+    top 10px
+    margin auto 0
+    justify-content flex-end  
   .dropdown-user
-    line-height 22px
-    padding-right 74px
+    display inline-block
+    position absolute
+    z-index 200
+    right 20px
+    top 5px
+    margin auto 0
+    padding 0 70px 0 0
+    min-height 70px
     text-align right
-    float right
-    margin-top -42px
     &.opened
       background #1d1d1d
+    .dropdown-user-menu
+      justify-content flex-end
     .dropdown-user-trigger
       text-decoration underline
       cursor pointer
@@ -209,19 +208,16 @@ h2
       &:hover
         color #aaa
     .avatar
+      position absolute
+      right 0px
       border 1px solid #CCC
       border-radius 5px
       width 64px
       height 64px
-      margin 0 -74px 0 0
-      float right
   .auth
-    float right
     height 28px
     font-size 18px
-    margin-top -35px
     li
-      float left
       margin-left 23px
 
 .mozilla
@@ -239,21 +235,9 @@ h2
       .rating
         &.negative
           color #666
-        i
-          position relative
-          top 2px
       .strength
         color #666
         margin-right 8px
-      .arrow
-        position relative
-        top 3px
-      .icon-synio-star-small
-        position relative
-        top 2px
-      .icon-synio-strength
-        position relative
-        top 1px
 
   .dropdown-user-menu
     li
@@ -307,7 +291,7 @@ h2
       background url(images/icons-synio.png) -115px -55px no-repeat
 
 .stat-performance
-  width 910px
+  width auto
   margin 0 auto 20px
   padding 15px 20px
   background #fff
@@ -339,7 +323,7 @@ h2
   color #258fa7
   text-decoration none
   background #eefbfc
-  background linear-gradient(top,  #eefbfc 0%,#d3edf8 100%)
+  background linear-gradient(to top,  #eefbfc 0%,#d3edf8 100%)
   cursor: pointer
   &:hover
     background #eefbfc
@@ -379,7 +363,6 @@ h2
   li
     &.stream-item
       min-height 36px
-      _height 36px
       padding 0 0 16px 46px
       position relative
       font-size 14px
@@ -414,13 +397,12 @@ h2
     font-size 2em
 
 .userfield-list
-  width 450px
+  max-width 450px
   li
     background #eee
     margin-bottom 1px
     padding 10px 10px
     overflow hidden
-    zoom 1
     line-height 12px
     color #777
     .userfield-actions
@@ -501,48 +483,6 @@ h2
     &:hover
       color #f00
 
-.help
-  display none
-  position relative
-  padding 10px 7px 13px
-  background #fefef1
-  color #363636
-  margin-top 13px
-  font-size 11px
-  border-radius 3px
-  -webkit-box-shadow 0 0 5px #e8e8c0 inset
-  box-shadow 0 0 5px #e8e8c0 inset
-  &:before
-    display block
-    content ""
-    position absolute
-    top -12px
-    left 15px
-    width 0
-    height 0
-    border-width 6px
-    border-color transparent transparent #F2F2DD transparent
-    border-style solid
-  .help-col
-    float left
-    width 230px
-    padding 0 10px
-    &.help-wide
-      float none
-      width 96%
-  .help-item
-    margin-bottom 20px
-    &:last-child
-      margin-bottom 0
-    h4
-      font-family Verdana, sans-serif
-      font-size 11px
-      color #727a90
-      font-weight bold
-      a
-        color #727a90
-        border-bottom 1px dotted #727a90
-
 .link-dotted
   &.help-link
     font-size 11px
@@ -552,8 +492,6 @@ h2
 .donate
   text-align center
   margin-bottom 22px
-  img
-    opacity 1
 
 .version div
   padding 0 1em

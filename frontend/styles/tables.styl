@@ -47,6 +47,7 @@
       border 1px solid transparent
       border-radius 3px 3px 0 0
       border-bottom none
+      width 100%
       &.active
         background #fff
         border-color #c3d4dc
@@ -61,14 +62,8 @@
         .blog-list-info
           display block
       .cell-rating
-        width 70px
-        font-weight bold
-        font-size 11px
         color #5fa459
-      .cell-readers
-        text-align center
-        vertical-align middle
-        font-size 11px
+        font-weight bold
     .cell-name
       padding-left 3px
       .avatar
@@ -84,18 +79,13 @@
           vertical-align middle
           position relative
           top -1px
-    .cell-readers
+    .cell-rating,.cell-readers,.cell-join
       width 90px
       text-align center
+      font-size 11px
       vertical-align middle
     .cell-join
-      width 130px
-      text-align center
-      vertical-align middle
-    .cell-rating
-      width 90px
-      text-align center
-      vertical-align middle
+      width 40px
   &.table-plugins
     .cell-checkbox
       width 20px
@@ -134,7 +124,6 @@
           position relative
           top 3px
     .cell-name
-      width 190px
       padding-right 0
       padding-left 0
       img
@@ -145,9 +134,6 @@
         &.no-realname
           margin-top 11px
       .username
-        width 125px
-        position relative
-        top 1px
         margin-bottom 3px
       .realname
         font-size 11px
@@ -155,7 +141,6 @@
       .cell-name
         div
           float left
-          width 125px
       .cell-date
         font-size 11px
       .cell-skill
@@ -165,15 +150,12 @@
       .cell-rating
         color #5fa459
         font-size 11px
-    .cell-rating
+    .cell-name+th,.cell-name+td,.cell-name+td+td
+      width 40px
+      text-align center
+    .cell-rating,.cell-skill
       text-align center
       width 70px
-    .cell-skill
-      text-align center
-      width 70px
-    .cell-date
-      text-align center
-      width 130px
     button
       float left
       margin-right 5px
@@ -219,7 +201,6 @@
     .cell-recipients
       width 130px
 
-.table th,
 .table .cell-tab .cell-tab-inner
   padding 6px 10px 8px
 
