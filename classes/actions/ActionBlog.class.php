@@ -403,42 +403,47 @@ class ActionBlog extends Action {
 		if (isPost('submit_blog_admin')) {
 			$this->Security_ValidateSendForm();
 
-			$aUserRank=getRequest('user_rank',array());
-			if (!is_array($aUserRank)) {
-				$aUserRank=array();
+			$aUserPerm = getRequest('user_perm',array());
+			if (!is_array($aUserPerm)) {
+				$aUserPerm = array();
 			}
-			foreach ($aUserRank as $sUserId => $sRank) {
-				$sRank=(string)$sRank;
+			foreach ($aUserPerm as $sUserId => $aPerm) {
 				if (!($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$sUserId))) {
 					$this->Message_AddError($this->Lang_Get('system_error'),$this->Lang_Get('error'));
 					break;
 				}
+
 				/**
-				 * Увеличиваем число читателей блога
+				 * Если разрешили читать посты, увеличиваем число читателей блога
+				 * (в соответствии со старым механизмом бана)
 				 */
-				if (in_array($sRank,array('administrator','moderator','reader')) and $oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_BAN) {
+				if ($aPerm['topics_read']) and !($oBlogUser->getTopicPermissions()->check(Permissions::READ))) {
 					$oBlog->setCountUser($oBlog->getCountUser()+1);
 				}
 
-				switch ($sRank) {
-					case 'administrator':
-						$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_ADMINISTRATOR);
-						break;
-					case 'moderator':
-						$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_MODERATOR);
-						break;
-					case 'reader':
-						$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
-						break;
-					case 'ban':
-						if ($oBlogUser->getUserRole()!=ModuleBlog::BLOG_USER_ROLE_BAN) {
-							$oBlog->setCountUser($oBlog->getCountUser()-1);
-						}
-						$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_BAN);
-						break;
-					default:
-						$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_GUEST);
+				/**
+				 * Если запретили читать посты, уменьшаем число читателей блога
+				 * (в соответствии со старым механизмом бана)
+				 */
+				if (!$aPerm['topics_read']) and $oBlogUser->getTopicPermissions()->check(Permissions::READ)) {
+					$oBlog->setCountUser($oBlog->getCountUser()-1);
 				}
+
+				$oBlogUser->patchBlogPermissions(Permissions::UPDATE, isset($aPerm['blog_update']));
+				$oBlogUser->patchBlogPermissions(Permissions::DELETE, isset($aPerm['blog_delete']));
+
+				$oBlogUser->patchTopicPermissions(Permissions::CREATE, isset($aPerm['topics_create']));
+				$oBlogUser->patchTopicPermissions(Permissions::READ  , isset($aPerm['topics_read']  ));
+				$oBlogUser->patchTopicPermissions(Permissions::UPDATE, isset($aPerm['topics_update']));
+				$oBlogUser->patchTopicPermissions(Permissions::DELETE, isset($aPerm['topics_delete']));
+
+				$oBlogUser->patchCommentPermissions(Permissions::CREATE, isset($aPerm['comments_create']));
+				$oBlogUser->patchCommentPermissions(Permissions::READ  , isset($aPerm['comments_read']  ));
+				$oBlogUser->patchCommentPermissions(Permissions::UPDATE, isset($aPerm['comments_update']));
+				$oBlogUser->patchCommentPermissions(Permissions::DELETE, isset($aPerm['comments_delete']));
+
+				$oBlogUser->patchVotePermissions(Permissions::CREATE, isset($aPerm['votes_create']));
+
 				$this->Blog_UpdateRelationBlogUser($oBlogUser);
 				$this->Message_AddNoticeSingle($this->Lang_Get('blog_admin_users_submit_ok'));
 			}
