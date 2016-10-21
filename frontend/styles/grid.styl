@@ -134,6 +134,14 @@
       width 100%
     #sidebar
       display none
+    #widemode
+      .switch-label.normalmode.big-screen
+        display inline-block
+      .switch-label.widemode.big-screen
+        display none
+  #widemode
+    .switch-label.widemode.big-screen
+      display inline-block
 
 @media (max-width:768px)
   #reply
@@ -147,6 +155,15 @@
       tr
         td,.cell-tab-inner
           padding 3px 0
+  #widemode
+    .switch-label.widemode.small-screen
+      display inline-block
+  body.widemode
+    #widemode
+      .switch-label.normalmode.small-screen
+        display inline-block
+      .switch-label.widemode.small-screen
+        display none
 
 @media (min-width:568px) and (max-width:768px)
   #c-header

@@ -53,10 +53,15 @@
 {/if}
 
 <div id="widemode">
-    <a id="despoil">Despoil</a>
-    <a id="widemode-switch">Wide mode &harr;</a>
-    <a id="up-switch"></a>
-    <a id="down-switch"></a>
+    <a id="despoil" title="Раскрыть/закрыть все спойлеры на странице">Despoil</a>
+    <a id="widemode-switch" title="Переключить режим отображения страницы">
+        <span class="switch-label widemode big-screen"><< Wide mode >></span>
+        <span class="switch-label normalmode big-screen">>> Normal mode << </span>
+        <span class="switch-label widemode small-screen"><< SideBar <<</span>
+        <span class="switch-label normalmode small-screen">>> SideBar >></span>
+    </a>
+    <a id="up-switch" title="Наверх"></a>
+    <a id="down-switch" title="Вниз"></a>
 </div>
 
 <div id="container" class="{hook run='container_class'}">
