@@ -18,11 +18,6 @@
   &.comment-list
     .comment
       margin-bottom 12px
-      .comment-info
-        li
-          &.vote
-            .vote-count
-              margin-right 0
     .comment-path
       font-size 11px
       color #a2b6cd
@@ -192,7 +187,10 @@
       display flex
       flex-flow row
       align-items center
+      .vote-up,.vote-down
+        cursor pointer
       .vote-count
+        cursor default
         color #949aa1
         font-weight bold
         font-size 12px
