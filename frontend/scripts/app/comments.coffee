@@ -31,6 +31,7 @@ classes =
   comment_goto_parent: 'goto-comment-parent'
   comment_goto_child: 'goto-comment-child'
   comment_hidden: 'comment-hidden'
+  level: 'comment-level-'
 
 hideClasses = [classes.self, classes.new, classes.deleted, classes.current]
 
@@ -176,22 +177,17 @@ inject = ({pid, id, html}) ->
   newComment.classList.add classes.wrapper
   newComment.id = "comment_wrapper_id_#{id}"
   newComment.innerHTML = html
+  level = 0
 
   if pid
-    element = document.getElementById "comment_wrapper_id_#{pid}"
-    allParents = [element]
-    while element.parentNode
-      if element.classList and classes.wrapper in element.classList
-        allParents.unshift(element.parentNode)
-      element = element.parentNode
-
-    if allParents.length == registry.get('comment_max_tree')
-      target = allParents[allParents.length - 2]
-    else
-      target = allParents[allParents.length - 1]
+    target = document.getElementById "comment_wrapper_id_#{pid}"
+    forEach target.classList, (className) ->
+      if className.match classes.level
+        level = parseInt(className.replace(classes.level,"")) + 1
   else
     target = document.getElementById "comments"
 
+  newComment.classList.add (classes.level + level)
   target.appendChild newComment
 
   if (newComment.getElementsByClassName(classes.self)).length
@@ -376,7 +372,6 @@ init = ->
   initEvent()
   setCountAllComment parseAllCommentTree()
   setCountNewComment parseNewCommentTree()
-  toggleCommentForm iCurrentShowFormComment
   if commentForm
     $(document)
       .on('mouseup', (e) -> 
@@ -391,48 +386,65 @@ init = ->
           .replace(/"/g,"&quot;")
           .replace(/'/g,"&#039;")
         if !text then return
+        #получаем всех родителей
+        parents = $(selection.anchorNode.parentElement)
+        parents = $(parents).add($(parents).parents())
+        #проверка на допустимость цитирования
+        if $(parents).filter("textarea").length then return
+        if !$(parents).filter(".comment-content,.topic-content").length then return
         #ищем родительский комментарий
-        parentComment = $(selection.anchorNode.parentElement).parentsUntil(".comment").filter(".comment-content")
-        parentID = 0
-        if parentComment.length 
-          parentID = parentComment.attr("id").replace("comment_content_id_","")
-        x = e.clientX + $(window).scrollLeft()
-        y = e.clientY + $(window).scrollTop()
+        parentID = $(parents).filter(".comment").attr("data-id") || 0;
+        x = e.clientX + $(window).scrollLeft() + 10
+        y = e.clientY + $(window).scrollTop() - 7
         #создаём элемент если нужно
         if !$("#quote").length 
-          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<s>&nbsp;</s></div>')
+          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>')
         quote = $("#quote")
-        $(quote).attr("data-quote",text)
-        $(quote).attr("data-parent-id",parentID)
-        $(quote).css('left',x)
-        $(quote).css('top',y)
-        $(quote).show()
+        if text != $(quote).attr("data-quote")
+          $(quote).attr("data-quote",text)
+          $(quote).attr("data-parent-id",parentID)
+          $(quote).css('left',x+'px')
+          $(quote).css('top',y+'px')
+          $(quote).show()
       )
       .on('mousedown', ->
         $("#quote").hide()
       )
       .on('mouseup', '#quote', (e) ->
         e.stopPropagation()
-        if $("#reply").hasClass("h-hidden")
-          iCurrentShowFormComment = $(this).attr("data-parent-id")
-          toggleCommentForm(iCurrentShowFormComment,false)
-        #ищем каретку в форме редактирования
-        caret = commentForm.selectionStart
-        if isNaN caret
-          commentForm.value += '<blockquote>'+$(this).attr("data-quote")+'</blockquote>'
+        #выбираем форму для вставки
+        targetForm = $("textarea[id^='comment_edit']")[0]
+        if !targetForm
+          targetForm = commentForm
+          if $("#reply").hasClass("h-hidden")
+            iCurrentShowFormComment = $(this).attr("data-parent-id")
+            toggleCommentForm(iCurrentShowFormComment, false)
+          else
+            iCurrentShowFormComment = $("#reply").siblings(".comment").attr("data-id") || 0
         else
-          commentForm.value = 
-            commentForm.value.substring(0,caret) +
+          iCurrentShowFormComment = $(targetForm).attr("id").replace("comment_edit_input_","")
+        #ищем каретку в форме редактирования
+        caret = targetForm.selectionStart
+        if isNaN caret
+          targetForm.value += '<blockquote>'+$(this).attr("data-quote")+'</blockquote>'
+        else
+          targetForm.value = 
+            targetForm.value.substring(0,caret) +
             '<blockquote>'+$(this).attr("data-quote")+'</blockquote>' +
-            commentForm.value.substring(caret)
+            targetForm.value.substring(caret)
         $(this).hide()
         #если форма редактирования не видна, мотаем
-        commentFormPosition = $(commentForm).offset().top
+        targetFormPosition = $(targetForm).offset().top
         windowPosition = $(window).scrollTop()
-        if (commentFormPosition + commentForm.getClientRects()[0].height < windowPosition) || (commentFormPosition > (windowPosition + $(window).height()))
-          scrollToComment(iCurrentShowFormComment)
+        if (targetFormPosition + targetForm.getClientRects()[0].height < windowPosition) || (targetFormPosition > (windowPosition + $(window).height()))
+          if iCurrentShowFormComment
+            scrollToComment iCurrentShowFormComment
+          else
+            scrollTo(targetForm, 300, {offset: -250})
       )
       .on('mousedown','#quote', (e) ->
+        if e.which != 1
+          $(this).hide()
         e.stopPropagation()
       )
 

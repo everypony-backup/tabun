@@ -37,7 +37,13 @@ return [
                     'title' => '#text',
                     'width' => '#int',
                     'height' => '#int',
-                    'class' => ['h-right', 'h-left', 'h-center']
+                    'class' => [
+                        'h-top',
+                        'h-bottom',
+                        'h-right',
+                        'h-left',
+                        'h-center'
+                    ]
                 ]
             ],
             [
@@ -94,8 +100,10 @@ return [
                     'class' => [
                         'spoiler',
                         'spoiler-title',
-                        'spoiler-body', '
-                        spoiler-gray',
+                        'spoiler-body', 
+                        'spoiler-gray',
+                        'h-top',
+                        'h-bottom',
                         'h-right',
                         'h-left',
                         'h-center',
