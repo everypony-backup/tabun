@@ -417,7 +417,7 @@ class ActionBlog extends Action {
 				 * Если разрешили читать посты, увеличиваем число читателей блога
 				 * (в соответствии со старым механизмом бана)
 				 */
-				if ($aPerm['topics_read']) and !($oBlogUser->getTopicPermissions()->check(Permissions::READ))) {
+				if (($aPerm['topics_read']) and !($oBlogUser->getTopicPermissions()->check(Permissions::READ))) {
 					$oBlog->setCountUser($oBlog->getCountUser()+1);
 				}
 
@@ -425,7 +425,7 @@ class ActionBlog extends Action {
 				 * Если запретили читать посты, уменьшаем число читателей блога
 				 * (в соответствии со старым механизмом бана)
 				 */
-				if (!$aPerm['topics_read']) and $oBlogUser->getTopicPermissions()->check(Permissions::READ)) {
+				if (!($aPerm['topics_read']) and $oBlogUser->getTopicPermissions()->check(Permissions::READ)) {
 					$oBlog->setCountUser($oBlog->getCountUser()-1);
 				}
 
