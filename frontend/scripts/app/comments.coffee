@@ -31,6 +31,7 @@ classes =
   comment_goto_parent: 'goto-comment-parent'
   comment_goto_child: 'goto-comment-child'
   comment_hidden: 'comment-hidden'
+  level: 'comment-level-'
 
 hideClasses = [classes.self, classes.new, classes.deleted, classes.current]
 
@@ -175,22 +176,17 @@ inject = ({pid, id, html}) ->
   newComment.classList.add classes.wrapper
   newComment.id = "comment_wrapper_id_#{id}"
   newComment.innerHTML = html
+  level = 0
 
   if pid
-    element = document.getElementById "comment_wrapper_id_#{pid}"
-    allParents = [element]
-    while element.parentNode
-      if element.classList and classes.wrapper in element.classList
-        allParents.unshift(element.parentNode)
-      element = element.parentNode
-
-    if allParents.length == registry.get('comment_max_tree')
-      target = allParents[allParents.length - 2]
-    else
-      target = allParents[allParents.length - 1]
+    target = document.getElementById "comment_wrapper_id_#{pid}"
+    forEach target.classList, (className) ->
+      if className.match classes.level
+        level = parseInt(className.replace(classes.level,"")) + 1
   else
     target = document.getElementById "comments"
 
+  newComment.classList.add (classes.level + level)
   target.appendChild newComment
 
   if (newComment.getElementsByClassName(classes.self)).length
