@@ -56,7 +56,6 @@
                     {if $oComment->getPid()}
                         <li class="goto goto-comment-parent">
                             <a href="{router page='comments'}{$oComment->getPid()}"
-                                onclick="ls.comments.goToParentComment({$oComment->getId()},{$oComment->getPid()}); return false;"
                                 title="{$aLang.comment_goto_parent}">↑</a>
                         </li>
                     {/if}

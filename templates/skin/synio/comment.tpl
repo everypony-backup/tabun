@@ -71,13 +71,10 @@
             {if $oComment->getPid()}
                 <li class="goto goto-comment-parent">
                     <a href="{router page='comments'}{$oComment->getPid()}"
-                        onclick="ls.comments.goToParentComment({$oComment->getId()},{$oComment->getPid()}); return false;"
+                        onclick="ls.comments.showComment({$oComment->getId()},true); return false;"
                         title="{$aLang.comment_goto_parent}">↑</a>
                 </li>
             {/if}
-            <li class="goto goto-comment-child">
-                <a href="#" title="{$aLang.comment_goto_child}">↓</a>
-            </li>
             {if $oUserCurrent}
                 {if !$oComment->getDelete() and !$bAllowNewComment}
                     <li>

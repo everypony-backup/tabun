@@ -77,5 +77,5 @@
 		<div class="comments-not-allowed">{$aLang.comment_unregistered}</div>
 	{/if}
 {/if}	
-
+<div id="hidden-message" class="h-hidden">Скрыто <b></b> <span></span> <a onclick="this.parentNode.classList.add(\'h-hidden\');$(\'.hidden-comment\').removeClass(\'hidden-comment\')">Показать</a></div>
 
