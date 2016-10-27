@@ -36,7 +36,7 @@ deploy:
       --project tabun
       --type trunk
       --blobs "static"
-      --containers "redis celery php mysql elastic"
+      --containers "static redis celery php mysql elastic"
       --destination $deploy_destination
       --server $deploy_host
       --port $deploy_port
@@ -50,8 +50,7 @@ deploy:
       ./deploy/script.sh
       --project tabun
       --type production
-      --blobs "static"
-      --containers "redis celery php mysql elastic"
+      --containers "static redis celery php mysql elastic"
       --destination $deploy_destination
       --server $deploy_host
       --port $deploy_port
@@ -59,5 +58,5 @@ deploy:
       --dry-run
     on:
       tags: true
-      all_branches: true
+      branch: master
       condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+.[0-9]+(-[a-z]+([0-9]+)?)?$
