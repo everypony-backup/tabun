@@ -35,7 +35,6 @@ deploy:
       ./deploy/script.sh
       --project tabun
       --type trunk
-      --blobs "static"
       --containers "static redis celery php mysql elastic"
       --destination $deploy_destination
       --server $deploy_host
