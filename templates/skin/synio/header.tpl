@@ -55,13 +55,13 @@
 <div id="widemode">
     <a id="despoil" title="Раскрыть/закрыть все спойлеры на странице">Despoil</a>
     <a id="widemode-switch" title="Переключить режим отображения страницы">
-        <span class="switch-label widemode big-screen">&lt;&lt; Wide mode &gt;&gt;</span>
-        <span class="switch-label normalmode big-screen">&gt;&gt; Normal mode &lt;&lt;</span>
-        <span class="switch-label widemode small-screen">&lt;&lt; SideBar &lt;&lt;</span>
-        <span class="switch-label normalmode small-screen">&gt;&gt; SideBar &gt;&gt;</span>
+        <span class="switch-label widemode big-screen">Wide mode</span>
+        <span class="switch-label normalmode big-screen">Normal mode</span>
+        <span class="switch-label widemode small-screen">SideBar</span>
+        <span class="switch-label normalmode small-screen">SideBar</span>
     </a>
-    <a id="up-switch" title="Наверх"></a>
-    <a id="down-switch" title="Вниз"></a>
+    <a id="up-switch" title="Наверх"><i></i></a>
+    <a id="down-switch" title="Вниз"><i></i></a>
 </div>
 
 <div id="container" class="{hook run='container_class'}">

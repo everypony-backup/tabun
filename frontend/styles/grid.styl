@@ -155,6 +155,9 @@
       tr
         td,.cell-tab-inner
           padding 3px 0
+    &.no-sidebar
+      .faq-page
+        width 90%
   #widemode
     .switch-label.widemode.small-screen
       display inline-block
@@ -184,8 +187,10 @@
   #wrapper
     width 140%
     padding 10px 5px 20px 5px
+    &.no-sidebar
+      flex-flow row
   #content-wrapper
-    width 70%
+    width 70%!important
   #sidebar
     width 30%
     position relative
@@ -284,18 +289,15 @@
       li
         margin-right 5px
   #widemode
-    right inherit
-    left 0
     width 100%
     border-radius 0
-    padding 5px
     text-align right
-    a#up-switch,a#down-switch
-      bottom 0
+    a
+      margin-right 5px
   #toolbar
-    bottom 10px
+    bottom 0
     left 0
-    height 25px
+    height 35px
     right inherit
     top inherit
     z-index 101
@@ -303,7 +305,7 @@
       border 0 transparent solid
       margin 0
       display flex
-      flex-flow row-reverse
+      flex-flow row
       padding  6px 0 0 10px
       width auto
       height 25px
@@ -312,13 +314,14 @@
         width 32px
         display inline-block
         i
-          transform rotate(90deg)
+          transform rotate(270deg)
           position relative
-          top -6px
+          top -8px
           left 6px
     .toolbar-update
       border 0 transparent solid
-      padding 5px
+      padding 2px 0 0 5px
+      margin 0
       width auto
       display flex
       flex-flow row
