@@ -143,22 +143,22 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	public function patchBlogPermissions($iPermissionsMask, $bAllow) {
 		$oPerm = $this->getBlogPermissions();
 		$oPerm->patch($iPermissionsMask, $bAllow);
-		setBlogPermissions($oPerm->get());
+		$this->setBlogPermissions($oPerm->get());
 	}
 	public function patchTopicPermissions($iPermissionsMask, $bAllow) {
 		$oPerm = $this->getTopicPermissions();
 		$oPerm->patch($iPermissionsMask, $bAllow);
-		setTopicPermissions($oPerm->get());
+		$this->setTopicPermissions($oPerm->get());
 	}
 	public function patchCommentPermissions($iPermissionsMask, $bAllow) {
 		$oPerm = $this->getCommentPermissions();
 		$oPerm->patch($iPermissionsMask, $bAllow);
-		setCommentPermissions($oPerm->get());
+		$this->setCommentPermissions($oPerm->get());
 	}
 	public function patchVotePermissions($iPermissionsMask, $bAllow) {
 		$oPerm = $this->getVotePermissions();
 		$oPerm->patch($iPermissionsMask, $bAllow);
-		setVotePermissions($oPerm->get());
+		$this->setVotePermissions($oPerm->get());
 	}
 	
 	private function legacyRoleToBlogPermissions() {	

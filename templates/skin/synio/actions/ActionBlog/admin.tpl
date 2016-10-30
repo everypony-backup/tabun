@@ -36,23 +36,23 @@
 							<td colspan="3">{$aLang.blog_admin_users_current_administrator}</td>
 						{else}
 							<td class="ta-c">
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][blog_update]" {if $oUserBlogPermissions->check(Permissions::UPDATE)}checked{/if} title="{$aLang.blog_admin_users_perm_blog_update}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][blog_delete]" {if $oUserBlogPermissions->check(Permissions::DELETE)}checked{/if} title="{$aLang.blog_admin_users_perm_blog_delete}" />
+								<label title="{$aLang.blog_admin_users_perm_blog_update}">{$aLang.blog_admin_users_perm_label_read}   <input type="checkbox" name="user_perm[{$oUser->getId()}][blog_update]" {if $oUserBlogPermissions->check(Permissions::UPDATE)}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_blog_delete}">{$aLang.blog_admin_users_perm_label_delete} <input type="checkbox" name="user_perm[{$oUser->getId()}][blog_delete]" {if $oUserBlogPermissions->check(Permissions::DELETE)}checked{/if} /></label>
 							</td>
 							<td class="ta-c">
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][topics_create]" {if $oUserTopicPermissions->check(Permissions::CREATE)}checked{/if} title="{$aLang.blog_admin_users_perm_topics_create}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][topics_read]"   {if $oUserTopicPermissions->check(Permissions::READ  )}checked{/if} title="{$aLang.blog_admin_users_perm_topics_read}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][topics_update]" {if $oUserTopicPermissions->check(Permissions::UPDATE)}checked{/if} title="{$aLang.blog_admin_users_perm_topics_update}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][topics_delete]" {if $oUserTopicPermissions->check(Permissions::DELETE)}checked{/if} title="{$aLang.blog_admin_users_perm_topics_delete}" />
+								<label title="{$aLang.blog_admin_users_perm_topics_create}">{$aLang.blog_admin_users_perm_label_create} <input type="checkbox" name="user_perm[{$oUser->getId()}][topics_create]" {if $oUserTopicPermissions->check(Permissions::CREATE)}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_topics_read}"  >{$aLang.blog_admin_users_perm_label_read}   <input type="checkbox" name="user_perm[{$oUser->getId()}][topics_read]"   {if $oUserTopicPermissions->check(Permissions::READ  )}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_topics_update}">{$aLang.blog_admin_users_perm_label_update} <input type="checkbox" name="user_perm[{$oUser->getId()}][topics_update]" {if $oUserTopicPermissions->check(Permissions::UPDATE)}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_topics_delete}">{$aLang.blog_admin_users_perm_label_delete} <input type="checkbox" name="user_perm[{$oUser->getId()}][topics_delete]" {if $oUserTopicPermissions->check(Permissions::DELETE)}checked{/if} /></label>
 							</td>
 							<td class="ta-c">
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][comments_create]" {if $oUserCommentPermissions->check(Permissions::CREATE)}checked{/if} title="{$aLang.blog_admin_users_perm_comments_create}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][comments_read]"   {if $oUserCommentPermissions->check(Permissions::READ  )}checked{/if} title="{$aLang.blog_admin_users_perm_comments_read}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][comments_update]" {if $oUserCommentPermissions->check(Permissions::UPDATE)}checked{/if} title="{$aLang.blog_admin_users_perm_comments_update}" />
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][comments_delete]" {if $oUserCommentPermissions->check(Permissions::DELETE)}checked{/if} title="{$aLang.blog_admin_users_perm_comments_delete}" />
+								<label title="{$aLang.blog_admin_users_perm_comments_create}">{$aLang.blog_admin_users_perm_label_create} <input type="checkbox" name="user_perm[{$oUser->getId()}][comments_create]" {if $oUserCommentPermissions->check(Permissions::CREATE)}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_comments_read}"  >{$aLang.blog_admin_users_perm_label_read}   <input type="checkbox" name="user_perm[{$oUser->getId()}][comments_read]"   {if $oUserCommentPermissions->check(Permissions::READ  )}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_comments_update}">{$aLang.blog_admin_users_perm_label_update} <input type="checkbox" name="user_perm[{$oUser->getId()}][comments_update]" {if $oUserCommentPermissions->check(Permissions::UPDATE)}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_comments_delete}">{$aLang.blog_admin_users_perm_label_delete} <input type="checkbox" name="user_perm[{$oUser->getId()}][comments_delete]" {if $oUserCommentPermissions->check(Permissions::DELETE)}checked{/if} /></label>
 							</td>
 							<td class="ta-c">
-								<input type="checkbox" name="user_perm[{$oUser->getId()}][votes_create]" {if $oUserVotePermissions->check(Permissions::CREATE)}checked{/if} title="{$aLang.blog_admin_users_perm_votes_create}" />
+								<label title="{$aLang.blog_admin_users_perm_votes_create}">{$aLang.blog_admin_users_perm_label_create} <input type="checkbox" name="user_perm[{$oUser->getId()}][votes_create]" {if $oUserVotePermissions->check(Permissions::CREATE)}checked{/if} /></label>
 							</td>
 						{/if}
 					</tr>

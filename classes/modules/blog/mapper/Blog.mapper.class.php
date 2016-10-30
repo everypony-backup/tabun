@@ -162,13 +162,24 @@ class ModuleBlog_MapperBlog extends Mapper {
 	public function UpdateRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
 		$sql = "UPDATE ".Config::Get('db.table.blog_user')." 
 			SET 
-				user_role = ?d			
+				user_blog_permissions = ?d,
+				user_topic_permissions = ?d,
+				user_comment_permissions = ?d,
+				user_vote_permissions = ?d
 			WHERE
 				blog_id = ?d 
 				AND
 				user_id = ?d
 		";
-		if ($this->oDb->query($sql,$oBlogUser->getUserRole(),$oBlogUser->getBlogId(),$oBlogUser->getUserId())) {
+		if ($this->oDb->query(
+			$sql,
+			$oBlogUser->getBlogPermissions()->get(),
+			$oBlogUser->getTopicPermissions()->get(),
+			$oBlogUser->getCommentPermissions()->get(),
+			$oBlogUser->getVotePermissions()->get(),
+			$oBlogUser->getBlogId(),
+			$oBlogUser->getUserId()
+		)) {
 			return true;
 		}
 		return false;
