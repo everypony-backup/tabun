@@ -62,7 +62,7 @@ sync_container() {
     echo "Got version: ${VERSION}"
 
     echo "Copying image to server"
-    rsync -a \
+    rsync -avvv \
         --info=progress2 \
         --checksum \
         -e "ssh -o TCPKeepAlive=yes -o ServerAliveInterval=5 -p $PORT" \
