@@ -8,6 +8,7 @@ do
         -p|--project)       PROJECT=$2; shift;;
         -d|--destination)   DESTINATION=$2; shift;;
         -c|--containers)    CONTAINERS=$2; shift;;
+        -b|--blobs)         BLOBS=$2; shift;;
         -t|--type)          TYPE=$2; shift;;
         -s|--server)        SERVER=$2; shift;;
         -P|--port)          PORT=$2; shift;;
@@ -34,12 +35,14 @@ Usage:
         --destination /srv/images \
         --server staging.everypony.ru \
         --user deploy \
+        --blobs "static" \
         --containers "redis app python mysql"
 
 Options:
    -p, --project        Project instance
    -d, --destination    Path to images on server
    -c, --containers     Containers list
+   -b, --blobs          Containers without running process
    -t, --type           Environment type (trunk/production/testing/etc.)
    -s, --server         Server to deploy
    -P, --port           SSH port
@@ -62,10 +65,10 @@ sync_container() {
     echo "Got version: ${VERSION}"
 
     echo "Copying image to server"
-    rsync -avv \
+    rsync -a \
         --info=progress2 \
         --checksum \
-        -e "ssh -o TCPKeepAlive=yes -o ServerAliveInterval=5 -p $PORT" \
+        -e "ssh -p $PORT" \
         --link-dest=${LINK_DEST}/ \
         .vagga/${CONTAINER_NAME}/ \
         ${USER}@${SERVER}:${DESTINATION}/${PROJECT_NAME}/${CONTAINER_NAME}.${VERSION}
@@ -97,8 +100,8 @@ deploy(){
     echo "Create dir, if neccessary"
     ssh ${USER}@${SERVER} -p ${PORT} mkdir -vp ${DESTINATION}/${PROJECT_NAME}
 
-    for CONTAINER in ${CONTAINERS}; do
-        echo "Syncing container ${CONTAINER}"
+    for CONTAINER in "${CONTAINERS} ${BLOBS}"; do
+        echo "Syncing image ${CONTAINER}"
         echo "===================="
         sync_container ${CONTAINER}
         echo "===================="

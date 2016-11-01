@@ -35,7 +35,8 @@ deploy:
       ./deploy/script.sh
       --project tabun
       --type trunk
-      --containers "static redis celery php mysql elastic"
+      --blobs "static"
+      --containers "redis celery php mysql elastic"
       --destination $deploy_destination
       --server $deploy_host
       --port $deploy_port
@@ -49,7 +50,8 @@ deploy:
       ./deploy/script.sh
       --project tabun
       --type production
-      --containers "static redis celery php mysql elastic"
+      --blobs "static"
+      --containers "redis celery php mysql elastic"
       --destination $deploy_destination
       --server $deploy_host
       --port $deploy_port
