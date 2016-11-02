@@ -430,7 +430,6 @@ class ActionBlog extends Action {
 				}
 
 				$oBlogUser->patchBlogPermissions(Permissions::UPDATE, isset($aPerm['blog_update']));
-				$oBlogUser->patchBlogPermissions(Permissions::DELETE, isset($aPerm['blog_delete']));
 
 				$oBlogUser->patchTopicPermissions(Permissions::CREATE, isset($aPerm['topics_create']));
 				$oBlogUser->patchTopicPermissions(Permissions::READ  , isset($aPerm['topics_read']  ));

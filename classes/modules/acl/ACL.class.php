@@ -201,7 +201,16 @@ class ModuleACL extends Module {
 	 */
 	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment) {
 		if ($oUser->getRating()>=Config::Get('acl.vote.comment.rating')) {
-			return true;
+			$oTopic = $this->Topic_GetTopicById($oComment->getTargetId());
+
+			if ($oTopic->getBlog()->getType() != 'close')
+				return true;
+
+			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlog()->getId(),$oUser->getId())) {
+				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -217,8 +226,7 @@ class ModuleACL extends Module {
 		 * Если блог закрытый, проверяем является ли пользователь его читателем
 		 */
 		if($oBlog->getType()=='close') {
-			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId());
-			if ($oBlogUser) {
+			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
 				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
 					if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
 						return self::CAN_VOTE_BLOG_TRUE;

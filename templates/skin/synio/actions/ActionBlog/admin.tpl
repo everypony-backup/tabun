@@ -36,8 +36,7 @@
 							<td colspan="3">{$aLang.blog_admin_users_current_administrator}</td>
 						{else}
 							<td class="ta-c">
-								<label title="{$aLang.blog_admin_users_perm_blog_update}">{$aLang.blog_admin_users_perm_label_read}   <input type="checkbox" name="user_perm[{$oUser->getId()}][blog_update]" {if $oUserBlogPermissions->check(Permissions::UPDATE)}checked{/if} /></label>
-								<label title="{$aLang.blog_admin_users_perm_blog_delete}">{$aLang.blog_admin_users_perm_label_delete} <input type="checkbox" name="user_perm[{$oUser->getId()}][blog_delete]" {if $oUserBlogPermissions->check(Permissions::DELETE)}checked{/if} /></label>
+								<label title="{$aLang.blog_admin_users_perm_blog_update}">{$aLang.blog_admin_users_perm_label_update} <input type="checkbox" name="user_perm[{$oUser->getId()}][blog_update]" {if $oUserBlogPermissions->check(Permissions::UPDATE)}checked{/if} /></label>
 							</td>
 							<td class="ta-c">
 								<label title="{$aLang.blog_admin_users_perm_topics_create}">{$aLang.blog_admin_users_perm_label_create} <input type="checkbox" name="user_perm[{$oUser->getId()}][topics_create]" {if $oUserTopicPermissions->check(Permissions::CREATE)}checked{/if} /></label>

@@ -162,6 +162,7 @@ class ModuleBlog_MapperBlog extends Mapper {
 	public function UpdateRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
 		$sql = "UPDATE ".Config::Get('db.table.blog_user')." 
 			SET 
+				user_role = ?d,
 				user_blog_permissions = ?d,
 				user_topic_permissions = ?d,
 				user_comment_permissions = ?d,
@@ -173,6 +174,7 @@ class ModuleBlog_MapperBlog extends Mapper {
 		";
 		if ($this->oDb->query(
 			$sql,
+			$oBlogUser->getUserRole(),
 			$oBlogUser->getBlogPermissions()->get(),
 			$oBlogUser->getTopicPermissions()->get(),
 			$oBlogUser->getCommentPermissions()->get(),
