@@ -100,10 +100,16 @@ deploy(){
     echo "Create dir, if neccessary"
     ssh ${USER}@${SERVER} -p ${PORT} mkdir -vp ${DESTINATION}/${PROJECT_NAME}
 
-    for CONTAINER in "${CONTAINERS} ${BLOBS}"; do
+    for CONTAINER in ${CONTAINERS}; do
         echo "Syncing image ${CONTAINER}"
         echo "===================="
         sync_container ${CONTAINER}
+        echo "===================="
+    done
+    for BLOB in ${BLOBS}; do
+        echo "Syncing blob ${BLOB}"
+        echo "===================="
+        sync_container ${BLOB}
         echo "===================="
     done
 
