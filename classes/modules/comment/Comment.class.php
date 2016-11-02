@@ -649,7 +649,7 @@ class ModuleComment extends Module {
 		$oViewerLocal=$this->Viewer_GetLocalViewer();
 		$oViewerLocal->Assign('oUserCurrent',$this->User_GetUserCurrent());
 		$oViewerLocal->Assign('bOneComment',true);
-		$oViewerLocal->Assign('iAuthorId', $oComment->getTarget()->getUserId());
+		$oViewerLocal->Assign('iAuthorId', $aComments[0]->getTarget()->getUserId());
 		$oViewerLocal->Assign('sAuthorNotice', $aLang.topic_author);
 		if($sTargetType!='topic') {
 			$oViewerLocal->Assign('bNoCommentFavourites',true);
