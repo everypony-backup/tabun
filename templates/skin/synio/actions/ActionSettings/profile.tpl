@@ -1,10 +1,5 @@
 {include file='header.tpl'}
-
-
-
-
 {include file='menu.settings.tpl'}
-
 
 <script type="text/javascript">
 	jQuery(document).ready(function($){
@@ -27,8 +22,7 @@
 			<input type="text" name="profile_user_field_value[]" value="" class="input-text input-width-200">
 			<a class="icon-synio-remove" title="{$aLang.user_field_delete}" href="#" onclick="return ls.userfield.removeFormField(this);"></a>
 		</p>
-		
-		
+
 		<div class="avatar-change">
 			<div class="avatar"><img src="{$oUserCurrent->getProfileAvatarPath(100)}" id="avatar-img" /></div>
 
@@ -36,12 +30,12 @@
 				<a href="#" id="avatar-upload" class="link-dotted">{if $oUserCurrent->getProfileAvatar()}{$aLang.settings_profile_avatar_change}{else}{$aLang.settings_profile_avatar_upload}{/if}</a><br />
 				<a href="#" id="avatar-remove" class="link-dotted" onclick="return ls.user.removeAvatar();" style="{if !$oUserCurrent->getProfileAvatar()}display:none;{/if}">{$aLang.settings_profile_avatar_delete}</a>
 			</div>
-			
+
 			<div id="avatar-resize" class="modal modal-upload-avatar">
 				<header class="modal-header">
 					<h3>{$aLang.settings_profile_avatar_resize_title}</h3>
 				</header>
-				
+
 				<div class="modal-content">
 					<div class="clearfix">
 						<div class="image-border">
@@ -54,20 +48,17 @@
 			</div>
 		</div>
 
-	
 		{hook run='form_settings_profile_begin'}
 
 		<input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}">
-		
-		
-		
+
 		<dl class="form-item">
 			<dt><label for="profile_name">{$aLang.settings_profile_name}:</label></dt>
 			<dd>
 				<input type="text" name="profile_name" id="profile_name" value="{$oUserCurrent->getProfileName()|escape:'html'}" class="input-text input-width-250" maxlength="{$oConfig->GetValue('module.user.name_max')}">
 			</dd>
 		</dl>
-		
+
 		<dl class="form-item">
 			<dt><label for="profile_sex">{$aLang.settings_profile_sex}:</label></dt>
 			<dd>
@@ -78,7 +69,7 @@
 				</select>
 			</dd>
 		</dl>
-		
+
 		<dl class="form-item">
 			<dt><label for="">{$aLang.settings_profile_birthday}:</label></dt>
 			<dd>
@@ -88,14 +79,14 @@
 						<option value="{$smarty.section.date_day.index}" {if $smarty.section.date_day.index==$oUserCurrent->getProfileBirthday()|date_format:"%d"}selected{/if}>{$smarty.section.date_day.index}</option>
 					{/section}
 				</select>
-				
+
 				<select name="profile_birthday_month" style="width: 103px; margin-right: 4px;">
 					<option value="">{$aLang.date_month}</option>
 					{section name=date_month start=1 loop=13 step=1}
 						<option value="{$smarty.section.date_month.index}" {if $smarty.section.date_month.index==$oUserCurrent->getProfileBirthday()|date_format:"%m"}selected{/if}>{$aLang.month_array[$smarty.section.date_month.index][0]}</option>
 					{/section}
 				</select>
-				
+
 				<select name="profile_birthday_year" style="width: 72px">
 					<option value="">{$aLang.date_year}</option>
 					{section name=date_year loop=$smarty.now|date_format:"%Y"+1 max=$smarty.now|date_format:"%Y"-2012+130 step=-1}
@@ -104,8 +95,7 @@
 				</select>
 			</dd>
 		</dl>
-		
-		
+
 		<br />
 		<label for="profile_about" style="margin-bottom: 7px">{$aLang.settings_profile_about}:</label>
 		<textarea name="profile_about" id="profile_about" class="input-text input-width-full" rows="7" maxlength="{$oConfig->GetValue('module.user.about_max')}">{$oUserCurrent->getProfileAbout()|escape:'html'}</textarea>
@@ -148,7 +138,7 @@
 			</select>
 		</p>
 		</div>
-		
+
 		{assign var="aUserFieldValues" value=$oUserCurrent->getUserFieldValues(false,'')}
 		{if count($aUserFieldValues)}
 			{foreach from=$aUserFieldValues item=oField}
@@ -159,12 +149,9 @@
 			{/foreach}
 		{/if}
 	</div>
-		
-		
-		
+
 	<div class="wrapper-content wrapper-content-dark">
 		<h3>{$aLang.settings_profile_section_contacts}</h3>
-
 		{assign var="aUserFieldContactValues" value=$oUserCurrent->getUserFieldValues(true,array('contact','social'))}
 		<div id="user-field-contact-contener">
 		{foreach from=$aUserFieldContactValues item=oField}
@@ -184,25 +171,13 @@
 		{/if}
 	</div>
 
-	
 	<div class="wrapper-content">
-		<script type="text/javascript">
-			jQuery(function($){
-				$('#avatar-upload').file({ name:'avatar' }).choose(function(e, input) {
-					ls.user.uploadAvatar(null,input);
-				});
-			});
-		</script>
 
-		
 		{hook run='form_settings_profile_end'}
-		
-		
+
 		<button type="submit"  name="submit_profile_edit" class="button button-primary" />{$aLang.settings_profile_submit}</button>
 	</div>
 </form>
-
-
 
 {hook run='settings_profile_end'}
 

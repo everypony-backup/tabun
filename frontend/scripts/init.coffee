@@ -136,4 +136,17 @@ init = ->
     str = if target.dataset.insert? then target.dataset.insert else target.textContent
     $.markItUp target: target, replaceWith: str
 
+  if window.location.pathname.match "settings/profile"
+    eval(
+      "jQuery(function($){"+
+        "$('#foto-upload').file({ name:'foto' }).choose(function(e, input) {"+
+          "ls.user.uploadFoto(null,input);"+
+        "});"+
+      "});"+
+      "jQuery(function($){"+
+        "$('#avatar-upload').file({ name:'avatar' }).choose(function(e, input) {"+
+          "ls.user.uploadAvatar(null,input);"+
+        "});"+
+      "});")
+
 module.exports = init

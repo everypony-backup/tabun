@@ -17,16 +17,9 @@
 	<div class="profile-photo-wrapper">
 		<a href="{$oUserProfile->getUserWebPath()}"><img src="{$oUserProfile->getProfileFotoPath()}"  class="profile-photo" id="foto-img" /></a>
 	</div>
-	
+
 	{if $sAction=='settings' and $oUserCurrent and $oUserCurrent->getId() == $oUserProfile->getId()}
-		<script type="text/javascript">
-			jQuery(function($){
-				$('#foto-upload').file({ name:'foto' }).choose(function(e, input) {
-					ls.user.uploadFoto(null,input);
-				});
-			});
-		</script>
-		
+
 		<p class="upload-photo">
 			<a href="#" id="foto-upload" class="link-dotted">{if $oUserCurrent->getProfileFoto()}{$aLang.settings_profile_photo_change}{else}{$aLang.settings_profile_photo_upload}{/if}</a>&nbsp;&nbsp;&nbsp;
 			<a href="#" id="foto-remove" class="link-dotted" onclick="return ls.user.removeFoto();" style="{if !$oUserCurrent->getProfileFoto()}display:none;{/if}">{$aLang.settings_profile_foto_delete}</a>
@@ -36,30 +29,23 @@
 			<header class="modal-header">
 				<h3>{$aLang.settings_profile_avatar_resize_title}</h3>
 			</header>
-			
+
 			<div class="modal-content">
 				<div class="clearfix">
 					<div class="image-border">
 						<img src=""  id="foto-resize-original-img">
 					</div>
 				</div>
-				
+
 				<button type="submit"  class="button button-primary" onclick="return ls.user.resizeFoto();">{$aLang.settings_profile_avatar_resize_apply}</button>
 				<button type="submit"  class="button" onclick="return ls.user.cancelFoto();">{$aLang.settings_profile_avatar_resize_cancel}</button>
 			</div>
 		</div>
 	{/if}
 </section>
-	
-
-
-
 
 {hook run='profile_sidebar_menu_before' oUserProfile=$oUserProfile}
-
-
 {hook run='profile_sidebar_end' oUserProfile=$oUserProfile}
-
 
 {if $oUserCurrent && $oUserCurrent->getId() != $oUserProfile->getId()}
 	<section class="block block-type-profile-note">
@@ -75,23 +61,22 @@
 					{$oUserNote->getText()}
 				{/if}
 			</p>
-			
+
 			<ul class="actions">
 				<li><a href="#" onclick="return ls.usernote.showForm();" class="link-dotted">{$aLang.user_note_form_edit}</a></li>
 				<li><a href="#" onclick="return ls.usernote.remove({$oUserProfile->getId()});" class="link-dotted">{$aLang.user_note_form_delete}</a></li>
 			</ul>
 		</div>
-		
+
 		<div id="usernote-form" style="display: none;">
 			<p><textarea rows="4" cols="20" id="usernote-form-text" class="input-text input-width-full"></textarea></p>
 			<button type="submit"  onclick="return ls.usernote.save({$oUserProfile->getId()});" class="button button-primary">{$aLang.user_note_form_save}</button>
 			<button type="submit"  onclick="return ls.usernote.hideForm();" class="button">{$aLang.user_note_form_cancel}</button>
 		</div>
-		
+
 		<a href="#" onclick="return ls.usernote.showForm();" id="usernote-button-add" class="link-dotted" {if $oUserNote}style="display:none;"{/if}>{$aLang.user_note_add}</a>
 	</section>
 {/if}
-
 
 {if $oUserCurrent && $oUserCurrent->getId()!=$oUserProfile->getId()}
 	<script type="text/javascript">
