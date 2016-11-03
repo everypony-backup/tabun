@@ -42,7 +42,7 @@
 {if !$bNoComments}
 {include
 	file='comment_tree.tpl'
-	iAuthorId=$oTopic->getUserId()
+	iAuthorId=$oTalk->getUserId()
 	sAuthorNotice=$aLang.topic_author
 	iTargetId=$oTalk->getId()
 	sTargetType='talk'
