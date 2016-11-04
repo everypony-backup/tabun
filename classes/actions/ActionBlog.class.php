@@ -819,14 +819,7 @@ class ActionBlog extends Action {
 		/**
 		 * Определяем права на отображение закрытого блога
 		 */
-		if($oBlog->getType()=='close'
-			and (!$this->oUserCurrent
-				or !in_array(
-					$oBlog->getId(),
-					$this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent)
-				)
-			)
-		) {
+		if(!$this->ACL_IsAllowReadTopicsInBlog($oBlog,$this->oUserCurrent)) {
 			$bCloseBlog=true;
 		} else {
 			$bCloseBlog=false;

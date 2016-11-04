@@ -201,16 +201,29 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment) {
-		if ($oUser->getRating()>=Config::Get('acl.vote.comment.rating')) {
-			$oTopic = $this->Topic_GetTopicById($oComment->getTargetId());
+		/**
+		 * Разрешаем если это админ сайта
+		 */
+		if ($oUser->isAdministrator()) {
+			return true;
+		}
 
-			if ($oTopic->getBlog()->getType() != 'close')
+		$oTopic = $this->Topic_GetTopicById($oComment->getTargetId());
+
+		if ($oTopic->getBlog()->getType() != 'close') {
+			return true;
+		}
+
+		/**
+		 * Если автор(смотритель) блога
+		 */	
+		if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+			return true;
+		}
+
+		if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlog()->getId(),$oUser->getId())) {
+			if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
 				return true;
-
-			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlog()->getId(),$oUser->getId())) {
-				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
-					return true;
-				}
 			}
 		}
 		return false;
@@ -224,7 +237,13 @@ class ModuleACL extends Module {
 	 */
 	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog) {
 		/**
-		 * Если блог закрытый, проверяем является ли пользователь его читателем
+		 * Разрешаем если это админ сайта
+		 */
+		if ($oUser->isAdministrator()) {
+			return true;
+		}
+		/**
+		 * Если блог закрытый, проверяем разрешение на голосование
 		 */
 		if($oBlog->getType()=='close') {
 			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
@@ -254,7 +273,19 @@ class ModuleACL extends Module {
 	 */
 	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic) {
 		/**
-		 * Если блог закрытый, проверяем является ли пользователь его читателем
+		 * Разрешаем если это админ сайта
+		 */
+		if ($oUser->isAdministrator()) {
+			return true;
+		}
+		/**
+		 * Если автор(смотритель) блога
+		 */		
+		if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+			return true;
+		}
+		/**
+		 * Если блог закрытый, проверяем разрешение на голосование
 		 */
 		if($oTopic->getBlog()->getType()=='close') {
 			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
@@ -527,9 +558,7 @@ class ModuleACL extends Module {
 			 * Разрешаем, если установлено разрешение (кхм...)
 			 */
 			if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-				if ($oBlogUser->getTopicPermissions()->check(Permissions::READ)) {
-					return true;
-				}
+				return $oBlogUser->getTopicPermissions()->check(Permissions::READ);
 			}
 			return false;
 		}

@@ -185,7 +185,7 @@
 
 
 {if $bCloseBlog}
-	{$aLang.blog_close_show}
+	{$aLang.topic_no_permission_read}
 {else}
 	{include file='topic_list.tpl'}
 {/if}
