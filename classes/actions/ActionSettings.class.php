@@ -606,7 +606,7 @@ class ActionSettings extends Action {
 			 * Проверяем информацию о себе
 			 */
 			if (func_check(getRequestStr('profile_about'),'text',1,Config::Get('module.user.about_max'))) {
-				$this->oUserCurrent->setProfileAbout($this->Text_Parser(getRequestStr('profile_about')));
+				$this->oUserCurrent->setProfileAbout($this->Text_Parser(getRequestStr('profile_about'), ModuleText::ACT_UPDATE));
 			} elseif (func_check(getRequestStr('profile_about'),'text',0,1)) {
 				$this->oUserCurrent->setProfileAbout(null);
 			}

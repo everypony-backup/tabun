@@ -77,8 +77,18 @@ add = (formId, targetId, targetType) ->
     unless bStateError
       toggleCommentForm iCurrentShowFormComment, true
 
+  textArea = document.getElementById("form_comment_text")
+  textValue = textArea.value
+  newTextValue = ""
+  i = -1
+  while ++i < textValue.length
+    if textValue.codePointAt(i) < 65535
+      newTextValue += textValue[i]
+    else
+      newTextValue += ' '
+      i++
+  textArea.value = newTextValue
   ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
-
 
 toggleCommentForm = (idComment, bNoFocus) ->
   reply = document.getElementById 'reply'

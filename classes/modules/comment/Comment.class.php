@@ -649,6 +649,7 @@ class ModuleComment extends Module {
 		$oViewerLocal=$this->Viewer_GetLocalViewer();
 		$oViewerLocal->Assign('oUserCurrent',$this->User_GetUserCurrent());
 		$oViewerLocal->Assign('bOneComment',true);
+		$oViewerLocal->Assign('sAuthorNotice', $aLang.topic_author);
 		if($sTargetType!='topic') {
 			$oViewerLocal->Assign('bNoCommentFavourites',true);
 		}
@@ -1006,13 +1007,4 @@ class ModuleComment extends Module {
 	public function AddCommentHistoryItem(ModuleComment_EntityCommentHistoryItem $oHistoryItem) {
 		return $this->oMapper->AddCommentHistoryItem($oHistoryItem);
 	}
-    /**
-     * Возвращает текст уведомления о изменении/блокировке
-     *
-     * @return string|null
-     */
-    public function getModifyNoticeHTML($lastModifyDateText = null, $lockModifyDateText = null)
-    {
-        return ''; // TODO: Implement with templates
-    }
 }

@@ -178,7 +178,9 @@ containers:
     - !EnsureDir /storage
     volumes:
       <<: *local_volumes
-      /storage: !Persistent {name: redis}
+      /storage: !Tmpfs
+        size: 128Mi
+        mode: 0o1700
 
   redis-trunk:
     setup:
@@ -503,7 +505,7 @@ commands:
   redis-cli: &redis !Command
     container: redis
     description: Run redis CLI
-    run: redis-cli
+    run: [redis-cli]
 
   redis: &redis !Command
     container: redis

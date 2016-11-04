@@ -54,7 +54,6 @@ exit 0;
 
 sync_container() {
     local NAME="$1"
-    local NO_CONFIG="$2"
     local CONTAINER_NAME=${NAME}-${TYPE}
     local PROJECT_NAME=${PROJECT}-${TYPE}
 
@@ -76,20 +75,24 @@ sync_container() {
 
     echo "Link as latest image ${CONTAINER_NAME}.${VERSION} -> ${LINK_DEST}"
     ssh ${USER}@${SERVER} -p ${PORT} ln -sfn ${CONTAINER_NAME}.${VERSION} ${LINK_DEST}
+}
 
-    if [ "$NO_CONFIG" ]; then
-        echo "Skipped config generation"
-    else
-        echo "Generated config"
-        echo
-    cat <<END | ssh ${USER}@${SERVER} -p ${PORT} tee -a ${DESTINATION}/${PROJECT_NAME}/config.yaml
+generate_config() {
+    local NAME="$1"
+    local CFG="$2"
+    local CONTAINER_NAME=${NAME}-${TYPE}
+
+    ${VAGGA} _build ${CONTAINER_NAME}
+
+    VERSION=`${VAGGA} _version_hash --short ${CONTAINER_NAME}`
+
+    cat <<END | tee -a ${CFG}
 ${NAME}:
     kind: Daemon
     instances: 1
     config: /lithos/${NAME}.yaml
     image: ${CONTAINER_NAME}.${VERSION}
 END
-    fi
 }
 
 deploy(){
@@ -97,28 +100,35 @@ deploy(){
     echo "Create dir, if neccessary"
     ssh ${USER}@${SERVER} -p ${PORT} mkdir -vp ${DESTINATION}/${PROJECT_NAME}
 
-    echo "Remove old config"
-    ssh ${USER}@${SERVER} -p ${PORT} rm -vf ${DESTINATION}/${PROJECT_NAME}/config.yaml
-
+    for CONTAINER in ${CONTAINERS}; do
+        echo "Syncing image ${CONTAINER}"
+        echo "===================="
+        sync_container ${CONTAINER}
+        echo "===================="
+    done
     for BLOB in ${BLOBS}; do
         echo "Syncing blob ${BLOB}"
         echo "===================="
-        sync_container ${BLOB} --no-config
+        sync_container ${BLOB}
         echo "===================="
     done
 
+    local CONFIG_FILE=$(mktemp)
+
     for CONTAINER in ${CONTAINERS}; do
-        echo "Syncing container ${CONTAINER}"
+        echo "Generating config for ${CONTAINER}"
         echo "===================="
-        sync_container ${CONTAINER}
+        generate_config ${CONTAINER} ${CONFIG_FILE}
         echo "===================="
     done
 
     if [ "$DRY_RUN" = "true" ]; then
         echo "Skipped version switch"
     else
+        echo "Copy configuration from ${CONFIG_FILE} to server"
+        scp -P ${PORT} ${CONFIG_FILE} ${USER}@${SERVER}:/tmp/
         echo "Switch to new config"
-        ssh -t ${USER}@${SERVER} -p ${PORT} sudo lithos_switch ${PROJECT_NAME} ${DESTINATION}/${PROJECT_NAME}/config.yaml
+        ssh -t ${USER}@${SERVER} -p ${PORT} sudo lithos_switch ${PROJECT_NAME} ${CONFIG_FILE}
     fi
 }
 
