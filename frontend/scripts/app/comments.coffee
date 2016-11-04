@@ -1,6 +1,5 @@
 $ = require "jquery"
 {scrollTo} = require "jquery"
-{Set, OrderedSet} = require "immutable"
 {keys, map, filter, first, forEach} = require "lodash"
 {gettext, ngettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
@@ -276,6 +275,7 @@ setCountAllComment = () ->
   allCounter.textContent = allComments.length
 
 showComment = (commentId,highlightParent) ->
+  "use strict"
   if commentId then comment = document.getElementById "comment_id_" + commentId
   unless comment then comment = newComments[0]
   unless comment then return
@@ -356,7 +356,6 @@ initEvent = ->
 
 init = ->
   initEvent()
-  setCountAllComment()
   setCountNewComment()
   if commentForm
     $(document)
