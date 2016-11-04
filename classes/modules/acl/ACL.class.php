@@ -30,6 +30,7 @@ class ModuleACL extends Module {
 	const CAN_VOTE_BLOG_FALSE = 0;
 	const CAN_VOTE_BLOG_TRUE = 1;
 	const CAN_VOTE_BLOG_ERROR_CLOSE = 2;
+	const CAN_VOTE_BLOG_ERROR_VOTE_FORBIDDEN = 3;
 	/**
 	 * Коды механизма удаления блога
 	 */
@@ -231,6 +232,8 @@ class ModuleACL extends Module {
 					if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
 						return self::CAN_VOTE_BLOG_TRUE;
 					}
+				} else {
+					return self::CAN_VOTE_BLOG_ERROR_VOTE_FORBIDDEN;
 				}
 			} else {
 				return self::CAN_VOTE_BLOG_ERROR_CLOSE;
@@ -254,22 +257,14 @@ class ModuleACL extends Module {
 		 * Если блог закрытый, проверяем является ли пользователь его читателем
 		 */
 		if($oTopic->getBlog()->getType()=='close') {
-			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId());
-			if ($oBlogUser) {
+			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
 				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
-					if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
-						return true;
-					}
+					return true;
 				}
-			} else {
-				return false;
 			}
-		} else {
-			if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
-				return true;
-			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретного пользователя

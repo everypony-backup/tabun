@@ -437,6 +437,20 @@ class ModuleTopic_EntityTopic extends Entity {
 		return false;
 	}
 	/**
+	 * Проверяет разрешение на чтение комментариев к топику у текущего пользователя
+	 *
+	 * @return bool
+	 */
+	public function getIsAllowReadComments() {
+		if ($this->getBlog()->getType()!='close') {
+			return true;
+		}
+		if ($oUser=$this->User_GetUserCurrent()) {
+			return $this->ACL_IsAllowAddCommentToTopic($this,$oUser);
+		}
+		return false;
+	}
+	/**
 	 * Возвращает количество добавивших топик в избранное
 	 *
 	 * @return int|null

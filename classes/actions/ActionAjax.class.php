@@ -237,10 +237,17 @@ class ActionAjax extends Action {
 			return;
 		}
 		/**
-		 * Пользователь имеет право голоса?
+		 * Права на голосование (по разрешениям)
 		 */
-		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment)) {
-			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_acl'),$this->Lang_Get('attention'));
+		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oComment->getTarget())) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_no_permission'),$this->Lang_Get('not_access'));
+			return;
+		}
+		/**
+		 * Права на голосование (по рейтингу)
+		 */
+		if ($this->oUserCurrent->getRating()<Config::Get('acl.vote.topic.rating')) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_acl'),$this->Lang_Get('attention'));
 			return;
 		}
 		/**
@@ -346,9 +353,16 @@ class ActionAjax extends Action {
 			return;
 		}
 		/**
-		 * Права на голосование
+		 * Права на голосование (по разрешениям)
 		 */
-		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic) and $iValue) {
+		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_no_permission'),$this->Lang_Get('not_access'));
+			return;
+		}
+		/**
+		 * Права на голосование (по рейтингу)
+		 */
+		if ($this->oUserCurrent->getRating()<Config::Get('acl.vote.topic.rating')) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_acl'),$this->Lang_Get('attention'));
 			return;
 		}
@@ -484,10 +498,13 @@ class ActionAjax extends Action {
 				}
 				break;
 			case ModuleACL::CAN_VOTE_BLOG_ERROR_CLOSE:
-				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_close'),$this->Lang_Get('attention'));
+				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_close'),$this->Lang_Get('not_access'));
 				return;
 				break;
-
+			case ModuleACL::CAN_VOTE_BLOG_ERROR_VOTE_FORBIDDEN:
+				$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_no_permission'),$this->Lang_Get('not_access'));
+				return;
+				break;
 			default:
 			case ModuleACL::CAN_VOTE_BLOG_FALSE:
 				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_acl'),$this->Lang_Get('attention'));

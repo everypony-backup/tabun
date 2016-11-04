@@ -673,17 +673,10 @@ class ActionBlog extends Action {
 			return parent::EventNotFound();
 		}
 		/**
-		 * Определяем права на отображение записи из закрытого блога
+		 * Определяем права на просмотр топика в блоге
 		 */
-		if($oTopic->getBlog()->getType()=='close'
-			and (!$this->oUserCurrent
-				|| !in_array(
-					$oTopic->getBlog()->getId(),
-					$this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent)
-				)
-			)
-		) {
-			$this->Message_AddErrorSingle($this->Lang_Get('blog_close_show'),$this->Lang_Get('not_access'));
+		if(!$this->ACL_IsAllowReadTopicsInBlog($oTopic->getBlog(),$this->oUserCurrent)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_no_permission_read'),$this->Lang_Get('not_access'));
 			return Router::Action('error');
 		}
 		/**
