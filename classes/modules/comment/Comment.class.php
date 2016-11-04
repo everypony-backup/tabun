@@ -649,7 +649,9 @@ class ModuleComment extends Module {
 		$oViewerLocal=$this->Viewer_GetLocalViewer();
 		$oViewerLocal->Assign('oUserCurrent',$this->User_GetUserCurrent());
 		$oViewerLocal->Assign('bOneComment',true);
-		if($sTargetType!='topic') {
+		if($sTargetType=='topic') {
+			$oViewerLocal->Assign('bAddCommentPermission',$this->Topic_GetTopicById($sId)->getIsAllowAddComment());
+		} else {
 			$oViewerLocal->Assign('bNoCommentFavourites',true);
 		}
 		$aCmt=array();

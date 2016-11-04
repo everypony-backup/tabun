@@ -982,14 +982,21 @@ class ActionBlog extends Action {
 			return;
 		}
 		/**
-		 * Проверяем разрешено ли постить комменты
+		 * Проверяем разрешено ли постить комменты (по разрешениям)
+		 */
+		if (!$this->ACL_IsAllowAddCommentToTopic($oTopic,$this->oUserCurrent)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_no_permission'),$this->Lang_Get('error'));
+			return;
+		}
+		/**
+		 * Проверяем разрешено ли постить комменты (по рейтингу)
 		 */
 		if (!$this->ACL_CanPostComment($this->oUserCurrent) and !$this->oUserCurrent->isAdministrator()) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_acl'),$this->Lang_Get('error'));
 			return;
 		}
 		/**
-		 * Проверяем разрешено ли постить комменты по времени
+		 * Проверяем разрешено ли постить комменты (по времени)
 		 */
 		if (!$this->ACL_CanPostCommentTime($this->oUserCurrent) and !$this->oUserCurrent->isAdministrator()) {
 			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_limit'),$this->Lang_Get('error'));
@@ -1162,17 +1169,10 @@ class ActionBlog extends Action {
 			return;
 		}
 		/**
-		 * Определяем права на отображение записи из закрытого блога
+		 * Разрешено ли читать комментарии?
 		 */
-		if($oTopic->getBlog()->getType()=='close'
-			and (!$this->oUserCurrent
-				|| !in_array(
-					$oTopic->getBlog()->getId(),
-					$this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent)
-				)
-			)
-		) {
-			$this->Message_AddErrorSingle($this->Lang_Get('blog_close_show'),$this->Lang_Get('not_access'));
+		if(!$this->ACL_IsAllowReadCommentsInBlog($oTopic->getBlog(),$this->oUserCurrent)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_comment_no_permission_read'),$this->Lang_Get('not_access'));
 			return;
 		}
 		/**

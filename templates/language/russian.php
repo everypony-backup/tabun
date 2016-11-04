@@ -232,6 +232,8 @@ return array(
 	'topic_comment_acl' => 'Ваш рейтинг слишком мал для написания комментариев',
 	'topic_comment_limit' => 'Вам нельзя писать комментарии слишком часто',
 	'topic_comment_notallow' => 'Автор запретил добавлять комментарии',
+	'topic_comment_no_permission' => 'Вам нельзя добавлять комментарии в этом блоге',
+	'topic_comment_no_permission_read' => 'Вам нельзя читать комментарии в этом блоге',
 	'topic_comment_spam' => 'Стоп! Спам!',
 	'topic_unpublish' => 'пост находится в черновиках',
 	'topic_favourite_add' => 'добавить в избранное',

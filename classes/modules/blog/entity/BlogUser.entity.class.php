@@ -167,8 +167,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 			case ModuleBlog::BLOG_USER_ROLE_ADMINISTRATOR:
 				return
 					  Permissions::READ
-					| Permissions::UPDATE
-					| Permissions::DELETE;
+					| Permissions::UPDATE;
 					
 			default:
 				return

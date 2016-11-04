@@ -6,7 +6,17 @@
 {if $aBlogUsers}
 	<form method="post" enctype="multipart/form-data" class="mb-20">
 		<input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
-		
+		{if $oBlogEdit->getType() == "open"}
+		<div class="blog-message blog-message-notice">
+			<strong>Внимание!</strong>
+			В открытом блоге нельзя запретить следующие действия:
+			<ul>
+				<li>{$aLang.blog_admin_users_perm_topics_read}</li>
+				<li>{$aLang.blog_admin_users_perm_comments_read}</li>
+				<li>{$aLang.blog_admin_users_perm_votes_create}</li>
+			</ul>
+		</div>
+		{/if}
 		<table class="table table-users">
 			<thead>
 				<tr>

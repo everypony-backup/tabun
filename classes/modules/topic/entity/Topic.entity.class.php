@@ -426,6 +426,17 @@ class ModuleTopic_EntityTopic extends Entity {
 		return false;
 	}
 	/**
+	 * Проверяет разрешение на добавление комментария к топику у текущего пользователя
+	 *
+	 * @return bool
+	 */
+	public function getIsAllowAddComment() {
+		if ($oUser=$this->User_GetUserCurrent()) {
+			return $this->ACL_IsAllowAddCommentToTopic($this,$oUser);
+		}
+		return false;
+	}
+	/**
 	 * Возвращает количество добавивших топик в избранное
 	 *
 	 * @return int|null
