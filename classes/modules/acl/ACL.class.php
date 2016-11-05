@@ -222,7 +222,13 @@ class ModuleACL extends Module {
 		}
 
 		if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlog()->getId(),$oUser->getId())) {
-			if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getVotePermissions()->check(Permissions::CREATE)
+			) {
 				return true;
 			}
 		}
@@ -247,7 +253,11 @@ class ModuleACL extends Module {
 		 */
 		if($oBlog->getType()=='close') {
 			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
+				if (
+					!$oBlogUser->getDeleted()
+					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getVotePermissions()->check(Permissions::CREATE)
+				) {
 					if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
 						return self::CAN_VOTE_BLOG_TRUE;
 					}
@@ -289,7 +299,12 @@ class ModuleACL extends Module {
 		 */
 		if($oTopic->getBlog()->getType()=='close') {
 			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
-				if ($oBlogUser->getVotePermissions()->check(Permissions::CREATE)) {
+				if (
+					!$oBlogUser->getDeleted()
+					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getVotePermissions()->check(Permissions::CREATE)
+				) {
 					return true;
 				}
 			}
@@ -339,7 +354,13 @@ class ModuleACL extends Module {
 			return true;
 		}
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-			if ($oBlogUser->getTopicPermissions()->check(Permissions::CREATE) and ($this->ACL_CanAddTopic($oUser,$oBlog))) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::CREATE)
+				&& ($this->ACL_CanAddTopic($oUser,$oBlog))
+			) {
 				return true;
 			}
 		}
@@ -366,7 +387,12 @@ class ModuleACL extends Module {
 			return true;
 		}
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
-			if ($oBlogUser->getTopicPermissions()->check(Permissions::UPDATE)) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::UPDATE)
+			) {
 				return true;
 			}
 		}
@@ -390,7 +416,13 @@ class ModuleACL extends Module {
 			$oTopic = $this->Topic_GetTopicById($oComment->getTargetId());
 
 			if ($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlog()->getId(),$oUser->getId())) {
-				if ($oBlogUser->getCommentPermissions()->check(Permissions::DELETE)) {
+				if (
+					!$oBlogUser->getDeleted()
+					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getCommentPermissions()->check(Permissions::DELETE)
+				) {
 					return true;
 				}
 			}
@@ -419,7 +451,12 @@ class ModuleACL extends Module {
 			return true;
 		}
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
-			if ($oBlogUser->getTopicPermissions()->check(Permissions::DELETE)) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::DELETE)
+			) {
 				return true;
 			}
 		}
@@ -446,7 +483,15 @@ class ModuleACL extends Module {
 			return true;
 		}
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
-			return $oBlogUser->getCommentPermissions()->check(Permissions::CREATE);
+			if(($oBlog->getType()=='close') && $oBlogUser->getDeleted()) {
+				return false;
+			}
+			return (
+				   $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getCommentPermissions()->check(Permissions::CREATE)
+			);
 		}
 		if($oBlog->getType()=='close') {
 			return false;
@@ -478,7 +523,13 @@ class ModuleACL extends Module {
 		 * Разрешаем удалять при наличии разрешения, но только пустой
 		 */
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-			if ($oBlogUser->getBlogPermissions()->check(Permissions::DELETE)) {
+			if(($oBlog->getType()=='close') && $oBlogUser->getDeleted()) {
+				return false;
+			}
+			if (
+				   $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::DELETE)
+			) {
 				return self::CAN_DELETE_BLOG_EMPTY_ONLY;
 			}
 		}
@@ -530,7 +581,11 @@ class ModuleACL extends Module {
 		 * Разрешаем, если установлено разрешение (кхм...)
 		 */
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-			if ($oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)
+			) {
 				return true;
 			}
 		}
@@ -558,7 +613,11 @@ class ModuleACL extends Module {
 			 * Разрешаем, если установлено разрешение (кхм...)
 			 */
 			if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-				return $oBlogUser->getTopicPermissions()->check(Permissions::READ);
+				return (
+					!$oBlogUser->getDeleted()
+					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				);
 			}
 			return false;
 		}
@@ -586,7 +645,12 @@ class ModuleACL extends Module {
 			 * Разрешаем, если установлено разрешение (кхм...)
 			 */
 			if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-				if ($oBlogUser->getCommentPermissions()->check(Permissions::READ)) {
+				if (
+					!$oBlogUser->getDeleted()
+					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+				) {
 					return true;
 				}
 			}
@@ -615,7 +679,11 @@ class ModuleACL extends Module {
 		 * Разрешаем, если установлено разрешение (кхм...)
 		 */
 		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-			if ($oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)
+			) {
 				return true;
 			}
 		}
@@ -681,8 +749,10 @@ class ModuleACL extends Module {
 			||
 			(
 				($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId()))
-				&&
-				($oBlogUser->getCommentPermissions()->check(Permissions::UPDATE))
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getCommentPermissions()->check(Permissions::UPDATE)
 			)
 		)
 	) {
@@ -750,8 +820,10 @@ class ModuleACL extends Module {
 				||
 				(
 					($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId()))
-					&&
-					($oBlogUser->getCommentPermissions()->check(Permissions::UPDATE))
+					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+					&& $oBlogUser->getCommentPermissions()->check(Permissions::UPDATE)
 				)
 			)
 		) {

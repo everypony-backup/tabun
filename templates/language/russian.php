@@ -204,7 +204,7 @@ return array(
 	'blog_user_invite_add_ok' => 'Пользователю %%login%% отправлено приглашение',
 	'blog_user_invite_remove_ok' => 'Приглашение для пользователя %%login%% удалено',
 	'blog_user_already_invited' => 'Пользователю %%login%% уже отправлен инвайт',
-	'blog_user_already_exists' => 'Пользователь %%login%% уже состоит в блоге',
+	'blog_user_already_exists' => 'Пользователь %%login%% уже принимал инвайт',
 	'blog_user_already_reject' => 'Пользователь %%login%% отклонил инвайт',
 	'blog_user_invite_title' => "Приглашение стать читателем блога '%%blog_title%%'",
 	'blog_user_invite_text' => "Брони %%login%% приглашает вас стать читателем закрытого блога '%%blog_title%%'.<br/><br/><a href='%%accept_path%%'>Принять</a> - <a href='%%reject_path%%'>Отклонить</a>",

@@ -258,12 +258,43 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	}
 
 	/**
+	 * Возвращает статус флага "deleted" - им помечается удалённая сущность
+	 *
+	 * @return bool|null
+	 */
+	public function getDeleted() {
+		return $this->_getDataOne('deleted');
+	}
+	/**
+	 * Устанавливает статус флага "deleted"
+	 *
+	 * @param bool $bDeleted
+	 */
+	public function setDeleted($bDeleted) {
+		$this->_aData['deleted'] = $bDeleted;
+	}
+
+	/**
 	 * Возвращает текущую роль пользователя в блоге старым способом
 	 *
 	 * @return int|null
 	 */
 	public function getUserRole() {
 		return $this->_getDataOne('user_role');
+	}
+
+	public function getIsAdministrator() {
+		return $this->getBlogPermissions()->check(Permissions::UPDATE);
+	}
+
+	public function getIsModerator() {
+		$oTopicPerm = $this->getTopicPermissions();
+		$oCommentPerm = $this->getCommentPermissions();
+		return
+			   $oTopicPerm->check(Permissions::UPDATE)
+			|| $oTopicPerm->check(Permissions::DELETE)
+			|| $oCommentPerm->check(Permissions::UPDATE)
+			|| $oCommentPerm->check(Permissions::DELETE);
 	}
 }
 ?>
