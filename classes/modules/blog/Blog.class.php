@@ -488,10 +488,8 @@ class ModuleBlog extends Module {
 	 * @param bool $bReturnIdOnly	Возвращать только ID блогов или полные объекты
 	 * @return array
 	 */
-	public function GetBlogUsersByUserId($sUserId,$iRole=null,$bReturnIdOnly=false) {
-		$aFilter=array(
-			'user_id'=> $sUserId
-		);
+	public function GetBlogUsersByUserId($sUserId,$iRole=null,$bReturnIdOnly=false,$aFilter=array()) {
+		$aFilter['user_id'] = $sUserId;
 		if($iRole!==null) {
 			$aFilter['user_role']=$iRole;
 		}
@@ -727,7 +725,7 @@ class ModuleBlog extends Module {
 			$aBlogUsers=$this->GetBlogUsersByUserId($oUser->getId());
 			foreach ($aBlogUsers as $oBlogUser) {
 				$oBlog=$oBlogUser->getBlog();
-				if ($this->ACL_CanAddTopic($oUser,$oBlog) or $oBlogUser->getIsAdministrator() or $oBlogUser->getIsModerator()) {
+				if ($this->ACL_IsAllowBlog($oBlog,$oUser)) {
 					$aAllowBlogsUser[$oBlog->getId()]=$oBlog;
 				}
 			}
@@ -754,7 +752,7 @@ class ModuleBlog extends Module {
 			 * Добавляем блоги, в которых состоит пользователь
 			 * (читателем, модератором, или администратором)
 			 */
-			$aOpenBlogsUser=array_merge($aOpenBlogsUser,$this->GetBlogUsersByUserId($oUser->getId(),null,true));
+			$aOpenBlogsUser=array_merge($aOpenBlogsUser,$this->GetBlogUsersByUserId($oUser->getId(),null,true,array('not_deleted'=>1)));
 			$this->Cache_Set(
                 $aOpenBlogsUser, 
                 $sCacheKey,
@@ -787,7 +785,7 @@ class ModuleBlog extends Module {
 				 * Получаем массив идентификаторов блогов,
 				 * которые являются откытыми для данного пользователя
 				 */
-				$aOpenBlogs=$this->GetBlogUsersByUserId($oUser->getId(),null,true);
+				$aOpenBlogs=$this->GetBlogUsersByUserId($oUser->getId(),null,true,array('not_deleted'=>1));
 				/**
 				 * Получаем закрытые блоги, где пользователь является автором
 				 */
