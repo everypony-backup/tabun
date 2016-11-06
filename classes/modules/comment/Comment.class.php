@@ -649,6 +649,7 @@ class ModuleComment extends Module {
 		$oViewerLocal=$this->Viewer_GetLocalViewer();
 		$oViewerLocal->Assign('oUserCurrent',$this->User_GetUserCurrent());
 		$oViewerLocal->Assign('bOneComment',true);
+		$oViewerLocal->Assign('sAuthorNotice', $aLang.topic_author);
 		if($sTargetType=='topic') {
 			$oViewerLocal->Assign('bAddCommentPermission',$this->Topic_GetTopicById($sId)->getIsAllowAddComment());
 		} else {
