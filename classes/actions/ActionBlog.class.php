@@ -809,7 +809,7 @@ class ActionBlog extends Action {
 		$sShowType=in_array($this->GetParamEventMatch(0,0),array('bad','new','newall','discussed','top')) ? $this->GetParamEventMatch(0,0) : 'good';
 		if (!in_array($sShowType,array('discussed','top'))) {
 			$sPeriod='all';
-		}
+		} 
 		/**
 		 * Проверяем есть ли блог с таким УРЛ
 		 */
@@ -819,7 +819,7 @@ class ActionBlog extends Action {
 		/**
 		 * Определяем права на отображение закрытого блога
 		 */
-		if(!$this->ACL_IsAllowReadTopicsInBlog($oBlog,$this->oUserCurrent)) {
+		if(!$this->oUserCurrent || !$this->ACL_IsAllowReadTopicsInBlog($oBlog,$this->oUserCurrent)) {
 			$bCloseBlog=true;
 		} else {
 			$bCloseBlog=false;
@@ -1326,7 +1326,7 @@ class ActionBlog extends Action {
 					case ($aBlogUsers[$oUser->getId()]->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE):
 						$sErrorMessage=$this->Lang_Get('blog_user_already_invited',array('login'=>htmlspecialchars($sUser)));
 						break;
-					case ($aBlogUsers[$oUser->getId()]->getUserRole()>ModuleBlog::BLOG_USER_ROLE_GUEST):
+					case ($aBlogUsers[$oUser->getId()]->getUserRole()>ModuleBlog::BLOG_USER_ROLE_GUEST || $aBlogUsers[$oUser->getId()]->getUserRole()==ModuleBlog::BLOG_USER_ROLE_BAN):
 						$sErrorMessage=$this->Lang_Get('blog_user_already_exists',array('login'=>htmlspecialchars($sUser)));
 						break;
 					case ($aBlogUsers[$oUser->getId()]->getUserRole()==ModuleBlog::BLOG_USER_ROLE_REJECT):
@@ -1541,7 +1541,7 @@ class ActionBlog extends Action {
 		if(!$oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$this->oUserCurrent->getId())) {
 			return $this->EventNotFound();
 		}
-		if($oBlogUser->getUserRole()>ModuleBlog::BLOG_USER_ROLE_GUEST) {
+		if($oBlogUser->getUserRole()>ModuleBlog::BLOG_USER_ROLE_GUEST || $oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_BAN) {
 			$sMessage=$this->Lang_Get('blog_user_invite_already_done');
 			$this->Message_AddError($sMessage,$this->Lang_Get('error'),true);
 			Router::Location(Router::GetPath('talk'));
@@ -1718,13 +1718,13 @@ class ActionBlog extends Action {
 		 * Получаем текущий статус пользователя в блоге
 		 */
 		$oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$this->oUserCurrent->getId());
-		if (!$oBlogUser || $oBlogUser->getDeleted()) {
+		if (!$oBlogUser || $oBlogUser->getDeleted() || $oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE || $oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_REJECT) {
 			if ($oBlog->getOwnerId()!=$this->oUserCurrent->getId()) {
 				/**
 				 * Присоединяем юзера к блогу
 				 */
 				$bResult=false;
-				if($oBlogUser) {
+				if($oBlogUser && $oBlogUser->getUserRole()!=ModuleBlog::BLOG_USER_ROLE_REJECT) {
 					if ($oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE) {
 						$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
 					}

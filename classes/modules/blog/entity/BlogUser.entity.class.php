@@ -198,8 +198,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 					| Permissions::READ;
 					
 			default:
-				return
-					  Permissions::READ;
+				return 0;
 			
 		}
 	}
@@ -226,8 +225,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 					| Permissions::READ;
 					
 			default:
-				return
-					  Permissions::READ;
+				return 0;
 			
 		}
 	}
@@ -251,8 +249,7 @@ class ModuleBlog_EntityBlogUser extends Entity {
 					| Permissions::READ;
 					
 			default:
-				return
-					  Permissions::READ;
+				return 0;
 			
 		}
 	}
@@ -284,10 +281,13 @@ class ModuleBlog_EntityBlogUser extends Entity {
 	}
 
 	public function getIsAdministrator() {
-		return $this->getBlogPermissions()->check(Permissions::UPDATE);
+		return (!$this->getDeleted()) && $this->getBlogPermissions()->check(Permissions::UPDATE);
 	}
 
 	public function getIsModerator() {
+		if ($this->getDeleted()) {
+			return false;
+		}
 		$oTopicPerm = $this->getTopicPermissions();
 		$oCommentPerm = $this->getCommentPermissions();
 		return

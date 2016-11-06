@@ -113,7 +113,7 @@ class ModuleBlog extends Module {
 			} else {
 				$oBlog->setOwner(null); // или $oBlog->setOwner(new ModuleUser_EntityUser());
 			}
-			if (isset($aBlogUsers[$oBlog->getId()]) && !$aBlogUsers[$oBlog->getId()]->getDeleted()) {
+			if (isset($aBlogUsers[$oBlog->getId()]) && !$aBlogUsers[$oBlog->getId()]->getDeleted() && ($aBlogUsers[$oBlog->getId()]->getUserRole()!=ModuleBlog::BLOG_USER_ROLE_INVITE && $aBlogUsers[$oBlog->getId()]->getUserRole()!=ModuleBlog::BLOG_USER_ROLE_REJECT)) {
 				$oBlog->setUserIsJoin(true);
 				$oBlog->setUserIsAdministrator($aBlogUsers[$oBlog->getId()]->getIsAdministrator());
 				$oBlog->setUserIsModerator($aBlogUsers[$oBlog->getId()]->getIsModerator());

@@ -143,7 +143,7 @@ class ModuleBlog_MapperBlog extends Mapper {
 	 * @return bool
 	 */
 	public function DeleteRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
-		if ($oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE) {
+		if (($oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE) || ($oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_REJECT)) {
 			$sql = "DELETE FROM ".Config::Get('db.table.blog_user')." 
 				WHERE
 					blog_id = ?d
