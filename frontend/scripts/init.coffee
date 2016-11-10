@@ -137,16 +137,11 @@ init = ->
     $.markItUp target: target, replaceWith: str
 
   if window.location.pathname.match "settings/profile"
-    eval(
-      "jQuery(function($){"+
-        "$('#foto-upload').file({ name:'foto' }).choose(function(e, input) {"+
-          "ls.user.uploadFoto(null,input);"+
-        "});"+
-      "});"+
-      "jQuery(function($){"+
-        "$('#avatar-upload').file({ name:'avatar' }).choose(function(e, input) {"+
-          "ls.user.uploadAvatar(null,input);"+
-        "});"+
-      "});")
+    (($) ->
+      $('#foto-upload').file({ name:'foto' }).choose (e, input) ->
+        ls.user.uploadFoto null, input
+      $('#avatar-upload').file({ name:'avatar' }).choose (e, input) ->
+        ls.user.uploadAvatar null, input
+    ) jQuery
 
 module.exports = init
