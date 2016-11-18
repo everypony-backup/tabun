@@ -156,6 +156,8 @@ return array(
 	 */
 	'blog_admin' => 'Управление блогом',
 	'blog_admin_not_authorization' => 'Для того, чтобы изменить блог, сначала нужно войти под своим аккаунтом.',
+	'blog_admin_attention' => 'Внимание!',
+	'blog_admin_open_blog_permissions_notice' => 'В открытом блоге нельзя запретить следующие действия:',
 	'blog_admin_profile' => 'Профиль',
 	'blog_admin_users' => 'Брони',
 	'blog_admin_users_administrator' => 'администратор',

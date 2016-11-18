@@ -819,7 +819,7 @@ class ActionBlog extends Action {
 		/**
 		 * Определяем права на отображение закрытого блога
 		 */
-		if(!$this->oUserCurrent || !$this->ACL_IsAllowReadTopicsInBlog($oBlog,$this->oUserCurrent)) {
+		if(!$this->ACL_IsAllowReadTopicsInBlog($oBlog,$this->oUserCurrent)) {
 			$bCloseBlog=true;
 		} else {
 			$bCloseBlog=false;
@@ -1091,10 +1091,10 @@ class ActionBlog extends Action {
 
 				$this->Comment_AddCommentOnline($oCommentOnline);
 
-                /**
-                 * Добавляем комментарий в поисковый индекс
-                 */
-                $this->SearchIndexer_CommentIndex($oCommentNew);
+				/**
+				 * Добавляем комментарий в поисковый индекс
+				 */
+				$this->SearchIndexer_CommentIndex($oCommentNew);
 			}
 			/**
 			 * Сохраняем дату последнего коммента для юзера
@@ -1126,6 +1126,8 @@ class ActionBlog extends Action {
 			 * Добавляем событие в ленту
 			 */
 			$this->Stream_write($oCommentNew->getUserId(), 'add_comment', $oCommentNew->getId(), $oTopic->getPublish() && $oTopic->getBlog()->getType()!='close');
+
+			$this->Comment_PostProcessComment($oCommentNew);
 		} else {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
 		}

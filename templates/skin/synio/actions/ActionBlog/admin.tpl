@@ -8,8 +8,8 @@
 		<input type="hidden" name="security_ls_key" value="{$LIVESTREET_SECURITY_KEY}" />
 		{if $oBlogEdit->getType() == "open"}
 		<div class="blog-message blog-message-notice">
-			<strong>Внимание!</strong>
-			В открытом блоге нельзя запретить следующие действия:
+			<strong>{$aLang.blog_admin_attention}</strong>
+			{$aLang.blog_admin_open_blog_permissions_notice}
 			<ul>
 				<li>{$aLang.blog_admin_users_perm_topics_read}</li>
 				<li>{$aLang.blog_admin_users_perm_comments_read}</li>

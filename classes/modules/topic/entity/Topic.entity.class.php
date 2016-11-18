@@ -442,13 +442,7 @@ class ModuleTopic_EntityTopic extends Entity {
 	 * @return bool
 	 */
 	public function getIsAllowReadComments() {
-		if ($this->getBlog()->getType()!='close') {
-			return true;
-		}
-		if ($oUser=$this->User_GetUserCurrent()) {
-			return $this->ACL_IsAllowAddCommentToTopic($this,$oUser);
-		}
-		return false;
+		return $this->ACL_IsAllowReadCommentsInBlog($this->getBlog(),$oUser);
 	}
 	/**
 	 * Возвращает количество добавивших топик в избранное

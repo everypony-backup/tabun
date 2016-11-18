@@ -1009,4 +1009,27 @@ class ModuleComment extends Module {
 	public function AddCommentHistoryItem(ModuleComment_EntityCommentHistoryItem $oHistoryItem) {
 		return $this->oMapper->AddCommentHistoryItem($oHistoryItem);
 	}
+	/**
+	 * Пост-обработка комментария
+	 *
+	 * @param  ModuleComment_EntityComment $oComment
+	 */
+	public function PostProcessComment($oComment) {
+		if (
+			   ($oComment->getTargetType() == 'topic')
+			&& ($oTopic = $this->Topic_GetTopicById($oComment->getTargetId()))
+			&& ($oBlog = $oTopic->getBlog())
+		)
+		{
+			// Автоматически создаём BlogUser
+			if (($oBlog->getType() == 'open') && !$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oComment->getUserId())) {
+				$oBlogUserNew=Engine::GetEntity('Blog_BlogUser');
+				$oBlogUserNew->setBlogId($oBlog->getId());
+				$oBlogUserNew->setUserId($oComment->getUserId());
+				$oBlogUserNew->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
+				$oBlogUserNew->setDeleted(true); // Если поставить здесь false, то юзеры будут автоматически подписываться на блог при добавлении комментариев. Причём, если юзер отпишется, то в следующий раз он не будет автоматически снова подписан.
+				$this->Blog_AddRelationBlogUser($oBlogUserNew);
+			}
+		}
+	}
 }
