@@ -66,7 +66,7 @@ return [
                 [
                     'src' => [
                         '#domain' => [
-                            'youtube.com' => '',
+                            'youtube.com' => 'embed/[\w\d]+$',
                             'player.vimeo.com' => '',
                             'dailymotion.com' => '',
                             'coub.com' => '',
