@@ -1,14 +1,6 @@
 {include file='header.tpl'}
 {include file='menu.settings.tpl'}
 
-<script type="text/javascript">
-	jQuery(document).ready(function($){
-		ls.lang.load({lang_load name="geo_select_city,geo_select_region"});
-		ls.geo.initSelect();
-		ls.userfield.iCountMax='{cfg name="module.user.userfield_max_identical"}';
-	});
-</script>
-
 {hook run='settings_profile_begin'}
 
 <form method="post" enctype="multipart/form-data" class="form-profile">
