@@ -252,6 +252,7 @@ containers:
     - !Container _base_alpine
     - !Install
       - php5-fpm
+      - libressl@main
       - php5-mysql
       - php5-pdo_mysql
       - php5-mcrypt
@@ -285,7 +286,6 @@ containers:
   php-trunk:
     setup:
       - !Container _php-base
-      - !Install [openssl]
       - !*Unpack
         - *trunk_stuff
         - *host_resolution
