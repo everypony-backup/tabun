@@ -272,11 +272,13 @@ preview = ->
 setCountNewComment = () ->
   unless newCounter then return
   if newComments.length
-    document.title = newComments.length + ' | ' + originalTitle
+    if UI.newCommentsInTitle
+      document.title = newComments.length + ' | ' + originalTitle
     newCounter.textContent = newComments.length
     newCounter.classList.remove "h-hidden"
   else
-    document.title = originalTitle
+    if UI.newCommentsInTitle
+      document.title = originalTitle
     newCounter.classList.add "h-hidden"
 
 
@@ -292,23 +294,24 @@ showComment = (commentId,highlightParent) ->
   commentWrapper = comment.parentNode
   parentWrapper = commentWrapper.parentNode
   parentComment = parentWrapper.children[0]
-  toFold = null
-  if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
-  hiddenCount = $(toFold).find(".comment").length
-  oldPos = comment.getClientRects()[0].top
-  while foldedComments.length
-    foldedComments[0].classList.remove classes.comment_folded
-  forEach toFold, (wrapper) ->
-    wrapper.classList.add classes.comment_folded
-  if hiddenCount
-    parentWrapper.insertBefore message, toFold[0]
-    message.classList.remove "h-hidden"
-  else
-    message.classList.add "h-hidden"
-  window.scrollBy 0, comment.getClientRects()[0].top - oldPos
-  if hiddenCount
-    message.children[0].textContent = hiddenCount
-    message.children[1].textContent = ngettext "comment", "comments", hiddenCount
+  if UI.autoFold
+    toFold = null
+    if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
+    hiddenCount = $(toFold).find(".comment").length
+    oldPos = comment.getClientRects()[0].top
+    while foldedComments.length
+      foldedComments[0].classList.remove classes.comment_folded
+    forEach toFold, (wrapper) ->
+      wrapper.classList.add classes.comment_folded
+    if hiddenCount
+      parentWrapper.insertBefore message, toFold[0]
+      message.classList.remove "h-hidden"
+    else
+      message.classList.add "h-hidden"
+    window.scrollBy 0, comment.getClientRects()[0].top - oldPos
+    if hiddenCount
+      message.children[0].textContent = hiddenCount
+      message.children[1].textContent = ngettext "comment", "comments", hiddenCount
   if currentViewedComment != null
     currentViewedComment.classList.remove classes.current
   if highlightParent
@@ -317,7 +320,10 @@ showComment = (commentId,highlightParent) ->
   else
     shift = (window.innerHeight - comment.getClientRects()[0].height) / 2
     if shift < 0 then shift = 0
-    scrollTo comment, 300, {offset: -shift}
+    if UI.smothScroll
+      $.scrollTo comment, 300, {offset: -shift}
+    else
+      window.scrollBy 0, comment.getClientRects()[0].top - shift
     comment.classList.remove classes["new"]
     comment.classList.add classes.current
     currentViewedComment = comment
@@ -344,7 +350,7 @@ initEvent = ->
       target.classList.add classes.folded
       forEach wrappers, (wrapper) -> wrapper.classList.add 'h-hidden'
 
-  if newCounter
+  if newCounter && UI.hotkeys
     $(document).keydown (e) ->
       if !$("textarea:focus,input:focus").length
         key = e.keyCode or e.which
@@ -354,7 +360,7 @@ initEvent = ->
         else if [13,46].indexOf(key) != -1
           e.preventDefault()
           $("#update-comments").click()
-    if updateButton
+    if updateButton && UI.autoUpdateComments
       topicID = parseInt($(updateButton).attr("onclick").match(/\d+/)[0])
       topicType = $(updateButton).attr("onclick").match(/\'.*\'/)[0].replace(/'/g,"")
       autoUpdate = ->
@@ -367,7 +373,7 @@ initEvent = ->
 init = ->
   initEvent()
   setCountNewComment()
-  if commentForm
+  if commentForm && UI.smartQuote
     $(document)
       .on('mouseup', (e) -> 
         #проверяем нажата ли левая кнопка

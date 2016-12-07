@@ -9,7 +9,10 @@ goNextTopic = ->
   iCurrentTopic++
   topic = $(".js-topic:eq('#{iCurrentTopic}')")
   if topic.length
-    $.scrollTo topic, 500
+    if UI.smothScroll
+      $.scrollTo topic, 500
+    else
+      window.scrollBy 0,topic[0].getClientRects()[0].top
   else
     iCurrentTopic = $('.js-topic').length - 1
     # переход на следующую страницу
@@ -30,7 +33,10 @@ goPrevTopic = ->
   else
     topic = $(".js-topic:eq('#{iCurrentTopic}')")
     if topic.length
-      $.scrollTo topic, 500
+      if UI.smothScroll
+        $.scrollTo topic, 500
+      else
+        window.scrollBy 0,topic[0].getClientRects()[0].top
   false
 
 init = ->
@@ -52,8 +58,16 @@ init = ->
   $("#toolbar").show()
 
   # Up/down
-  $('#up-switch').on 'click', -> $.scrollTo 0, 1000
-  $('#down-switch').on 'click', -> $.scrollTo document.body.clientHeight, 1000
+  $('#up-switch').on 'click', ->
+    if UI.smothScroll
+      $.scrollTo 0, 1000
+    else
+      window.scrollTo 0, 0
+  $('#down-switch').on 'click', ->
+    if UI.smothScroll
+      $.scrollTo document.body.clientHeight, 1000
+    else
+      window.scrollTo 0, document.body.clientHeight
 
   # Wide Mode
   $('#widemode-switch').on 'click', -> $('body').toggleClass 'widemode'
