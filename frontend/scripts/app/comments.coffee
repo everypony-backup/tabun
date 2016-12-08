@@ -286,7 +286,7 @@ setCountAllComment = () ->
   document.getElementById("name-count-comments").textContent = ngettext "comment", "comments", allComments.length
   allCounter.textContent = allComments.length
 
-showComment = (commentId,highlightParent) ->
+showComment = (commentId, highlightParent) ->
   "use strict"
   if commentId then comment = document.getElementById "comment_id_" + commentId
   unless comment then comment = newComments[0]
@@ -294,7 +294,7 @@ showComment = (commentId,highlightParent) ->
   commentWrapper = comment.parentNode
   parentWrapper = commentWrapper.parentNode
   parentComment = parentWrapper.children[0]
-  if UI.autoFold
+  if UI.autoFold || highlightParent
     toFold = null
     if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
     hiddenCount = $(toFold).find(".comment").length
