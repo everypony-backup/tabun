@@ -30,6 +30,8 @@
     padding-left 14px
   .reply
     margin-left 40px
+  &.comment-folded
+    display none
 
 .comment-preview
   padding 5px 10px 16px
@@ -174,9 +176,6 @@
       &.goto-comment-parent
         a
           background-position -161px -193px
-      &.goto-comment-child
-        a 
-          background-position -129px -193px
       &:hover
         a
           background-image url(images/jquery-ui/ui-icons_2e83ff_256x240.png)
@@ -342,3 +341,10 @@ div
   width 16px
 #quote>b
   transform rotate(180deg)
+
+#hidden-message
+  margin 5px 0 10px
+  a
+    float right
+    border-bottom 1px dotted #09f
+    cursor pointer

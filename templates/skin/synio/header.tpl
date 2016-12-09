@@ -37,6 +37,17 @@
     {/if}
     {include 'analytics.tpl'}
     {hook run='html_head_end'}
+    <script type="text/javascript">
+        var UI = {
+            smothScroll: window.localStorage.getItem('UI-smothScroll') === "false" ? false:true,
+            hotkeys: window.localStorage.getItem('UI-hotkeys') === "false" ? false:true,
+            smartQuote: window.localStorage.getItem('UI-smartQuote') === "false" ? false:true,
+            autoFold: window.localStorage.getItem('UI-autoFold') === "false" ? false:true,
+            newCommentsInTitle: window.localStorage.getItem('UI-newCommentsInTitle') === "false" ? false:true,
+            autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true" ? true:false
+        }
+    </script>
+
 </head>
 
 {add_block group='toolbar' name='toolbar_admin.tpl' priority=100}

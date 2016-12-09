@@ -169,8 +169,8 @@ class ModuleTopic extends Module {
 				$oTopic->setCountCommentNew($oTopic->getCountComment()-$aTopicsRead[$oTopic->getId()]->getCommentCountLast());
 				$oTopic->setDateRead($aTopicsRead[$oTopic->getId()]->getDateRead());
 			} else {
-				$oTopic->setCountCommentNew(0);
-				$oTopic->setDateRead(date("Y-m-d H:i:s"));
+				$oTopic->setCountCommentNew($oTopic->getCountComment());
+				$oTopic->setDateRead($oTopic->getDateAdd());
 			}
 		}
 		return $aTopics;
