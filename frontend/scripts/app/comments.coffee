@@ -294,6 +294,9 @@ showComment = (commentId, highlightParent) ->
   commentWrapper = comment.parentNode
   parentWrapper = commentWrapper.parentNode
   parentComment = parentWrapper.children[0]
+  if UI.autoDespoil && !highlightParent
+    forEach $(comment).find(".spoiler-body"), (node) ->
+      node.style.display = 'block'
   if UI.autoFold || highlightParent
     toFold = null
     if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")

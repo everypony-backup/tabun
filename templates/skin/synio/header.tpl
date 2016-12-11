@@ -37,6 +37,7 @@
     {/if}
     {include 'analytics.tpl'}
     {hook run='html_head_end'}
+    <style id="UI-custom-style"></style>
     <script type="text/javascript">
         var UI = {
             smothScroll: window.localStorage.getItem('UI-smothScroll') === "false" ? false:true,
@@ -44,7 +45,11 @@
             smartQuote: window.localStorage.getItem('UI-smartQuote') === "false" ? false:true,
             autoFold: window.localStorage.getItem('UI-autoFold') === "false" ? false:true,
             newCommentsInTitle: window.localStorage.getItem('UI-newCommentsInTitle') === "false" ? false:true,
-            autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true" ? true:false
+            autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true" ? true:false,
+            autoDespoil: window.localStorage.getItem('UI-autoDespoil') === "true" ? true:false
+        }
+        if (UI-autoDespoil) {
+            document.getElementById('UI-custom-style').innerHTML += ('.comment-current .spoiler-gray{background-color:transparent;}.comment-current .spoiler-gray img{filter: inherit;}');
         }
     </script>
 

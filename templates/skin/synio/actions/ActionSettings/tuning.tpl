@@ -55,6 +55,10 @@
 		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoUpdateComments"/>
 		Автообновление комментариев
 	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoDespoil"/>
+		Раскрывать спойлеры в активном комментарии
+	</label>
 
 	<script type="text/javascript">
 		document.getElementById("UI-smothScroll").checked = UI.smothScroll;
@@ -63,6 +67,7 @@
 		document.getElementById("UI-autoFold").checked = UI.autoFold;
 		document.getElementById("UI-newCommentsInTitle").checked = UI.newCommentsInTitle;
 		document.getElementById("UI-autoUpdateComments").checked = UI.autoUpdateComments;
+		document.getElementById("UI-autoDespoil").checked = UI.autoDespoil;
 	</script>
 
 	{hook run='form_settings_tuning_end'}
