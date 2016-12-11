@@ -352,12 +352,13 @@ initEvent = ->
 
   if newCounter && UI.hotkeys
     $(document).keydown (e) ->
-      if !$("textarea:focus,input:focus").length
-        key = e.keyCode or e.which
-        if [32,45].indexOf(key) != -1
+      key = e.keyCode or e.which
+      if [32,45].indexOf(key) != -1
+        if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
           e.preventDefault()
           $(newCounter).click()
-        else if [13,46].indexOf(key) != -1
+      else if [13,46].indexOf(key) != -1
+        if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
           e.preventDefault()
           $("#update-comments").click()
     if updateButton && UI.autoUpdateComments
