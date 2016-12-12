@@ -74,13 +74,17 @@ init = ->
 
   # Despoil
   $('#despoil').on 'click', ->
+    if UI.despoilOnlyArticle
+      target = 'article .spoiler-body'
+    else
+      target = '.spoiler-body'
     if $(this).text().trim() == 'Despoil'
       $(this).text('Spoil')
-      forEach $('.spoiler-body'), (node) ->
-        node.style.display = 'block'
+      mode = 'block'
     else
       $(this).text('Despoil')
-      forEach $('.spoiler-body'), (node) ->
-        node.style.display = 'none'
+      mode = 'none'
+    forEach $(target), (node) ->
+      node.style.display = mode
 
 module.exports = {init, goPrevTopic, goNextTopic}
