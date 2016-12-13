@@ -47,7 +47,8 @@
             newCommentsInTitle: window.localStorage.getItem('UI-newCommentsInTitle') === "false" ? false:true,
             autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true" ? true:false,
             autoDespoil: window.localStorage.getItem('UI-autoDespoil') === "true" ? true:false,
-            despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') === "true" ? true:false
+            despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') === "true" ? true:false,
+            showPinkie: window.localStorage.getItem('UI-showPinkie') === "false" ? false:true
         }
         if (UI-autoDespoil) {
             document.getElementById('UI-custom-style').innerHTML += ('.comment-current .spoiler-gray{background-color:transparent;}.comment-current .spoiler-gray img{filter: inherit;}');
