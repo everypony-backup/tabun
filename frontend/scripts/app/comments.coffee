@@ -301,9 +301,14 @@ showComment = (commentId, highlightParent) ->
     toFold = null
     if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
     hiddenCount = $(toFold).find(".comment").length
-    while foldedComments.length
-      foldedComments[0].classList.remove classes.comment_folded
-    oldPos = comment.getClientRects()[0].top
+    if highlightParent
+      oldPos = comment.getClientRects()[0].top
+      while foldedComments.length
+        foldedComments[0].classList.remove classes.comment_folded
+    else
+      while foldedComments.length
+        foldedComments[0].classList.remove classes.comment_folded
+      oldPos = comment.getClientRects()[0].top
     forEach toFold, (wrapper) ->
       wrapper.classList.add classes.comment_folded
     if hiddenCount
