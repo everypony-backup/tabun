@@ -71,13 +71,8 @@
     &.folded
       background-position -13px -94px
   &.comment-deleted
-    .comment-content
-      background #c5c5c5
-      border-color #C8A8A8
-      &:after
-        border-color #C8A8A8 transparent transparent
-      &:before
-        border-color #c5c5c5 transparent transparent
+    em
+      color #8b0000
   &.comment-self
     .comment-content
       background #fff
@@ -100,16 +95,9 @@
         border-color #bae48e transparent transparent
       &:before
         border-color #cdf5a6 transparent transparent
-  .comment-info
-    li
-      &.comment-hide
-        a
-          color #CCC
-          cursor pointer
   &.comment-hidden
-    .comment-info
-      .edit
-        display none
+    em
+      color #8b0000
   .comment-actions
     li
       display inline
@@ -118,18 +106,6 @@
 .comments.comment-list .comment-path .blog-name,
 .comments.comment-list .comment-path .comment-path-comments
   color #000
-
-  .comment
-    &.comment-hidden
-      .comment-info
-        li
-          &.comment-hide
-            display none
-
-.ls-user-role-not-admin
-  .comment
-    &.comment-deleted
-      display none
 
 .comment-info
   display flex
@@ -141,72 +117,61 @@
   position relative
   overflow visible
   font-size 11px
-  li
-    height 18px
-    margin-right 15px
-    &.comment-author
-      a
-        font-weight bold
-        color #444
-      &.comment-topic-author
-        a
-          color #4b5468
-    a
-      &.delete
-        color #ccc
-      &.link-dotted
-        color #09f
-        text-decoration none
-        border-bottom 1px dotted #09f
-        &:hover
-          color #f00
-          border-color #f00
-    &.comment-date
-      color #999
-    &.goto
-      a
-        color #a2b6cd
-        text-decoration none
-        display inline-block
-        width 14px
-        height 14px
-        text-indent 20px
-        overflow hidden
-        background transparent url(images/jquery-ui/ui-icons_888888_256x240.png) no-repeat
-      &.goto-comment-parent
-        a
-          background-position -161px -193px
+  .comment-author
+    font-weight bold
+    color #444
+    &.comment-topic-author
+      color #4b5468
+  a
+    &.delete
+      color #ccc
+    &.link-dotted
+      color #09f
+      text-decoration none
+      border-bottom 1px dotted #09f
       &:hover
-        a
-          background-image url(images/jquery-ui/ui-icons_2e83ff_256x240.png)
-    .favourite-count
-      color #a2b6cd
-    &.vote
-      position absolute
-      top 0
-      right 0
+        color #f00
+        border-color #f00
+  .comment-date
+    color #999
+  .goto.goto-comment-parent
+    color #a2b6cd
+    text-decoration none
+    display inline-block
+    width 14px
+    height 14px
+    text-indent 20px
+    overflow hidden
+    background transparent url(images/jquery-ui/ui-icons_888888_256x240.png) no-repeat
+    background-position -161px -193px
+    &:hover
+      background-image url(images/jquery-ui/ui-icons_2e83ff_256x240.png)
+  .favourite-count
+    color #a2b6cd
+  .vote
+    position absolute
+    top 0
+    right 0
+    margin 0
+    display flex
+    flex-flow row
+    align-items center
+    .vote-up,.vote-down
+      cursor pointer
+    .vote-count
+      cursor default
+      color #949aa1
+      font-weight bold
+      font-size 12px
       margin 0
-      display flex
-      flex-flow row
-      align-items center
-      .vote-up,.vote-down
-        cursor pointer
+      padding 0 3px
+      line-height 18px
+    .vote-count-positive
       .vote-count
-        cursor default
-        color #949aa1
-        font-weight bold
-        font-size 12px
-        margin 0
-        padding 0 3px
-        line-height 18px
-      &.vote-count-positive
-        .vote-count
-          color #51983c
-      &.vote-count-negative
-        .vote-count
-          color #da4242
-    &.goto-comment-child
-      display none
+        color #51983c
+    .vote-count-negative
+      .vote-count
+        color #da4242
 
 div
   &.favourite
@@ -292,7 +257,7 @@ div
     .edit-form,
     .edit-form>label
       display block
-    .text.current
+    .text
       display none
   .comment-edit-bw
       display none

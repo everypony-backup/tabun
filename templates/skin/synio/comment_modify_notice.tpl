@@ -3,7 +3,6 @@
 {assign var="isHardModified" value=($flags & ModuleComment_EntityComment::FLAG_HARD_MODIFIED) !== 0}
 {assign var="isLocked" value=($flags & ModuleComment_EntityComment::FLAG_LOCK_MODIFY) !== 0}
 {strip}
-<li class="modify-notice">
 {if $isModified or $isLocked}
 	{assign var="title" value=""}
 	{assign var="titleSuffix" value=""}
@@ -46,7 +45,6 @@
 		{/if}
 	{/if}
 	{assign var="title" value="$title$titleSuffix"}
-	<span class="{if $isHardModified}hard-modified{else if $isSelfModified}self-modified{else}adm-modified{/if}" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">{$title|escape:"html"}</span>
+	<span class="modify-notice {if $isHardModified}hard-modified{else if $isSelfModified}self-modified{else}adm-modified{/if}" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">{$title|escape:"html"}</span>
 {/if}
-</li>
 {/strip}
