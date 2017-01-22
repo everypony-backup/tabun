@@ -1,0 +1,6 @@
+[submodule "marble"]
+	path = marble
+	url = git@github.com:everypony/marble.git
+[submodule "deploy"]
+	path = deploy
+	url = git@github.com:everypony/marble.git
