@@ -260,6 +260,7 @@ containers:
       - php5-curl
       - php5-imagick@community
       - php5-bcmath
+      - imagemagick@main
     - !ComposerDependencies
       optimize_autoloader: true
     - !EnsureDir /log
