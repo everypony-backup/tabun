@@ -113,7 +113,8 @@ init = ->
   toolbar.init()
 
   # Pinkie Pie
-  if random(1000) < 5 then showPinkie random 150, 1500
+  if UI.showPinkie
+    if random(1000) < 5 then showPinkie random 150, 1500
 
   # Spoilers
   $(document).on 'click', '.spoiler-title', ({target}) ->

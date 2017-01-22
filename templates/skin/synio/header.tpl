@@ -37,6 +37,24 @@
     {/if}
     {include 'analytics.tpl'}
     {hook run='html_head_end'}
+    <style id="UI-custom-style"></style>
+    <script type="text/javascript">
+        var UI = {
+            smothScroll: window.localStorage.getItem('UI-smothScroll') === "false",
+            hotkeys: window.localStorage.getItem('UI-hotkeys') === "false",
+            smartQuote: window.localStorage.getItem('UI-smartQuote') === "false",
+            autoFold: window.localStorage.getItem('UI-autoFold') === "false",
+            newCommentsInTitle: window.localStorage.getItem('UI-newCommentsInTitle') === "false",
+            autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') !== "true",
+            autoDespoil: window.localStorage.getItem('UI-autoDespoil') !== "true",
+            despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') !== "true",
+            showPinkie: window.localStorage.getItem('UI-showPinkie') === "false"
+        }
+        if (UI.autoDespoil) {
+            document.getElementById('UI-custom-style').innerHTML += ('.comment-current .spoiler-gray{background-color:transparent;}.comment-current .spoiler-gray img{filter: inherit;}');
+        }
+    </script>
+
 </head>
 
 {add_block group='toolbar' name='toolbar_admin.tpl' priority=100}

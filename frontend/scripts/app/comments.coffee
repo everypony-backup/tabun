@@ -1,6 +1,5 @@
 $ = require "jquery"
 {scrollTo} = require "jquery"
-{Set, OrderedSet} = require "immutable"
 {keys, map, filter, first, forEach} = require "lodash"
 {gettext, ngettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
@@ -29,20 +28,24 @@ classes =
   folded: 'folded'
   comment: 'comment'
   comment_goto_parent: 'goto-comment-parent'
-  comment_goto_child: 'goto-comment-child'
   comment_hidden: 'comment-hidden'
+  comment_folded: 'comment-folded'
   level: 'comment-level-'
 
 hideClasses = [classes.self, classes.new, classes.deleted, classes.current]
 
 iCurrentShowFormComment = 0
-currentViewedCommentId = null
+currentViewedComment = null
 
-newComments = new Set()
-allComments = new OrderedSet()
-newCounter = null
-allCounter = null
-commentForm = null
+allComments = document.getElementsByClassName classes.comment
+newComments = document.getElementsByClassName classes["new"]
+foldedComments = document.getElementsByClassName classes.comment_folded
+newCounter = document.getElementById "new_comments_counter"
+allCounter = document.getElementById "count-comments"
+commentForm = document.getElementById "form_comment_text"
+updateButton = document.getElementById "update-comments"
+message = document.getElementById "hidden-message"
+originalTitle = document.title
 
 toggleCommentFormState = (state) ->
   submitButton = document.getElementById "comment-button-submit"
@@ -147,8 +150,7 @@ closeEditForm = (idComment, contentWrapper) ->
 
 load = (idTarget, typeTarget, bFlushNew=true) ->
   idCommentLast = parseInt(newCounter.dataset.idCommentLast) || 0
-  objImg = document.getElementById 'update-comments'
-  objImg.classList.add 'active'
+  updateButton.classList.add 'active'
   params =
     idCommentLast: idCommentLast
     idTarget: idTarget
@@ -159,16 +161,15 @@ load = (idTarget, typeTarget, bFlushNew=true) ->
       return error gettext("common_error"), result.sMsg
 
     if bFlushNew
-      Set(document.getElementsByClassName(classes.new)).forEach (comment) ->
-        comment.classList.remove classes.new
-        comment.classList.remove classes.current
+      while newComments.length
+        newComments[0].classList.remove classes["new"]
 
     forEach result.comments, (comment, id) ->
-      unless allComments.contains parseInt id
+      unless document.getElementById "comment_id_"+id
         inject comment
 
-    setCountNewComment parseNewCommentTree()
-    setCountAllComment parseAllCommentTree()
+    setCountNewComment()
+    setCountAllComment()
 
     if keys(result.comments) > 0
       curItemBlock = blocks.getCurrentItem 'stream'
@@ -176,7 +177,7 @@ load = (idTarget, typeTarget, bFlushNew=true) ->
         blocks.load curItemBlock, 'stream'
       newCounter.dataset.idCommentLast = result.iMaxIdComment
 
-  _complete = -> objImg.classList.remove 'active'
+  _complete = -> updateButton.classList.remove 'active'
 
   ajax types[typeTarget].url_response, params, _success, _complete
 
@@ -198,10 +199,8 @@ inject = ({pid, id, html}) ->
 
   newComment.classList.add (classes.level + level)
   target.appendChild newComment
-
-  if (newComment.getElementsByClassName(classes.self)).length
-    scrollToComment id
-
+  if newComment.getElementsByClassName(classes.self).length
+    showComment id
 
 toggle = (obj, commentId) ->
   url = routes.comment.delete
@@ -270,71 +269,80 @@ preview = ->
   textPreview 'form_comment_text', false, "comment_preview_#{iCurrentShowFormComment}"
 
 
-setCountNewComment = (count) ->
-  newCounter.textContent = count
-  if count
+setCountNewComment = () ->
+  unless newCounter then return
+  if newComments.length
+    if UI.newCommentsInTitle
+      document.title = newComments.length + ' | ' + originalTitle
+    newCounter.textContent = newComments.length
     newCounter.classList.remove "h-hidden"
   else
+    if UI.newCommentsInTitle
+      document.title = originalTitle
     newCounter.classList.add "h-hidden"
 
 
-setCountAllComment = (count) ->
-  document.getElementById("name-count-comments").textContent = ngettext "comment", "comments", count
-  allCounter.textContent = count
+setCountAllComment = () ->
+  document.getElementById("name-count-comments").textContent = ngettext "comment", "comments", allComments.length
+  allCounter.textContent = allComments.length
 
-parseAllCommentTree = ->
-  allComments = Set map(
-    document.getElementsByClassName(classes.comment)
-    (comment) -> parseInt comment.dataset.id
-  )
-  allComments.size
-
-parseNewCommentTree = ->
-  newComments = OrderedSet map(
-    document.getElementsByClassName(classes.new)
-    (comment) -> parseInt comment.dataset.id
-  )
-  newComments.size
-
-goToNextComment = ->
-  commentId = newComments.first()
-  if commentId then scrollToComment commentId
-
-
-scrollToComment = (commentId) ->
-  comment = document.getElementById "comment_id_#{commentId}"
-  unless comment
-    return
-
-  scrollTo comment, 300, offset: -250
-
-  if currentViewedCommentId
-    previousViewedComment = document.getElementById "comment_id_#{currentViewedCommentId}"
-    if previousViewedComment
-      previousViewedComment.classList.remove classes.current
-
-  if newCounter
-    newComments = newComments.delete commentId
-    setCountNewComment newComments.size
-  
-  comment.classList.remove classes.new
-  comment.classList.add classes.current
-
-  currentViewedCommentId = parseInt comment.dataset.id
-
-
-goToParentComment = (id, pid) ->
-  scrollToComment pid
-  goToChild = $('#comment_id_'+pid+' .goto-comment-child>a')
-  $(goToChild).parent().show()
-  $(goToChild).attr('href','#'+id)
-  $(goToChild).attr('onclick', '{ls.comments.scrollToComment('+id+');$(this).parent().hide();$(this).attr("onclick","")}')
+showComment = (commentId, highlightParent) ->
+  "use strict"
+  if commentId then comment = document.getElementById "comment_id_" + commentId
+  unless comment then comment = newComments[0]
+  unless comment then return
+  commentWrapper = comment.parentNode
+  parentWrapper = commentWrapper.parentNode
+  parentComment = parentWrapper.children[0]
+  if UI.autoDespoil && !highlightParent
+    forEach $(comment).find(".spoiler-body"), (node) ->
+      node.style.display = 'block'
+  if UI.autoFold || highlightParent
+    toFold = null
+    if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
+    hiddenCount = $(toFold).find(".comment").length
+    if highlightParent
+      oldPos = comment.getClientRects()[0].top
+      while foldedComments.length
+        foldedComments[0].classList.remove classes.comment_folded
+    else
+      while foldedComments.length
+        foldedComments[0].classList.remove classes.comment_folded
+      oldPos = comment.getClientRects()[0].top
+    forEach toFold, (wrapper) ->
+      wrapper.classList.add classes.comment_folded
+    if hiddenCount
+      parentWrapper.insertBefore message, toFold[0]
+      message.classList.remove "h-hidden"
+    else
+      message.classList.add "h-hidden"
+    window.scrollBy 0, comment.getClientRects()[0].top - oldPos
+    if hiddenCount
+      message.children[0].textContent = hiddenCount
+      message.children[1].textContent = ngettext "comment", "comments", hiddenCount
+  if currentViewedComment != null
+    currentViewedComment.classList.remove classes.current
+  if highlightParent
+    parentComment.classList.add classes.current
+    currentViewedComment = parentComment
+  else
+    shift = (window.innerHeight - comment.getClientRects()[0].height) / 2
+    if shift < 0 then shift = 0
+    if UI.smothScroll
+      $.scrollTo comment, 300, {offset: -shift}
+    else
+      window.scrollBy 0, comment.getClientRects()[0].top - shift
+    comment.classList.remove classes["new"]
+    comment.classList.add classes.current
+    currentViewedComment = comment
+  setCountNewComment()
 
 initEvent = ->
-  $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
-    key = keyCode or which
-    if ctrlKey and key == 13
-      $('#comment-button-submit').click()
+  if commentForm
+    $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
+      key = keyCode or which
+      if ctrlKey and key == 13
+        $('#comment-button-submit').click()
 
   $(document).on "click", '.folding', ({target}) ->
     wrappers = document
@@ -350,15 +358,31 @@ initEvent = ->
       target.classList.add classes.folded
       forEach wrappers, (wrapper) -> wrapper.classList.add 'h-hidden'
 
+  if newCounter && UI.hotkeys
+    $(document).keydown (e) ->
+      key = e.keyCode or e.which
+      if [32,45].indexOf(key) != -1
+        if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
+          e.preventDefault()
+          $(newCounter).click()
+      else if [13,46].indexOf(key) != -1
+        if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
+          e.preventDefault()
+          $("#update-comments").click()
+    if updateButton && UI.autoUpdateComments
+      topicID = parseInt($(updateButton).attr("onclick").match(/\d+/)[0])
+      topicType = $(updateButton).attr("onclick").match(/\'.*\'/)[0].replace(/'/g,"")
+      autoUpdate = ->
+        if document.visibilityState != 'hidden' then return
+        if !$("#reply").hasClass("h-hidden") then return
+        if $(updateButton).hasClass("active") then return
+        load(topicID,topicType,false)
+      setInterval(autoUpdate,60000)
 
 init = ->
-  newCounter = document.getElementById "new_comments_counter"
-  allCounter = document.getElementById "count-comments"
-  commentForm = document.getElementById "form_comment_text"
   initEvent()
-  setCountAllComment parseAllCommentTree()
-  setCountNewComment parseNewCommentTree()
-  if commentForm
+  setCountNewComment()
+  if commentForm && UI.smartQuote
     $(document)
       .on('mouseup', (e) -> 
         #проверяем нажата ли левая кнопка
@@ -424,9 +448,9 @@ init = ->
         windowPosition = $(window).scrollTop()
         if (targetFormPosition + targetForm.getClientRects()[0].height < windowPosition) || (targetFormPosition > (windowPosition + $(window).height()))
           if iCurrentShowFormComment
-            scrollToComment iCurrentShowFormComment
+            scrollTo document.getElementById "comment_id_"+iCurrentShowFormComment, 300, {offset: -250}
           else
-            scrollTo(targetForm, 300, {offset: -250})
+            scrollTo targetForm, 300, {offset: -250}
       )
       .on('mousedown','#quote', (e) ->
         if e.which != 1
@@ -438,8 +462,6 @@ init = ->
 
 module.exports = {
   init
-  goToParentComment
-  scrollToComment
   toggleCommentForm
   toggle
   toggleEditForm
@@ -448,5 +470,5 @@ module.exports = {
   add
   preview
   load
-  goToNextComment
+  showComment
 }

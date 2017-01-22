@@ -8,7 +8,7 @@ routes = require "lib/routes.coffee"
 
 url = routes.userfields
 
-iCountMax = 2
+iCountMax = 4
 
 showAddForm = ->
   $('#user_fields_form_name').val ''

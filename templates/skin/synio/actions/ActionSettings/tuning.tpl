@@ -29,10 +29,60 @@
 		</select>
 	</label>
 
+	<br />
+	<h3>Настройки интерфейса</h3>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-smothScroll"/>
+		Плавная анимация прокрутки
+	</label>
+	<label title="'space' или 'ins' - переход к следующему новому комментарию; 'enter' или 'del' обновить комментарии">
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-hotkeys"/>
+		Горячие клавиши
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-smartQuote"/>
+		Умное цитирование
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoFold"/>
+		Автосворачивание промежуточных комментариев
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-newCommentsInTitle"/>
+		Отображать количество новых комментариев в заголовке
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoUpdateComments"/>
+		Автообновление комментариев
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoDespoil"/>
+		Раскрывать спойлеры в активном комментарии
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-despoilOnlyArticle"/>
+		Кнопка "Despoil" действует только на топик
+	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-showPinkie"/>
+		Пинкамина
+	</label>
+
+	<script type="text/javascript">
+		document.getElementById("UI-smothScroll").checked = UI.smothScroll;
+		document.getElementById("UI-hotkeys").checked = UI.hotkeys;
+		document.getElementById("UI-smartQuote").checked = UI.smartQuote;
+		document.getElementById("UI-autoFold").checked = UI.autoFold;
+		document.getElementById("UI-newCommentsInTitle").checked = UI.newCommentsInTitle;
+		document.getElementById("UI-autoUpdateComments").checked = UI.autoUpdateComments;
+		document.getElementById("UI-autoDespoil").checked = UI.autoDespoil;
+		document.getElementById("UI-despoilOnlyArticle").checked = UI.despoilOnlyArticle;
+		document.getElementById("UI-showPinkie").checked = UI.showPinkie;
+	</script>
 
 	{hook run='form_settings_tuning_end'}
 	<br />
-	<button type="submit"  name="submit_settings_tuning" class="button button-primary">{$aLang.settings_profile_submit}</button>
+	<button type="submit" name="submit_settings_tuning" class="button button-primary">{$aLang.settings_profile_submit}</button>
 </form>
 
 {hook run='settings_tuning_end'}
