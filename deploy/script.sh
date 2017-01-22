@@ -86,7 +86,7 @@ generate_config() {
 
     VERSION=`${VAGGA} _version_hash --short ${CONTAINER_NAME}`
 
-    for DAEMON_CFG in lithos/${TYPE}/${NAME}/daemons/*.yaml; do
+    for DAEMON_CFG in $(find lithos/${TYPE}/${NAME}/daemons/ -type f); do
         cat <<END | tee -a ${CFG}
 $(basename ${DAEMON_CFG} .yaml):
     kind: Daemon
@@ -95,7 +95,7 @@ $(basename ${DAEMON_CFG} .yaml):
     image: ${CONTAINER_NAME}.${VERSION}
 END
     done
-    for COMMAND_CFG in lithos/${TYPE}/${NAME}/commands/*.yaml; do
+    for COMMAND_CFG in $(find lithos/${TYPE}/${NAME}/commands/ -type f); do
         cat <<END | tee -a ${CFG}
 $(basename ${COMMAND_CFG} .yaml):
     kind: Command
