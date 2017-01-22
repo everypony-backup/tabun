@@ -86,13 +86,23 @@ generate_config() {
 
     VERSION=`${VAGGA} _version_hash --short ${CONTAINER_NAME}`
 
-    cat <<END | tee -a ${CFG}
-${NAME}:
+    for CFG in lithos/${TYPE}/${NAME}/daemons; do
+        cat <<END | tee -a ${CFG}
+${CFG}:
     kind: Daemon
     instances: 1
-    config: /lithos/${NAME}.yaml
+    config: /lithos/${NAME}/daemons/${CFG}.yaml
     image: ${CONTAINER_NAME}.${VERSION}
 END
+    done
+    for CFG in lithos/${TYPE}/${NAME}/commands; do
+        cat <<END | tee -a ${CFG}
+${CFG}:
+    kind: Command
+    config: /lithos/${NAME}/commands/${CFG}.yaml
+    image: ${CONTAINER_NAME}.${VERSION}
+END
+    done
 }
 
 deploy(){
