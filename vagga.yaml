@@ -227,7 +227,7 @@ containers:
     - !EnsureDir /backup
     volumes:
       /storage: !Persistent {name: mysql, init-command: _init_db}
-      /storage: !Persistent {name: backup}
+      /backup: !Persistent {name: backup}
 
   mysql-trunk:
     setup:
