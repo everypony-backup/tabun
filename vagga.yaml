@@ -222,8 +222,10 @@ containers:
       source: /work/config/local/mysql
       path: /etc/mysql
     - !EnsureDir /storage
+    - !EnsureDir /backup
     volumes:
       /storage: !Persistent {name: mysql, init-command: _init_db}
+      /storage: !Persistent {name: backup}
 
   mysql-trunk:
     setup:
