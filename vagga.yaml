@@ -211,9 +211,13 @@ containers:
   mysql-dev:
     setup:
     - !Container _base_alpine
+    # TODO: Replace with ordinary install when https://github.com/alpinelinux/aports/pull/808/files will be merged
+    - !Sh apk add xtrabackup@testing --update-cache --repository https://files.everypony.org/alpine/testing --allow-untrusted
     - !Install
       - mariadb
       - mariadb-client
+      - perl
+      - perl-dbd-mysql
     - !Copy
       source: /work/config/local/mysql
       path: /etc/mysql
@@ -522,6 +526,13 @@ commands:
     user-id: 1
     external-user-id: 0
     run: mysqld_safe --skip-syslog --console --debug-gdb
+
+  innobackupex: &innobackupex !Command
+    container: mysql-dev
+    description: Run innobackupex command
+    user-id: 1
+    external-user-id: 0
+    run: [innobackupex]
 
   mail: &mail !Command
     container: celery
