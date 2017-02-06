@@ -223,6 +223,7 @@ containers:
       - mariadb-client
       - perl
       - perl-dbd-mysql
+      - rsync
     - !Copy
       source: /work/config/local/mysql
       path: /etc/mysql
