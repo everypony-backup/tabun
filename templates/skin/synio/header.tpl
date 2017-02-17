@@ -50,9 +50,9 @@
             despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') !== "true",
             showPinkie: window.localStorage.getItem('UI-showPinkie') === "false"
         }
-        if (UI.autoDespoil) {
-            document.getElementById('UI-custom-style').innerHTML += ('.comment-current .spoiler-gray{background-color:transparent;}.comment-current .spoiler-gray img{filter: inherit;}');
-        }
+        {*if (UI.autoDespoil) {*}
+            {*document.getElementById('UI-custom-style').innerHTML += ('.comment-current .spoiler-gray{background-color:transparent;}.comment-current .spoiler-gray img{filter: inherit;}');*}
+        {*}*}
     </script>
 
 </head>
