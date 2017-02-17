@@ -22,7 +22,7 @@ volumes:
     user: 1
     group: 1
   /backup: !Persistent
-    path: /storage/backup
+    path: /backup/mysql
     mkdir: true
     mode: 0o700
     user: 1
