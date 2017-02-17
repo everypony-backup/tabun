@@ -20,6 +20,12 @@ volumes:
     mode: 0o700
     user: 1
     group: 1
+  /backup: !Persistent
+    path: /backup
+    mkdir: true
+    mode: 0o700
+    user: 1
+    group: 1
 fileno-limit: 200ki
 memory-limit: 25Gi  # Will be decreased later
 cpu-shares: 1024
