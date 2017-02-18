@@ -56,7 +56,6 @@ deploy:
       --server $deploy_host
       --port $deploy_port
       --user $deploy_user
-      --dry-run
     on:
       tags: true
       branch: master
