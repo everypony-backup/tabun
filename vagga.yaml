@@ -211,15 +211,25 @@ containers:
   mysql-dev:
     setup:
     - !Container _base_alpine
+    # TODO: Replace with ordinary install when https://github.com/alpinelinux/aports/pull/808/files will be merged
+    - !Download
+      url: https://files.everypony.org/alpine/testing/x86_64/xtrabackup-2.4.5-r0.apk
+      path: /tmp/xtrabackup-2.4.5-r0.apk
+    - !Sh apk add /tmp/xtrabackup-2.4.5-r0.apk --allow-untrusted
     - !Install
       - mariadb
       - mariadb-client
+      - perl
+      - perl-dbd-mysql
+      - rsync
     - !Copy
       source: /work/config/local/mysql
       path: /etc/mysql
     - !EnsureDir /storage
+    - !EnsureDir /backup
     volumes:
       /storage: !Persistent {name: mysql, init-command: _init_db}
+      /backup: !Persistent {name: backup}
 
   mysql-trunk:
     setup:
@@ -260,6 +270,7 @@ containers:
       - php5-curl
       - php5-imagick@community
       - php5-bcmath
+      - imagemagick@main
     - !ComposerDependencies
       optimize_autoloader: true
     - !EnsureDir /log
@@ -521,6 +532,13 @@ commands:
     user-id: 1
     external-user-id: 0
     run: mysqld_safe --skip-syslog --console --debug-gdb
+
+  innobackupex: &innobackupex !Command
+    container: mysql-dev
+    description: Run innobackupex command
+    user-id: 1
+    external-user-id: 0
+    run: [innobackupex]
 
   mail: &mail !Command
     container: celery
