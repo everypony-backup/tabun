@@ -116,6 +116,10 @@ init = ->
   if UI.showPinkie
     if random(1000) < 5 then showPinkie random 150, 1500
 
+  # autoDespoil
+  if UI.autoDespoil
+    document.getElementById('UI-custom-style').textContent += '.comment-current .spoiler-gray{background-color:transparent;color: #333;}.comment-current .spoiler-gray img{filter: inherit;}'
+
   # Spoilers
   $(document).on 'click', '.spoiler-title', ({target}) ->
     $e = $('.spoiler-body', $(target).closest('.spoiler')).eq(0)
