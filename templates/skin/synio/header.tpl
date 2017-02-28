@@ -51,12 +51,6 @@
             showPinkie: window.localStorage.getItem('UI-showPinkie') !== "false"
         }
     </script>
-    <script type="text/javascript">
-        if (UI.autoDespoil) {
-            document.getElementById('UI-custom-style').innerHTML += '.comment-current .spoiler-gray{background-color:transparent;color: #333;}.comment-current .spoiler-gray img{filter: inherit;}';
-        }
-    </script>
-
 </head>
 
 {add_block group='toolbar' name='toolbar_admin.tpl' priority=100}

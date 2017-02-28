@@ -30,6 +30,11 @@
     ls.tools.registry.loadJSON({json var=$aFrontendRegistry});
     ls.lang.load({json var = $aLangJs});
 </script>
+<script type="text/javascript">
+    if (UI.autoDespoil) {
+        document.getElementById('UI-custom-style').innerHTML += '.comment-current .spoiler-gray{background-color:transparent;color: #333;}.comment-current .spoiler-gray img{filter: inherit;}';
+    }
+</script>
 {if isset($scripts)}
     {foreach from=$scripts item=item}
         <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.bundle.js" type="text/javascript"></script>
