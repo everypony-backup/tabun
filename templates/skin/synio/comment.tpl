@@ -50,7 +50,6 @@
                 </div>
                 <span class="favourite-count" id="fav_count_comment_{$oCommentId}" {if $oComment->getCountFavourite() == 0}hidden{/if}>{if $oComment->getCountFavourite() > 0}{$oComment->getCountFavourite()}{/if}</span>
             </div>
-            {/if}
             {if !$oCommentDeleted}
                 {if !$bAllowNewComment}
                     <a href="#" onclick="ls.comments.toggleCommentForm({$oCommentId}); return false;" class="reply-link link-dotted">{$aLang.comment_answer}</a>
