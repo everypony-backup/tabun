@@ -56,7 +56,7 @@
     background #f4f4f4
   .comment-avatar
     position absolute
-    top -5px
+    top -3px
     left 0
     width 18px
     height 18px
@@ -112,7 +112,7 @@
   flex-flow row
   flex-wrap wrap
   align-items flex-end
-  padding 0 50px 0 25px
+  padding 0 50px 0 13px
   line-height 13px
   position relative
   overflow visible
@@ -132,6 +132,8 @@
       &:hover
         color #f00
         border-color #f00
+  a,div,time,span
+    margin-right 10px
   .comment-date
     color #999
   .goto.goto-comment-parent
@@ -234,11 +236,11 @@ div
 .modify-notice
   font-size 10px
   font-style italic
-  .self-modified
+  &.self-modified
     color #69b55b
-  .adm-modified
+  &.adm-modified
     color #aaaa00
-  .hard-modified
+  &.hard-modified
     color #d5883c
 
 .comment:not(.editable)

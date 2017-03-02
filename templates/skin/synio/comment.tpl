@@ -1,7 +1,6 @@
 {assign var="oUserIsAdmin" value=$oUserCurrent->isAdministrator()}
 {assign var="oCommentAuthor" value=$oComment->getUser()}
 {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
-{assign var="oCommentAuthorPath" value='/profile/$oCommentAuthorLogin'}
 {assign var="oCommentVote" value=$oComment->getVote()}
 {assign var="oCommentId" value=$oComment->getId()}
 {assign var="oCommentRating" value=$oComment->getRating()}
@@ -25,10 +24,10 @@
         </div>
     </div>
     <div class="comment-info">
-        <a href="{$oCommentAuthorPath}">
+        <a href="/profile/{$oCommentAuthorLogin}">
             <img src="{$oCommentAuthor->getProfileAvatarPath(24)}"  class="comment-avatar"/>
         </a>
-        <a class="comment-author {if $iAuthorId == $oCommentAuthor->getId()}comment-topic-author{/if}" {if sAuthorNotice} title="{$sAuthorNotice}"{/if} href="{$oCommentAuthorPath}">{$oCommentAuthorLogin}</a>
+        <a class="comment-author {if $iAuthorId == $oCommentAuthor->getId()}comment-topic-author{/if}" {if sAuthorNotice} title="{$sAuthorNotice}"{/if} href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
         <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}"
                   title="{date_format date=$oCommentDate hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
             {date_format date=$oCommentDate format="j F Y, H:i"}
@@ -38,7 +37,7 @@
             <a class="goto goto-comment-parent" href="#" onclick="ls.comments.showComment({$oCommentId},true); return false;" title="{$aLang.comment_goto_parent}">↑</a>
         {/if}
         {if $oUserCurrent}
-            {!$bNoCommentFavourites}
+            {if !$bNoCommentFavourites}
             <div class="comment-favourite">
                 <div onclick="return ls.favourite.toggle({$oCommentId},this,'comment');"
                      class="favourite {if $oComment->getIsFavourite()}active{/if}">
@@ -50,6 +49,7 @@
                 </div>
                 <span class="favourite-count" id="fav_count_comment_{$oCommentId}" {if $oComment->getCountFavourite() == 0}hidden{/if}>{if $oComment->getCountFavourite() > 0}{$oComment->getCountFavourite()}{/if}</span>
             </div>
+            {/if}
             {if !$oCommentDeleted}
                 {if !$bAllowNewComment}
                     <a href="#" onclick="ls.comments.toggleCommentForm({$oCommentId}); return false;" class="reply-link link-dotted">{$aLang.comment_answer}</a>
