@@ -405,6 +405,25 @@ containers:
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
+  logs-trunk:
+    setup:
+      - !Container _base_alpine
+      - !BuildDeps
+        - python
+        - python-dev
+      - !Env
+        HOME: /opt
+      - !NpmInstall
+        - log.io
+      - !*Unpack
+        - *trunk_stuff
+        - *host_resolution
+      - !Copy
+        source: /config/.log.io
+        path: /opt/.log.io
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
 commands:
   _write-version: !Command
     container: php-dev
