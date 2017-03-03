@@ -10,7 +10,7 @@
 
 <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad {/if}{if $oUserCurrent}{if $oComment->getUserId() == $oUserCurrent->getId()}comment-self {elseif $sDateReadLast <= $oCommentDate}comment-new{/if}{/if}">
     <div id="comment_content_id_{$oCommentId}" class="comment-content">
-        <div class="text">
+        <div class="text current">
             {if !$oCommentDeleted and ($oCommentRating > $oConfig->GetValue('module.user.bad_rating'))}
                 {$oComment->getText()}
             {elseif  $bOneComment or ($oUserCurrent and $oUserIsAdmin)}
