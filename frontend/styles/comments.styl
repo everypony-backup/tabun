@@ -45,6 +45,17 @@
 #form_comment
   margin-bottom 16px
 
+.folding
+  width 13px
+  height 13px
+  position absolute
+  top 8px
+  left -16px
+  background url(images/icons-synio.png) 0 -94px no-repeat
+  cursor pointer
+  &.folded
+    background-position -13px -94px
+
 .comment
   min-height 48px
   padding 0 0 10px
@@ -60,16 +71,6 @@
     left 0
     width 18px
     height 18px
-  .folding
-    width 13px
-    height 13px
-    position absolute
-    top 8px
-    left -16px
-    background url(images/icons-synio.png) 0 -94px no-repeat
-    cursor pointer
-    &.folded
-      background-position -13px -94px
   &.comment-deleted
     em
       color #8b0000
