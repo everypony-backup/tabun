@@ -126,7 +126,7 @@ toggleEditForm = (idComment, bOpen, bAllowLock=false) ->
     edit.className = "markitup-editor"
     edit.id = "comment_edit_input_#{idComment}"
     edit.style.height = (currentText.getBoundingClientRect().height * 1.2 + 40) + "px"
-    edit.value = currentText.innerHTML.replace(/<br[\s]*\/?>\r?\n/gmi, "\n")
+    edit.value = currentText.innerHTML.replace(/<br[\s]*\/?>\r?\n/gmi, "\n").trim()
     editForm.appendChild preview
     editForm.appendChild edit
     if bAllowLock and document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
