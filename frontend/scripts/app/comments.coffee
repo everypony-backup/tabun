@@ -406,9 +406,6 @@ init = ->
         parentID = $(parents).filter(".comment").attr("data-id") || 0;
         x = e.clientX + $(window).scrollLeft() + 10
         y = e.clientY + $(window).scrollTop() - 7
-        #создаём элемент если нужно
-        if !$("#quote").length 
-          $("body").append('<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>')
         quote = $("#quote")
         if text != $(quote).attr("data-quote")
           $(quote).attr("data-quote",text)
