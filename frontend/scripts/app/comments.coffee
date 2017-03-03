@@ -429,8 +429,9 @@ init = ->
         if !$(parents).filter(".comment-content,.topic-content").length then return
         #ищем родительский комментарий
         parentID = $(parents).filter(".comment")[0].dataset.id || 0;
-        x = e.clientX + $(window).scrollLeft() + 10
-        y = e.clientY + $(window).scrollTop() - 7
+        contentRect = document.getElementById("content").getBoundingClientRect()
+        x = e.clientX - contentRect.left + 10;
+        y = e.clientY - contentRect.top - 9;
         quote = document.getElementById "quote"
         if text != quote.dataset.quote
           quote.dataset.quote = text
