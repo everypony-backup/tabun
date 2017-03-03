@@ -236,7 +236,10 @@ saveEdit = (idComment) ->
     if result.newText
       document.querySelector("#comment_content_id_#{idComment} .text.current").innerHTML = result.newText
     if result.notice
-      document.querySelector("#comment_id_#{idComment} .modify-notice").innerHTML = result.notice
+      if document.querySelector("#comment_id_#{idComment} .modify-notice")
+        document.querySelector("#comment_id_#{idComment} .modify-notice").innerHTML = result.notice
+      else
+        document.querySelector("#comment_id_#{idComment} .comment-info").innerHTML += '<span class="modify-notice">'+result.notice+'</span>'
     if result.bStateError
       return error result.sMsgTitle, result.sMsg
     else
