@@ -352,32 +352,32 @@ initEvent = ->
     $("#comment-button-preview").on 'click', () ->
       ls.comments.preview()
     $(document)
-      .on(".comment-info>.reply-link", 'click', () ->
+      .on('click', ".comment-info>.reply-link", () ->
         ls.comments.toggleCommentForm this.parentNode.dataset.id)
-      .on(".comment-delete,.comment-repair", 'click', () ->
+      .on('click', ".comment-delete,.comment-repair", () ->
         ls.comments.toggle this this.parentNode.dataset.id)
-      .on(".comment-edit-bw", 'click', () ->
+      .on('click', ".comment-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock)
-      .on(".comment-save-edit-bw", 'click', () ->
+      .on('click', ".comment-save-edit-bw", () ->
         ls.comments.saveEdit this.parentNode.dataset.id)
-      .on(".comment-preview-edit-bw", 'click', () ->
+      .on('click', ".comment-preview-edit-bw", () ->
         ls.comments.previewEdit this.parentNode.dataset.id)
-      .on(".comment-cancel-edit-bw", 'click', () ->
+      .on('click', ".comment-cancel-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, false)
 
   $("#hidden-message>a").on 'click', () ->
     this.parentNode.classList.add 'h-hidden'
     $('.hidden-comment').removeClass 'hidden-comment'
   $(document)
-    .on(".comment-favourite>.favourite", 'click', () ->
+    .on('click', ".comment-favourite>.favourite", () ->
       ls.favourite.toggle this.parentNode.parentNode.dataset.id, this, 'comment')
-    .on(".goto-comment-parent", 'click', () ->
+    .on('click', ".goto-comment-parent", () ->
       ls.comments.showComment this.parentNode.dataset.id, true)
-    .on(".comment-vote>.vote-up", 'click', () ->
+    .on('click', ".comment-vote>.vote-up", () ->
       ls.vote.vote this.parentNode.parentNode.dataset.id, this, 1, 'comment')
-    .on(".comment-vote>.vote-down", 'click', () ->
+    .on('click', ".comment-vote>.vote-down", () ->
       ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment')
-    .on(".folding", 'click', () ->
+    .on('click', ".folding", () ->
       $(this).nextAll().toggleClass 'h-hidden')
 
   if newCounter && UI.hotkeys
