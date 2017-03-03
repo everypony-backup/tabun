@@ -12,7 +12,7 @@
 		
 		{if $bAllowSubscribe and $oUserCurrent}
 			<div class="subscribe">
-				<input {if $oSubscribeComment and $oSubscribeComment->getStatus()}checked="checked"{/if} data-target-type="{$sTargetType}" data-target-id="{$iTargetId}" type="checkbox" id="comment_subscribe" class="input-checkbox">
+				<input {if $oSubscribeComment and $oSubscribeComment->getStatus()}checked="checked"{/if} data-target_type="{$sTargetType}" data-target_id="{$iTargetId}" type="checkbox" id="comment_subscribe" class="input-checkbox">
 				<label for="comment_subscribe">{$aLang.comment_subscribe}</label>
 			</div>
 		{/if}
@@ -63,7 +63,7 @@
 				
 				{hook run='form_add_comment_end'}
 				
-				<button type="submit" name="submit_comment" id="comment-button-submit" data-target-type="{$sTargetType}" data-target-id="{$iTargetId}" class="button button-primary">{$aLang.comment_add}</button>
+				<button type="submit" name="submit_comment" id="comment-button-submit" data-target_type="{$sTargetType}" data-target_id="{$iTargetId}" class="button button-primary">{$aLang.comment_add}</button>
 				<button type="button" id="comment-button-preview" class="button">{$aLang.comment_preview}</button>
 				
 				<input type="hidden" name="reply" value="0" id="form_comment_reply" />
@@ -74,6 +74,6 @@
 		<div class="comments-not-allowed">{$aLang.comment_unregistered}</div>
 	{/if}
 {/if}
-<div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>
+<div data-parent-id="" data-quote="" id="quote" style="display: none;"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>
 <div id="hidden-message" class="h-hidden">Скрыто <b></b> <span></span> <a>Показать</a></div>
 

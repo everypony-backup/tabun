@@ -344,13 +344,13 @@ initEvent = ->
       if ctrlKey and key == 13
         $('#comment-button-submit').click()
     $("#comment_subscribe").on 'change', () ->
-      ls.subscribe.toggle this.dataset.target-type+'_new_comment', this.dataset.target-id, '', this.checked
+      ls.subscribe.toggle this.dataset.target_type+'_new_comment', this.dataset.target_id, '', this.checked
     $(".reply-header>a").on 'click', () ->
       ls.comments.toggleCommentForm 0
     $("#comment-button-submit").on 'click', () ->
-      ls.comments.add 'form_comment', this.dataset.target-id, this.dataset.target-type
+      ls.comments.add 'form_comment', this.dataset.target_id, this.dataset.target_type
     $("#comment-button-preview").on 'click', () ->
-      ls.comments.preview
+      ls.comments.preview()
     $("#hidden-message>a").on 'click', () ->
       this.parentNode.classList.add 'h-hidden'
       $('.hidden-comment').removeClass 'hidden-comment'
