@@ -73,6 +73,16 @@ return [
                     'rating' => 0
                 ]
             ]
+        ],
+
+        'vote_user' => [
+            'msg' => 'Вы ещё недостаточно окрепли!',
+            'groups' => [
+                [
+                    'registration_time' => 60 * 60 * 24,
+                    'rating' => 0
+                ]
+            ]
         ]
     ],
 
