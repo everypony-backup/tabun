@@ -383,26 +383,30 @@ initEvent = ->
     .on('click', ".folding", () ->
       $(this).nextAll().toggleClass 'h-hidden')
 
-  if newCounter && UI.hotkeys
-    $(document).keydown (e) ->
-      key = e.keyCode or e.which
-      if [32,45].indexOf(key) != -1
-        if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
-          e.preventDefault()
-          $(newCounter).click()
-      else if [13,46].indexOf(key) != -1
-        if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
-          e.preventDefault()
-          $("#update-comments").click()
-    if updateButton && UI.autoUpdateComments
-      topicID = parseInt($(updateButton).attr("onclick").match(/\d+/)[0])
-      topicType = $(updateButton).attr("onclick").match(/\'.*\'/)[0].replace(/'/g,"")
+  if updateButton
+    $(updateButton).on 'click', () ->
+      ls.comments.load this.dataset.target_id, this.dataset.target_type
+    if UI.autoUpdateComments
       autoUpdate = ->
         if document.visibilityState != 'hidden' then return
         if !$("#reply").hasClass("h-hidden") then return
         if $(updateButton).hasClass("active") then return
-        load(topicID,topicType,false)
-      setInterval(autoUpdate,60000)
+        load updateButton.dataset.target_id, updateButton.dataset.target_type, false
+      setInterval autoUpdate, 60000
+    if newCounter
+      $(newCounter).on 'click', () ->
+        ls.comments.showComment()
+      if UI.hotkeys
+        $(document).keydown (e) ->
+          key = e.keyCode or e.which
+          if [32,45].indexOf(key) != -1
+            if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
+              e.preventDefault()
+              $(newCounter).click()
+          else if [13,46].indexOf(key) != -1
+            if ["TEXTAREA","INPUT"].indexOf(document.activeElement.nodeName) == -1
+              e.preventDefault()
+              $("#update-comments").click()
 
 init = ->
   initEvent()
