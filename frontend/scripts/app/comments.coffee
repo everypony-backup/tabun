@@ -351,33 +351,34 @@ initEvent = ->
       ls.comments.add 'form_comment', this.dataset.target_id, this.dataset.target_type
     $("#comment-button-preview").on 'click', () ->
       ls.comments.preview()
-    $(".comment-info>.reply-link").on 'click', () ->
-      ls.comments.toggleCommentForm this.parentNode.dataset.id
-    $(".comment-delete,.comment-repair").on 'click', () ->
-      ls.comments.toggle this this.parentNode.dataset.id
-    $(".comment-edit-bw").on 'click', () ->
-      ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock
-    $(".comment-save-edit-bw").on 'click', () ->
-      ls.comments.saveEdit this.parentNode.dataset.id
-    $(".comment-preview-edit-bw").on 'click', () ->
-      ls.comments.previewEdit this.parentNode.dataset.id
-    $(".comment-cancel-edit-bw").on 'click', () ->
-      ls.comments.toggleEditForm this.parentNode.dataset.id, false
+    $(document)
+      .on(".comment-info>.reply-link", 'click', () ->
+        ls.comments.toggleCommentForm this.parentNode.dataset.id)
+      .on(".comment-delete,.comment-repair", 'click', () ->
+        ls.comments.toggle this this.parentNode.dataset.id)
+      .on(".comment-edit-bw", 'click', () ->
+        ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock)
+      .on(".comment-save-edit-bw", 'click', () ->
+        ls.comments.saveEdit this.parentNode.dataset.id)
+      .on(".comment-preview-edit-bw", 'click', () ->
+        ls.comments.previewEdit this.parentNode.dataset.id)
+      .on(".comment-cancel-edit-bw", 'click', () ->
+        ls.comments.toggleEditForm this.parentNode.dataset.id, false)
 
   $("#hidden-message>a").on 'click', () ->
     this.parentNode.classList.add 'h-hidden'
     $('.hidden-comment').removeClass 'hidden-comment'
-  $(".comment-favourite>.favourite").on 'click', () ->
-    ls.favourite.toggle this.parentNode.parentNode.dataset.id, this, 'comment'
-  $(".goto-comment-parent").on 'click', () ->
-    ls.comments.showComment this.parentNode.dataset.id, true
-  $(".comment-vote>.vote-up").on 'click', () ->
-    ls.vote.vote this.parentNode.parentNode.dataset.id, this, 1, 'comment'
-  $(".comment-vote>.vote-down").on 'click', () ->
-    ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment'
-
-  $(".folding").on 'click', () ->
-    $(this).nextAll().toggleClass 'h-hidden'
+  $(document)
+    .on(".comment-favourite>.favourite", 'click', () ->
+      ls.favourite.toggle this.parentNode.parentNode.dataset.id, this, 'comment')
+    .on(".goto-comment-parent", 'click', () ->
+      ls.comments.showComment this.parentNode.dataset.id, true)
+    .on(".comment-vote>.vote-up", 'click', () ->
+      ls.vote.vote this.parentNode.parentNode.dataset.id, this, 1, 'comment')
+    .on(".comment-vote>.vote-down", 'click', () ->
+      ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment')
+    .on(".folding", 'click', () ->
+      $(this).nextAll().toggleClass 'h-hidden')
 
   if newCounter && UI.hotkeys
     $(document).keydown (e) ->
