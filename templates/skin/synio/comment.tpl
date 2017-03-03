@@ -23,7 +23,7 @@
             {/if}
         </div>
     </div>
-    <div class="comment-info">
+    <div class="comment-info" data-id="{$oCommentId}">
         <a href="/profile/{$oCommentAuthorLogin}">
             <img src="{$oCommentAuthor->getProfileAvatarPath(24)}"  class="comment-avatar"/>
         </a>
@@ -34,13 +34,12 @@
         </time>
         <a class="comment-link icon-synio-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
         {if $oComment->getPid()}
-            <a class="goto goto-comment-parent" href="#" onclick="ls.comments.showComment({$oCommentId},true); return false;" title="{$aLang.comment_goto_parent}">↑</a>
+            <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
         {/if}
         {if $oUserCurrent}
             {if !$bNoCommentFavourites}
             <div class="comment-favourite">
-                <div onclick="return ls.favourite.toggle({$oCommentId},this,'comment');"
-                     class="favourite {if $oComment->getIsFavourite()}active{/if}">
+                <div class="favourite {if $oComment->getIsFavourite()}active{/if}">
                     {if $oComment->getIsFavourite()}
                         {t}favourite_in{/t}
                     {else}
@@ -52,23 +51,23 @@
             {/if}
             {if !$oCommentDeleted}
                 {if !$bAllowNewComment}
-                    <a href="#" onclick="ls.comments.toggleCommentForm({$oCommentId}); return false;" class="reply-link link-dotted">{$aLang.comment_answer}</a>
+                    <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
                 {/if}
                 {if $oUserIsAdmin}
-                    <a href="#" class="comment-delete link-dotted" onclick="ls.comments.toggle(this,{$oCommentId}); return false;">{$aLang.comment_delete}</a>
+                    <a class="comment-delete link-dotted">{$aLang.comment_delete}</a>
                 {/if}
             {elseif $oUserIsAdmin}
-                <a href="#" class="comment-repair link-dotted" onclick="ls.comments.toggle(this,{$oCommentId}); return false;">{$aLang.comment_repair}</a>
+                <a class="comment-repair link-dotted">{$aLang.comment_repair}</a>
             {/if}
             {if $oComment->testAllowEdit($editAccessMask)}
-                <a href="#" class="link-dotted comment-edit-bw" onclick="return ls.comments.toggleEditForm({$oCommentId}, true, {if $oComment->testAllowLock($editAccessMask)}true{else}false{/if});">{$aLang.comment_edit}</a>
-                <a href="#" class="link-dotted comment-save-edit-bw" onclick="return ls.comments.saveEdit({$oCommentId});">{$aLang.comment_save_edit}</a>
-                <a href="#" class="link-dotted comment-preview-edit-bw" onclick="return ls.comments.previewEdit({$oCommentId});">{$aLang.comment_preview_edit}</a>
-                <a href="#" class="link-dotted comment-cancel-edit-bw" onclick="return ls.comments.toggleEditForm({$oCommentId}, false);">{$aLang.comment_cancel_edit}</a>
+                <a class="link-dotted comment-edit-bw" data-lock="{if $oComment->testAllowLock($editAccessMask)}true{else}false{/if}">{$aLang.comment_edit}</a>
+                <a class="link-dotted comment-save-edit-bw">{$aLang.comment_save_edit}</a>
+                <a class="link-dotted comment-preview-edit-bw">{$aLang.comment_preview_edit}</a>
+                <a class="link-dotted comment-cancel-edit-bw">{$aLang.comment_cancel_edit}</a>
             {/if}
             {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}"
-                    class="vote
+                    class="vote comment-vote
                     {if $oCommentRating > 0}
                         vote-count-positive
                     {elseif $oCommentRating < 0}
@@ -82,9 +81,9 @@
                                 voted-down
                             {/if}
                      {/if}">
-                    <div class="vote-up" onclick="return ls.vote.vote({$oCommentId},this,1,'comment');"></div>
+                    <div class="vote-up"></div>
                     <span class="vote-count" id="vote_total_comment_{$oCommentId}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
-                    <div class="vote-down" onclick="return ls.vote.vote({$oCommentId},this,-1,'comment');"></div>
+                    <div class="vote-down"></div>
                 </div>
             {/if}
             {hook run='comment_action' comment=$oComment}

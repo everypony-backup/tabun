@@ -351,9 +351,30 @@ initEvent = ->
       ls.comments.add 'form_comment', this.dataset.target_id, this.dataset.target_type
     $("#comment-button-preview").on 'click', () ->
       ls.comments.preview()
-    $("#hidden-message>a").on 'click', () ->
-      this.parentNode.classList.add 'h-hidden'
-      $('.hidden-comment').removeClass 'hidden-comment'
+    $(".comment-info>.reply-link").on 'click', () ->
+      ls.comments.toggleCommentForm this.parentNode.dataset.id
+    $(".comment-delete,.comment-repair").on 'click', () ->
+      ls.comments.toggle this this.parentNode.dataset.id
+    $(".comment-edit-bw").on 'click', () ->
+      ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock
+    $(".comment-save-edit-bw").on 'click', () ->
+      ls.comments.saveEdit this.parentNode.dataset.id
+    $(".comment-preview-edit-bw").on 'click', () ->
+      ls.comments.previewEdit this.parentNode.dataset.id
+    $(".comment-cancel-edit-bw").on 'click', () ->
+      ls.comments.toggleEditForm this.parentNode.dataset.id, false
+
+  $("#hidden-message>a").on 'click', () ->
+    this.parentNode.classList.add 'h-hidden'
+    $('.hidden-comment').removeClass 'hidden-comment'
+  $(".comment-favourite>.favourite").on 'click', () ->
+    ls.favourite.toggle this.parentNode.parentNode.dataset.id, this, 'comment'
+  $(".goto-comment-parent").on 'click', () ->
+    ls.comments.showComment this.parentNode.dataset.id, true
+  $(".comment-vote>.vote-up").on 'click', () ->
+    ls.vote.vote this.parentNode.parentNode.dataset.id, this, 1, 'comment'
+  $(".comment-vote>.vote-down").on 'click', () ->
+    ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment'
 
   $(document).on "click", '.folding', ({target}) ->
     wrappers = document
