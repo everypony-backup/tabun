@@ -51,7 +51,7 @@
 		{include file='editor.tpl' sImgToLoad='form_comment_text'}
 	
 		<h4 class="reply-header" id="comment_id_0">
-			<a href="#" class="link-dotted">{$sNoticeCommentAdd}</a>
+			<a class="link-dotted">{$sNoticeCommentAdd}</a>
 		</h4>
 		
 		
