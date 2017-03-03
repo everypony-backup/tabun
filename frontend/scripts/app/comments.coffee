@@ -376,19 +376,8 @@ initEvent = ->
   $(".comment-vote>.vote-down").on 'click', () ->
     ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment'
 
-  $(document).on "click", '.folding', ({target}) ->
-    wrappers = document
-      .getElementById "comment_wrapper_id_#{target.dataset.id}"
-      .getElementsByClassName classes.wrapper
-
-    if classes.folded in target.classList
-      # Expand
-      target.classList.remove classes.folded
-      forEach wrappers, (wrapper) -> wrapper.classList.remove 'h-hidden'
-    else
-      # Collapse
-      target.classList.add classes.folded
-      forEach wrappers, (wrapper) -> wrapper.classList.add 'h-hidden'
+  $(".folding").on "click" () ->
+    $(this).nextAll().toggleClass 'h-hidden'
 
   if newCounter && UI.hotkeys
     $(document).keydown (e) ->
