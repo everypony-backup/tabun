@@ -376,7 +376,7 @@ initEvent = ->
   $(".comment-vote>.vote-down").on 'click', () ->
     ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment'
 
-  $(".folding").on "click" () ->
+  $(".folding").on 'click', () ->
     $(this).nextAll().toggleClass 'h-hidden'
 
   if newCounter && UI.hotkeys
