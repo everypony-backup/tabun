@@ -80,9 +80,9 @@
                                 voted-down
                             {/if}
                      {/if}">
-                    <div class="vote-up"></div>
+                    <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                     <span class="vote-count" id="vote_total_comment_{$oCommentId}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
-                    <div class="vote-down"></div>
+                    <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                 </div>
             {/if}
             {hook run='comment_action' comment=$oComment}

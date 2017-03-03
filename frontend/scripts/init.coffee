@@ -128,6 +128,10 @@ init = ->
     else
       $e.hide 'normal'
 
+  # Vote
+  $(document).on 'click', ".vote-item", () ->
+      ls.vote.vote this.dataset.target_id, this, this.dataset.direction, this.dataset.target_type
+
   # Help-tags link
   $('.js-tags-help-link').on 'click', ({target}) ->
     helpTargetId = registry.get('tags-help-target-id')

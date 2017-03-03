@@ -1,6 +1,8 @@
 {include file='header.tpl'}
 {assign var="oUserOwner" value=$oBlog->getOwner()}
 {assign var="oVote" value=$oBlog->getVote()}
+{assing var="oBlogId" value=$oBlog->getId()}
+{assign var="oBlogRating" value=$oBlog->getRating()}
 
 {if $oUserCurrent and $oUserCurrent->isAdministrator()}
 	<div id="blog_delete_form" class="modal">
@@ -10,7 +12,7 @@
 		</header>
 		
 		
-		<form action="{router page='blog'}delete/{$oBlog->getId()}/" method="POST" class="modal-content">
+		<form action="{router page='blog'}delete/{$oBlogId}/" method="POST" class="modal-content">
 			<p><label for="topic_move_to">{$aLang.blog_admin_delete_move}:</label>
 			<select name="topic_move_to" id="topic_move_to" class="input-width-full">
 				<option value="-1">{$aLang.blog_delete_clear}</option>
@@ -33,18 +35,16 @@
 <div class="blog-top">
 	<h2 class="page-header">{$oBlog->getTitle()|escape:'html'} {if $oBlog->getType()=='close'} <i title="{$aLang.blog_closed}" class="icon-synio-topic-private"></i>{/if}</h2>
 
-	<div id="vote_area_blog_{$oBlog->getId()}" class="vote-topic 
-															{if $oBlog->getRating() > 0}
+	<div id="vote_area_blog_{$oBlogId}" class="vote-topic 
+															{if $oBlogRating > 0}
 																vote-count-positive
-															{elseif $oBlog->getRating() < 0}
+															{elseif $oBlogRating < 0}
 																vote-count-negative
-															{elseif $oBlog->getRating() == 0}
+															{elseif $oBlogRating == 0}
 																vote-count-zero
 															{/if}
-															
 															{if $oVote} 
 																voted 
-																
 																{if $oVote->getDirection() > 0}
 																	voted-up
 																{elseif $oVote->getDirection() < 0}
@@ -53,21 +53,20 @@
 															{else}
 																not-voted
 															{/if}
-															
 															{if ($oUserCurrent && $oUserOwner->getId() == $oUserCurrent->getId())}
 																vote-nobuttons
 															{/if}">
-		<a href="#" class="vote-item vote-up" onclick="return ls.vote.vote({$oBlog->getId()},this,1,'blog');"><span><i></i></span></a>
-		<div class="vote-item vote-count" title="{$aLang.blog_vote_count}: {$oBlog->getCountVote()}"><span id="vote_total_blog_{$oBlog->getId()}">{if $oBlog->getRating() > 0}+{/if}{$oBlog->getRating()}</span></div>
-		<a href="#" class="vote-item vote-down" onclick="return ls.vote.vote({$oBlog->getId()},this,-1,'blog');"><span><i></i></span></a>
+		<div class="vote-item vote-up" data-direction="1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
+		<span class="vote-count" title="{$aLang.blog_vote_count}: {$oBlog->getCountVote()}" id="vote_total_blog_{$oBlogId}">{if $oBlogRating > 0}+{/if}{$oBlogRating}</span>
+		<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
 	</div>
 </div>
 
 <div class="blog-mini" id="blog-mini">
 		{if $oUserCurrent and $oUserCurrent->getId()!=$oBlog->getOwnerId()}
-			<button type="submit"  class="button button-small" id="button-blog-join-first-{$oBlog->getId()}" data-button-additional="button-blog-join-second-{$oBlog->getId()}" data-only-text="1" onclick="ls.blog.toggleJoin(this, {$oBlog->getId()}); return false;">{if $oBlog->getUserIsJoin()}{$aLang.blog_leave}{else}{$aLang.blog_join}{/if}</button>
+			<button type="submit"  class="button button-small" id="button-blog-join-first-{$oBlogId}" data-button-additional="button-blog-join-second-{$oBlogId}" data-only-text="1" onclick="ls.blog.toggleJoin(this, {$oBlogId}); return false;">{if $oBlog->getUserIsJoin()}{$aLang.blog_leave}{else}{$aLang.blog_join}{/if}</button>
 		{/if}
-	<span id="blog_user_count_{$oBlog->getId()}">{$iCountBlogUsers}</span> {$iCountBlogUsers|declension:$aLang.reader_declension:'russian'},
+	<span id="blog_user_count_{$oBlogId}">{$iCountBlogUsers}</span> {$iCountBlogUsers|declension:$aLang.reader_declension:'russian'},
 	{$oBlog->getCountTopic()} {$oBlog->getCountTopic()|declension:$aLang.topic_declension:'russian'}
 	<div class="h-float-right" id="blog-mini-header">
 		<a href="#" class="link-dotted" onclick="ls.blog.toggleInfo(); return false;">{$aLang.blog_expand_info}</a>
@@ -93,7 +92,7 @@
 				<li><span>{$aLang.infobox_blog_create}</span> <strong>{date_format date=$oBlog->getDateAdd() format="j F Y"}</strong></li>
 				<li><span>{$aLang.infobox_blog_topics}</span> <strong>{$oBlog->getCountTopic()}</strong></li>
 				<li><span><a href="{$oBlog->getUrlFull()}users/">{$aLang.infobox_blog_users}</a></span> <strong>{$iCountBlogUsers}</strong></li>
-				<li class="rating"><span>{$aLang.infobox_blog_rating}</span> <strong>{$oBlog->getRating()}</strong></li>
+				<li class="rating"><span>{$aLang.infobox_blog_rating}</span> <strong>{$oBlogRating}</strong></li>
 			</ul>
 			
 			
@@ -134,11 +133,11 @@
 				<br /><br />
 				<ul class="actions">
 					<li>
-						<a href="{router page='blog'}edit/{$oBlog->getId()}/" title="{$aLang.blog_edit}" class="edit">{$aLang.blog_edit}</a></li>
+						<a href="{router page='blog'}edit/{$oBlogId}/" title="{$aLang.blog_edit}" class="edit">{$aLang.blog_edit}</a></li>
 						{if $oUserCurrent->isAdministrator()}
 							<li><a href="#" title="{$aLang.blog_delete}" id="blog_delete_show" class="delete">{$aLang.blog_delete}</a>
 						{else}
-							<a href="{router page='blog'}delete/{$oBlog->getId()}/?security_ls_key={$LIVESTREET_SECURITY_KEY}" title="{$aLang.blog_delete}" onclick="return confirm('{$aLang.blog_admin_delete_confirm}');" >{$aLang.blog_delete}</a>
+							<a href="{router page='blog'}delete/{$oBlogId}/?security_ls_key={$LIVESTREET_SECURITY_KEY}" title="{$aLang.blog_delete}" onclick="return confirm('{$aLang.blog_admin_delete_confirm}');" >{$aLang.blog_delete}</a>
 						{/if}
 					</li>
 				</ul>
@@ -148,7 +147,7 @@
 	
 	<footer class="blog-footer" id="blog-footer">
 		{if $oUserCurrent and $oUserCurrent->getId()!=$oBlog->getOwnerId()}
-			<button type="submit"  class="button button-small" id="button-blog-join-second-{$oBlog->getId()}" data-button-additional="button-blog-join-first-{$oBlog->getId()}" data-only-text="1" onclick="ls.blog.toggleJoin(this, {$oBlog->getId()}); return false;">{if $oBlog->getUserIsJoin()}{$aLang.blog_leave}{else}{$aLang.blog_join}{/if}</button>
+			<button type="submit"  class="button button-small" id="button-blog-join-second-{$oBlogId}" data-button-additional="button-blog-join-first-{$oBlogId}" data-only-text="1" onclick="ls.blog.toggleJoin(this, {$oBlogId}); return false;">{if $oBlog->getUserIsJoin()}{$aLang.blog_leave}{else}{$aLang.blog_join}{/if}</button>
 		{/if}
 		<a href="{router page='rss'}blog/{$oBlog->getUrl()}/" class="rss">RSS</a>
 		

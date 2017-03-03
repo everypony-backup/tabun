@@ -1,6 +1,8 @@
 {assign var="oBlog" value=$oTopic->getBlog()}
 {assign var="oUser" value=$oTopic->getUser()}
 {assign var="oVote" value=$oTopic->getVote()}
+{assign var="oTopicId" value=$oTopic->getId()}
+{assign var="oTopicRating" value=$oTopic->getRating()}
 
 {if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
 	{assign var="bVoteInfoShow" value=true}
@@ -23,13 +25,13 @@
 		{/strip}
 		<div class="topic-info">
 			<div class="topic-info-vote">
-				<div id="vote_area_topic_{$oTopic->getId()}" class="vote-topic
+				<div id="vote_area_topic_{$oTopicId}" class="vote-topic
 					{if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
-						{if $oTopic->getRating() > 0}
+						{if $oTopicRating > 0}
 							vote-count-positive
-						{elseif $oTopic->getRating() < 0}
+						{elseif $oTopicRating < 0}
 							vote-count-negative
-						{elseif $oTopic->getRating() == 0}
+						{elseif $oTopicRating == 0}
 							vote-count-zero
 						{/if}
 					{/if}
@@ -59,17 +61,15 @@
 						vote-not-expired
 					{/if}">
 
-					<div class="vote-item vote-up"{if $oUserCurrent and $oUserCurrent->isAdministrator()} style="display: block;"{/if} onclick="return ls.vote.vote({$oTopic->getId()},this,1,'topic');"><span><i></i></span></div>
-					<div class="vote-item vote-count" title="{$aLang.topic_vote_count}: {$oTopic->getCountVote()}">
-						<span id="vote_total_topic_{$oTopic->getId()}">
+					<div class="vote-item vote-up" data-direction="1" data-target_id="{$oTopicId}" data-target_type="topic"></div>
+					<span id="vote_total_topic_{$oTopicId}" class="vote-item vote-count" title="{$aLang.topic_vote_count}: {$oTopic->getCountVote()}" data-direction="0" data-target_id="{$oTopicId}" data-target_type="topic">
 							{if $bVoteInfoShow}
-								{if $oTopic->getRating() > 0}+{/if}{$oTopic->getRating()}
+								{if $oTopicRating > 0}+{/if}{$oTopicRating}
 							{else}
-								<i onclick="return ls.vote.vote({$oTopic->getId()},this,0,'topic');">?</i>
+								?
 							{/if}
-						</span>
-					</div>
-					<div class="vote-item vote-down"{if $oUserCurrent and $oUserCurrent->isAdministrator()} style="display: block;"{/if} onclick="return ls.vote.vote({$oTopic->getId()},this,-1,'topic');"><span><i></i></span></div>
+					</span>
+					<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oTopicId}" data-target_type="topic"></div>
 				</div>
 			</div>
 
@@ -85,7 +85,7 @@
 				{/if}
 
 				{if $oTopic->getIsAllowDelete()}
-					<span class="delete"><i class="icon-synio-actions-delete"></i><a href="{router page='topic'}delete/{$oTopic->getId()}/?security_ls_key={$LIVESTREET_SECURITY_KEY}" title="{$aLang.topic_delete}" onclick="return confirm('{$aLang.topic_delete_confirm}');" class="actions-delete">{$aLang.topic_delete}</a></span>
+					<span class="delete"><i class="icon-synio-actions-delete"></i><a href="{router page='topic'}delete/{$oTopicId}/?security_ls_key={$LIVESTREET_SECURITY_KEY}" title="{$aLang.topic_delete}" onclick="return confirm('{$aLang.topic_delete_confirm}');" class="actions-delete">{$aLang.topic_delete}</a></span>
 				{/if}
 			</span>
 		{/if}

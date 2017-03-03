@@ -4,12 +4,9 @@
   display flex
   flex-flow row
   align-items center
-  .vote-item
-    cursor pointer
-    overflow hidden
-    display inline-block
 
 .vote-up,.vote-down
+  cursor pointer
   background transparent url(images/up.png) no-repeat
   height 15px
   width 12px
@@ -23,12 +20,11 @@
   opacity 1
 
 .vote-count
+  cursor text
+  color #949aa1
   padding 0 5px 0 4px
   line-height 18px
   font-size 18px
-  span
-    i
-      font-style normal
 
 .vote-count-positive
   .vote-count

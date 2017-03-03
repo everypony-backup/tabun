@@ -376,10 +376,6 @@ initEvent = ->
       ls.favourite.toggle this.parentNode.parentNode.dataset.id, this, 'comment')
     .on('click', ".goto-comment-parent", () ->
       ls.comments.showComment this.parentNode.dataset.id, true)
-    .on('click', ".comment-vote>.vote-up", () ->
-      ls.vote.vote this.parentNode.parentNode.dataset.id, this, 1, 'comment')
-    .on('click', ".comment-vote>.vote-down", () ->
-      ls.vote.vote this.parentNode.parentNode.dataset.id, this, -1, 'comment')
     .on('click', ".folding", () ->
       $(this).nextAll().toggleClass 'h-hidden')
 
