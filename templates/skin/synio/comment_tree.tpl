@@ -74,6 +74,6 @@
 		<div class="comments-not-allowed">{$aLang.comment_unregistered}</div>
 	{/if}
 {/if}
-<div data-parent-id="" data-quote="" id="quote" style="display: none;"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>
+<div data-parent_id="" data-quote="" id="quote" style="display: none;"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>
 <div id="hidden-message" class="h-hidden">Скрыто <b></b> <span></span> <a>Показать</a></div>
 

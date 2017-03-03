@@ -409,17 +409,17 @@ init = ->
   setCountNewComment()
   if commentForm && UI.smartQuote
     $(document)
-      .on('mouseup', (e) -> 
+      .on('mouseup', (e) ->
         #проверяем нажата ли левая кнопка
         if e.which != 1 then return
         selection = window.getSelection()
         text = selection
           .toString()
-          .replace(/&/g,"&amp;")
-          .replace(/</g,"&lt;")
-          .replace(/>/g,"&gt;")
-          .replace(/"/g,"&quot;")
-          .replace(/'/g,"&#039;")
+          .replace /&/g, "&amp;"
+          .replace /</g, "&lt;"
+          .replace />/g, "&gt;"
+          .replace /"/g, "&quot;"
+          .replace /'/g, "&#039;"
         if !text then return
         #получаем всех родителей
         parents = $(selection.anchorNode.parentElement)
@@ -428,15 +428,15 @@ init = ->
         if $(parents).filter("textarea").length then return
         if !$(parents).filter(".comment-content,.topic-content").length then return
         #ищем родительский комментарий
-        parentID = $(parents).filter(".comment").attr("data-id") || 0;
+        parentID = $(parents).filter(".comment")[0].dataset.id || 0;
         x = e.clientX + $(window).scrollLeft() + 10
         y = e.clientY + $(window).scrollTop() - 7
-        quote = $("#quote")
-        if text != $(quote).attr("data-quote")
-          $(quote).attr("data-quote",text)
-          $(quote).attr("data-parent-id",parentID)
-          $(quote).css('left',x+'px')
-          $(quote).css('top',y+'px')
+        quote = document.getElementById quote
+        if text != quote.dataset.quote
+          quote.dataset.quote = text
+          quote.dataset.parent_id = parentID
+          $(quote).css 'left', x+'px'
+          $(quote).css 'top', y+'px'
           $(quote).show()
       )
       .on('mousedown', ->
@@ -448,21 +448,21 @@ init = ->
         targetForm = $("textarea[id^='comment_edit']")[0]
         if !targetForm
           targetForm = commentForm
-          if $("#reply").hasClass("h-hidden")
-            iCurrentShowFormComment = $(this).attr("data-parent-id")
-            toggleCommentForm(iCurrentShowFormComment, false)
+          if $("#reply").hasClass "h-hidden"
+            iCurrentShowFormComment = this.dataset.parent_id
+            toggleCommentForm iCurrentShowFormComment, false
           else
-            iCurrentShowFormComment = $("#reply").siblings(".comment").attr("data-id") || 0
+            iCurrentShowFormComment = $("#reply").siblings(".comment").dataset.id || 0
         else
-          iCurrentShowFormComment = $(targetForm).attr("id").replace("comment_edit_input_","")
+          iCurrentShowFormComment = $(targetForm).id.replace "comment_edit_input_", ""
         #ищем каретку в форме редактирования
         caret = targetForm.selectionStart
         if isNaN caret
-          targetForm.value += '<blockquote>'+$(this).attr("data-quote")+'</blockquote>'
+          targetForm.value += '<blockquote>'+this.dataset.quote+'</blockquote>'
         else
           targetForm.value = 
             targetForm.value.substring(0,caret) +
-            '<blockquote>'+$(this).attr("data-quote")+'</blockquote>' +
+            '<blockquote>'+this.dataset.quote+'</blockquote>' +
             targetForm.value.substring(caret)
         $(this).hide()
         #если форма редактирования не видна, мотаем
@@ -479,7 +479,6 @@ init = ->
           $(this).hide()
         e.stopPropagation()
       )
-
 
 
 module.exports = {
