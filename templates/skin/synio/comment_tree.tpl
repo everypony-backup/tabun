@@ -12,7 +12,7 @@
 		
 		{if $bAllowSubscribe and $oUserCurrent}
 			<div class="subscribe">
-				<input {if $oSubscribeComment and $oSubscribeComment->getStatus()}checked="checked"{/if} type="checkbox" id="comment_subscribe" class="input-checkbox" onchange="ls.subscribe.toggle('{$sTargetType}_new_comment','{$iTargetId}','',this.checked);">
+				<input {if $oSubscribeComment and $oSubscribeComment->getStatus()}checked="checked"{/if} data-target-type="{$sTargetType}" data-target-id="{$iTargetId}" type="checkbox" id="comment_subscribe" class="input-checkbox">
 				<label for="comment_subscribe">{$aLang.comment_subscribe}</label>
 			</div>
 		{/if}
@@ -51,7 +51,7 @@
 		{include file='editor.tpl' sImgToLoad='form_comment_text'}
 	
 		<h4 class="reply-header" id="comment_id_0">
-			<a href="#" class="link-dotted" onclick="ls.comments.toggleCommentForm(0); return false;">{$sNoticeCommentAdd}</a>
+			<a href="#" class="link-dotted">{$sNoticeCommentAdd}</a>
 		</h4>
 		
 		
@@ -63,11 +63,8 @@
 				
 				{hook run='form_add_comment_end'}
 				
-				<button type="submit"  name="submit_comment" 
-						id="comment-button-submit" 
-						onclick="ls.comments.add('form_comment',{$iTargetId},'{$sTargetType}'); return false;" 
-						class="button button-primary">{$aLang.comment_add}</button>
-				<button type="button" onclick="ls.comments.preview();" class="button">{$aLang.comment_preview}</button>
+				<button type="submit" name="submit_comment" id="comment-button-submit" data-target-type="{$sTargetType}" data-target-id="{$iTargetId}" class="button button-primary">{$aLang.comment_add}</button>
+				<button type="button" id="comment-button-preview" class="button">{$aLang.comment_preview}</button>
 				
 				<input type="hidden" name="reply" value="0" id="form_comment_reply" />
 				<input type="hidden" name="cmt_target_id" value="{$iTargetId}" />
@@ -78,5 +75,5 @@
 	{/if}
 {/if}
 <div data-parent-id="" data-quote="" id="quote"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>
-<div id="hidden-message" class="h-hidden">Скрыто <b></b> <span></span> <a onclick="this.parentNode.classList.add('h-hidden');$('.hidden-comment').removeClass('hidden-comment')">Показать</a></div>
+<div id="hidden-message" class="h-hidden">Скрыто <b></b> <span></span> <a>Показать</a></div>
 
