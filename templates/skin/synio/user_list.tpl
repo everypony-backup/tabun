@@ -36,7 +36,7 @@
 					<td class="cell-name">
 						<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(48)}"  class="avatar" /></a>
 						<div class="name {if !$oUser->getProfileName()}no-realname{/if}">
-							<p class="username word-wrap"><a href="{$oUser->getUserWebPath()} data-user_id="{$oUser->getId()}"">{$oUser->getLogin()}</a></p>
+							<p class="username word-wrap"><a href="{$oUser->getUserWebPath()}" data-user_id="{$oUser->getId()}">{$oUser->getLogin()}</a></p>
 							{if $oUser->getProfileName()}<p class="realname">{$oUser->getProfileName()}</p>{/if}
 						</div>
 					</td>
