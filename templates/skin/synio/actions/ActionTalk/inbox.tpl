@@ -63,7 +63,14 @@
 						</td>
 						<td class="cell-date ta-r">
 						{date_format date=$oTalk->getDate() format="j F Y"}<br/>
-						<a href="#" onclick="return ls.favourite.toggle({$oTalk->getId()},this,'talk');" class="favourite {if $oTalk->getIsFavourite()}active{/if}">{if $oTalk->getIsFavourite()}Удалить из избранного{else}В избранное{/if}</a></td>
+			                <div class="favourite {if $oTalk->getIsFavourite()}active{/if}" data-target_id="{$oTalk->getId()}" data-target_type="talk">
+			                    {if $oTalk->getIsFavourite()}
+			                        {t}favourite_in{/t}
+			                    {else}
+			                        {t}favourite_add{/t}
+			                    {/if}
+			                </div>
+						</td>
 					</tr>
 				{/foreach}
 			</tbody>

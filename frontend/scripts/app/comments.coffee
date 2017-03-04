@@ -372,8 +372,6 @@ initEvent = ->
     this.parentNode.classList.add 'h-hidden'
     $('.hidden-comment').removeClass 'hidden-comment'
   $(document)
-    .on('click', ".comment-favourite>.favourite", () ->
-      ls.favourite.toggle this.parentNode.parentNode.dataset.id, this, 'comment')
     .on('click', ".goto-comment-parent", () ->
       ls.comments.showComment this.parentNode.dataset.id, true)
     .on('click', ".folding", () ->

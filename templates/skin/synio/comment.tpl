@@ -38,7 +38,7 @@
         {if $oUserCurrent}
             {if !$bNoCommentFavourites}
             <div class="comment-favourite">
-                <div class="favourite {if $oComment->getIsFavourite()}active{/if}">
+                <div class="favourite {if $oComment->getIsFavourite()}active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
                     {if $oComment->getIsFavourite()}
                         {t}favourite_in{/t}
                     {else}
