@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="comment-info" data-id="{$oCommentId}">
-        <a href="/profile/{$oCommentAuthorLogin}">
+        <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthor->getId()}">
             <img src="{$oCommentAuthor->getProfileAvatarPath(24)}"  class="comment-avatar"/>
         </a>
         <a class="comment-author {if $iAuthorId == $oCommentAuthor->getId()}comment-topic-author{/if}" {if sAuthorNotice} title="{$sAuthorNotice}"{/if} href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>

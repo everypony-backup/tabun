@@ -74,7 +74,7 @@
 			</div>
 
 			<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(48)}"  class="avatar" /></a>
-			<a rel="author" href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a> в блоге
+			<a rel="author" href="{$oUser->getUserWebPath()}" data-user_id="{$oUser->getId()}">{$oUser->getLogin()}</a> в блоге
 			<a href="{$oBlog->getUrlFull()}" class="topic-blog{if $oBlog->getType()=='close'} private-blog{/if}">{$oBlog->getTitle()|escape:'html'}</a>
 
 
