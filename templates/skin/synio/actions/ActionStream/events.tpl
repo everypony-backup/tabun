@@ -38,7 +38,7 @@
 			{elseif $oStreamEvent->getEventType() == 'vote_blog'}
 				{if $oUser->getProfileSex() != 'woman'} {$aLang.stream_list_event_vote_blog} {else} {$aLang.stream_list_event_vote_blog_female} {/if} 
 				<span class="stream-voted 
-				{assign var=oVote value=$oStreamEvent->getVote())}
+				{assign var=oVote value=$oStreamEvent->getVote()}
 				{if $oVote}
 					{if $oVote->getDirection() > 0}
 						stream-voted-up
@@ -51,7 +51,7 @@
 			{elseif $oStreamEvent->getEventType() == 'vote_topic'}
 				{if $oUser->getProfileSex() != 'woman'} {$aLang.stream_list_event_vote_topic} {else} {$aLang.stream_list_event_vote_topic_female} {/if} 
 				<span class="stream-voted 
-				{assign var=oVote value=$oStreamEvent->getVote())}
+				{assign var=oVote value=$oStreamEvent->getVote()}
 				{if $oVote}
 					{if $oVote->getDirection() > 0}
 						stream-voted-up
@@ -64,7 +64,7 @@
 			{elseif $oStreamEvent->getEventType() == 'vote_comment'}
 				{if $oUser->getProfileSex() != 'woman'} {$aLang.stream_list_event_vote_comment} {else} {$aLang.stream_list_event_vote_comment_female} {/if} 
 				<span class="stream-voted 
-				{assign var=oVote value=$oStreamEvent->getVote())}
+				{assign var=oVote value=$oStreamEvent->getVote()}
 				{if $oVote}
 					{if $oVote->getDirection() > 0}
 						stream-voted-up
@@ -77,7 +77,7 @@
 			{elseif $oStreamEvent->getEventType() == 'vote_user'}
 				{if $oUser->getProfileSex() != 'woman'} {$aLang.stream_list_event_vote_user} {else} {$aLang.stream_list_event_vote_user_female} {/if} 
 				<span class="stream-voted 
-				{assign var=oVote value=$oStreamEvent->getVote())}
+				{assign var=oVote value=$oStreamEvent->getVote()}
 				{if $oVote}
 					{if $oVote->getDirection() > 0}
 						stream-voted-up
