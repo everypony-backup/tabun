@@ -1412,7 +1412,7 @@ class ActionAjax extends Action {
 			return;
 		}
 		
-		$aVotes = $this->Vote_GetVoteByTarget($targetId, $targetType);
+		$aVotes = $this->Vote_SimpleGetVoteByOneTarget($targetId, $targetType);
 		$aResult = array();
 		foreach($aVotes as $oVote) {
 			$oUser = $this->User_GetUserById($oVote->getVoterId());

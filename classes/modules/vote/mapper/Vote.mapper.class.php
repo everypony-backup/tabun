@@ -77,26 +77,24 @@ class ModuleVote_MapperVote extends Mapper {
 		return $aVotes;
 	}
 	/**
-	 * Получить список голосований по списку идентификаторов таргета
+	 * Получить список голосований по идентификатору таргета
 	 *
-	 * @param array $aArrayId	Список ID владельцев
-	 * @param string $sTargetType	Тип владельца
+	 * @param  array|int $aTargetId     ID владельца
+	 * @param  string    $sTargetType   Тип владельца
 	 * @return array
 	 */
-	public function GetVoteByTarget($aArrayId,$sTargetType) {
-		if (!is_array($aArrayId) or count($aArrayId)==0) {
-			return array();
-		}
+	public function SimpleGetVoteByOneTarget($iTargetId,$sTargetType) {
+		$iTargetId = (int) $iTargetId;
 		$sql = "SELECT 
 					*							 
 				FROM 
 					".Config::Get('db.table.vote')."
 				WHERE 					
-					target_id IN(?a) 	
+					target_id = ?d 	
 					AND
 					target_type = ? ";
 		$aVotes=array();
-		if ($aRows=$this->oDb->select($sql,$aArrayId,$sTargetType)) {
+		if ($aRows=$this->oDb->select($sql,$iTargetId,$sTargetType)) {
 			foreach ($aRows as $aRow) {
 				$aVotes[]=Engine::GetEntity('Vote',$aRow);
 			}

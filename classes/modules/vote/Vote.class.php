@@ -149,72 +149,20 @@ class ModuleVote extends Module {
 		return $aVote;
 	}
 	/**
-	 * Получить список голосований по списку идентификаторов таргета
+	 * Получить список голосований по идентификатору таргета
 	 *
-	 * @param  array|int $aTargetId	Список ID владельцев
-	 * @param  string    $sTargetType	Тип владельца
+	 * @param  array|int $aTargetId     ID владельца
+	 * @param  string    $sTargetType   Тип владельца
 	 * @return array
 	 */
-	public function GetVoteByTarget($aTargetId, $sTargetType) {
-		if (!is_array($aTargetId)) $aTargetId=array($aTargetId);
-		if (!$aTargetId) {
-			return array();
-		}
-		$aTargetId=array_unique($aTargetId);
+	public function SimpleGetVoteByOneTarget($iTargetId, $sTargetType) {
+		$iTargetId = (int) $iTargetId;
 		$aVote=array();
-		$aIdNotNeedQuery=array();
-		/**
-		 * Делаем мульти-запрос к кешу
-		 */
-		$aCacheKeys=func_build_cache_keys($aTargetId,"vote_{$sTargetType}_");
-		if (false !== ($data = $this->Cache_Get($aCacheKeys))) {
-			/**
-			 * проверяем что досталось из кеша
-			 */
-			foreach ($aCacheKeys as $sValue => $sKey ) {
-				if (array_key_exists($sKey,$data)) {
-					if ($data[$sKey]) {
-						$aVote[$data[$sKey]->getTargetId()]=$data[$sKey];
-					} else {
-						$aIdNotNeedQuery[]=$sValue;
-					}
-				}
-			}
-		}
-		/**
-		 * Смотрим каких топиков не было в кеше и делаем запрос в БД
-		 */
-		$aIdNeedQuery=array_diff($aTargetId,array_keys($aVote));
-		$aIdNeedQuery=array_diff($aIdNeedQuery,$aIdNotNeedQuery);
-		$aIdNeedStore=$aIdNeedQuery;
-		if ($data = $this->oMapper->GetVoteByTarget($aIdNeedQuery,$sTargetType)) {
+		if ($data = $this->oMapper->SimpleGetVoteByOneTarget($iTargetId,$sTargetType)) {
 			foreach ($data as $oVote) {
-				/**
-				 * Добавляем к результату и сохраняем в кеш
-				 */
 				$aVote[$oVote->getTargetId()]=$oVote;
-				$this->Cache_Set(
-                    $oVote,
-                    "vote_{$oVote->getTargetType()}_{$oVote->getTargetId()}",
-                    []
-                );
-				$aIdNeedStore=array_diff($aIdNeedStore,array($oVote->getTargetId()));
 			}
 		}
-		/**
-		 * Сохраняем в кеш запросы не вернувшие результата
-		 */
-		foreach ($aIdNeedStore as $sId) {
-			$this->Cache_Set(
-                null,
-                "vote_{$sTargetType}_{$sId}",
-                []
-            );
-		}
-		/**
-		 * Сортируем результат согласно входящему массиву
-		 */
-		$aVote=func_array_sort_by_keys($aVote,$aTargetId);
 		return $aVote;
 	}
 	/**
