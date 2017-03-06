@@ -585,6 +585,7 @@ class ModuleACL extends Module {
     {
         return $this::EDIT_ALLOW_FIX | ($userIsNotAuthor && Config::Get('acl.edit.comment.enable_lock') ? $this::EDIT_ALLOW_LOCK : 0);
     }
+	
 	public function CheckSimpleAccessLevel($req, $oUser, $oTarget, $sTargetType) {
 		if($req == 8) return true;
 		if($req == 0) return false;
