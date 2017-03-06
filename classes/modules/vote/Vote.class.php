@@ -157,13 +157,7 @@ class ModuleVote extends Module {
 	 */
 	public function SimpleGetVoteByOneTarget($iTargetId, $sTargetType) {
 		$iTargetId = (int) $iTargetId;
-		$aVote=array();
-		if ($data = $this->oMapper->SimpleGetVoteByOneTarget($iTargetId,$sTargetType)) {
-			foreach ($data as $oVote) {
-				$aVote[$oVote->getTargetId()]=$oVote;
-			}
-		}
-		return $aVote;
+		return $this->oMapper->SimpleGetVoteByOneTarget($iTargetId,$sTargetType);
 	}
 	/**
 	 * Удаляет голосование из базы по списку идентификаторов таргета
