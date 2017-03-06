@@ -9,9 +9,8 @@
 {assign var="oCommentRating" value=$oComment->getRating()}
 {assign var="oCommentDate" value=$oComment->getDate()}
 {assign var="oCommentDeleted" value=$oComment->getDelete()}
-{if $bVoteInfoEnabled === null}
-    {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.ne_enable_level'), $oUserCurrent, $oComment, 'comment')}
-{/if}
+{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.ne_enable_level'), $oUserCurrent, $oComment, 'comment')}
+
 
 <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad {/if}{if $oUserCurrent}{if $oComment->getUserId() == $oUserCurrent->getId()}comment-self {elseif $sDateReadLast <= $oCommentDate}comment-new{/if}{/if}">
     <div id="comment_content_id_{$oCommentId}" class="comment-content">
