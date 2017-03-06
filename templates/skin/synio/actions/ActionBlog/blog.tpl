@@ -1,7 +1,7 @@
 {include file='header.tpl'}
 {assign var="oUserOwner" value=$oBlog->getOwner()}
 {assign var="oVote" value=$oBlog->getVote()}
-{assing var="oBlogId" value=$oBlog->getId()}
+{assign var="oBlogId" value=$oBlog->getId()}
 {assign var="oBlogRating" value=$oBlog->getRating()}
 
 {if $oUserCurrent and $oUserCurrent->isAdministrator()}
