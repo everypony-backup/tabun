@@ -71,8 +71,8 @@ getVotes = (targetId, targetType, el) ->
   params['targetType'] = targetType
 
   ajax routes.vote.getVotes, params, this.onGetVotes.bind({"orig":this,"control":el})
-    el.dataset.queryState = "query"
-    return false
+  el.dataset.queryState = "query"
+  return false
 
 __makeProfileLink = (path, data) ->
   el = document.createElement "a"
