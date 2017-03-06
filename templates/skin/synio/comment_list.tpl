@@ -7,6 +7,7 @@
     {if $oTopic}
         {assign var="oBlog" value=$oTopic->getBlog()}
     {/if}
+    {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel(Config::Get('vote_state.comment.ne_enable_level'), $oUserCurrent, $oComment, 'comment')}
     <section class="comment">
         <div class="comment-content">
             <div class="text">{$oComment->getText()}</div>
@@ -36,8 +37,8 @@
                 {/if}
             {/if}
             {if $oComment->getTargetType() != 'talk'}
-                <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote {if $oCommentRating > 0} vote-count-positive {elseif $oCommentRating < 0} vote-count-negative{/if}">
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
+                <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote {if $oCommentRating > 0} vote-count-positive {elseif $oCommentRating < 0} vote-count-negative {elseif $oCommentRating == 0 and $bVoteInfoEnabled and $oComment->getCountVote() > 0} vote-count-mixed {/if} {if $bVoteInfoEnabled}voteInfo-enable{/if}">
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}" onclick="ls.vote.getVotes({$oComment->getId()},'comment',this);"{/if}>{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
                 </div>
             {/if}
             <div>

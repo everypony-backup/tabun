@@ -9,6 +9,9 @@
 {assign var="oCommentRating" value=$oComment->getRating()}
 {assign var="oCommentDate" value=$oComment->getDate()}
 {assign var="oCommentDeleted" value=$oComment->getDelete()}
+{if !$bVoteInfoEnabled}
+    {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel(Config::Get('vote_state.comment.ne_enable_level'), $oUserCurrent, $oComment, 'comment')}
+{/if}
 
 <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad {/if}{if $oUserCurrent}{if $oComment->getUserId() == $oUserCurrent->getId()}comment-self {elseif $sDateReadLast <= $oCommentDate}comment-new{/if}{/if}">
     <div id="comment_content_id_{$oCommentId}" class="comment-content">
@@ -67,12 +70,14 @@
                 <a class="link-dotted comment-cancel-edit-bw">{$aLang.comment_cancel_edit}</a>
             {/if}
             {if $oComment->getTargetType() != 'talk'}
-                <div id="vote_area_comment_{$oCommentId}"
+                <div id="vote_area_comment_{$oCommentId} {if $bVoteInfoEnabled}voteInfo-enable{/if}"
                     class="vote comment-vote
                     {if $oCommentRating > 0}
                         vote-count-positive
                     {elseif $oCommentRating < 0}
                         vote-count-negative
+                    {elseif $oCommentRating == 0 and $bVoteInfoEnabled and $oComment->getCountVote() > 0}
+                        vote-count-mixed
                     {/if}
                     {if $oCommentVote}
                         voted
@@ -83,7 +88,7 @@
                             {/if}
                      {/if}">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}" onclick="ls.vote.getVotes({$oComment->getId()},'comment',this);"{/if}>{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
                     <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                 </div>
             {/if}

@@ -50,6 +50,7 @@ module.exports =
     blog: '/ajax/vote/blog/'
     user: '/ajax/vote/user/'
     question: '/ajax/vote/question/'
+    getVotes: '/ajax/get-object-votes/'
   question:
     add: '/question/add/'
   favourite:

@@ -21,9 +21,14 @@
 	</header>
 
 	{assign var="nesting" value="-1"}
+	{assign var="iVoteInfoNeEnableLevel" value=Config::Get('vote_state.comment.ne_enable_level')}
 	{foreach from=$aComments item=oComment name=rublist}
 		{assign var="cmtlevel" value=$oComment->getLevel()}
-		
+		{if $bVoteInfoEnabled === null && $iVoteInfoNeEnableLevel >= 6}
+			{* Кэширование допустимо только если все комменты дерева принадлежат одной области видимости. *}
+			{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($iVoteInfoNeEnableLevel, $oUserCurrent, $oComment, 'comment')}
+		{/if}
+
 		{if $nesting < $cmtlevel} 
 		{elseif $nesting > $cmtlevel}    	
 			{section name=closelist1  loop=$nesting-$cmtlevel+1}</div>{/section}

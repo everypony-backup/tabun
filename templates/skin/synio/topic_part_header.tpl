@@ -3,12 +3,13 @@
 {assign var="oVote" value=$oTopic->getVote()}
 {assign var="oTopicId" value=$oTopic->getId()}
 {assign var="oTopicRating" value=$oTopic->getRating()}
+{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.ne_enable_level'), $oUserCurrent, $oTopic, 'topic')}
 
 {if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
 	{assign var="bVoteInfoShow" value=true}
 {/if}
 
-<article class="topic topic-type-{$oTopic->getType()} js-topic">
+<article class="topic topic-type-{$oTopic->getType()} js-topic {if $bVoteInfoEnabled}voteInfo-enable{/if}">
     <header class="topic-header">
         {strip}
             <h1 class="topic-title word-wrap">
@@ -31,6 +32,8 @@
 							vote-count-positive
 						{elseif $oTopicRating < 0}
 							vote-count-negative
+						{elseif $oTopicRating == 0 and $bVoteInfoEnabled and $oTopic->getCountVote() > 0}
+							vote-count-mixed
 						{elseif $oTopicRating == 0}
 							vote-count-zero
 						{/if}
