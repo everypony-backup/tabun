@@ -70,7 +70,7 @@ getVotes = (targetId, targetType, el) ->
   params['targetId'] = targetId
   params['targetType'] = targetType
 
-  ajax routes.vote.getVotes, params, this.onGetVotes.bind({"orig":this,"control":el})
+  ajax routes.vote.getVotes, params, onGetVotes.bind({"orig":this,"control":el})
   el.dataset.queryState = "query"
   return false
 
