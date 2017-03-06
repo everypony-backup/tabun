@@ -70,7 +70,7 @@ getVotes = (targetId, targetType, el) ->
   params['targetId'] = targetId
   params['targetType'] = targetType
 
-  ajax routes.vote.getVotes, params, onGetVotes.bind({"orig":this,"control":el})
+  ajax routes.vote.getVotes, params, onGetVotes.bind({"control":el})
   el.dataset.queryState = "query"
   return false
 
@@ -140,18 +140,18 @@ onGetVotes = (result) ->
       context.eventTarget.addEventListener "click", context.callback
     
     if parseInt(this.control.dataset.count) != result.aVotes.length
-      this.control.parentNode.classList.remove this.orig.options.classes.negative
-      this.control.parentNode.classList.remove this.orig.options.classes.positive
-      this.control.parentNode.classList.remove this.orig.options.classes.mixed
+      this.control.parentNode.classList.remove "vote-count-negative"
+      this.control.parentNode.classList.remove "vote-count-positive"
+      this.control.parentNode.classList.remove "vote-count-mixed"
       if voteSum > 0
         this.control.textContent = "+" + voteSum.toString()
-        this.control.parentNode.classList.add this.orig.options.classes.positive
+        this.control.parentNode.classList.add "vote-count-positive"
       else
         this.control.textContent = voteSum.toString()
         if voteSum < 0
-          this.control.parentNode.classList.add this.orig.options.classes.negative
+          this.control.parentNode.classList.add "vote-count-negative"
         else
-          this.control.parentNode.classList.add this.orig.options.classes.mixed
+          this.control.parentNode.classList.add "vote-count-mixed"
       
       this.control.dataset.count = result.aVotes.length.toString()
   delete this.control.dataset.queryState
