@@ -1380,7 +1380,7 @@ class ActionAjax extends Action {
     }
 	
 	protected function EventGetObjectVotes() {
-		$ne_enable_level = Config::Get('acl.vote_state.comment.ne_enable_level');
+		$ne_enable_level = Config::Get('vote_state.comment.ne_enable_level');
 		/**
 		 * Пользователь авторизован?
 		 */
