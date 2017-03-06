@@ -33,6 +33,10 @@
   .vote-count
     color #da4242
 
+.voteInfo-enable .vote.vote-count-mixed
+  .vote-count
+    color black
+
 .voted-down .vote-up,.voted-up .vote-down
   opacity 0.15
 
@@ -458,8 +462,6 @@
     color #f00
 
 .voteInfo-enable
-  .vote.vote-count-mixed .vote-count
-    color black
   .comment-vote.vote, .vote-count[data-count="0"]
     cursor default
   .vote-count[data-count]:not([data-count="0"]):not([data-query-state="query"]) 
