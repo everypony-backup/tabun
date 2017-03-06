@@ -313,14 +313,12 @@
 .ls-user
   display inline-block
 
-.user:before, .ls-user:before
-  width 12px
-  height 12px
-  margin-right 4px
-
 .user:not(.has-avatar):before, .ls-user:not(.has-avatar):before
   content ''
   display inline-block
+  width 12px
+  height 12px
+  margin-right 4px
   background url(images/icons-synio.png) -165px -74px no-repeat
   vertical-align middle
   position relative
@@ -329,6 +327,8 @@
 .user.has-avatar, .ls-user.has-avatar
   img
     vertical-align text-bottom
+    width 12px
+    height 12px
 
 .user.undefined, .ls-user.undefined
   pointer-events none

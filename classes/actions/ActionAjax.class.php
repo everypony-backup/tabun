@@ -1416,7 +1416,7 @@ class ActionAjax extends Action {
 		$aResult = array();
 		foreach($aVotes as $oVote) {
 			$oUser = $this->User_GetUserById($oVote->getVoterId());
-			$bShowUser = $oUser && (strtotime($oVote->getDate()) > Config::Get('acl.vote_state.comment.oe_end') || $this->ACL_CheckSimpleAccessLevel(Config::Get('acl.vote_state.comment.oe_enable_level'), $this->oUserCurrent, $oTarget, $targetType));
+			$bShowUser = $oUser && (strtotime($oVote->getDate()) > Config::Get('vote_state.comment.oe_end') || $this->ACL_CheckSimpleAccessLevel(Config::Get('vote_state.comment.oe_enable_level'), $this->oUserCurrent, $oTarget, $targetType));
 			$aResult[] = array(
 				'voterName' => $bShowUser ? $oUser->getLogin() : null,
 				'voterAvatar' => $bShowUser ? $oUser->getProfileAvatarPath() : null,
