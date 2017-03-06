@@ -383,8 +383,17 @@ class ModuleStream extends Module {
 			if (isset($aObjects['user'][$oEvent->getUserId()])) {
 				$oEvent->setUser($aObjects['user'][$oEvent->getUserId()]);
 				$aVote=array();
-				if ($oEvent->getEventType() === 'vote_comment') {
+				if ($oEvent->getEventType() === 'vote_topic') {
+					$aVote=$this->Vote_GetVoteByArray($oEvent->getTargetId(),'topic',$oEvent->getUserId());
+					$oEvent->setVote($aVote[$oEvent->getTargetId()]);
+				} elseif ($oEvent->getEventType() === 'vote_comment') {
 					$aVote=$this->Vote_GetVoteByArray($oEvent->getTargetId(),'comment',$oEvent->getUserId());
+					$oEvent->setVote($aVote[$oEvent->getTargetId()]);
+				} elseif ($oEvent->getEventType() === 'vote_user') {
+					$aVote=$this->Vote_GetVoteByArray($oEvent->getTargetId(),'user',$oEvent->getUserId());
+					$oEvent->setVote($aVote[$oEvent->getTargetId()]);
+				} elseif ($oEvent->getEventType() === 'vote_blog') {
+					$aVote=$this->Vote_GetVoteByArray($oEvent->getTargetId(),'blog',$oEvent->getUserId());
 					$oEvent->setVote($aVote[$oEvent->getTargetId()]);
 				}
 				/**
