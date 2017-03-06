@@ -110,9 +110,9 @@ onGetVotes = (result) ->
         
         time = document.createElement "time"
         time.datetime = vote.date
-        var date = new Date(Date.parse(vote.date))
-        var now = new Date()
-		timeString = if date.getDate() != now.getDate() or date.getMonth() != now.getMonth() or date.getFullYear() != now.getFullYear() then date.toLocaleString() else date.toLocaleTimeString()
+        date = new Date(Date.parse(vote.date))
+        now = new Date()
+        timeString = if date.getDate() != now.getDate() or date.getMonth() != now.getMonth() or date.getFullYear() != now.getFullYear() then date.toLocaleString() else date.toLocaleTimeString()
         time.appendChild document.createTextNode(timeString)
         line.appendChild time
         
