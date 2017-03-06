@@ -136,7 +136,7 @@ onGetVotes = (result) ->
         "target":vl_wrapper,
         "eventTarget":window
       }
-      context.callback = this.orig.onVotesListLeaved.bind context
+      context.callback = onVotesListLeaved.bind context
       context.eventTarget.addEventListener "click", context.callback
     
     if parseInt(this.control.dataset.count) != result.aVotes.length
