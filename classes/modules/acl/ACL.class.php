@@ -614,7 +614,7 @@ class ModuleACL extends Module {
 					if($req >= 3 && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) return true;
 					if($req >= 4 && $oBlog->getUserIsModerator()) return true;
 					if($req >= 5) {
-						if(in_array($oBlog->getId(), $this->ModuleBlog_GetAccessibleBlogsByUser($oUser)) ||
+						if(in_array($oBlog->getId(), $this->Blog_GetAccessibleBlogsByUser($oUser)) ||
 							(
 								in_array(['open', 'personal'], $oBlog->getType())  && (
 									!($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) ||
