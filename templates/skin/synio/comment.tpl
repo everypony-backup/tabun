@@ -1,4 +1,6 @@
+{if $oUserCurrent}
 {assign var="oUserIsAdmin" value=$oUserCurrent->isAdministrator()}
+{/if}
 {assign var="oCommentAuthor" value=$oComment->getUser()}
 {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
 {assign var="oCommentVote" value=$oComment->getVote()}
@@ -13,7 +15,7 @@
         <div class="text current">
             {if !$oCommentDeleted and ($oCommentRating > $oConfig->GetValue('module.user.bad_rating'))}
                 {$oComment->getText()}
-            {elseif  $bOneComment or ($oUserCurrent and $oUserIsAdmin)}
+            {elseif  $bOneComment or $oUserIsAdmin}
                 {$oComment->getText()}
             {elseif $oCommentDeleted}
                 <em>{$aLang.comment_was_delete}</em>
