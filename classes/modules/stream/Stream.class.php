@@ -382,8 +382,10 @@ class ModuleStream extends Module {
 			 */
 			if (isset($aObjects['user'][$oEvent->getUserId()])) {
 				$oEvent->setUser($aObjects['user'][$oEvent->getUserId()]);
+				$aVote=array();
 				if ($oEvent->getEventType() === 'vote_comment') {
-					$oEvent->setVote(Vote_GetVote($oEvent->getTargetId(),'comment',$oEvent->getUserId()));
+					$aVote=$this->Vote_GetVoteByArray($oEvent->getTargetId(),'comment',$oEvent->getUserId());
+					$oEvent->setVote($aVote[$oEvent->getTargetId()]);
 				}
 				/**
 				 * Аттачим объекты
