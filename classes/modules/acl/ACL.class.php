@@ -616,7 +616,7 @@ class ModuleACL extends Module {
 					if($req >= 5) {
 						if(in_array($oBlog->getId(), $this->Blog_GetAccessibleBlogsByUser($oUser)) ||
 							(
-								in_array(['open', 'personal'], $oBlog->getType())  && (
+								in_array($oBlog->getType(), ['open', 'personal'])  && (
 									!($oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) ||
 									$oBlogUser->getUserRole() != ModuleBlog::BLOG_USER_ROLE_BAN
 								)
