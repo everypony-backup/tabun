@@ -126,27 +126,24 @@
   a
     &.delete
       color #ccc
-    &.link-dotted
-      color #09f
-      text-decoration none
-      border-bottom 1px dotted #09f
-      &:hover
-        color #f00
-        border-color #f00
   .comment-date
     color #999
+  .comment-link
+    background transparent url(images/icons-comment.png) no-repeat -14px 0
+    height 14px
+    width 17px
+    &:hover
+      background-position -14px -14px
   .goto.goto-comment-parent
-    color #a2b6cd
+    color transparent
     text-decoration none
     display inline-block
     width 14px
     height 14px
-    text-indent 20px
     overflow hidden
-    background transparent url(images/jquery-ui/ui-icons_888888_256x240.png) no-repeat
-    background-position -161px -193px
+    background transparent url(images/icons-comment.png) no-repeat 0 0
     &:hover
-      background-image url(images/jquery-ui/ui-icons_2e83ff_256x240.png)
+      background-position 0 -14px
   .vote
     position absolute
     top 0

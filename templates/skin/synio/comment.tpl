@@ -36,7 +36,7 @@
                   title="{date_format date=$oCommentDate hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
             {date_format date=$oCommentDate format="j F Y, H:i"}
         </time>
-        <a class="comment-link icon-synio-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
+        <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
         {if $oComment->getPid()}
             <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
         {/if}
