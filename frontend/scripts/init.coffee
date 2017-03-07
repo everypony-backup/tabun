@@ -111,7 +111,7 @@ init = ->
 
   # autoDespoil
   if UI.autoDespoil
-    document.getElementById('UI-custom-style').textContent += '.comment-current .spoiler-gray{background-color:transparent;color: #333;}.comment-current .spoiler-gray img{filter: inherit;}'
+    document.getElementById('UI-custom-style').textContent += '.comment-current .spoiler-gray{background-color:transparent;color: #777;}.comment-current .spoiler-gray img{filter: inherit;}'
 
   # Spoilers
   $(document).on 'click', '.spoiler-title', ({target}) ->
