@@ -1,3 +1,4 @@
+{strip}
 {if $oUserCurrent}
     {assign var="oUserIsAdmin" value=$oUserCurrent->isAdministrator()}
     {assign var="oCommentVote" value=$oComment->getVote()}
@@ -99,3 +100,4 @@
     </div>
 </section>
 <div class="folding"></div>
+{/strip}
