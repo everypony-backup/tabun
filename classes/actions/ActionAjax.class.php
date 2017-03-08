@@ -215,7 +215,7 @@ class ActionAjax extends Action {
 		 */
 		if ($oComment->getUserId()==$this->oUserCurrent->getId()) {
 			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_self'),$this->Lang_Get('attention'));
-			return;
+			return Router::Action('error');
 		}
         /**
          * Комментарий не в блоге?
