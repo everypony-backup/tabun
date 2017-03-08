@@ -71,20 +71,14 @@
             {/if}
             {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                    {if $oCommentRating > 0}
-                        vote-count-positive
-                    {elseif $oCommentRating < 0}
-                        vote-count-negative
-                    {elseif $oCommentRating == 0 and $bVoteInfoEnabled and $oComment->getCountVote() > 0}
-                        vote-count-mixed
+                    {if $oCommentRating > 0} vote-count-positive
+                    {elseif $oCommentRating < 0} vote-count-negative
+                    {elseif $oCommentRating == 0 and $bVoteInfoEnabled and $oComment->getCountVote() > 0} vote-count-mixed
                     {/if}
-                    {if $oCommentVote}
-                        voted
-                            {if $oCommentVote->getDirection() > 0}
-                                voted-up
-                            {else}
-                                voted-down
-                            {/if}
+                    {if $oCommentVote} voted
+                        {if $oCommentVote->getDirection() > 0} voted-up
+                        {else} voted-down
+                        {/if}
                     {/if}
                     {if $bVoteInfoEnabled} vote-info-enable{/if}
                     {if $LS->ACL_CanVoteComment($oUserCurrent, $oComment, false, $oCommentVote)} vote-enabled{/if}
