@@ -197,13 +197,106 @@ class ModuleACL extends Module {
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleComment_EntityComment $oComment	Комментарий
+	 * @param string $sMsgId
+	 * @param string $sTitleId
+	 * @param bool $bFullCheck
+	 * @param ModuleVote_EntityVote $oPresentVote
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment) {
-		if ($oUser->getRating()>=Config::Get('acl.vote.comment.rating')) {
-			return true;
+	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, &$sMsgId=null, &$sTitleId=null, $bFullCheck=true, $oPresentVote=null) {
+		/**
+		 * Пользователь не авторизован?
+		 */
+		if (!$oUser) {
+			$sMsgId = 'need_authorization';
+			$sTitleId = 'error';
+			return false;
 		}
-		return false;
+		/**
+		 * Комментарий не существует?
+		 */
+		if (!$oComment) {
+			$sMsgId = 'comment_vote_error_noexists';
+			$sTitleId = 'error';
+			return false;
+		}
+		/**
+		 * Голосует автор комментария?
+		 */
+		if ($oComment->getUserId()==$oUser->getId()) {
+			$sMsgId = 'comment_vote_error_self';
+			$sTitleId = 'attention';
+			return false;
+		}
+		/**
+		 * Комментарий не в блоге?
+		 */
+		if ($oComment->getTargetType() != 'topic') {
+			$sMsgId = 'comment_vote_error_noexists';
+			$sTitleId = 'error';
+			return false;
+		}
+		/**
+		 * Пользователь уже голосовал?
+		 */
+		if ($bFullCheck) {
+			$oVote=$this->Vote_GetVote($oComment->getId(),'comment',$oUser->getId());
+		} else {
+			$oVote=$oPresentVote;
+		}
+		if ($oVote) {
+			$sMsgId = 'comment_vote_error_already';
+			$sTitleId = 'attention';
+			return false;
+		}
+		/**
+		 * Время голосования истекло?
+		 */
+		if (strtotime($oComment->getDate())<=time()-Config::Get('acl.vote.comment.limit_time')) {
+			$sMsgId = 'comment_vote_error_time';
+			$sTitleId = 'attention';
+			return false;
+		}
+		/**
+		 * Пользователь не имеет права голоса?
+		 */
+		if ($oUser->getRating()<Config::Get('acl.vote.comment.rating')) {
+			return false;
+		}
+		/**
+		 * Как именно голосует пользователь
+		 */
+		if ($bFullCheck)
+		$iValue=(int)getRequestStr('value', null, 'post');
+		if (!in_array($iValue, [1, -1])) {
+			$sMsgId = 'comment_vote_error_value';
+			$sTitleId = 'attention';
+			return false;
+		}
+		/**
+		 * А можно ли ему вообще голосовать?
+		 */
+		if ($bFullCheck)
+		if (($mRes = $this->Magicrule_CheckRuleAction(
+			'vote_comment',
+			$oUser,
+			[
+				'vote_value' => $iValue
+			]
+		)) !== true) {
+			if (is_string($mRes)) {
+				$sMsgId = $mRes;
+				$sTitleId = 'attention';
+				return false;
+				//return Router::Action('error');
+			} else {
+				$sMsgId = 'check_rule_action_error';
+				$sTitleId = 'attention';
+				return false;
+				//return Router::Action('error');
+			}
+		}
+		return true;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретный блог
