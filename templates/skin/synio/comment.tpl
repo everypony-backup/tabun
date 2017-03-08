@@ -33,8 +33,7 @@
             <img src="{$oCommentAuthor->getProfileAvatarPath(24)}"  class="comment-avatar"/>
         </a>
         <a class="comment-author {if $iAuthorId == $oCommentAuthor->getId()}comment-topic-author{/if}" {if sAuthorNotice} title="{$sAuthorNotice}"{/if} href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
-        <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}"
-                  title="{date_format date=$oCommentDate hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
+        <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}" title="{date_format date=$oCommentDate hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
             {date_format date=$oCommentDate format="j F Y, H:i"}
         </time>
         <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
@@ -71,8 +70,7 @@
                 <a class="link-dotted comment-cancel-edit-bw">{$aLang.comment_cancel_edit}</a>
             {/if}
             {if $oComment->getTargetType() != 'talk'}
-                <div id="vote_area_comment_{$oCommentId}"
-                    class="vote comment-vote
+                <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
                     {if $oCommentRating > 0}
                         vote-count-positive
                     {elseif $oCommentRating < 0}
