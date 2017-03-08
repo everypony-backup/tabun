@@ -21,6 +21,8 @@ voteTargets =
 vote = (idTarget, objVote, value, type) ->
   unless voteTargets[type]
     return false
+  unless objVote.parentNode.classList.contains("vote-enabled")
+    return false
 
   objVote = $(objVote)
   params = {}
