@@ -197,13 +197,13 @@ class ModuleACL extends Module {
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleComment_EntityComment $oComment	Комментарий
-	 * @param string $sMsgId
-	 * @param string $sTitleId
 	 * @param bool $bFullCheck
 	 * @param ModuleVote_EntityVote $oPresentVote
+	 * @param string $sMsgId
+	 * @param string $sTitleId
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, &$sMsgId=null, &$sTitleId=null, $bFullCheck=true, $oPresentVote=null) {
+	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, &$sMsgId=null, &$sTitleId=null) {
 		/**
 		 * Пользователь не авторизован?
 		 */

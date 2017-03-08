@@ -210,7 +210,7 @@ class ActionAjax extends Action {
 		/**
 		 * Может ли пользователь проголосовать за комментарий?
 		 */
-		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,$sMsgId,$sTitleId)) {
+		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,true,null,$sMsgId,$sTitleId)) {
 			$this->Message_AddErrorSingle($this->Lang_Get($sMsgId),$this->Lang_Get($sTitleId));
 			return;
 		}
