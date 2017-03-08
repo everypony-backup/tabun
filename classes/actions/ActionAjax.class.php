@@ -454,63 +454,18 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
+		$oUser=$this->User_GetUserById(getRequestStr('idUser',null,'post'));
+		
+		$error = new stdClass();
 		/**
-		 * Пользователь существует?
+		 * Может ли пользователь проголосовать за другого пользователя?
 		 */
-		if (!($oUser=$this->User_GetUserById(getRequestStr('idUser',null,'post')))) {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
-			return;
-		}
-		/**
-		 * Голосует за себя?
-		 */
-		if ($oUser->getId()==$this->oUserCurrent->getId()) {
-			$this->Message_AddErrorSingle($this->Lang_Get('user_vote_error_self'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Уже голосовал?
-		 */
-		if ($oUserVote=$this->Vote_GetVote($oUser->getId(),'user',$this->oUserCurrent->getId())) {
-			$this->Message_AddErrorSingle($this->Lang_Get('user_vote_error_already'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Имеет право на голосование?
-		 */
-		if (!$this->ACL_CanVoteUser($this->oUserCurrent,$oUser)) {
-			$this->Message_AddErrorSingle($this->Lang_Get('user_vote_error_acl'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Как проголосовал
-		 */
-		$iValue=getRequestStr('value',null,'post');
-		if (!in_array($iValue,array('1','-1'))) {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+		if (!$this->ACL_CanVoteUser($this->oUserCurrent,$oUser,true,null,$error)) {
+			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
 
-        /**
-         * А можно ли ему вообще голосовать?
-         */
-        $mRes = $this->Magicrule_CheckRuleAction(
-            'vote_user',
-            $this->oUserCurrent,
-            [
-                'vote_value' => (int)getRequest('value', null, 'post')
-            ]
-        );
-        if ($mRes !== true) {
-            if (is_string($mRes)) {
-                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
-                return Router::Action('error');
-            } else {
-                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
-                return Router::Action('error');
-            }
-        }
-
+		$iValue=(int)getRequestStr('value', null, 'post');
 		/**
 		 * Голосуем
 		 */

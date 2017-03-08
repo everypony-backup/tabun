@@ -359,13 +359,107 @@ class ModuleACL extends Module {
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleUser_EntityUser $oUserTarget	Пользователь за которого голосуем
+	 * @param bool $bFullCheck
+	 * @param ModuleVote_EntityVote $oPresentVote
+	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget) {
-		if ($oUser->getRating()>=Config::Get('acl.vote.user.rating')) {
-			return true;
+	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
+		/**
+		 * Пользователь авторизован?
+		 */
+		if (!$oUser) {
+			if($error != null) {
+				$error->sMsgId = 'need_authorization';
+				$error->sTitleId = 'error';
+			}
+			return false;
 		}
-		return false;
+		/**
+		 * Пользователь не существует?
+		 */
+		if (!$oUser) {
+			if($error != null) {
+				$error->sMsgId = 'system_error';
+				$error->sTitleId = 'error';
+			}
+			return false;
+		}
+		/**
+		 * Голосует за себя?
+		 */
+		if ($oUserTarget->getId()==$oUser->getId()) {
+			if($error != null) {
+				$error->sMsgId = 'user_vote_error_self';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Уже голосовал?
+		 */
+		if ($bFullCheck) {
+			$oUserVote=$this->Vote_GetVote($oUserTarget->getId(),'user',$oUser->getId());
+		} else {
+			$oUserVote=$oPresentVote;
+		}
+		if ($oUserVote) {
+			if($error != null) {
+				$error->sMsgId = 'user_vote_error_already';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Имеет право на голосование?
+		 */
+		if ($oUser->getRating()<Config::Get('acl.vote.user.rating')) {
+			if($error != null) {
+				$error->sMsgId = 'user_vote_error_acl';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Как проголосовал
+		 */
+		$iValue=(int)getRequestStr('value',null,'post');
+		if ($bFullCheck)
+		if (!in_array($iValue, [1, -1])) {
+			if($error != null) {
+				$error->sMsgId = 'system_error';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * А можно ли ему вообще голосовать?
+		 */
+		if ($bFullCheck)
+		if (($mRes = $this->Magicrule_CheckRuleAction(
+			'vote_user',
+			$oUser,
+			[
+				'vote_value' => $iValue
+			]
+		)) !== true) {
+			if (is_string($mRes)) {
+				if($error != null) {
+					$error->sMsgId = $mRes;
+					$error->sTitleId = 'attention';
+				}
+				return false;
+				//return Router::Action('error');
+			} else {
+				if($error != null) {
+					$error->sMsgId = 'check_rule_action_error';
+					$error->sTitleId = 'attention';
+				}
+				return false;
+				//return Router::Action('error');
+			}
+		}
+		return true;
 	}
 	/**
 	 * Проверяет можно ли юзеру слать инвайты
