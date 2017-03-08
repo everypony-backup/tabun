@@ -9,7 +9,7 @@
 	{assign var="bVoteInfoShow" value=true}
 {/if}
 
-<article class="topic topic-type-{$oTopic->getType()} js-topic {if $bVoteInfoEnabled}voteInfo-enable{/if}">
+<article class="topic topic-type-{$oTopic->getType()} js-topic {if $bVoteInfoEnabled}vote-info-enable{/if}">
     <header class="topic-header">
         {strip}
             <h1 class="topic-title word-wrap">
