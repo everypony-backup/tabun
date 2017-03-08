@@ -205,10 +205,6 @@ class ActionAjax extends Action {
 		}
 		$oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post'));
 		
-		$error = [
-			'sMsgId' => 'comment_vote_error_acl',
-			'sTitleId' => 'attention',
-		];
 		/**
 		 * Может ли пользователь проголосовать за комментарий?
 		 */

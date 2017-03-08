@@ -208,7 +208,7 @@ class ModuleACL extends Module {
 		 */
 		if (!$oUser) {
 			$error['sMsgId'] = 'need_authorization';
-			$error['sMsgId'] = 'error';
+			$error['sTitleId'] = 'error';
 			return false;
 		}
 		/**
@@ -216,7 +216,7 @@ class ModuleACL extends Module {
 		 */
 		if (!$oComment) {
 			$error['sMsgId'] = 'comment_vote_error_noexists';
-			$error['sMsgId'] = 'error';
+			$error['sTitleId'] = 'error';
 			return false;
 		}
 		/**
@@ -224,7 +224,7 @@ class ModuleACL extends Module {
 		 */
 		if ($oComment->getUserId()==$oUser->getId()) {
 			$error['sMsgId'] = 'comment_vote_error_self';
-			$error['sMsgId'] = 'attention';
+			$error['sTitleId'] = 'attention';
 			return false;
 		}
 		/**
@@ -232,7 +232,7 @@ class ModuleACL extends Module {
 		 */
 		if ($oComment->getTargetType() != 'topic') {
 			$error['sMsgId'] = 'comment_vote_error_noexists';
-			$error['sMsgId'] = 'error';
+			$error['sTitleId'] = 'error';
 			return false;
 		}
 		/**
@@ -245,7 +245,7 @@ class ModuleACL extends Module {
 		}
 		if ($oVote) {
 			$error['sMsgId'] = 'comment_vote_error_already';
-			$error['sMsgId'] = 'attention';
+			$error['sTitleId'] = 'attention';
 			return false;
 		}
 		/**
@@ -253,13 +253,15 @@ class ModuleACL extends Module {
 		 */
 		if (strtotime($oComment->getDate())<=time()-Config::Get('acl.vote.comment.limit_time')) {
 			$error['sMsgId'] = 'comment_vote_error_time';
-			$error['sMsgId'] = 'attention';
+			$error['sTitleId'] = 'attention';
 			return false;
 		}
 		/**
 		 * Пользователь не имеет права голоса?
 		 */
 		if ($oUser->getRating()<Config::Get('acl.vote.comment.rating')) {
+			$error['sMsgId'] = 'comment_vote_error_acl';
+			$error['sTitleId'] = 'attention';
 			return false;
 		}
 		/**
@@ -269,7 +271,7 @@ class ModuleACL extends Module {
 		$iValue=(int)getRequestStr('value', null, 'post');
 		if (!in_array($iValue, [1, -1])) {
 			$error['sMsgId'] = 'comment_vote_error_value';
-			$error['sMsgId'] = 'attention';
+			$error['sTitleId'] = 'attention';
 			return false;
 		}
 		/**
@@ -285,12 +287,12 @@ class ModuleACL extends Module {
 		)) !== true) {
 			if (is_string($mRes)) {
 				$error['sMsgId'] = $mRes;
-				$error['sMsgId'] = 'attention';
+				$error['sTitleId'] = 'attention';
 				return false;
 				//return Router::Action('error');
 			} else {
 				$error['sMsgId'] = 'check_rule_action_error';
-				$error['sMsgId'] = 'attention';
+				$error['sTitleId'] = 'attention';
 				return false;
 				//return Router::Action('error');
 			}
