@@ -205,13 +205,15 @@ class ActionAjax extends Action {
 		}
 		$oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post'));
 		
-		$sMsgId = 'comment_vote_error_acl';
-		$sTitleId = 'attention';
+		$error = [
+			'sMsgId' => 'comment_vote_error_acl',
+			'sTitleId' => 'attention',
+		];
 		/**
 		 * Может ли пользователь проголосовать за комментарий?
 		 */
-		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,true,null,$sMsgId,$sTitleId)) {
-			$this->Message_AddErrorSingle($this->Lang_Get($sMsgId),$this->Lang_Get($sTitleId));
+		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,true,null,$error)) {
+			$this->Message_AddErrorSingle($this->Lang_Get($error['sMsgId']),$this->Lang_Get($error['sTitleId']));
 			return;
 		}
 
