@@ -24,6 +24,7 @@
 																		not-voted
 																	{/if}
 																	
+																	{if $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile, false, $oVote)} vote-enabled{/if}
 																	{if ($oUserCurrent && $oUserProfileId == $oUserCurrent->getId()) || !$oUserCurrent}
 																		vote-nobuttons
 																	{/if}">

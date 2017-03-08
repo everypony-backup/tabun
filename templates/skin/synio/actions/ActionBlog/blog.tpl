@@ -53,6 +53,7 @@
 															{else}
 																not-voted
 															{/if}
+															{if $LS->ACL_CanVoteBlog($oUserCurrent, $oBlog, false, $oVote)} vote-enabled{/if}
 															{if ($oUserCurrent && $oUserOwner->getId() == $oUserCurrent->getId())}
 																vote-nobuttons
 															{/if}">
