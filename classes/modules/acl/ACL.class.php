@@ -202,37 +202,45 @@ class ModuleACL extends Module {
 	 * @param array $error
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, &$error=[]) {
+	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Пользователь не авторизован?
 		 */
 		if (!$oUser) {
-			$error['sMsgId'] = 'need_authorization';
-			$error['sTitleId'] = 'error';
+			if($error != null) {
+				$error->sMsgId = 'need_authorization';
+				$error->sTitleId = 'error';
+			}
 			return false;
 		}
 		/**
 		 * Комментарий не существует?
 		 */
 		if (!$oComment) {
-			$error['sMsgId'] = 'comment_vote_error_noexists';
-			$error['sTitleId'] = 'error';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_noexists';
+				$error->sTitleId = 'error';
+			}
 			return false;
 		}
 		/**
 		 * Голосует автор комментария?
 		 */
 		if ($oComment->getUserId()==$oUser->getId()) {
-			$error['sMsgId'] = 'comment_vote_error_self';
-			$error['sTitleId'] = 'attention';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_self';
+				$error->sTitleId = 'attention';
+			}
 			return false;
 		}
 		/**
 		 * Комментарий не в блоге?
 		 */
 		if ($oComment->getTargetType() != 'topic') {
-			$error['sMsgId'] = 'comment_vote_error_noexists';
-			$error['sTitleId'] = 'error';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_noexists';
+				$error->sTitleId = 'error';
+			}
 			return false;
 		}
 		/**
@@ -244,24 +252,30 @@ class ModuleACL extends Module {
 			$oVote=$oPresentVote;
 		}
 		if ($oVote) {
-			$error['sMsgId'] = 'comment_vote_error_already';
-			$error['sTitleId'] = 'attention';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_already';
+				$error->sTitleId = 'attention';
+			}
 			return false;
 		}
 		/**
 		 * Время голосования истекло?
 		 */
 		if (strtotime($oComment->getDate())<=time()-Config::Get('acl.vote.comment.limit_time')) {
-			$error['sMsgId'] = 'comment_vote_error_time';
-			$error['sTitleId'] = 'attention';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_time';
+				$error->sTitleId = 'attention';
+			}
 			return false;
 		}
 		/**
 		 * Пользователь не имеет права голоса?
 		 */
 		if ($oUser->getRating()<Config::Get('acl.vote.comment.rating')) {
-			$error['sMsgId'] = 'comment_vote_error_acl';
-			$error['sTitleId'] = 'attention';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_acl';
+				$error->sTitleId = 'attention';
+			}
 			return false;
 		}
 		/**
@@ -270,8 +284,10 @@ class ModuleACL extends Module {
 		if ($bFullCheck)
 		$iValue=(int)getRequestStr('value', null, 'post');
 		if (!in_array($iValue, [1, -1])) {
-			$error['sMsgId'] = 'comment_vote_error_value';
-			$error['sTitleId'] = 'attention';
+			if($error != null) {
+				$error->sMsgId = 'comment_vote_error_value';
+				$error->sTitleId = 'attention';
+			}
 			return false;
 		}
 		/**
@@ -286,13 +302,17 @@ class ModuleACL extends Module {
 			]
 		)) !== true) {
 			if (is_string($mRes)) {
-				$error['sMsgId'] = $mRes;
-				$error['sTitleId'] = 'attention';
+				if($error != null) {
+					$error->sMsgId = $mRes;
+					$error->sTitleId = 'attention';
+				}
 				return false;
 				//return Router::Action('error');
 			} else {
-				$error['sMsgId'] = 'check_rule_action_error';
-				$error['sTitleId'] = 'attention';
+				if($error != null) {
+					$error->sMsgId = 'check_rule_action_error';
+					$error->sTitleId = 'attention';
+				}
 				return false;
 				//return Router::Action('error');
 			}

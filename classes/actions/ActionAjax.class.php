@@ -205,11 +205,12 @@ class ActionAjax extends Action {
 		}
 		$oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post'));
 		
+		$error = new stdClass();
 		/**
 		 * Может ли пользователь проголосовать за комментарий?
 		 */
 		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,true,null,$error)) {
-			$this->Message_AddErrorSingle($this->Lang_Get($error['sMsgId']),$this->Lang_Get($error['sTitleId']));
+			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
 
