@@ -144,7 +144,7 @@ onGetVotes = (result) ->
       context.callback = onVotesListLeaved.bind context
       context.eventTarget.addEventListener "click", context.callback
     else
-      notice null, lang.gettext("no_new_votes")
+      notice null, lang.gettext("no_votes")
     
     if parseInt(this.control.dataset.count) != result.aVotes.length
       this.control.parentNode.classList.remove "vote-count-negative"

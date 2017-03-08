@@ -154,8 +154,8 @@ msgstr "Вы робот!"
 msgid "comment_lock_edit"
 msgstr "заблокировать дальнейшее изменение"
 
-msgid "no_new_votes"
-msgstr "Нет новых голосов"
+msgid "no_votes"
+msgstr "Голосов нет"
 
 # Editor
 msgid "create"
