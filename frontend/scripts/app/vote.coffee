@@ -44,7 +44,7 @@ onVote = (idTarget, objVote, value, type, result) ->
   divTotal = $ "##{prefix.total}#{type}_#{idTarget}"
   divCount = $ "##{prefix.count}#{type}_#{idTarget}"
 
-  divVoting.removeClass classNames "vote-count-positive", "vote-count-negative", "vote-count-zero", "vote-count-mixed", "not-voted"
+  divVoting.removeClass classNames "vote-count-positive", "vote-count-negative", "vote-count-zero", "vote-count-mixed", "not-voted", "vote-enabled"
   divVoting.addClass classNames "voted",
     "voted-up": value > 0
     "voted-down": value < 0

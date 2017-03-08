@@ -87,6 +87,7 @@
                             {/if}
                     {/if}
                     {if $bVoteInfoEnabled} vote-info-enable{/if}
+                    {if $LS->ACL_CanVoteComment($oUserCurrent, $oComment, false, $oCommentVote)} vote-enabled{/if}
                     ">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                     <span class="vote-count" id="vote_total_comment_{$oCommentId}" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}" onclick="ls.vote.getVotes({$oComment->getId()},'comment',this);"{/if}>{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
