@@ -80,7 +80,7 @@
                         {else} voted-down
                         {/if}
                     {/if}
-                    {if $bVoteInfoEnabled} vote-info-enable{/if}
+                    {if $bVoteInfoEnabled} vote-info-enabled{/if}
                     {if $LS->ACL_CanVoteComment($oUserCurrent, $oComment, false, $oCommentVote)} vote-enabled{/if}
                     ">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
