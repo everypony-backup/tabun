@@ -376,70 +376,41 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
+		$oBlog=$this->Blog_GetBlogById(getRequestStr('idBlog',null,'post'));
+		
+		$error = new stdClass();
 		/**
-		 * Блог существует?
+		 * Может ли пользователь проголосовать за блог?
 		 */
-		if (!($oBlog=$this->Blog_GetBlogById(getRequestStr('idBlog',null,'post')))) {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+		if (!$this->ACL_CanVoteBlog($this->oUserCurrent,$oBlog,true,null,$error)) {
+			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
-		/**
-		 * Голосует за свой блог?
-		 */
-		if ($oBlog->getOwnerId()==$this->oUserCurrent->getId()) {
-			$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_self'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Уже голосовал?
-		 */
-		if ($oBlogVote=$this->Vote_GetVote($oBlog->getId(),'blog',$this->oUserCurrent->getId())) {
-			$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_already'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Имеет право на голосование?
-		 */
-		switch($this->ACL_CanVoteBlog($this->oUserCurrent,$oBlog)) {
-			case ModuleACL::CAN_VOTE_BLOG_TRUE:
-				$iValue=getRequestStr('value',null,'post');
-				if (in_array($iValue,array('1','-1'))) {
-					$oBlogVote=Engine::GetEntity('Vote');
-					$oBlogVote->setTargetId($oBlog->getId());
-					$oBlogVote->setTargetType('blog');
-					$oBlogVote->setVoterId($this->oUserCurrent->getId());
-					$oBlogVote->setDirection($iValue);
-					$oBlogVote->setDate(date("Y-m-d H:i:s"));
-					$iVal=(float)$this->Rating_VoteBlog($this->oUserCurrent,$oBlog,$iValue);
-					$oBlogVote->setValue($iVal);
-					$oBlog->setCountVote($oBlog->getCountVote()+1);
-					if ($this->Vote_AddVote($oBlogVote) and $this->Blog_UpdateBlog($oBlog)) {
-						$this->Viewer_AssignAjax('iCountVote',$oBlog->getCountVote());
-						$this->Viewer_AssignAjax('iRating',$oBlog->getRating());
-						$this->Message_AddNoticeSingle($this->Lang_Get('blog_vote_ok'),$this->Lang_Get('attention'));
-						/**
-						 * Добавляем событие в ленту
-						 */
-						$this->Stream_write($oBlogVote->getVoterId(), 'vote_blog', $oBlog->getId());
-					} else {
-						$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
-						return;
-					}
-				} else {
-					$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
-					return;
-				}
-				break;
-			case ModuleACL::CAN_VOTE_BLOG_ERROR_CLOSE:
-				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_close'),$this->Lang_Get('attention'));
-				return;
-				break;
 
-			default:
-			case ModuleACL::CAN_VOTE_BLOG_FALSE:
-				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_acl'),$this->Lang_Get('attention'));
-				return;
-				break;
+		$iValue=(int)getRequestStr('value', null, 'post');
+		/**
+		 * Голосуем
+		 */
+		$oBlogVote=Engine::GetEntity('Vote');
+		$oBlogVote->setTargetId($oBlog->getId());
+		$oBlogVote->setTargetType('blog');
+		$oBlogVote->setVoterId($this->oUserCurrent->getId());
+		$oBlogVote->setDirection($iValue);
+		$oBlogVote->setDate(date("Y-m-d H:i:s"));
+		$iVal=(float)$this->Rating_VoteBlog($this->oUserCurrent,$oBlog,$iValue);
+		$oBlogVote->setValue($iVal);
+		$oBlog->setCountVote($oBlog->getCountVote()+1);
+		if ($this->Vote_AddVote($oBlogVote) and $this->Blog_UpdateBlog($oBlog)) {
+			$this->Viewer_AssignAjax('iCountVote',$oBlog->getCountVote());
+			$this->Viewer_AssignAjax('iRating',$oBlog->getRating());
+			$this->Message_AddNoticeSingle($this->Lang_Get('blog_vote_ok'),$this->Lang_Get('attention'));
+			/**
+			 * Добавляем событие в ленту
+			 */
+			$this->Stream_write($oBlogVote->getVoterId(), 'vote_blog', $oBlog->getId());
+		} else {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+			return;
 		}
 	}
 	/**

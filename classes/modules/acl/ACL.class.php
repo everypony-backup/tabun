@@ -324,22 +324,81 @@ class ModuleACL extends Module {
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleBlog_EntityBlog $oBlog	Блог
+	 * @param bool $bFullCheck
+	 * @param ModuleVote_EntityVote $oPresentVote
+	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog) {
+	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
+		/**
+		 * Пользователь не авторизован?
+		 */
+		if (!$oUser) {
+			if($error != null) {
+				$error->sMsgId = 'need_authorization';
+				$error->sTitleId = 'error';
+			}
+			return false;
+		}
+		/**
+		 * Блог не существует?
+		 */
+		if (!$oBlog) {
+			if($error != null) {
+				$error->sMsgId = 'system_error';
+				$error->sTitleId = 'error';
+			}
+			return false;
+		}
+		/**
+		 * Голосует за свой блог?
+		 */
+		if ($oBlog->getOwnerId()==$oUser->getId()) {
+			if($error != null) {
+				$error->sMsgId = 'blog_vote_error_self';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Уже голосовал?
+		 */
+		if ($bFullCheck) {
+			$oBlogVote=$this->Vote_GetVote($oBlog->getId(),'blog',$oUser->getId());
+		} else {
+			$oBlogVote=$oPresentVote;
+		}
+		if ($oBlogVote) {
+			if($error != null) {
+				$error->sMsgId = 'blog_vote_error_already';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
 		/**
 		 * Если блог закрытый, проверяем является ли пользователь его читателем
 		 */
 		if($oBlog->getType()=='close') {
 			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId());
 			if(!$oBlogUser || $oBlogUser->getUserRole()<ModuleBlog::BLOG_USER_ROLE_GUEST) {
-				return self::CAN_VOTE_BLOG_ERROR_CLOSE;
+				if($error != null) {
+					$error->sMsgId = 'blog_vote_error_close';
+					$error->sTitleId = 'attention';
+				}
+				return false;
 			}
 		}
-		if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
-			return self::CAN_VOTE_BLOG_TRUE;
+		/**
+		 * Имеет право на голосование?
+		 */
+		if ($oUser->getRating()<Config::Get('acl.vote.blog.rating')) {
+			if($error != null) {
+				$error->sMsgId = 'blog_vote_error_acl';
+				$error->sTitleId = 'attention';
+			}
+			return false;
 		}
-		return self::CAN_VOTE_BLOG_FALSE;
+		return true;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретный топик
