@@ -281,8 +281,8 @@ class ModuleACL extends Module {
 		/**
 		 * Как именно голосует пользователь
 		 */
-		if ($bFullCheck)
 		$iValue=(int)getRequestStr('value', null, 'post');
+		if ($bFullCheck)
 		if (!in_array($iValue, [1, -1])) {
 			if($error != null) {
 				$error->sMsgId = 'comment_vote_error_value';
