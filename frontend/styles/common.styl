@@ -453,11 +453,21 @@
   border-width 1px
   border-radius 5px
   z-index 5000
-  right -10px
-  bottom 24px
   transition-duration 0.5s
   transition-property opacity,filter
   opacity 1
+  &.for-comment
+    right -10px
+    bottom 24px
+  &.for-topic
+    left 20px
+    top 52px
+  &.for-blog
+    right -5px
+    top 30px
+  &.for-user
+    right -25px
+    top 40px
 
 .vote-list-wrapper.hidden
   opacity 0
