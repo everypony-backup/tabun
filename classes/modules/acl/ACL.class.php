@@ -405,13 +405,112 @@ class ModuleACL extends Module {
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleTopic_EntityTopic $oTopic	Топик
+	 * @param bool $bFullCheck
+	 * @param ModuleVote_EntityVote $oPresentVote
+	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic) {
-		if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
-			return true;
+	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
+		/**
+		 * Пользователь не авторизован?
+		 */
+		if (!$oUser) {
+			if($error != null) {
+				$error->sMsgId = 'need_authorization';
+				$error->sTitleId = 'error';
+			}
+			return false;
 		}
-		return false;
+		/**
+		 * Топик не существует?
+		 */
+		if (!$oTopic) {
+			if($error != null) {
+				$error->sMsgId = 'system_error';
+				$error->sTitleId = 'error';
+			}
+			return false;
+		}
+		/**
+		 * Голосует автор топика?
+		 */
+		if ($oTopic->getUserId()==$oUser->getId()) {
+			if($error != null) {
+				$error->sMsgId = 'topic_vote_error_self';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Пользователь уже голосовал?
+		 */
+		if ($bFullCheck) {
+			$oTopicVote=$this->Vote_GetVote($oTopic->getId(),'topic',$oUser->getId());
+		} else {
+			$oTopicVote=$oPresentVote;
+		}
+		if ($oTopicVote) {
+			if($error != null) {
+				$error->sMsgId = 'topic_vote_error_already';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Время голосования истекло?
+		 */
+		if (strtotime($oTopic->getDateAdd())<=time()-Config::Get('acl.vote.topic.limit_time')) {
+			if($error != null) {
+				$error->sMsgId = 'topic_vote_error_time';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+		/**
+		 * Как проголосовал пользователь
+		 */
+		$iValue=(int)getRequestStr('value',null,'post');
+		if (!in_array($iValue, [1, -1, 0])) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Права на голосование
+		 */
+		if ($oUser->getRating()<Config::Get('acl.vote.topic.rating') and $iValue) {
+			if($error != null) {
+				$error->sMsgId = 'topic_vote_error_acl';
+				$error->sTitleId = 'attention';
+			}
+			return false;
+		}
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+		if (($mRes = $this->Magicrule_CheckRuleAction(
+			'vote_topic',
+			$oUser,
+			[
+				'vote_value' => $iValue
+			]
+		)) !== true) {
+			if (is_string($mRes)) {
+				if($error != null) {
+					$error->sMsgId = $mRes;
+					$error->sTitleId = 'attention';
+				}
+				return false;
+				//return Router::Action('error');
+			} else {
+				if($error != null) {
+					$error->sMsgId = 'check_rule_action_error';
+					$error->sTitleId = 'attention';
+				}
+				return false;
+				//return Router::Action('error');
+			}
+		}
+		return true;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретного пользователя
