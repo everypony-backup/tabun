@@ -46,7 +46,8 @@ onVote = (idTarget, objVote, value, type, result) ->
   divTotal = $ "##{prefix.total}#{type}_#{idTarget}"
   divCount = $ "##{prefix.count}#{type}_#{idTarget}"
 
-  divVoting.removeClass classNames "vote-count-positive", "vote-count-negative", "vote-count-zero", "vote-count-mixed", "not-voted", "vote-enabled"
+  isVoteInfoEnabledBase = divVoting.hasClass "vote-info-enabled-base"
+  divVoting.removeClass classNames "vote-count-positive", "vote-count-negative", "vote-count-zero", "vote-count-mixed", "not-voted", "vote-enabled", "vote-info-enabled-base"
   divVoting.addClass classNames "voted",
     "voted-up": value > 0
     "voted-down": value < 0
@@ -55,6 +56,7 @@ onVote = (idTarget, objVote, value, type, result) ->
     "vote-count-negative": iRating < 0
     "vote-count-zero": iRating == 0 and iCountVote == 0
     "vote-count-mixed": iRating == 0 and iCountVote > 0
+	"vote-info-enabled": isVoteInfoEnabledBase
 
   if divCount.length > 0 and result.iCountVote then divCount.text parseInt(result.iCountVote)
   divTotal.text if iRating > 0 then "+#{iRating}" else if iRating < 0 then result.iRating else 0

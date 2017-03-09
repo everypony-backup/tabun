@@ -58,8 +58,11 @@
 						not-voted
 					{/if}
 					
-					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled{/if}
-					{if $bVoteInfoEnabled} vote-info-enabled{/if}
+					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled
+						{if $bVoteInfoEnabled} vote-info-enabled-base{/if}
+					{else}
+						{if $bVoteInfoEnabled} vote-info-enabled{/if}
+					{/if}
 					">
 
 					{assign var="iTopicCountVote" value=$oTopic->getCountVote()}
