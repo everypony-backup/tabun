@@ -153,5 +153,11 @@ init = ->
       $('#avatar-upload').file({ name:'avatar' }).choose (e, input) ->
         ls.user.uploadAvatar null, input
     ) jQuery
-
+  else if window.location.pathname.match "stream"
+    $('#stream_get_more_all').on 'click', ->
+      ls.stream.getMoreAll()
+    $('#stream_get_more').on 'click', ->
+      ls.stream.getMore()
+    $('#stream_get_more_by_user').on 'click', ->
+      ls.stream.getMoreByUser(this.dataset.user_id)
 module.exports = init
