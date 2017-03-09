@@ -1000,7 +1000,7 @@ class ModuleACL extends Module {
 					}
 				}
 				if(isset($oTargetUser)) {
-					// ...
+					return true;
 				}
 			}
 		}
