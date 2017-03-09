@@ -131,7 +131,7 @@ onGetVotes = (result) ->
       vl_wrapper = document.createElement "div"
       vl_wrapper.className = "vote-list-wrapper hidden"
       vl_wrapper.appendChild vl
-      this.control.parentNode.parentNode.insertBefore vl_wrapper, this.control.parentNode.nextSibling
+      this.control.parentNode.insertBefore vl_wrapper, this.control.nextSibling
       setTimeout DOMTokenList.prototype.remove.bind(vl_wrapper.classList), 10, "hidden"
       
       context = {
