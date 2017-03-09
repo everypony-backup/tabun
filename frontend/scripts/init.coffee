@@ -205,12 +205,12 @@ init = ->
     $(document).ready () ->
       ls.blog.loadInfoType document.getElementById('blog_type').value
     $('#blog_type').on 'change', () ->
-      ls.blog.loadInfoType document.getElementById("blog_type").value
+      ls.blog.loadInfoType this.value
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value
     $('#blog_id').on 'change', () ->
-      ls.blog.loadInfo document.getElementById("blog_id").value
+      ls.blog.loadInfo this.value
     $('.js-tags-help-link').on 'click', () ->
       str = if this.dataset.insert? then this.dataset.insert else this.textContent
       targetForm = document.getElementsByTagName("textarea")[0]
