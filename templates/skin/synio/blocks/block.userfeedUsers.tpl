@@ -1,17 +1,4 @@
 {if $oUserCurrent}
-	{literal}
-	<script language="JavaScript" type="text/javascript">
-		jQuery(document).ready( function() {
-			jQuery('#userfeed_users_complete').keydown(function (event) {
-				if (event.which == 13) {
-					ls.userfeed.appendUser()
-				}
-			});
-		 });
-	</script>
-	{/literal}
-
-
 	<section class="block block-type-activity">
 		<header class="block-header">
 			<h3>{$aLang.userfeed_block_users_title}</h3>
@@ -24,7 +11,7 @@
 				<div class="search-form-wrapper">
 					<div class="search-input-wrapper">
 						<input type="text" id="userfeed_users_complete" autocomplete="off" placeholder="{$aLang.userfeed_block_users_append}" class="autocomplete-users input-text input-width-full" />
-						<div onclick="ls.userfeed.appendUser();" class="input-submit"></div>
+						<div class="input-submit"></div>
 					</div>
 				</div>
 				
@@ -34,11 +21,7 @@
 							{assign var=iUserId value=$oUser->getId()}
 							
 							{if !isset($aUserfeedFriends.$iUserId)}
-								<li><input class="userfeedUserCheckbox input-checkbox"
-											type="checkbox"
-											id="usf_u_{$iUserId}"
-											checked="checked"
-											onClick="if (jQuery(this).prop('checked')) { ls.userfeed.subscribe('users',{$iUserId}) } else { ls.userfeed.unsubscribe('users',{$iUserId}) } " />
+								<li><input class="userfeedUserCheckbox input-checkbox" type="checkbox" id="usf_u_{$iUserId}" {if isset($aUserfeedSubscribedUsers.$iUserId)} checked="checked"{/if} data-user_id="{$iUserId}"/>
 									<a href="{$oUser->getUserWebPath()}" title="{$oUser->getLogin()}"><img src="{$oUser->getProfileAvatarPath(24)}"  class="avatar" /></a>
 									<a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
 								</li>
@@ -66,11 +49,7 @@
 					{foreach from=$aUserfeedFriends item=oUser}
 						{assign var=iUserId value=$oUser->getId()}
 						
-						<li><input class="userfeedUserCheckbox input-checkbox"
-									type="checkbox"
-									id="usf_u_{$iUserId}"
-									{if isset($aUserfeedSubscribedUsers.$iUserId)} checked="checked"{/if}
-									onClick="if (jQuery(this).prop('checked')) { ls.userfeed.subscribe('users',{$iUserId}) } else { ls.userfeed.unsubscribe('users',{$iUserId}) } " />
+						<li><input class="userfeedUserCheckbox input-checkbox" type="checkbox" id="usf_u_{$iUserId}" {if isset($aUserfeedSubscribedUsers.$iUserId)} checked="checked"{/if} data-user_id="{$iUserId}"/>
 							<a href="{$oUser->getUserWebPath()}" title="{$oUser->getLogin()}"><img src="{$oUser->getProfileAvatarPath(24)}"  class="avatar" /></a>
 							<a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
 						</li>

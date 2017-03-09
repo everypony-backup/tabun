@@ -197,5 +197,15 @@ init = ->
         ls.stream.subscribe this.dataset.user_id
       else
         ls.stream.unsubscribe this.dataset.user_id
-
+  else if window.location.pathname.match "feed"
+    $('#userfeed_users_complete').on 'keydown', (e) ->
+      if e.which == 13
+        ls.userfeed.appendUser()
+    $('#userfeed_users_complete+div').on 'click', () ->
+        ls.userfeed.appendUser()
+    $('.userfeedUserCheckbox').on 'click', () ->
+      if this.checked
+        ls.userfeed.subscribe 'users', this.dataset.user_id
+      else
+        ls.userfeed.unsubscribe 'users', this.dataset.user_id
 module.exports = init
