@@ -139,19 +139,6 @@ init = ->
     $("#reactivation-form-submit").on 'click', ->
       ls.user.reactivation()
 
-  # Help-tags link
-  $('.js-tags-help-link').on 'click', ({target}) ->
-    helpTargetId = registry.get('tags-help-target-id')
-    unless helpTargetId
-      return false
-
-    helpTarget = $ "##{helpTargetId}"
-    unless helpTarget.length
-      return false
-
-    str = if target.dataset.insert? then target.dataset.insert else target.textContent
-    $.markItUp target: target, replaceWith: str
-
   if window.location.pathname.match "settings/profile"
     (($) ->
       $('#foto-upload').file({ name:'foto' }).choose (e, input) ->
@@ -208,4 +195,16 @@ init = ->
         ls.userfeed.subscribe 'users', this.dataset.user_id
       else
         ls.userfeed.unsubscribe 'users', this.dataset.user_id
+  else if window.location.pathname.match("edit") || window.location.pathname.match("add")
+    $('.js-tags-help-link').on 'click', ({target}) ->
+      helpTargetId = document.getElementById("tags-help").dataset.target_id
+      unless helpTargetId
+        return false
+      helpTarget = $ "##{helpTargetId}"
+      unless helpTarget.length
+        return false
+      str = if target.dataset.insert? then target.dataset.insert else target.textContent
+      $.markItUp target: target, replaceWith: str
+    $('tags-help-toggle').on 'click', ->
+      $('#tags-help').toggle()
 module.exports = init

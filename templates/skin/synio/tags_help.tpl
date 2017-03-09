@@ -1,9 +1,6 @@
-<script type="text/javascript">
-	ls.tools.registry.set('tags-help-target-id','{$sTagsTargetId}');
-</script>
-<a href="#" class="link-dotted help-link" onclick="jQuery('#tags-help').toggle(); return false;">{$aLang.tags_help_link_show}</a>
+<a href="#" id="tags-help-toggle" class="link-dotted help-link" >{$aLang.tags_help_link_show}</a>
 
-<dl class="help clearfix" id="tags-help" style="display: none;">
+<dl class="help clearfix" id="tags-help" data-target_id="{$sTagsTargetId}" style="display: none;">
 	<dt class="help-col help-wide">
 		<h3>{$aLang.tags_help_special}</h3>
 		<div class="help-item">
