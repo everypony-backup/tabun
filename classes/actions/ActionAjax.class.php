@@ -1197,6 +1197,7 @@ class ActionAjax extends Action {
 	
 	protected function EventGetObjectVotes() {
 		$targetType = getRequestStr('targetType',null,'post');
+		$targetId = (int) getRequestStr('targetId',null,'post');
 		switch($targetType) {
 			case 'comment':
 				$oTarget = $this->Comment_GetCommentById($targetId);
@@ -1226,7 +1227,6 @@ class ActionAjax extends Action {
 			return;
 		}
 		
-		$targetId = (int) getRequestStr('targetId',null,'post');
 		/**
 		 * Объект существует?
 		 */
