@@ -32,8 +32,10 @@
 							vote-count-positive
 						{elseif $oTopicRating < 0}
 							vote-count-negative
+						{*
 						{elseif $oTopicRating == 0 and $bVoteInfoEnabled and $oTopic->getCountVote() > 0}
 							vote-count-mixed
+						*}
 						{elseif $oTopicRating == 0}
 							vote-count-zero
 						{/if}
