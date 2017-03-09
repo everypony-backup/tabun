@@ -185,7 +185,7 @@ init = ->
         ls.stream.appendUser()
     $('#stream_users_complete+div').on 'click', () ->
       ls.stream.appendUser()
-    $('.streamUserCheckbox').on 'click', () ->
+    $(document).on 'click', '.streamUserCheckbox', () ->
       if this.checked
         ls.stream.subscribe this.dataset.user_id
       else
@@ -196,7 +196,7 @@ init = ->
         ls.userfeed.appendUser()
     $('#userfeed_users_complete+div').on 'click', () ->
         ls.userfeed.appendUser()
-    $('.userfeedUserCheckbox').on 'click', () ->
+    $(document).on 'click', '.userfeedUserCheckbox', () ->
       if this.checked
         ls.userfeed.subscribe 'users', this.dataset.user_id
       else
