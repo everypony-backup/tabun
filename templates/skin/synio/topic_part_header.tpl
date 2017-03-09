@@ -3,13 +3,13 @@
 {assign var="oVote" value=$oTopic->getVote()}
 {assign var="oTopicId" value=$oTopic->getId()}
 {assign var="oTopicRating" value=$oTopic->getRating()}
-{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.ne_enable_level'), $oUserCurrent, $oTopic, 'topic')}
+{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.topic.ne_enable_level'), $oUserCurrent, $oTopic, 'topic')}
 
 {if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
 	{assign var="bVoteInfoShow" value=true}
 {/if}
 
-<article class="topic topic-type-{$oTopic->getType()} js-topic {if $bVoteInfoEnabled}vote-info-enabled{/if}">
+<article class="topic topic-type-{$oTopic->getType()} js-topic">
     <header class="topic-header">
         {strip}
             <h1 class="topic-title word-wrap">
@@ -56,16 +56,13 @@
 						not-voted
 					{/if}
 					
-					{if (strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time') && !$oVote) || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId())}
-						vote-nobuttons
-					{/if}
-					
-					{if strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
-						vote-not-expired
-					{/if}">
+					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled{/if}
+					{if $bVoteInfoEnabled} vote-info-enabled{/if}
+					">
 
+					{assign var="iTopicCountVote" value=$oTopic->getCountVote()}
 					<div class="vote-item vote-up" data-direction="1" data-target_id="{$oTopicId}" data-target_type="topic"></div>
-					<span id="vote_total_topic_{$oTopicId}" class="vote-item vote-count" title="{$aLang.topic_vote_count}: {$oTopic->getCountVote()}" data-direction="0" data-target_id="{$oTopicId}" data-target_type="topic">
+					<span id="vote_total_topic_{$oTopicId}" class="vote-item vote-count" title="{$aLang.topic_vote_count}: {$iTopicCountVote}" data-count="{$iTopicCountVote}" data-direction="0" data-target_id="{$oTopicId}" data-target_type="topic">
 							{if $bVoteInfoShow}
 								{if $oTopicRating > 0}+{/if}{$oTopicRating}
 							{else}

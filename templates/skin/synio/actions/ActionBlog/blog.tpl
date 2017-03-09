@@ -3,6 +3,7 @@
 {assign var="oVote" value=$oBlog->getVote()}
 {assign var="oBlogId" value=$oBlog->getId()}
 {assign var="oBlogRating" value=$oBlog->getRating()}
+{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.blog.ne_enable_level'), $oUserCurrent, $oBlog, 'blog')}
 
 {if $oUserCurrent and $oUserCurrent->isAdministrator()}
 	<div id="blog_delete_form" class="modal">
@@ -54,11 +55,11 @@
 																not-voted
 															{/if}
 															{if $LS->ACL_CanVoteBlog($oUserCurrent, $oBlog, false, $oVote)} vote-enabled{/if}
-															{if ($oUserCurrent && $oUserOwner->getId() == $oUserCurrent->getId())}
-																vote-nobuttons
-															{/if}">
+															{if $bVoteInfoEnabled} vote-info-enabled{/if}
+															">
+		{assign var="iBlogCountVote" value=$oBlog->getCountVote()}
 		<div class="vote-item vote-up" data-direction="1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
-		<span class="vote-count" title="{$aLang.blog_vote_count}: {$oBlog->getCountVote()}" id="vote_total_blog_{$oBlogId}">{if $oBlogRating > 0}+{/if}{$oBlogRating}</span>
+		<span class="vote-count" title="{$aLang.blog_vote_count}: {$iBlogCountVote}" data-count="{$iBlogCountVote}" id="vote_total_blog_{$oBlogId}" data-target_id="{$oBlogId}" data-target_type="blog">{if $oBlogRating > 0}+{/if}{$oBlogRating}</span>
 		<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
 	</div>
 </div>

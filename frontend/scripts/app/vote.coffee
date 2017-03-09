@@ -111,6 +111,7 @@ onGetVotes = (result) ->
           name: vote.voterName,
           avatar: vote.voterAvatar
         });
+        profileLink.classList.add "vote-list-item"
         line.appendChild profileLink
         
         time = document.createElement "time"
@@ -118,23 +119,22 @@ onGetVotes = (result) ->
         date = new Date(Date.parse(vote.date))
         now = new Date()
         timeString = if date.getDate() != now.getDate() or date.getMonth() != now.getMonth() or date.getFullYear() != now.getFullYear() then date.toLocaleString() else date.toLocaleTimeString()
+        time.className = "vote-list-item"
         time.appendChild document.createTextNode(timeString)
         line.appendChild time
         
         voteValue = document.createElement "span"
         voteValue.dataset.value = if vote.value == 0 then "0" else (if vote.value > 0 then "+" else "−") + Math.abs(vote.value).toString()
-        voteValue.className = "vote"
+        voteValue.className = "vote-list-item vote"
         line.appendChild voteValue
         
         vl.appendChild line
       
       vl_wrapper = document.createElement "div"
       vl_wrapper.className = "vote-list-wrapper hidden"
+      vl_wrapper.classList.add "for-"+this.targetType
       vl_wrapper.appendChild vl
-      if this.control.parentNode.parentNode.classList.contains("comment-actions")
-        this.control.parentNode.insertBefore vl_wrapper, this.control.parentNode.firstChild
-      else
-        this.control.parentNode.parentNode.parentNode.insertBefore vl_wrapper, this.control.parentNode.parentNode.nextSibling
+      this.control.parentNode.parentNode.parentNode.insertBefore vl_wrapper, this.control.parentNode.parentNode.nextSibling
       setTimeout DOMTokenList.prototype.remove.bind(vl_wrapper.classList), 10, "hidden"
       
       context = {
