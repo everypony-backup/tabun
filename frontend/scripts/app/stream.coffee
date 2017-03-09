@@ -62,7 +62,7 @@ appendUser = ->
 
 more = (url, extra_params={}) ->
   if isBusy then return
-  selLoad = document.getElementById 'stream_get_more'
+  selLoad = document.getElementsByClassName('stream-get-more')[0]
   lastId = selLoad.dataset.lastId
   unless lastId then return
   selLoad.classList.add 'stream_loading'
