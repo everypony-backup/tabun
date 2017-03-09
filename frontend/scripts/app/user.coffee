@@ -225,10 +225,10 @@ searchUsersByPrefix = (sPrefix, obj) ->
 followToggle = (obj, iUserId) ->
   if $(obj).hasClass('followed')
     unsubscribe iUserId
-    $(obj).toggleClass('followed').text lang.get('profile_user_follow')
+    $(obj).toggleClass('followed').text gettext('user_follow')
   else
     subscribe iUserId
-    $(obj).toggleClass('followed').text lang.get('profile_user_unfollow')
+    $(obj).toggleClass('followed').text gettext('user_unfollow')
   false
 
 module.exports = {

@@ -153,6 +153,25 @@ init = ->
       $('#avatar-upload').file({ name:'avatar' }).choose (e, input) ->
         ls.user.uploadAvatar null, input
     ) jQuery
+    $('#foto-remove').on 'click', ->
+      ls.user.removeFoto()
+    $('#foto-resize-button').on 'click', ->
+      ls.user.resizeFoto()
+    $('#foto-cancel-button').on 'click', ->
+      ls.user.cancelFoto()
+  else if window.location.pathname.match "profile"
+    $('#usernote_edit').on 'click', ->
+      ls.usernote.showForm()
+    $('#usernote_delete').on 'click', ->
+      ls.usernote.remove(this.dataset.user_id)
+    $('#usernote_save').on 'click', ->
+      ls.usernote.save(this.dataset.user_id)
+    $('#usernote_cancel').on 'click', ->
+      ls.usernote.hideForm()
+    $('#usernote-button-add').on 'click', ->
+      ls.usernote.showForm()
+    $('#follow_user').on 'click', ->
+      ls.user.followToggle(this, this.dataset.user_id)
   else if window.location.pathname.match "stream"
     $('#stream_get_more_all').on 'click', ->
       ls.stream.getMoreAll()

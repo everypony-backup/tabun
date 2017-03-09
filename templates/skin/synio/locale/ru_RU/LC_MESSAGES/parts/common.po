@@ -194,3 +194,9 @@ msgstr "FAQ"
 
 msgid "rules"
 msgstr "Правила"
+
+msgid "user_follow"
+msgstr "Подписаться"
+
+msgid "user_unfollow"
+msgstr "Отписаться"
