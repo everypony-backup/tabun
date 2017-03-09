@@ -58,14 +58,7 @@
 					
 					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled{/if}
 					{if $bVoteInfoEnabled} vote-info-enabled{/if}
-					
-					{if (strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time') && !$oVote) || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId())}
-						vote-nobuttons
-					{/if}
-					
-					{if strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
-						vote-not-expired
-					{/if}">
+					">
 
 					<div class="vote-item vote-up" data-direction="1" data-target_id="{$oTopicId}" data-target_type="topic"></div>
 					<span id="vote_total_topic_{$oTopicId}" class="vote-item vote-count" title="{$aLang.topic_vote_count}: {$oTopic->getCountVote()}" data-direction="0" data-target_id="{$oTopicId}" data-target_type="topic">

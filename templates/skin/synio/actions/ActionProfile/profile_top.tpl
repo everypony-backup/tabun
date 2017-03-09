@@ -25,9 +25,7 @@
 																	{/if}
 																	
 																	{if $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile, false, $oVote)} vote-enabled{/if}
-																	{if ($oUserCurrent && $oUserProfileId == $oUserCurrent->getId()) || !$oUserCurrent}
-																		vote-nobuttons
-																	{/if}">
+																	">
 			<div class="vote-item vote-up" data-direction="1" data-target_id="{$oUserProfileId}" data-target_type="user"></div>
 			<span id="vote_total_user_{$oUserProfileId}" class="vote-count">{if $oUserProfile->getRating() > 0}+{/if}{$oUserProfile->getRating()}</span>
 			<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oUserProfileId}" data-target_type="user"></div>

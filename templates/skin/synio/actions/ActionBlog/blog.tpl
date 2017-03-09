@@ -54,9 +54,7 @@
 																not-voted
 															{/if}
 															{if $LS->ACL_CanVoteBlog($oUserCurrent, $oBlog, false, $oVote)} vote-enabled{/if}
-															{if ($oUserCurrent && $oUserOwner->getId() == $oUserCurrent->getId())}
-																vote-nobuttons
-															{/if}">
+															">
 		<div class="vote-item vote-up" data-direction="1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
 		<span class="vote-count" title="{$aLang.blog_vote_count}: {$oBlog->getCountVote()}" id="vote_total_blog_{$oBlogId}">{if $oBlogRating > 0}+{/if}{$oBlogRating}</span>
 		<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
