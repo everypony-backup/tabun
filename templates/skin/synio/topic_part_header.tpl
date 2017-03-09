@@ -9,7 +9,7 @@
 	{assign var="bVoteInfoShow" value=true}
 {/if}
 
-<article class="topic topic-type-{$oTopic->getType()} js-topic {if $bVoteInfoEnabled}vote-info-enabled{/if}">
+<article class="topic topic-type-{$oTopic->getType()} js-topic">
     <header class="topic-header">
         {strip}
             <h1 class="topic-title word-wrap">
@@ -57,6 +57,7 @@
 					{/if}
 					
 					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled{/if}
+					{if $bVoteInfoEnabled} vote-info-enabled{/if}
 					
 					{if (strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time') && !$oVote) || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId())}
 						vote-nobuttons
