@@ -23,6 +23,20 @@
     var LIVESTREET_SECURITY_KEY = '{$LIVESTREET_SECURITY_KEY}';
     var RECAPTCHA_KEY = '{cfg name='recaptcha.key'}';
 </script>
+<script type="text/javascript">
+    var UI = {
+        smothScroll: window.localStorage.getItem('UI-smothScroll') !== "false",
+        hotkeys: window.localStorage.getItem('UI-hotkeys') !== "false",
+        smartQuote: window.localStorage.getItem('UI-smartQuote') !== "false",
+        autoFold: window.localStorage.getItem('UI-autoFold') !== "false",
+        newCommentsInTitle: window.localStorage.getItem('UI-newCommentsInTitle') !== "false",
+        autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true",
+        autoDespoil: window.localStorage.getItem('UI-autoDespoil') === "true",
+        despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') === "true",
+        showPinkie: window.localStorage.getItem('UI-showPinkie') !== "false",
+        voteNeutral: window.localStorage.getItem('UI-voteNeutral') !== "false"
+    }
+</script>
 <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
 <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>
 
@@ -35,6 +49,7 @@
         <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.bundle.js" type="text/javascript"></script>
     {/foreach}
 {/if}
+{include 'analytics.tpl'}
 {hook run='body_end'}
 
 </body>
