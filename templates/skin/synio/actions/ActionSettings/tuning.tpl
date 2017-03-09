@@ -67,6 +67,10 @@
 		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-showPinkie"/>
 		Пинкамина
 	</label>
+	<label>
+		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-voteNeutral"/>
+		Нейтрально голосовать за топики по *?*
+	</label>
 
 	<script type="text/javascript">
 		document.getElementById("UI-smothScroll").checked = UI.smothScroll;
@@ -78,6 +82,7 @@
 		document.getElementById("UI-autoDespoil").checked = UI.autoDespoil;
 		document.getElementById("UI-despoilOnlyArticle").checked = UI.despoilOnlyArticle;
 		document.getElementById("UI-showPinkie").checked = UI.showPinkie;
+		document.getElementById("UI-voteNeutral").checked = UI.voteNeutral;
 	</script>
 
 	{hook run='form_settings_tuning_end'}

@@ -48,7 +48,8 @@
             autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true",
             autoDespoil: window.localStorage.getItem('UI-autoDespoil') === "true",
             despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') === "true",
-            showPinkie: window.localStorage.getItem('UI-showPinkie') !== "false"
+            showPinkie: window.localStorage.getItem('UI-showPinkie') !== "false",
+            voteNeutral: window.localStorage.getItem('UI-voteNeutral') !== "false"
         }
     </script>
 </head>
