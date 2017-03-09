@@ -123,7 +123,7 @@ init = ->
 
   # Vote
   $(document).on 'click', ".vote-item", () ->
-    if this.dataset.direction != 0 || UI.voteNeutral
+    if this.dataset.direction != "0" || UI.voteNeutral
       ls.vote.vote this.dataset.target_id, this, this.dataset.direction, this.dataset.target_type
 
   # get votes
