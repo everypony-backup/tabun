@@ -59,7 +59,7 @@
 															">
 		{assign var="iBlogCountVote" value=$oBlog->getCountVote()}
 		<div class="vote-item vote-up" data-direction="1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
-		<span class="vote-count" title="{$aLang.blog_vote_count}: {$iBlogCountVote}" data-count="{$iBlogCountVote}" id="vote_total_blog_{$oBlogId}">{if $oBlogRating > 0}+{/if}{$oBlogRating}</span>
+		<span class="vote-count" title="{$aLang.blog_vote_count}: {$iBlogCountVote}" data-count="{$iBlogCountVote}" id="vote_total_blog_{$oBlogId}" data-target_id="{$oBlogId}" data-target_type="blog">{if $oBlogRating > 0}+{/if}{$oBlogRating}</span>
 		<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oBlogId}" data-target_type="blog"></div>
 	</div>
 </div>
