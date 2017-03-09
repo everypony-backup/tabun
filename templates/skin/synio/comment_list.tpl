@@ -3,6 +3,7 @@
     {assign var="oCommentAuthor" value=$oComment->getUser()}
     {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
     {assign var="oCommentId" value=$oComment->getId()}
+    {assign var="oCommentRating" value=$oComment->getRating()}
     {assign var="oTopic" value=$oComment->getTarget()}
     {if $oTopic}
         {assign var="oBlog" value=$oTopic->getBlog()}
