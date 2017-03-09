@@ -28,11 +28,14 @@
   margin-bottom -2px
 
 .vote-count
-  cursor text
   color #949aa1
   padding 0 5px 0 4px
   line-height 18px
   font-size 18px
+
+.vote-info-enabled
+  .vote-item.vote-count
+    cursor help
 
 .vote-count-positive
   .vote-count
@@ -60,10 +63,10 @@
   .vote-up,
   .vote-down
     opacity 0.5
+    &:hover
+      opacity 0.85
+  .vote-item
     cursor pointer
-  .vote-up:hover,
-  .vote-down:hover
-    opacity 0.85
 
 .text
   blockquote
@@ -173,7 +176,7 @@
       text-align center
       text-decoration none
       width 25px
-      cursor: pointer
+      cursor pointer
   .toolbar-topic
     width 19px
     padding 11px
@@ -333,10 +336,6 @@
 .loader
   background #fafafa url(images/loader.gif) 50% 50% no-repeat
 
-.user, .ls-user
-  font-weight bold
-  color #333
-
 .ls-user
   display inline-block
 
@@ -445,12 +444,22 @@
   border-style solid
   border-width 1px
   border-radius 5px
-  z-index 1
-  right -10px
-  bottom 24px
+  z-index 5000
   transition-duration 0.5s
   transition-property opacity,filter
   opacity 1
+  &.for-comment
+    right -10px
+    bottom 24px
+  &.for-topic
+    left 20px
+    top 52px
+  &.for-blog
+    right -5px
+    top 30px
+  &.for-user
+    right -25px
+    top 40px
 
 .vote-list-wrapper.hidden
   opacity 0
@@ -459,11 +468,11 @@
   display table
 .vote-list>div
   display table-row
-.vote-list>div>*
+.vote-list .vote-list-item
   display table-cell
-.vote-list>div>*:not(:last-child)
+.vote-list .vote-list-item:not(:last-child)
   padding-right 10px
-.vote-list>div:not(:last-child)>*
+.vote-list>div:not(:last-child)>.vote-list-item
   padding-bottom 0.3em
 
 .vote-list

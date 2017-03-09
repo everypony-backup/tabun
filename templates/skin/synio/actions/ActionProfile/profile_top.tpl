@@ -2,6 +2,7 @@
 <div class="profile">
 	{hook run='profile_top_begin' oUserProfile=$oUserProfile}
 	
+	{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.user.ne_enable_level'), $oUserCurrent, $oUserProfile, 'user')}
 	<div class="vote-profile">
 		<div id="vote_area_user_{$oUserProfileId}" class="vote-topic
 																	{if $oUserProfile->getRating() > 0}
@@ -25,14 +26,14 @@
 																	{/if}
 																	
 																	{if $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile, false, $oVote)} vote-enabled{/if}
-																	{if ($oUserCurrent && $oUserProfileId == $oUserCurrent->getId()) || !$oUserCurrent}
-																		vote-nobuttons
-																	{/if}">
+																	{if $bVoteInfoEnabled} vote-info-enabled{/if}
+																	">
+			{assign var="iUserProfileCountVote" value=$oUserProfile->getCountVote()}
 			<div class="vote-item vote-up" data-direction="1" data-target_id="{$oUserProfileId}" data-target_type="user"></div>
-			<span id="vote_total_user_{$oUserProfileId}" class="vote-count">{if $oUserProfile->getRating() > 0}+{/if}{$oUserProfile->getRating()}</span>
+			<span id="vote_total_user_{$oUserProfileId}" class="vote-count" data-count="{$iUserProfileCountVote}" data-target_id="{$oUserProfileId}" data-target_type="user">{if $oUserProfile->getRating() > 0}+{/if}{$oUserProfile->getRating()}</span>
 			<div class="vote-item vote-down" data-direction="-1" data-target_id="{$oUserProfileId}" data-target_type="user"></div>
 		</div>
-		<div class="vote-label">{$aLang.user_vote_count}: {$oUserProfile->getCountVote()}</div>
+		<div class="vote-label">{$aLang.user_vote_count}: {$iUserProfileCountVote}</div>
 	</div>
 	
 	<div class="strength">

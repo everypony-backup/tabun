@@ -254,69 +254,18 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
+		$oTopic=$this->Topic_GetTopicById(getRequestStr('idTopic',null,'post'));
+		
+		$error = new stdClass();
 		/**
-		 * Топик существует?
+		 * Может ли пользователь проголосовать за топик?
 		 */
-		if (!($oTopic=$this->Topic_GetTopicById(getRequestStr('idTopic',null,'post')))) {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic,true,null,$error)) {
+			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
-		/**
-		 * Голосует автор топика?
-		 */
-		if ($oTopic->getUserId()==$this->oUserCurrent->getId()) {
-			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_self'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Пользователь уже голосовал?
-		 */
-		if ($oTopicVote=$this->Vote_GetVote($oTopic->getId(),'topic',$this->oUserCurrent->getId())) {
-			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_already'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Время голосования истекло?
-		 */
-		if (strtotime($oTopic->getDateAdd())<=time()-Config::Get('acl.vote.topic.limit_time')) {
-			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_time'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Как проголосовал пользователь
-		 */
-		$iValue=getRequestStr('value',null,'post');
-		if (!in_array($iValue,array('1','-1','0'))) {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
-			return;
-		}
-		/**
-		 * Права на голосование
-		 */
-		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic) and $iValue) {
-			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_acl'),$this->Lang_Get('attention'));
-			return;
-		}
-        /**
-         * А можно ли ему вообще голосовать?
-         */
-        $mRes = $this->Magicrule_CheckRuleAction(
-            'vote_topic',
-            $this->oUserCurrent,
-            [
-                'vote_value' => (int)getRequest('value', null, 'post')
-            ]
-        );
-        if ($mRes !== true) {
-            if (is_string($mRes)) {
-                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
-                return Router::Action('error');
-            } else {
-                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
-                return Router::Action('error');
-            }
-        }
-
+		
+		$iValue=(int)getRequestStr('value', null, 'post');
 		/**
 		 * Голосуем
 		 */
@@ -1247,7 +1196,29 @@ class ActionAjax extends Action {
     }
 	
 	protected function EventGetObjectVotes() {
-		$ne_enable_level = Config::Get('vote_state.comment.ne_enable_level');
+		$targetType = getRequestStr('targetType',null,'post');
+		$targetId = (int) getRequestStr('targetId',null,'post');
+		switch($targetType) {
+			case 'comment':
+				$oTarget = $this->Comment_GetCommentById($targetId);
+				$ne_enable_level = Config::Get('vote_state.comment.ne_enable_level');
+				break;
+			case 'topic':
+				$oTarget = $this->Topic_GetTopicById($targetId);
+				$ne_enable_level = Config::Get('vote_state.topic.ne_enable_level');
+				break;
+			case 'blog':
+				$oTarget = $this->Blog_GetBlogById($targetId);
+				$ne_enable_level = Config::Get('vote_state.blog.ne_enable_level');
+				break;
+			case 'user':
+				$oTarget = $this->User_GetUserById($targetId);
+				$ne_enable_level = Config::Get('vote_state.user.ne_enable_level');
+				break;
+			default:
+				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+				return;
+		}
 		/**
 		 * Пользователь авторизован?
 		 */
@@ -1256,16 +1227,6 @@ class ActionAjax extends Action {
 			return;
 		}
 		
-		$targetId = (int) getRequestStr('targetId',null,'post');
-		$targetType = getRequestStr('targetType',null,'post');
-		switch($targetType) {
-			case 'comment':
-				$oTarget = $this->Comment_GetCommentById($targetId);
-				break;
-			default:
-				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
-				return;
-		}
 		/**
 		 * Объект существует?
 		 */
