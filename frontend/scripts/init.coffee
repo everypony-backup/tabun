@@ -198,7 +198,7 @@ init = ->
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $('.js-tags-help-link').on 'click', () ->
       str = if this.dataset.insert? then this.dataset.insert else this.textContent
-      targetForm = document.getElementByTagName("textarea")[0]
+      targetForm = document.getElementsByTagName("textarea")[0]
       caret = targetForm.selectionStart
       if isNaN caret
         targetForm.value += str
