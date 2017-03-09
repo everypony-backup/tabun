@@ -67,7 +67,7 @@
 						{assign var=iUserId value=$oUser->getId()}
 						
 						{if !isset($aStreamFriends.$iUserId)}
-							<li><input class="streamUserCheckbox input-checkbox" type="checkbox" id="strm_u_{$iUserId}" checked="checked"/>
+							<li><input class="streamUserCheckbox input-checkbox" type="checkbox" id="strm_u_{$iUserId}" data-user_id="{$iUserId}" checked="checked"/>
 								<a href="{$oUser->getUserWebPath()}" title="{$oUser->getLogin()}"><img src="{$oUser->getProfileAvatarPath(24)}"  class="avatar" /></a>
 								<a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
 							</li>
