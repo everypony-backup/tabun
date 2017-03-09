@@ -111,7 +111,7 @@ onGetVotes = (result) ->
           name: vote.voterName,
           avatar: vote.voterAvatar
         });
-        profileLink.className = "vote-list-item"
+        profileLink.classList.add "vote-list-item"
         line.appendChild profileLink
         
         time = document.createElement "time"
