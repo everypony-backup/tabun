@@ -160,4 +160,17 @@ init = ->
       ls.stream.getMore()
     $('#stream_get_more_by_user').on 'click', ->
       ls.stream.getMoreByUser(this.dataset.user_id)
+    $('.streamEventTypeCheckbox').on 'click', ->
+      ls.stream.switchEventType this.dataset.target_type
+    $('#stream_users_complete').on 'keydown', (e) ->
+      if e.which == 13
+        ls.stream.appendUser()
+    $('#stream_users_complete+div').on 'click', () ->
+      ls.stream.appendUser()
+    $('.streamUserCheckbox').on 'click', () ->
+      if this.checked
+        ls.stream.subscribe this.dataset.user_id
+      else
+        ls.stream.unsubscribe this.dataset.user_id
+
 module.exports = init

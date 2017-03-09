@@ -1,16 +1,4 @@
 {if $oUserCurrent}
-	{literal}
-		<script type="text/javascript">
-			jQuery(document).ready( function() {
-				jQuery('#stream_users_complete').keydown(function (event) {
-					if (event.which == 13) {
-						ls.stream.appendUser()
-					}
-				});
-			 });
-		</script>
-	{/literal}
-
 
 	<section class="block block-type-activity">
 		<header class="block-header">
@@ -25,11 +13,7 @@
 					{if !($oConfig->get('module.stream.disable_vote_events') && substr($sType, 0, 4) == 'vote')}
 						<li>
 							<label>
-								<input class="streamEventTypeCheckbox input-checkbox"
-									type="checkbox"
-									id="strn_et_{$sType}"
-									{if in_array($sType, $aStreamTypesList)}checked="checked"{/if}
-									onClick="ls.stream.switchEventType('{$sType}')" />
+								<input class="streamEventTypeCheckbox input-checkbox" type="checkbox" id="strn_et_{$sType}" data-target_type="{$sType}" {if in_array($sType, $aStreamTypesList)}checked="checked"{/if}/>
 								{assign var=langKey value="stream_event_type_`$sType`"}
 								{$aLang.$langKey}
 							</label>
@@ -39,8 +23,6 @@
 			</ul>
 		</div>
 	</section>
-		
-		
 		
 	<section class="block block-type-activity">
 		<header class="block-header">
@@ -54,11 +36,7 @@
 				<ul class="stream-settings-friends user-list-mini max-height-200">
 					{foreach from=$aStreamFriends item=oUser}
 						{assign var=iUserId value=$oUser->getId()}
-						<li><input class="streamUserCheckbox input-checkbox"
-									type="checkbox"
-									id="strm_u_{$iUserId}"
-									{if isset($aStreamSubscribedUsers.$iUserId)} checked="checked"{/if}
-									onClick="if (jQuery(this).prop('checked')) { ls.stream.subscribe({$iUserId}) } else { ls.stream.unsubscribe({$iUserId}) } " />
+						<li><input class="streamUserCheckbox input-checkbox" type="checkbox" id="strm_u_{$iUserId}" data-user_id="{$iUserId}" {if isset($aStreamSubscribedUsers.$iUserId)} checked="checked"{/if}/>
 							<a href="{$oUser->getUserWebPath()}" title="{$oUser->getLogin()}"><img src="{$oUser->getProfileAvatarPath(24)}"  class="avatar" /></a>
 							<a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
 						</li>
@@ -70,8 +48,6 @@
 		</div>
 	</section>
 		
-		
-		
 	<section class="block block-type-activity">
 		<header class="block-header">
 			<h3>{$aLang.stream_block_users_title}</h3>
@@ -81,7 +57,7 @@
 			<div class="search-form-wrapper">
 				<div class="search-input-wrapper">
 					<input type="text" id="stream_users_complete" autocomplete="off" placeholder="{$aLang.stream_block_config_append}" class="autocomplete-users input-text input-width-full" />
-					<div onclick="ls.stream.appendUser();" class="input-submit"></div>
+					<div class="input-submit"></div>
 				</div>
 			</div>
 			
