@@ -1,7 +1,7 @@
 $ = require "jquery"
 {forEach, debounce} = require "lodash"
 
-lang = require "core/lang.coffee"
+{gettext, ngettext} = require "core/lang.coffee"
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
 
@@ -95,7 +95,7 @@ loadInfo = (idBlog) ->
 
 
 loadInfoType = (type) ->
-  $('#blog_type_note').text lang.get("blog_create_type_#{type}_notice")
+  $('#blog_type_note').text gettext("blog_create_type_#{type}_notice")
 
 toggleInfo = ->
   $('#blog-mini').slideToggle()

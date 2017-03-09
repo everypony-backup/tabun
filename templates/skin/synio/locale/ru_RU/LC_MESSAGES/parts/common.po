@@ -200,3 +200,9 @@ msgstr "Подписаться"
 
 msgid "user_unfollow"
 msgstr "Отписаться"
+
+msgid "blog_create_type_open_notice"
+msgstr "Открытый — к этому блогу может присоединиться любой желающий, посты видны всем"
+
+msgid "blog_create_type_close_notice"
+msgstr "Закрытый — присоединиться можно только по приглашению администрации блога, посты видят только подписчики"
