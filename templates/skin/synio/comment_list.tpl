@@ -39,7 +39,7 @@
             {/if}
             {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote {if $oCommentRating > 0} vote-count-positive {elseif $oCommentRating < 0} vote-count-negative {elseif $oCommentRating == 0 and $bVoteInfoEnabled and $oComment->getCountVote() > 0} vote-count-mixed {/if} {if $bVoteInfoEnabled} vote-info-enabled {/if}">
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}"{/if}>{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}"{/if}>{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
                 </div>
             {/if}
             <div>
