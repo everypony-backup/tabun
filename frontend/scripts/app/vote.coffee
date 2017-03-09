@@ -75,7 +75,7 @@ getVotes = (targetId, targetType, el) ->
   params['targetId'] = targetId
   params['targetType'] = targetType
 
-  ajax routes.vote.getVotes, params, onGetVotes.bind({"control":el})
+  ajax routes.vote.getVotes, params, onGetVotes.bind({"control":el,"targetType":targetType})
   el.dataset.queryState = "query"
   return false
 
@@ -144,7 +144,7 @@ onGetVotes = (result) ->
       context.callback = onVotesListLeaved.bind context
       context.eventTarget.addEventListener "click", context.callback
     else
-      notice null, lang.gettext("no_votes")
+      notice null, lang.gettext("no_votes_"+this.targetType)
     
     if parseInt(this.control.dataset.count) != result.aVotes.length
       this.control.parentNode.classList.remove "vote-count-negative"

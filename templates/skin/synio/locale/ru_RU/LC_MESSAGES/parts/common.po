@@ -154,8 +154,17 @@ msgstr "Вы робот!"
 msgid "comment_lock_edit"
 msgstr "заблокировать дальнейшее изменение"
 
-msgid "no_votes"
-msgstr "Никто не проголосовал"
+msgid "no_votes_comment"
+msgstr "Никто не оценивал комментарий"
+
+msgid "no_votes_topic"
+msgstr "Никто не оценивал пост"
+
+msgid "no_votes_blog"
+msgstr "Никто не оценивал блог"
+
+msgid "no_votes_comment"
+msgstr "Никто не оценивал пользователя"
 
 # Editor
 msgid "create"
