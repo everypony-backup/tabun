@@ -196,15 +196,14 @@ init = ->
       else
         ls.userfeed.unsubscribe 'users', this.dataset.user_id
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
-    $('.js-tags-help-link').on 'click', ({target}) ->
-      helpTargetId = document.getElementById("tags-help").dataset.target_id
-      unless helpTargetId
-        return false
-      helpTarget = $ "##{helpTargetId}"
-      unless helpTarget.length
-        return false
-      str = if target.dataset.insert? then target.dataset.insert else target.textContent
-      $.markItUp target: target, replaceWith: str
-    $('tags-help-toggle').on 'click', ->
+    $('.js-tags-help-link').on 'click', () ->
+      str = if this.dataset.insert? then this.dataset.insert else this.textContent
+      targetForm = document.getElementByTagName("textarea")[0]
+      caret = targetForm.selectionStart
+      if isNaN caret
+        targetForm.value += str
+      else
+        targetForm.value = targetForm.value.substring(0,caret) + str + targetForm.value.substring(caret)
+    $('#tags-help-toggle').on 'click', ->
       $('#tags-help').toggle()
 module.exports = init
