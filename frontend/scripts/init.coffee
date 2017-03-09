@@ -153,9 +153,9 @@ init = ->
     $('#foto-cancel-button').on 'click', ->
       ls.user.cancelFoto()
   else if window.location.pathname.match "settings/tuning"
-    forEach $('UI-checkbox'), (checkbox) ->
+    forEach $('.UI-checkbox'), (checkbox) ->
       checkbox.checked = UI[checkbox.dataset.name]
-    $('UI-checkbox').on 'click', () ->
+    $('.UI-checkbox').on 'click', () ->
       window.localStorage.setItem("UI-"+this.dataset.name, this.checked)
   else if window.location.pathname.match "profile"
     $('#usernote_edit').on 'click', ->
