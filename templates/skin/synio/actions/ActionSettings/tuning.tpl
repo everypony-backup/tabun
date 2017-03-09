@@ -32,57 +32,48 @@
 	<br />
 	<h3>Настройки интерфейса</h3>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-smothScroll"/>
+		<input type="checkbox" class="UI-checkbox" data-name="smothScroll"/>
 		Плавная анимация прокрутки
 	</label>
 	<label title="'space' или 'ins' - переход к следующему новому комментарию; 'enter' или 'del' обновить комментарии">
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-hotkeys"/>
+		<input type="checkbox" class="UI-checkbox" data-name="hotkeys"/>
 		Горячие клавиши
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-smartQuote"/>
+		<input type="checkbox" class="UI-checkbox" data-name="smartQuote"/>
 		Умное цитирование
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoFold"/>
+		<input type="checkbox" class="UI-checkbox" data-name="autoFold"/>
 		Автосворачивание промежуточных комментариев
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-newCommentsInTitle"/>
+		<input type="checkbox" class="UI-checkbox" data-name="newCommentsInTitle"/>
 		Отображать количество новых комментариев в заголовке
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoUpdateComments"/>
+		<input type="checkbox" class="UI-checkbox" data-name="autoUpdateComments"/>
 		Автообновление комментариев
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-autoDespoil"/>
+		<input type="checkbox" class="UI-checkbox" data-name="autoDespoil"/>
 		Раскрывать спойлеры в активном комментарии
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-despoilOnlyArticle"/>
+		<input type="checkbox" class="UI-checkbox" data-name="despoilOnlyArticle"/>
 		Кнопка "Despoil" действует только на топик
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-showPinkie"/>
+		<input type="checkbox" class="UI-checkbox" data-name="showPinkie"/>
 		Пинкамина
 	</label>
 	<label>
-		<input type="checkbox" onclick="window.localStorage.setItem(this.id, this.checked)" id="UI-voteNeutral"/>
+		<input type="checkbox" class="UI-checkbox" data-name="voteNeutral"/>
 		Нейтрально голосовать за топики по *?*
 	</label>
 
 	<script type="text/javascript">
-		document.getElementById("UI-smothScroll").checked = UI.smothScroll;
-		document.getElementById("UI-hotkeys").checked = UI.hotkeys;
-		document.getElementById("UI-smartQuote").checked = UI.smartQuote;
-		document.getElementById("UI-autoFold").checked = UI.autoFold;
-		document.getElementById("UI-newCommentsInTitle").checked = UI.newCommentsInTitle;
-		document.getElementById("UI-autoUpdateComments").checked = UI.autoUpdateComments;
-		document.getElementById("UI-autoDespoil").checked = UI.autoDespoil;
-		document.getElementById("UI-despoilOnlyArticle").checked = UI.despoilOnlyArticle;
-		document.getElementById("UI-showPinkie").checked = UI.showPinkie;
-		document.getElementById("UI-voteNeutral").checked = UI.voteNeutral;
+
 	</script>
 
 	{hook run='form_settings_tuning_end'}
