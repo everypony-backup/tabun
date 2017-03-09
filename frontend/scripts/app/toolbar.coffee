@@ -87,4 +87,10 @@ init = ->
     forEach $(target), (node) ->
       node.style.display = mode
 
+  #goPrev, goNext
+  $('.toolbar-topic-prev').on 'click', ->
+    ls.toolbar.goPrevTopic()
+  $('.toolbar-topic-next').on 'click', ->
+    ls.toolbar.goNextTopic()
+
 module.exports = {init, goPrevTopic, goNextTopic}
