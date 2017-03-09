@@ -201,6 +201,11 @@ init = ->
         ls.userfeed.subscribe 'users', this.dataset.user_id
       else
         ls.userfeed.unsubscribe 'users', this.dataset.user_id
+  else if window.location.pathname.match("blog/add") || window.location.pathname.match("blog/edit")
+    $(document).ready () ->
+      ls.blog.loadInfoType document.getElementById('blog_type').value
+    $('#blog_type').on 'change', () ->
+      ls.blog.loadInfoType document.getElementById("blog_type").value
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value
