@@ -196,9 +196,10 @@ init = ->
       else
         ls.userfeed.unsubscribe 'users', this.dataset.user_id
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
-    ls.blog.loadInfoType document.getElementById("blog_id").value
+    $(document).ready () ->
+      ls.blog.loadInfo document.getElementById("blog_id").value
     $('#blog_id').on 'change', () ->
-      ls.blog.loadInfoType document.getElementById("blog_id").value
+      ls.blog.loadInfo document.getElementById("blog_id").value
     $('.js-tags-help-link').on 'click', () ->
       str = if this.dataset.insert? then this.dataset.insert else this.textContent
       targetForm = document.getElementsByTagName("textarea")[0]
