@@ -487,6 +487,7 @@ class ModuleACL extends Module {
         /**
          * А можно ли ему вообще голосовать?
          */
+		if ($bFullCheck)
 		if (($mRes = $this->Magicrule_CheckRuleAction(
 			'vote_topic',
 			$oUser,
