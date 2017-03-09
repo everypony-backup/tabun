@@ -78,7 +78,7 @@
 				{include file='actions/ActionProfile/friend_item.tpl' oUserFriend=$oUserProfile->getUserFriend()}
 				<li><a href="{router page='talk'}add/?talk_users={$oUserProfile->getLogin()}">{$aLang.user_write_prvmsg}</a></li>
 				<li>
-					<a id="follow_user" data-user_id="{$oUserProfile->getId()}" class="{if $oUserProfile->isFollow()}followed{/if}">
+					<a href="#" id="follow_user" data-user_id="{$oUserProfile->getId()}" class="{if $oUserProfile->isFollow()}followed{/if}">
 						{if $oUserProfile->isFollow()}{$aLang.profile_user_unfollow}{else}{$aLang.profile_user_follow}{/if}
 					</a>
 				</li>

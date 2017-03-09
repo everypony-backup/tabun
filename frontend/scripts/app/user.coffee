@@ -2,7 +2,7 @@ $ = require "jquery"
 {forEach, debounce, uniqueId, isString} = require "lodash"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
-lang = require "core/lang.coffee"
+{gettext, ngettext} = require "core/lang.coffee"
 {notice, error} = require "core/messages.coffee"
 {subscribe, unsubscribe} = require "app/stream.coffee"
 routes = require "lib/routes.coffee"
