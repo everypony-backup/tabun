@@ -155,7 +155,7 @@ msgid "comment_lock_edit"
 msgstr "заблокировать дальнейшее изменение"
 
 msgid "no_votes"
-msgstr "Голосов нет"
+msgstr "Никто не проголосовал"
 
 # Editor
 msgid "create"
