@@ -134,6 +134,11 @@ init = ->
   $(document).on 'click', ".favourite", () ->
     ls.favourite.toggle this.dataset.target_id, this, this.dataset.target_type
 
+  # reactivation
+    $("#reactivation-form-submit").disabled = false
+    $("#reactivation-form-submit").on 'click', ->
+      ls.user.reactivation()
+
   # Help-tags link
   $('.js-tags-help-link').on 'click', ({target}) ->
     helpTargetId = registry.get('tags-help-target-id')

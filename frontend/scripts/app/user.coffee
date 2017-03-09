@@ -169,8 +169,8 @@ formLoader = (form, bHide) ->
   forEach form.find('input[type="text"], input[type="password"]'), (node) ->
     $(node).toggleClass 'loader', bHide
 
-reactivation = (form) ->
-  if isString form then form = $ "##{form}"
+reactivation = () ->
+  form = document.getElementById "reactivation-form"
 
   ajaxSubmit routes.profile.reactivate, form, (result) ->
 
