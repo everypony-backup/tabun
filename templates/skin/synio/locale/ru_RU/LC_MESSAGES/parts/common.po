@@ -163,7 +163,7 @@ msgstr "Никто не оценивал пост"
 msgid "no_votes_blog"
 msgstr "Никто не оценивал блог"
 
-msgid "no_votes_comment"
+msgid "no_votes_user"
 msgstr "Никто не оценивал пользователя"
 
 # Editor
