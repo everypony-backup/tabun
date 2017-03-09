@@ -33,10 +33,6 @@
   line-height 18px
   font-size 18px
 
-// Как вариант, можно сделать cursor=pointer для всех .vote-item, для которых разрешено голосование.
-.vote-item.vote-count
-  cursor pointer
-
 .vote-info-enabled
   .vote-item.vote-count
     cursor help
@@ -67,9 +63,10 @@
   .vote-up,
   .vote-down
     opacity 0.5
-    cursor pointer
     &:hover
       opacity 0.85
+  .vote-item
+    cursor pointer
 
 .text
   blockquote
