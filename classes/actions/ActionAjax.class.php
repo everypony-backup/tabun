@@ -1196,7 +1196,28 @@ class ActionAjax extends Action {
     }
 	
 	protected function EventGetObjectVotes() {
-		$ne_enable_level = Config::Get('vote_state.comment.ne_enable_level');
+		$targetType = getRequestStr('targetType',null,'post');
+		switch($targetType) {
+			case 'comment':
+				$oTarget = $this->Comment_GetCommentById($targetId);
+				$ne_enable_level = Config::Get('vote_state.comment.ne_enable_level');
+				break;
+			case 'topic':
+				$oTarget = $this->Topic_GetTopicById($targetId);
+				$ne_enable_level = Config::Get('vote_state.topic.ne_enable_level');
+				break;
+			case 'blog':
+				$oTarget = $this->Blog_GetBlogById($targetId);
+				$ne_enable_level = Config::Get('vote_state.blog.ne_enable_level');
+				break;
+			case 'user':
+				$oTarget = $this->User_GetUserById($targetId);
+				$ne_enable_level = Config::Get('vote_state.user.ne_enable_level');
+				break;
+			default:
+				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+				return;
+		}
 		/**
 		 * Пользователь авторизован?
 		 */
@@ -1206,15 +1227,6 @@ class ActionAjax extends Action {
 		}
 		
 		$targetId = (int) getRequestStr('targetId',null,'post');
-		$targetType = getRequestStr('targetType',null,'post');
-		switch($targetType) {
-			case 'comment':
-				$oTarget = $this->Comment_GetCommentById($targetId);
-				break;
-			default:
-				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
-				return;
-		}
 		/**
 		 * Объект существует?
 		 */
