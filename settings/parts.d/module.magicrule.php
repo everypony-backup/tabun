@@ -60,7 +60,7 @@ return [
             'groups' => [
                 [
                     'registration_time' => 60 * 60 * 24,
-                    'rating' => 0
+                    'rating' => 25
                 ]
             ]
         ],
@@ -70,7 +70,7 @@ return [
             'groups' => [
                 [
                     'registration_time' => 60 * 60 * 24,
-                    'rating' => 0
+                    'rating' => 25
                 ]
             ]
         ],
@@ -80,7 +80,7 @@ return [
             'groups' => [
                 [
                     'registration_time' => 60 * 60 * 24,
-                    'rating' => 0
+                    'rating' => 25
                 ]
             ]
         ]
