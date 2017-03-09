@@ -56,6 +56,8 @@
 						not-voted
 					{/if}
 					
+					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled{/if}
+					
 					{if (strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time') && !$oVote) || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId())}
 						vote-nobuttons
 					{/if}
