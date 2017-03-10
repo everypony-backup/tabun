@@ -149,7 +149,7 @@ onGetVotes = (result) ->
         vl_wrapper.style.overflowY = "scroll"
       
       context = {
-        "target":vl_wrapper,
+        "target":vl_box,
         "eventTarget":window
       }
       context.callback = onVotesListLeaved.bind context
