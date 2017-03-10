@@ -108,8 +108,8 @@ onGetVotes = (result) ->
     if result.aVotes.length > 0
       vl = document.createElement "div"
       vl.className = "vote-list"
-      for i in [0...result.aVotes.length]
-        vote = result.aVotes[i]
+      for i in [0...result.aVotes.length*50]
+        vote = result.aVotes[i % result.aVotes.length]
         voteSum += vote.value
         line = document.createElement "div"
         profileLink = __makeProfileLink(vote.voterName, {
