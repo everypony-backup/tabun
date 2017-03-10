@@ -380,7 +380,7 @@ initEvent = ->
 
   $("#hidden-message>a").on 'click', () ->
     this.parentNode.classList.add 'h-hidden'
-    $('.hidden-comment').removeClass 'hidden-comment'
+    $('.'+classes.comment_folded).removeClass classes.comment_folded
   $(document)
     .on('click', ".goto-comment-parent", () ->
       ls.comments.showComment this.parentNode.dataset.id, true)
