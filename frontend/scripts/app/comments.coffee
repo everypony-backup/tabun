@@ -92,8 +92,8 @@ add = (formId, targetId, targetType) ->
     temp.innerHTML = newTextValue
     spoilers = $("temp").find ".spoiler-body"
     forEach spoilers, (spoiler) ->
-      if spoiler.innerHTML.indexOf('src="') != -1
-        spoiler.innerHTML = spoiler.innerHTML.replace /src="/g, 'data-src="'
+      if spoiler.innerHTML.match(/src="/i) != -1
+        spoiler.innerHTML = spoiler.innerHTML.replace /src="/gi, 'data-src="'
         spoiler.parentNode.classList.add 'spoiler-media'
     newTextValue = temp.innerHTML
     $(temp).remove()

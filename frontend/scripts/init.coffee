@@ -117,7 +117,7 @@ init = ->
   $(document).on 'click', '.spoiler-title', ({target}) ->
     $e = $('.spoiler-body', $(target).closest('.spoiler')).eq(0)
     if $e[0].parentNode.classList.contains 'spoiler-media'
-      $e[0].innerHTML = $e[0].innerHTML.replace /data-src="/g, 'src="'
+      $e[0].innerHTML = $e[0].innerHTML.replace /data-src="/gi, 'src="'
       $e[0].parentNode.classList.remove 'spoiler-media'
     if $e.css('display') == 'none'
       $e.css 'display', 'block'
