@@ -87,10 +87,10 @@ add = (formId, targetId, targetType) ->
     else
       newTextValue += ' '
       i++
-  if newTextValue.indexOf('spoiler-body') != -1
+  if newTextValue.match /spoiler-body/i
     temp = document.createElement 'temp'
     temp.innerHTML = newTextValue
-    spoilers = $("temp").find ".spoiler-body"
+    spoilers = $(temp).find ".spoiler-body"
     forEach spoilers, (spoiler) ->
       if spoiler.innerHTML.match /src="/i
         spoiler.innerHTML = spoiler.innerHTML.replace /src="/gi, 'data-src="'
