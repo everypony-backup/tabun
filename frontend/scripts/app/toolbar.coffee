@@ -86,7 +86,7 @@ init = ->
       mode = 'none'
     forEach $(target), (node) ->
       if node.parentNode.classList.contains "spoiler-media"
-        node.innerHTML = node.innerHTML.replace 'data-src="', 'src="'
+        node.innerHTML = node.innerHTML.replace /data-src="/g, 'src="'
         node.parentNode.classList.remove "spoiler-media"
       node.style.display = mode
 
