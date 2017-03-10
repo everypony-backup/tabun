@@ -1248,7 +1248,7 @@ class ActionAjax extends Action {
 			$aResult[] = array(
 				'voterName' => $bShowUser ? $oUser->getLogin() : null,
 				'voterAvatar' => $bShowUser ? $oUser->getProfileAvatarPath() : null,
-				'value' => (float) $oVote->getDirection(),
+				'value' => (float) $oVote->getValue(),
 				'date' => (string) $oVote->getDate().'+03:00',
 			);
 		}
