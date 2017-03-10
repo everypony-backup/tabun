@@ -1202,18 +1202,22 @@ class ActionAjax extends Action {
 			case 'comment':
 				$oTarget = $this->Comment_GetCommentById($targetId);
 				$ne_enable_level = Config::Get('vote_state.comment.ne_enable_level');
+				$oe_end = Config::Get('vote_state.comment.oe_end');
 				break;
 			case 'topic':
 				$oTarget = $this->Topic_GetTopicById($targetId);
 				$ne_enable_level = Config::Get('vote_state.topic.ne_enable_level');
+				$oe_end = Config::Get('vote_state.topic.oe_end');
 				break;
 			case 'blog':
 				$oTarget = $this->Blog_GetBlogById($targetId);
 				$ne_enable_level = Config::Get('vote_state.blog.ne_enable_level');
+				$oe_end = Config::Get('vote_state.blog.oe_end');
 				break;
 			case 'user':
 				$oTarget = $this->User_GetUserById($targetId);
 				$ne_enable_level = Config::Get('vote_state.user.ne_enable_level');
+				$oe_end = Config::Get('vote_state.user.oe_end');
 				break;
 			default:
 				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
@@ -1244,7 +1248,7 @@ class ActionAjax extends Action {
 		$aResult = array();
 		foreach($aVotes as $oVote) {
 			$oUser = $this->User_GetUserById($oVote->getVoterId());
-			$bShowUser = $oUser && (strtotime($oVote->getDate()) > Config::Get('vote_state.comment.oe_end') || $this->ACL_CheckSimpleAccessLevel(Config::Get('vote_state.comment.oe_enable_level'), $this->oUserCurrent, $oTarget, $targetType));
+			$bShowUser = $oUser && (strtotime($oVote->getDate()) > $oe_end || $this->ACL_CheckSimpleAccessLevel(Config::Get('vote_state.comment.oe_enable_level'), $this->oUserCurrent, $oTarget, $targetType));
 			$aResult[] = array(
 				'voterName' => $bShowUser ? $oUser->getLogin() : null,
 				'voterAvatar' => $bShowUser ? $oUser->getProfileAvatarPath() : null,
