@@ -54,8 +54,8 @@ onVote = (idTarget, objVote, value, type, result) ->
     "voted-zero": value == 0
     "vote-count-positive": iRating > 0
     "vote-count-negative": iRating < 0
-    "vote-count-zero": iRating == 0 and iCountVote == 0
-    "vote-count-mixed": iRating == 0 and iCountVote > 0
+    "vote-count-zero": iRating == 0 and (iCountVote == 0 or type == "topic")
+    "vote-count-mixed": iRating == 0 and (iCountVote > 0 and type != "topic")
     "vote-info-enabled": isVoteInfoEnabledBase
 
   if divCount.length > 0 and result.iCountVote then divCount.text parseInt(result.iCountVote)
