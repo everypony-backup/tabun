@@ -103,7 +103,7 @@ return [
                         'spoiler-title',
                         'spoiler-body', 
                         'spoiler-gray',
-                        'spoiler-media',
+                        'spoiler spoiler-media',
                         'h-top',
                         'h-bottom',
                         'h-right',
