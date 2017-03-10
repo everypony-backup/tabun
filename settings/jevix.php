@@ -103,6 +103,7 @@ return [
                         'spoiler-title',
                         'spoiler-body', 
                         'spoiler-gray',
+                        'spoiler-media',
                         'h-top',
                         'h-bottom',
                         'h-right',
@@ -117,10 +118,6 @@ return [
         ],
         // Параметры тегов являющиеся обязательными
         'cfgSetTagParamsRequired' => [
-            [
-                'img',
-                'src'
-            ],
             [
                 'iframe',
                 'src'

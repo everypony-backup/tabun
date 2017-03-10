@@ -77,7 +77,7 @@ add = (formId, targetId, targetType) ->
     unless bStateError
       toggleCommentForm iCurrentShowFormComment, true
 
-  textArea = document.getElementById("form_comment_text")
+  textArea = document.getElementById "form_comment_text"
   textValue = textArea.value
   newTextValue = ""
   i = -1
@@ -87,6 +87,16 @@ add = (formId, targetId, targetType) ->
     else
       newTextValue += ' '
       i++
+  if newTextValue.indexOf('spoiler-body') != -1
+    temp = document.createElement 'temp'
+    temp.innerHTML = newTextValue
+    spoilers = $("temp").find ".spoiler-body"
+    forEach spoilers, (spoiler) ->
+      if spoiler.innerHTML.indexOf('src="') != -1
+        spoiler.innerHTML = spoiler.innerHTML.replace 'src="', 'data-src="'
+        spoiler.parentNode.classList.add 'spoiler-media'
+    newTextValue = temp.innerHTML
+    $(temp).remove()
   textArea.value = newTextValue
   ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
 

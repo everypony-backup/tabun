@@ -85,6 +85,9 @@ init = ->
       $(this).text('Despoil')
       mode = 'none'
     forEach $(target), (node) ->
+      if node.parentNode.classList.contains "spoiler-media"
+        node.innerHTML = node.innerHTML.replace 'data-src="', 'src="'
+        node.parentNode.classList.remove "spoiler-media"
       node.style.display = mode
 
   #goPrev, goNext
