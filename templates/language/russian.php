@@ -199,7 +199,7 @@ return array(
 	 */
 	'topic_title' => 'Посты',
 	'topic_read_more' => 'Читать дальше',
-	'topic_author' => 'Автор',
+	'topic_author' => 'Автор топика',
 	'topic_date' => 'дата',
 	'topic_tags' => 'Теги',
 	'topic_tags_empty' => 'нет',
