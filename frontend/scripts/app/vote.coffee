@@ -142,8 +142,8 @@ onGetVotes = (result) ->
       vl_wrapper.classList.add "for-"+this.targetType
       vl_wrapper.appendChild vl
       vl_box.appendChild vl_wrapper
-      this.control.parentNode.parentNode.parentNode.insertBefore vl_wrapper, this.control.parentNode.parentNode.nextSibling
-      setTimeout DOMTokenList.prototype.remove.bind(vl_wrapper.classList), 10, "hidden"
+      this.control.parentNode.parentNode.parentNode.insertBefore vl_box, this.control.parentNode.parentNode.nextSibling
+      setTimeout DOMTokenList.prototype.remove.bind(vl_box.classList), 10, "hidden"
       
       context = {
         "target":vl_wrapper,
