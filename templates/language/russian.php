@@ -356,10 +356,10 @@ return array(
 	'comment_vote_error_self' => 'Вы не можете голосовать за свой комментарий!',
 	'comment_vote_error_noexists' => 'Вы голосуете за несуществующий комментарий!',
 	'comment_vote_ok' => 'Ваш голос учтен',
-	'comment_favourite_add' => 'добавить в избранное',
+	'comment_favourite_add' => 'В избранное',
 	'comment_favourite_add_ok' => 'Комментарий добавлен в избранное',
 	'comment_favourite_add_no' => 'Этого комментария нет в вашем избранном',
-	'comment_favourite_add_already' => 'Этот комментарий уже есть в вашем избранном',
+	'comment_favourite_add_already' => 'В избранном',
 	'comment_favourite_del' => 'удалить из избранного',
 	'comment_favourite_del_ok' => 'Комментарий удален из избранного',
 	/**
