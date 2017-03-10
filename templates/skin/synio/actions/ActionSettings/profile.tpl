@@ -6,13 +6,13 @@
 <form method="post" enctype="multipart/form-data" class="form-profile">
 	<div class="wrapper-content">
 		<p id="profile_user_field_template" style="display:none;" class="js-user-field-item">
-			<select name="profile_user_field_type[]" onchange="ls.userfield.changeFormField(this);">
+			<select name="profile_user_field_type[]">
 			{foreach from=$aUserFieldsContact item=oFieldAll}
 				<option value="{$oFieldAll->getId()}">{$oFieldAll->getTitle()|escape:'html'}</option>
 			{/foreach}
 			</select>
 			<input type="text" name="profile_user_field_value[]" value="" class="input-text input-width-200">
-			<a class="icon-synio-remove" title="{$aLang.user_field_delete}" href="#" onclick="return ls.userfield.removeFormField(this);"></a>
+			<a class="icon-synio-remove" title="{$aLang.user_field_delete}"></a>
 		</p>
 
 		<div class="avatar-change">
@@ -20,7 +20,7 @@
 
 			<div>
 				<a href="#" id="avatar-upload" class="link-dotted">{if $oUserCurrent->getProfileAvatar()}{$aLang.settings_profile_avatar_change}{else}{$aLang.settings_profile_avatar_upload}{/if}</a><br />
-				<a href="#" id="avatar-remove" class="link-dotted" onclick="return ls.user.removeAvatar();" style="{if !$oUserCurrent->getProfileAvatar()}display:none;{/if}">{$aLang.settings_profile_avatar_delete}</a>
+				<a href="#" id="avatar-remove" class="link-dotted" style="{if !$oUserCurrent->getProfileAvatar()}display:none;{/if}">{$aLang.settings_profile_avatar_delete}</a>
 			</div>
 
 			<div id="avatar-resize" class="modal modal-upload-avatar">
@@ -34,8 +34,8 @@
 							<img src=""  id="avatar-resize-original-img">
 						</div>
 					</div>
-					<button type="submit"  class="button button-primary" onclick="return ls.user.resizeAvatar();">{$aLang.settings_profile_avatar_resize_apply}</button>
-					<button type="submit"  class="button" onclick="return ls.user.cancelAvatar();">{$aLang.settings_profile_avatar_resize_cancel}</button>
+					<button type="submit" id="avatar-resize-button" class="button button-primary">{$aLang.settings_profile_avatar_resize_apply}</button>
+					<button type="submit" id="avatar-cancel-button" class="button">{$aLang.settings_profile_avatar_resize_cancel}</button>
 				</div>
 			</div>
 		</div>
@@ -148,18 +148,18 @@
 		<div id="user-field-contact-contener">
 		{foreach from=$aUserFieldContactValues item=oField}
 			<p class="js-user-field-item">
-				<select name="profile_user_field_type[]" onchange="ls.userfield.changeFormField(this);">
+				<select name="profile_user_field_type[]">
 				{foreach from=$aUserFieldsContact item=oFieldAll}
 					<option value="{$oFieldAll->getId()}" {if $oFieldAll->getId()==$oField->getId()}selected="selected"{/if}>{$oFieldAll->getTitle()|escape:'html'}</option>
 				{/foreach}
 				</select>
 				<input type="text" name="profile_user_field_value[]" value="{$oField->getValue()|escape:'html'}" class="input-text input-width-200">
-				<a class="icon-synio-remove" title="{$aLang.user_field_delete}" href="#" onclick="return ls.userfield.removeFormField(this);"></a>
+				<a class="icon-synio-remove" title="{$aLang.user_field_delete}"></a>
 			</p>
 		{/foreach}
 		</div>
 		{if $aUserFieldsContact}
-			<a href="#" onclick="return ls.userfield.addFormField();" class="link-dotted">{$aLang.user_field_add}</a>
+			<a id="form-field-add" class="link-dotted">{$aLang.user_field_add}</a>
 		{/if}
 	</div>
 

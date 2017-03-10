@@ -146,12 +146,24 @@ init = ->
       $('#avatar-upload').file({ name:'avatar' }).choose (e, input) ->
         ls.user.uploadAvatar null, input
     ) jQuery
+    $('#avatar-remove').on 'click', ->
+      ls.user.removeAvatar()
+    $('#avatar-resize-button').on 'click', ->
+      ls.user.resizeAvatar()
+    $('#avatar-cancel-button').on 'click', ->
+      ls.user.cancelAvatar()
     $('#foto-remove').on 'click', ->
       ls.user.removeFoto()
     $('#foto-resize-button').on 'click', ->
       ls.user.resizeFoto()
     $('#foto-cancel-button').on 'click', ->
       ls.user.cancelFoto()
+    $('#form-field-add').on 'click', ->
+      ls.userfield.addFormField()
+    $(document).on 'change', '#user-field-contact-contener select', ->
+      ls.userfield.changeFormField this
+    $(document).on 'click', '#user-field-contact-contener .icon-synio-remove', ->
+      ls.userfield.removeFormField this
   else if window.location.pathname.match "settings/tuning"
     forEach $('.UI-checkbox'), (checkbox) ->
       if UI[checkbox.dataset.name]
