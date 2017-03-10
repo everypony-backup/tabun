@@ -33,6 +33,7 @@ return [
                 'img',
                 [
                     'src',
+                    'data-src',
                     'alt' => '#text',
                     'title' => '#text',
                     'width' => '#int',
