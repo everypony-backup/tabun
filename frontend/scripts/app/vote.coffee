@@ -145,7 +145,7 @@ onGetVotes = (result) ->
       this.control.parentNode.parentNode.parentNode.insertBefore vl_box, this.control.parentNode.parentNode.nextSibling
       setTimeout DOMTokenList.prototype.remove.bind(vl_box.classList), 10, "hidden"
       if vl_wrapper.scrollHeight > vl_wrapper.clientHeight
-        vl_wrapper.style.width = (vl_wrapper.clientWidth + 20) + "px"
+        vl_wrapper.style.width = (vl_wrapper.clientWidth + 24) + "px"
         vl_wrapper.style.overflowY = "scroll"
       
       context = {
