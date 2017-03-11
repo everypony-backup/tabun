@@ -2,29 +2,29 @@
 
 return [
     'comment' => [
-        'oe_end' => 0 /*test*/+strtotime('2017-03-05'),
-        'oe_enable_level' => 0,
-        'ne_enable_level' => 6,
+        'oa_end' => 0 /*test*/+strtotime('2017-03-05'),
+        'oa_enable_level' => 0,
+        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
     ],
     'topic' => [
-        'oe_end' => 0,
-        'oe_enable_level' => 0,
-        'ne_enable_level' => 6,
+        'oa_end' => 0,
+        'oa_enable_level' => 0,
+        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
     ],
     'blog' => [
-        'oe_end' => 0,
-        'oe_enable_level' => 0,
-        'ne_enable_level' => 6,
+        'oa_end' => 0,
+        'oa_enable_level' => 0,
+        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
     ],
     'user' => [
-        'oe_end' => 0,
-        'oe_enable_level' => 0,
-        'ne_enable_level' => 6,
+        'oa_end' => 0,
+        'oa_enable_level' => 0,
+        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
     ],
 ];
-// oe_end — точка завершения "старого" периода, unix timestamp
-// oe_enable_level — кому разрешено видеть юзеров оценок за "старый" период
-// ne_enable_level — кому разрешено видеть юзеров оценок за "новый" период и запрашивать список оценок в целом
+// oa_end — точка завершения "старого" периода, unix timestamp
+// oa_enable_level — кому разрешено видеть юзеров оценок за "старый" период
+// na_enable_level — кому разрешено видеть юзеров оценок за "новый" период и запрашивать список оценок в целом
 //	0 — никто
 //	1 — администраторы сайта
 //	3 — администраторы сайта, администраторы блогов
