@@ -503,15 +503,15 @@
     float left
     margin-right 3px
     padding-top 1.5pt
+  @media (max-width:567px)
+    &::after
+      display block
+      height 150px
+      content ""
 .vote-list-item
   display table-row
   &:not(:last-child)>.vote-list-item-component
     padding-bottom 0.3em
-  &:last-child::after
-    @media (max-width:567px)
-      display block
-      height 150px
-      content ""
   .vote::before
     content attr(data-value)
   .vote[data-value="0"]::before
