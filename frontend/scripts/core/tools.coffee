@@ -111,13 +111,12 @@ contentMakeSpoilers = (oldText) ->
   if oldText.match /spoiler-body/i
     temp = document.createElement 'temp'
     temp.innerHTML = oldText
-    spoilers = temp.querySelectorAll ".spoiler-body"
+    spoilers = temp.querySelectorAll ".spoiler:not(.spoiler-media)"
     if spoilers.length
-      i = spoilers.length
       while i--
-        if spoilers[i].innerHTML.match /src="/i
-          spoilers[i].innerHTML = spoilers[i].innerHTML.replace /src="/gi, 'data-src="'
-          spoilers[i].parentNode.classList.add 'spoiler-media'
+        if spoilers[i].children[1].innerHTML.match /src="/i
+          spoilers[i].children[1].innerHTML = spoilers[i].children[1].innerHTML.replace /src="/gi, 'data-src="'
+          spoilers[i].children[1].parentNode.classList.add 'spoiler-media'
       newText = temp.innerHTML
     else
       newText = oldText
