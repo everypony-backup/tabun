@@ -84,7 +84,7 @@ init = ->
     else
       this.textContent = 'Despoil'
       action = 'spoil'
-    spoilerHandler target, action
+    ls.tools.spoilerHandler target, action
 
   #goPrev, goNext
   $('.toolbar-topic-prev').on 'click', ->

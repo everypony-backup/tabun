@@ -115,7 +115,7 @@ init = ->
 
   # Spoilers
   $(document).on 'click', '.spoiler-title', () ->
-    spoilerHandler $(this).parent(), 'toggle'
+    ls.tools.spoilerHandler $(this).parent(), 'toggle'
 
   # Vote
   $(document).on 'click', ".vote-item", () ->
