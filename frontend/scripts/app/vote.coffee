@@ -180,7 +180,7 @@ onGetVotes = (result) ->
   delete this.control.dataset.queryState
 
 onVotesListLeaved = (e) ->
-  if this.target != e.target and e.target.tagName != "A" and !this.target.contains(e.target)
+  if e.target.classList.contains "close-button" or (this.target != e.target and e.target.tagName != "A" and !this.target.contains e.target)
     this.target.classList.add "hidden"
     setTimeout Node.prototype.removeChild.bind(this.target.parentNode), 500, this.target
     this.eventTarget.removeEventListener e.type, this.callback
