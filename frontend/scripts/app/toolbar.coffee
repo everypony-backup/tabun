@@ -75,20 +75,16 @@ init = ->
   # Despoil
   $('#despoil').on 'click', ->
     if UI.despoilOnlyArticle
-      target = 'article .spoiler-body'
+      target = $('article .spoiler')
     else
-      target = '.spoiler-body'
-    if $(this).text().trim() == 'Despoil'
-      $(this).text('Spoil')
-      mode = 'block'
+      target = $('.spoiler')
+    if this.textContent.trim() == 'Despoil'
+      this.textContent = 'Spoil'
+      action = 'despoil'
     else
-      $(this).text('Despoil')
-      mode = 'none'
-    forEach $(target), (node) ->
-      if node.parentNode.classList.contains "spoiler-media"
-        node.innerHTML = node.innerHTML.replace /data-src="/gi, 'src="'
-        node.parentNode.classList.remove "spoiler-media"
-      node.style.display = mode
+      this.textContent = 'Despoil'
+      action = 'spoil'
+    spoilerHandler target, action
 
   #goPrev, goNext
   $('.toolbar-topic-prev').on 'click', ->
