@@ -4,7 +4,7 @@ $ = require "jquery"
 {gettext, ngettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
-{textPreview, registry, prepareJSON} = require "core/tools.coffee"
+{textPreview, registry, prepareJSON, spoilerHandler} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
 {commentFor} = require "lib/markitup.coffee"
@@ -308,7 +308,7 @@ showComment = (commentId, highlightParent) ->
   parentWrapper = commentWrapper.parentNode
   parentComment = parentWrapper.children[0]
   if UI.autoDespoil && !highlightParent
-    ls.tools.spoilerHandler $(comment).find(".spoiler"), 'despoil'
+    spoilerHandler $(comment).find(".spoiler"), 'despoil'
   if UI.autoFold || highlightParent
     toFold = null
     if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")

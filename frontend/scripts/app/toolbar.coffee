@@ -1,6 +1,6 @@
 $ = require "jquery"
 {forEach, throttle} = require "lodash"
-
+{spoilerHandler} = require "core/tools.coffee"
 
 iCurrentTopic = -1
 
@@ -84,7 +84,7 @@ init = ->
     else
       this.textContent = 'Despoil'
       action = 'spoil'
-    ls.tools.spoilerHandler target, action
+    spoilerHandler target, action
 
   #goPrev, goNext
   $('.toolbar-topic-prev').on 'click', ->

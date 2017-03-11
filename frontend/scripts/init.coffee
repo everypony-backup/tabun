@@ -9,7 +9,7 @@ require "jquery.file"
 
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
-{showPinkie, registry} = require "core/tools.coffee"
+{showPinkie, registry, spoilerHandler} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
@@ -115,7 +115,7 @@ init = ->
 
   # Spoilers
   $(document).on 'click', '.spoiler-title', () ->
-    ls.tools.spoilerHandler $(this).parent(), 'toggle'
+    spoilerHandler $(this).parent(), 'toggle'
 
   # Vote
   $(document).on 'click', ".vote-item", () ->
