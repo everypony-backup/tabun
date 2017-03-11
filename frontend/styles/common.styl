@@ -34,8 +34,18 @@
   font-size 18px
 
 .vote-info-enabled
-  .vote-item.vote-count
-    cursor help
+  .vote-count
+    &.vote-item
+      cursor help
+    &[data-count="0"]
+      cursor default
+    &[data-count]:not([data-count="0"]):not([data-query-state="query"]) 
+      cursor help
+    &[data-query-state="query"]
+      cursor progress
+  &.vote-count-mixed
+    .vote-count
+      color black
 
 .vote-count-positive
   .vote-count
@@ -44,10 +54,6 @@
 .vote-count-negative
   .vote-count
     color #da4242
-
-.vote-count-mixed.vote-info-enabled
-  .vote-count
-    color black
 
 .vote-up,
 .vote-down
@@ -519,10 +525,3 @@
   .vote[data-value^="−"]::before
     color #f00
 
-.vote-info-enabled
-  .vote-count[data-count="0"]
-    cursor default
-  .vote-count[data-count]:not([data-count="0"]):not([data-query-state="query"]) 
-    cursor help
-  .vote-count[data-query-state="query"]
-    cursor progress
