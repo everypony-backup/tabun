@@ -511,10 +511,6 @@
     display block
     height 150px
     content ""
-.vote-list-item-component
-  display table-cell
-  &:not(:last-child)
-    padding-right 10px
   .vote::before
     content attr(data-value)
     font-weight bolder
@@ -524,4 +520,8 @@
     color #390
   .vote[data-value^="−"]::before
     color #f00
+.vote-list-item-component
+  display table-cell
+  &:not(:last-child)
+    padding-right 10px
 
