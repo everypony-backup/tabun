@@ -52,9 +52,11 @@
 
 	<input type="hidden" name="topic_type" value="topic" />
 	
-	<button type="submit"  name="submit_topic_publish" id="submit_topic_publish" class="button button-primary h-float-right">{$aLang.topic_create_submit_publish}</button>
-	<button type="submit"  name="submit_preview" onclick="ls.topic.preview('form-topic-add','text_preview'); return false;" class="button">{$aLang.topic_create_submit_preview}</button>
-	<button type="submit"  name="submit_topic_save" id="submit_topic_save" class="button">{$aLang.topic_create_submit_save}</button>
+	<button type="submit"  name="submit_topic_publish" id="submit_topic_publish" class="h-hidden button button-primary h-float-right">{$aLang.topic_create_submit_publish}</button>
+	<button  id="fake_publish" data-target="submit_topic_publish" class="button button-primary h-float-right">{$aLang.topic_create_submit_publish}</button>
+	<button type="submit"  name="submit_preview" class="button submit-preview">{$aLang.topic_create_submit_preview}</button>
+	<button type="submit"  name="submit_topic_save" id="submit_topic_save" class="button h-hidden">{$aLang.topic_create_submit_save}</button>
+	<button id="fake_save" data-target="submit_topic_save" class="button">{$aLang.topic_create_submit_save}</button>
 </form>
 
 	

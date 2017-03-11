@@ -9,7 +9,7 @@ require "jquery.file"
 
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
-{showPinkie, registry, spoilerHandler} = require "core/tools.coffee"
+{showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
@@ -229,4 +229,17 @@ init = ->
         targetForm.value = targetForm.value.substring(0,caret) + str + targetForm.value.substring(caret)
     $('#tags-help-toggle').on 'click', ->
       $('#tags-help').toggle()
+    $(document).on 'click', '#question_list .icon-synio-remove', () ->
+      ls.poll.removeAnswer this
+    $('#question_list+a').on 'click', () ->
+      ls.poll.addAnswer()
+    $('#fake_save, #fake_publish, .submit-preview'). on 'click', (e) ->
+      e.preventDefault()
+      document.getElementById('topic_title').value = contentRemoveBadChars document.getElementById('topic_title').value
+      document.getElementById('topic_tags').value = contentRemoveBadChars document.getElementById('topic_tags').value
+      document.getElementById('topic_text').value = contentRemoveBadChars contentMakeSpoilers document.getElementById('topic_text').value
+      if this.dataset.target
+        document.getElementById(this.dataset.target).click()
+      else
+        ls.topic.preview 'form-topic-add', 'text_preview'
 module.exports = init
