@@ -113,6 +113,7 @@ contentMakeSpoilers = (oldText) ->
     temp.innerHTML = oldText
     spoilers = temp.querySelectorAll ".spoiler:not(.spoiler-media)"
     if spoilers.length
+      i = spoilers.length
       while i--
         if spoilers[i].children[1].innerHTML.match /src="/i
           spoilers[i].children[1].innerHTML = spoilers[i].children[1].innerHTML.replace /src="/gi, 'data-src="'
