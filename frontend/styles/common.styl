@@ -476,6 +476,9 @@
       display block
       text-align center
       margin-bottom 8px
+      color #333
+      text-decoration none
+      font-weight bolder
 
 .vote-list-wrapper
   overflow-y hidden
@@ -487,36 +490,35 @@
 .vote-list
   display table
   color black
-.vote-list>div
-  display table-row
-.vote-list .vote-list-item
-  display table-cell
-.vote-list .vote-list-item:not(:last-child)
-  padding-right 10px
-.vote-list>div:not(:last-child)>.vote-list-item
-  padding-bottom 0.3em
-
-.vote-list
   time,
   .vote
     text-align right
-
-.vote-list
   time>.fa
     float left
     margin-right 3px
     padding-top 1.5pt
-
-.vote-list
-  .vote::before
-    content attr(data-value)
-    font-weight bolder
-  .vote[data-value="0"]::before
-    color black
-  .vote[data-value^="+"]::before
-    color #390
-  .vote[data-value^="−"]::before
-    color #f00
+.vote-list-item
+  display table-row
+  &:not(:last-child)>.vote-list-item-component
+    padding-bottom 0.3em
+  &:last-child::after
+    display block
+    height 150px
+    content ""
+.vote-list-item-component
+  display table-cell
+  &:not(:last-child)
+    padding-right 10px
+  .vote
+    &::before
+      content attr(data-value)
+      font-weight bolder
+    &[data-value="0"]::before
+      color black
+    &[data-value^="+"]::before
+      color #390
+    &[data-value^="−"]::before
+      color #f00
 
 .vote-info-enabled
   .vote-count[data-count="0"]

@@ -113,11 +113,12 @@ onGetVotes = (result) ->
         vote = result.aVotes[i % result.aVotes.length]
         voteSum += vote.value
         line = document.createElement "div"
+        line.className = "vote-list-item"
         profileLink = __makeProfileLink(vote.voterName, {
           name: vote.voterName,
           avatar: vote.voterAvatar
         });
-        profileLink.classList.add "vote-list-item"
+        profileLink.classList.add "vote-list-item-component"
         line.appendChild profileLink
         
         time = document.createElement "time"
@@ -125,13 +126,13 @@ onGetVotes = (result) ->
         date = new Date(Date.parse(vote.date))
         now = new Date()
         timeString = if date.getDate() != now.getDate() or date.getMonth() != now.getMonth() or date.getFullYear() != now.getFullYear() then date.toLocaleString() else date.toLocaleTimeString()
-        time.className = "vote-list-item"
+        time.className = "vote-list-item-component"
         time.appendChild document.createTextNode(timeString)
         line.appendChild time
         
         voteValue = document.createElement "span"
         voteValue.dataset.value = if vote.value == 0 then "0" else (if vote.value > 0 then "+" else "−") + Math.abs(vote.value).toString()
-        voteValue.className = "vote-list-item vote"
+        voteValue.className = "vote-list-item-component vote"
         line.appendChild voteValue
         
         vl.appendChild line
