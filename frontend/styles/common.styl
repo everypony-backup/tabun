@@ -508,9 +508,10 @@
   &:not(:last-child)>.vote-list-item-component
     padding-bottom 0.3em
   &:last-child::after
-    display block
-    height 150px
-    content ""
+    @media (min-width:568px)
+      display block
+      height 150px
+      content ""
   .vote::before
     content attr(data-value)
   .vote[data-value="0"]::before
