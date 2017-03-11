@@ -77,8 +77,6 @@ add = (formId, targetId, targetType) ->
     unless bStateError
       toggleCommentForm iCurrentShowFormComment, true
 
-  textArea = document.getElementById "form_comment_text"
-  textArea.value = contentRemoveBadChars contentMakeSpoilers textArea.value
   ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
 
 toggleCommentForm = (idComment, bNoFocus) ->
@@ -341,8 +339,10 @@ initEvent = ->
     $(".reply-header>a").on 'click', () ->
       ls.comments.toggleCommentForm 0
     $("#comment-button-submit").on 'click', () ->
+      commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
       ls.comments.add 'form_comment', this.dataset.target_id, this.dataset.target_type
     $("#comment-button-preview").on 'click', () ->
+      commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
       ls.comments.preview()
     $(document)
       .on('click', ".comment-info>.reply-link", () ->
@@ -352,8 +352,10 @@ initEvent = ->
       .on('click', ".comment-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock)
       .on('click', ".comment-save-edit-bw", () ->
+        commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
         ls.comments.saveEdit this.parentNode.dataset.id)
       .on('click', ".comment-preview-edit-bw", () ->
+        commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
         ls.comments.previewEdit this.parentNode.dataset.id)
       .on('click', ".comment-cancel-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, false)
