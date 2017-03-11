@@ -352,10 +352,12 @@ initEvent = ->
       .on('click', ".comment-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock)
       .on('click', ".comment-save-edit-bw", () ->
-        commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
+        editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
+        editForm.value = contentRemoveBadChars contentMakeSpoilers editForm.value
         ls.comments.saveEdit this.parentNode.dataset.id)
       .on('click', ".comment-preview-edit-bw", () ->
-        commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
+        editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
+        editForm.value = contentRemoveBadChars contentMakeSpoilers editForm.value
         ls.comments.previewEdit this.parentNode.dataset.id)
       .on('click', ".comment-cancel-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, false)
