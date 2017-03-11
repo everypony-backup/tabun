@@ -9,7 +9,7 @@ require "jquery.file"
 
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
-{showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers} = require "core/tools.coffee"
+{showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers, textPreview} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
@@ -214,6 +214,16 @@ init = ->
       ls.blog.loadInfoType document.getElementById('blog_type').value
     $('#blog_type').on 'change', () ->
       ls.blog.loadInfoType this.value
+  else if window.location.pathname.match "talk/add"
+    $('#fake_talk_add, #talk_preview').on 'click', (e) ->
+      e.preventDefault()
+      document.getElementById('talk_title').value = contentRemoveBadChars document.getElementById('talk_title').value
+      document.getElementById('talk_text').value = contentMakeSpoilers contentRemoveBadChars document.getElementById('talk_text').value
+      if (this.id == 'talk_preview')
+        document.getElementById('text_preview').parentNode.style.display = 'block'
+        textPreview 'talk_text', false
+      else
+        document.getElementById('#submit_talk_add').click()
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value
