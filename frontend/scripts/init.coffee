@@ -114,15 +114,8 @@ init = ->
     document.getElementById('UI-custom-style').textContent += '.comment-current .spoiler-gray{background-color:transparent;color: #777;}.comment-current .spoiler-gray img{filter: inherit;}'
 
   # Spoilers
-  $(document).on 'click', '.spoiler-title', ({target}) ->
-    $e = $('.spoiler-body', $(target).closest('.spoiler')).eq(0)
-    if $e[0].parentNode.classList.contains 'spoiler-media'
-      $e[0].innerHTML = $e[0].innerHTML.replace /data-src="/gi, 'src="'
-      $e[0].parentNode.classList.remove 'spoiler-media'
-    if $e.css('display') == 'none'
-      $e.css 'display', 'block'
-    else
-      $e.hide 'normal'
+  $(document).on 'click', '.spoiler-title', () ->
+    spoilerHandler $(this).parent(), 'toggle'
 
   # Vote
   $(document).on 'click', ".vote-item", () ->

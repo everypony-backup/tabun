@@ -73,5 +73,25 @@ uploadImg = (formId) ->
 
   btns.removeAttr('disabled').removeClass('disabled').text 'Загрузить'
 
+spoilerHandler = (target, action) ->
+  unless target then return
+  if action == 'despoil'
+    style = 'block'
+  else
+    style = 'none'
+  i = target.length
+  while i--
+    unless target[i].children[1] then continue
+    if action == 'toggle'
+      if target[i].children[1].style.display == 'block'
+        style = 'none'
+      else
+        style = 'block'
+    if style == 'block'
+      if target[i].classList.contains "spoiler-media"
+        target[i].children[1].innerHTML = target[i].children[1].innerHTML.replace /data-src="/gi, 'src="'
+        target[i].classList.remove "spoiler-media"
+    target[i].children[1].style.display = style
+  return false
 
-module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg}
+module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg, spoilerHandler}
