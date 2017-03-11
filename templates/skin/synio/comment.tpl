@@ -4,7 +4,7 @@
     {assign var="oCommentVote" value=$oComment->getVote()}
     {assign var="editAccessMask" value=$oComment->getEditAccessMask($oUserCurrent)}
 	{if $bVoteInfoEnabled === null}
-		{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.ne_enable_level'), $oUserCurrent, $oComment, 'comment')}
+		{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
 	{/if}
 {/if}
 {assign var="oCommentAuthor" value=$oComment->getUser()}
