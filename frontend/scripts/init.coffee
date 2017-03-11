@@ -223,7 +223,7 @@ init = ->
         document.getElementById('text_preview').parentNode.style.display = 'block'
         textPreview 'talk_text', false
       else
-        document.getElementById('#submit_talk_add').click()
+        document.getElementById('submit_talk_add').click()
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value
