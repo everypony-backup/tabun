@@ -4,7 +4,7 @@ $ = require "jquery"
 {gettext, ngettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
-{textPreview, registry, prepareJSON, spoilerHandler} = require "core/tools.coffee"
+{textPreview, registry, prepareJSON, spoilerHandler, contentMakeSpoilers, contentRemoveBadChars} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
 routes = require "lib/routes.coffee"
 {commentFor} = require "lib/markitup.coffee"
@@ -78,26 +78,7 @@ add = (formId, targetId, targetType) ->
       toggleCommentForm iCurrentShowFormComment, true
 
   textArea = document.getElementById "form_comment_text"
-  textValue = textArea.value
-  newTextValue = ""
-  i = -1
-  while ++i < textValue.length
-    if textValue.codePointAt(i) < 65535
-      newTextValue += textValue[i]
-    else
-      newTextValue += ' '
-      i++
-  if newTextValue.match /spoiler-body/i
-    temp = document.createElement 'temp'
-    temp.innerHTML = newTextValue
-    spoilers = $(temp).find ".spoiler-body"
-    forEach spoilers, (spoiler) ->
-      if spoiler.innerHTML.match /src="/i
-        spoiler.innerHTML = spoiler.innerHTML.replace /src="/gi, 'data-src="'
-        spoiler.parentNode.classList.add 'spoiler-media'
-    newTextValue = temp.innerHTML
-    $(temp).remove()
-  textArea.value = newTextValue
+  textArea.value = contentRemoveBadChars contentMakeSpoilers textArea.value
   ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
 
 toggleCommentForm = (idComment, bNoFocus) ->

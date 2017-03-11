@@ -94,4 +94,35 @@ spoilerHandler = (target, action) ->
     target[i].children[1].style.display = style
   return false
 
-module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg, spoilerHandler}
+contentRemoveBadChars = (oldText) ->
+  unless oldText then return
+  newText = ''
+  i = -1
+  while ++i < oldText.length
+    if oldText.codePointAt(i) < 65535
+      newText += oldText[i]
+    else
+      newText += ' '
+      i++
+  return newText
+
+contentMakeSpoilers = (oldText) ->
+  unless oldText then return
+  if oldText.match /spoiler-body/i
+    temp = document.createElement 'temp'
+    temp.innerHTML = oldText
+    spoilers = temp.querySelectorAll ".spoiler-body"
+    if spoilers.length
+      i = spoilers.length
+      while i--
+        if spoilers[i].innerHTML.match /src="/i
+          spoilers[i].innerHTML = spoilers[i].innerHTML.replace /src="/gi, 'data-src="'
+          spoilers[i].parentNode.classList.add 'spoiler-media'
+      newText = temp.innerHTML
+    else
+      newText = oldText
+    temp.outerHTML = ''
+  else return oldText
+  return newText
+
+module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers}
