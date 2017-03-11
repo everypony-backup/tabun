@@ -138,9 +138,13 @@ onGetVotes = (result) ->
       vl_box = document.createElement "div"
       vl_box.className = "vote-list-box hidden"
       vl_box.classList.add "for-"+this.targetType
+      vl_closeButton = document.createElement "div"
+      vl_closeButton.className = "close-button"
+      vl_closeButton.textContent = lang.gettext "close"
       vl_wrapper = document.createElement "div"
       vl_wrapper.className = "vote-list-wrapper"
       vl_wrapper.appendChild vl
+      vl_box.appendChild vl_closeButton
       vl_box.appendChild vl_wrapper
       this.control.parentNode.parentNode.parentNode.insertBefore vl_box, this.control.parentNode.parentNode.nextSibling
       setTimeout DOMTokenList.prototype.remove.bind(vl_box.classList), 10, "hidden"
