@@ -139,8 +139,9 @@ onGetVotes = (result) ->
       vl_box = document.createElement "div"
       vl_box.className = "vote-list-box hidden"
       vl_box.classList.add "for-"+this.targetType
-      vl_closeButton = document.createElement "div"
+      vl_closeButton = document.createElement "a"
       vl_closeButton.className = "close-button"
+      vl_closeButton.href = "javascript://"
       vl_closeButton.textContent = lang.gettext "close"
       vl_wrapper = document.createElement "div"
       vl_wrapper.className = "vote-list-wrapper"
