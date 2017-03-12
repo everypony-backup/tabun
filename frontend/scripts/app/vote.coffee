@@ -108,9 +108,8 @@ onGetVotes = (result) ->
     if result.aVotes.length > 0
       vl = document.createElement "div"
       vl.className = "vote-list"
-      test_mp = if window.location.hash.indexOf("#vlmp50") != -1 then 50 else 1
-      for i in [0...result.aVotes.length*test_mp]
-        vote = result.aVotes[i % result.aVotes.length]
+      for i in [0...result.aVotes.length]
+        vote = result.aVotes[i]
         voteSum += vote.value
         line = document.createElement "div"
         line.className = "vote-list-item"
