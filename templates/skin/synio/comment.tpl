@@ -3,6 +3,7 @@
     {assign var="oUserIsAdmin" value=$oUserCurrent->isAdministrator()}
     {assign var="oCommentVote" value=$oComment->getVote()}
     {assign var="editAccessMask" value=$oComment->getEditAccessMask($oUserCurrent)}
+    {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
 	{if $bVoteInfoEnabled === null}
 		{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
 	{/if}
@@ -82,7 +83,7 @@
             {/if}
             {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                    {if $oComment->getCountVote() > 0}
+                    {if $oCommentVoteCount > 0}
                         {if $oCommentRating > 0} vote-count-positive
                         {elseif $oCommentRating < 0} vote-count-negative
                         {else} vote-count-mixed
@@ -96,7 +97,7 @@
                     {if $bVoteInfoEnabled} vote-info-enabled{/if}
                     {if $LS->ACL_CanVoteComment($oUserCurrent, $oComment, false, $oCommentVote)} vote-enabled{/if}">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}"{/if}>{$oCommentRating}</span>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
                     <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                 </div>
             {/if}

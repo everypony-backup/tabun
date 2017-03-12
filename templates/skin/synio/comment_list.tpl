@@ -9,6 +9,7 @@
     {/if}
     {if $oUserCurrent}
         {assign var="oCommentRating" value=$oComment->getRating()}
+        {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
         {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
     {/if}
 
@@ -46,14 +47,14 @@
                 {/if}
                 {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                    {if $oComment->getCountVote() > 0}
+                    {if $oCommentVoteCount > 0}
                         {if $oCommentRating > 0} vote-count-positive
                         {elseif $oCommentRating < 0} vote-count-negative
                         {else} vote-count-mixed
                         {/if}
                     {/if}
                     {if $bVoteInfoEnabled} vote-info-enabled{/if}">
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}"{/if}>{$oCommentRating}</span>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
                 </div>
                 {/if}
             {/if}
