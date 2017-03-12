@@ -4,17 +4,17 @@ return [
     'comment' => [
         'oa_end' => 0 /*test*/+strtotime('2017-03-05'),
         'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
+        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'topic' => [
         'oa_end' => 0,
         'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
+        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'blog' => [
         'oa_end' => 0,
         'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
+        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'user' => [
         'oa_end' => 0,
