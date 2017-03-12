@@ -3,12 +3,15 @@
     {assign var="oCommentAuthor" value=$oComment->getUser()}
     {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
     {assign var="oCommentId" value=$oComment->getId()}
-    {assign var="oCommentRating" value=$oComment->getRating()}
     {assign var="oTopic" value=$oComment->getTarget()}
     {if $oTopic}
         {assign var="oBlog" value=$oTopic->getBlog()}
     {/if}
-    {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
+    {if $oUserCurrent}
+        {assign var="oCommentRating" value=$oComment->getRating()}
+        {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
+    {/if}
+
     <section class="comment">
         <div class="comment-content">
             <div class="text">{$oComment->getText()}</div>
