@@ -36,7 +36,7 @@
     </div>
     <div class="comment-info" data-id="{$oCommentId}">
         <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthor->getId()}">
-            <img src="{$oCommentAuthor->getProfileAvatarPath(24)}"  class="comment-avatar"/>
+            <img src="{$oCommentAuthor->getProfileAvatarPath(24)}" class="comment-avatar"/>
         </a>
         <a class="comment-author {if $iAuthorId == $oCommentAuthor->getId()}comment-topic-author {if $sAuthorNotice}" title="{$sAuthorNotice}{/if}{/if}" href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
         <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}" title="{date_format date=$oCommentDate hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
