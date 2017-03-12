@@ -20,7 +20,7 @@
 {assign var="oCommentDate" value=$oComment->getDate()}
 {assign var="oCommentDeleted" value=$oComment->getDelete()}
 
-<section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad {/if} {$oCommentSelf} {$oCommentNew}">
+<section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad{/if} {$oCommentSelf} {$oCommentNew}">
     <div id="comment_content_id_{$oCommentId}" class="comment-content">
         <div class="text current">
             {if !$oCommentDeleted and ($oCommentRating > $oConfig->GetValue('module.user.bad_rating'))}
@@ -86,6 +86,7 @@
                         {if $oCommentRating > 0} vote-count-positive
                         {elseif $oCommentRating < 0} vote-count-negative
                         {else} vote-count-mixed
+                        {/if}
                         {if $oCommentVote} voted
                             {if $oCommentVote->getDirection() > 0} voted-up
                             {else} voted-down
