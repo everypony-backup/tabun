@@ -19,7 +19,7 @@ return [
     'user' => [
         'oa_end' => 0,
         'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all admitted users to listen New Age
+        'na_enable_level' => 6,	// Allow all users to listen New Age
     ],
 ];
 // oa_end — точка завершения "старого" периода, unix timestamp
