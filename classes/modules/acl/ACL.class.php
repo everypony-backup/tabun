@@ -49,7 +49,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanCreateBlog(ModuleUser_EntityUser $oUser) {
+	public function CanCreateBlog(ModuleUser_EntityUser $oUser=null) {
 		if ($oUser->getRating()>=Config::Get('acl.create.blog.rating')) {
 			return true;
 		}
@@ -62,7 +62,7 @@ class ModuleACL extends Module {
 	 * @param ModuleBlog_EntityBlog $oBlog	Блог
 	 * @return bool
 	 */
-	public function CanAddTopic(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog) {
+	public function CanAddTopic(ModuleUser_EntityUser $oUser=null, ModuleBlog_EntityBlog $oBlog) {
 		/**
 		 * Если юзер является создателем блога то разрешаем ему постить
 		 */
@@ -83,7 +83,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostComment(ModuleUser_EntityUser $oUser) {
+	public function CanPostComment(ModuleUser_EntityUser $oUser=null) {
 		if ($oUser->getRating()>=Config::Get('acl.create.comment.rating')) {
 			return true;
 		}
@@ -95,7 +95,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostCommentTime(ModuleUser_EntityUser $oUser) {
+	public function CanPostCommentTime(ModuleUser_EntityUser $oUser=null) {
 		if (Config::Get('acl.create.comment.limit_time')>0 and $oUser->getDateCommentLast()) {
 			$sDateCommentLast=strtotime($oUser->getDateCommentLast());
 			if ($oUser->getRating()<Config::Get('acl.create.comment.limit_time_rating') and ((time()-$sDateCommentLast)<Config::Get('acl.create.comment.limit_time'))) {
@@ -110,7 +110,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostTopicTime(ModuleUser_EntityUser $oUser) {
+	public function CanPostTopicTime(ModuleUser_EntityUser $oUser=null) {
 		// Для администраторов ограничение по времени не действует
 		if($oUser->isAdministrator()
 			or Config::Get('acl.create.topic.limit_time')==0
@@ -132,7 +132,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanSendTalkTime(ModuleUser_EntityUser $oUser) {
+	public function CanSendTalkTime(ModuleUser_EntityUser $oUser=null) {
 		// Для администраторов ограничение по времени не действует
 		if($oUser->isAdministrator()
 			or Config::Get('acl.create.talk.limit_time')==0
@@ -154,7 +154,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostTalkCommentTime(ModuleUser_EntityUser $oUser) {
+	public function CanPostTalkCommentTime(ModuleUser_EntityUser $oUser=null) {
 		/**
 		 * Для администраторов ограничение по времени не действует
 		 */
@@ -189,7 +189,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanUseHtmlInComment(ModuleUser_EntityUser $oUser) {
+	public function CanUseHtmlInComment(ModuleUser_EntityUser $oUser=null) {
 		return true;
 	}
 	/**
@@ -202,7 +202,7 @@ class ModuleACL extends Module {
 	 * @param array $error
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
+	public function CanVoteComment(ModuleUser_EntityUser $oUser=null, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Пользователь не авторизован?
 		 */
@@ -329,7 +329,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
+	public function CanVoteBlog(ModuleUser_EntityUser $oUser=null, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Пользователь не авторизован?
 		 */
@@ -410,7 +410,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
+	public function CanVoteTopic(ModuleUser_EntityUser $oUser=null, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Пользователь не авторизован?
 		 */
@@ -524,7 +524,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
+	public function CanVoteUser(ModuleUser_EntityUser $oUser=null, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Пользователь авторизован?
 		 */
@@ -627,7 +627,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanSendInvite(ModuleUser_EntityUser $oUser) {
+	public function CanSendInvite(ModuleUser_EntityUser $oUser=null) {
 		if ($this->User_GetCountInviteAvailable($oUser)==0) {
 			return false;
 		}
@@ -778,7 +778,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function IsAllowPublishIndex(ModuleUser_EntityUser $oUser) {
+	public function IsAllowPublishIndex(ModuleUser_EntityUser $oUser=null) {
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
