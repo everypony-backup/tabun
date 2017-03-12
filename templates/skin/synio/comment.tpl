@@ -49,14 +49,19 @@
         {if $oUserCurrent}
             {if !$bNoCommentFavourites}
             <div class="comment-favourite">
-                <div class="favourite {if $oComment->getIsFavourite()}active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
-                    {if $oComment->getIsFavourite()}
-                        {$aLang.comment_favourite_add_already}
-                    {else}
-                        {$aLang.comment_favourite_add}
-                    {/if}
-                </div>
-                <span class="favourite-count" id="fav_count_comment_{$oCommentId}" {if $oComment->getCountFavourite() == 0}hidden{/if}>{if $oComment->getCountFavourite() > 0}{$oComment->getCountFavourite()}{/if}</span>
+                {if $oComment->getCountFavourite() > 0}
+                    <div class="favourite {if $oComment->getIsFavourite()}active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                        {if $oComment->getIsFavourite()}
+                            {$aLang.comment_favourite_add_already}
+                        {else}
+                            {$aLang.comment_favourite_add}
+                        {/if}
+                    </div>
+                    <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
+                {else}
+                    <div class="favourite" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
+                    <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
+                {/if}
             </div>
             {/if}
             {if !$oCommentDeleted}
