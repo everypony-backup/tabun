@@ -3,6 +3,8 @@
 
 {hook run='settings_profile_begin'}
 
+<div data-bazooka="AvatarHandler"></div>
+
 <form method="post" enctype="multipart/form-data" class="form-profile">
 	<div class="wrapper-content">
 		<p id="profile_user_field_template" style="display:none;" class="js-user-field-item">
@@ -173,4 +175,4 @@
 
 {hook run='settings_profile_end'}
 
-{include file='footer.tpl'}
+{include file='footer.tpl' scripts=["profile"]}

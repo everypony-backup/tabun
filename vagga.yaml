@@ -528,7 +528,7 @@ commands:
     run: [php, ls, reindex]
 
   webpack: !Command
-    container: static
+    container: frontend
     description: Webpack CLI
     run: [webpack]
 
