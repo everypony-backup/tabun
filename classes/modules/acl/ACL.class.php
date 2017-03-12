@@ -50,6 +50,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanCreateBlog(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($oUser->getRating()>=Config::Get('acl.create.blog.rating')) {
 			return true;
 		}
@@ -63,6 +66,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanAddTopic(ModuleUser_EntityUser $oUser=null, ModuleBlog_EntityBlog $oBlog) {
+		if (!$oUser) {
+			return false;
+		}
 		/**
 		 * Если юзер является создателем блога то разрешаем ему постить
 		 */
@@ -84,6 +90,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanPostComment(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($oUser->getRating()>=Config::Get('acl.create.comment.rating')) {
 			return true;
 		}
@@ -96,6 +105,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanPostCommentTime(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		if (Config::Get('acl.create.comment.limit_time')>0 and $oUser->getDateCommentLast()) {
 			$sDateCommentLast=strtotime($oUser->getDateCommentLast());
 			if ($oUser->getRating()<Config::Get('acl.create.comment.limit_time_rating') and ((time()-$sDateCommentLast)<Config::Get('acl.create.comment.limit_time'))) {
@@ -111,6 +123,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanPostTopicTime(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		// Для администраторов ограничение по времени не действует
 		if($oUser->isAdministrator()
 			or Config::Get('acl.create.topic.limit_time')==0
@@ -133,6 +148,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanSendTalkTime(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		// Для администраторов ограничение по времени не действует
 		if($oUser->isAdministrator()
 			or Config::Get('acl.create.talk.limit_time')==0
@@ -155,6 +173,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanPostTalkCommentTime(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		/**
 		 * Для администраторов ограничение по времени не действует
 		 */
@@ -190,6 +211,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanUseHtmlInComment(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		return true;
 	}
 	/**
@@ -628,6 +652,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function CanSendInvite(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($this->User_GetCountInviteAvailable($oUser)==0) {
 			return false;
 		}
@@ -640,6 +667,9 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 */
 	public function IsAllowBlog($oBlog,$oUser) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
@@ -664,6 +694,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function IsAllowEditTopic($oTopic,$oUser) {
+		if (!$oUser) {
+			return false;
+		}
 		/**
 		 * Разрешаем если это админ сайта или автор топика
 		 */
@@ -703,6 +736,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function IsAllowDeleteTopic($oTopic,$oUser) {
+		if (!$oUser) {
+			return false;
+		}
 		/**
 		 * Разрешаем если это админ сайта или автор топика
 		 */
@@ -741,6 +777,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function IsAllowDeleteBlog($oBlog,$oUser) {
+		if (!$oUser) {
+			return false;
+		}
 		/**
 		 * Разрешаем если это админ сайта или автор блога
 		 */
@@ -779,6 +818,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function IsAllowPublishIndex(ModuleUser_EntityUser $oUser=null) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
@@ -792,6 +834,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function IsAllowEditBlog($oBlog,$oUser) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
@@ -819,6 +864,9 @@ class ModuleACL extends Module {
 	 * @return bool
 	 */
 	public function IsAllowAdminBlog($oBlog,$oUser) {
+		if (!$oUser) {
+			return false;
+		}
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
