@@ -6,6 +6,12 @@
 	{if $bVoteInfoEnabled === null}
 		{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
 	{/if}
+    {if $oComment->getUserId() == $oUserCurrent->getId()}
+        {assign var="oCommentSelf" value="comment-self"}
+    {/if}
+    {if $sDateReadLast <= $oCommentDate}
+        {assign var="oCommentNew" value="comment-new"}
+    {/if}
 {/if}
 {assign var="oCommentAuthor" value=$oComment->getUser()}
 {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
@@ -14,7 +20,7 @@
 {assign var="oCommentDate" value=$oComment->getDate()}
 {assign var="oCommentDeleted" value=$oComment->getDelete()}
 
-<section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad {/if}{if $oUserCurrent}{if $oComment->getUserId() == $oUserCurrent->getId()}comment-self {elseif $sDateReadLast <= $oCommentDate}comment-new{/if}{/if}">
+<section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oCommentDeleted}comment-deleted {/if}{if $oComment->isBad()}comment-bad {/if} {$oCommentSelf} {$oCommentNew}">
     <div id="comment_content_id_{$oCommentId}" class="comment-content">
         <div class="text current">
             {if !$oCommentDeleted and ($oCommentRating > $oConfig->GetValue('module.user.bad_rating'))}
@@ -71,20 +77,20 @@
             {/if}
             {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                    {if $oCommentRating > 0} vote-count-positive
-                    {elseif $oCommentRating < 0} vote-count-negative
-                    {elseif $oCommentRating == 0 and $bVoteInfoEnabled and $oComment->getCountVote() > 0} vote-count-mixed
-                    {/if}
-                    {if $oCommentVote} voted
-                        {if $oCommentVote->getDirection() > 0} voted-up
-                        {else} voted-down
+                    {if $oComment->getCountVote() > 0}
+                        {if $oCommentRating > 0} vote-count-positive
+                        {elseif $oCommentRating < 0} vote-count-negative
+                        {else} vote-count-mixed
+                        {if $oCommentVote} voted
+                            {if $oCommentVote->getDirection() > 0} voted-up
+                            {else} voted-down
+                            {/if}
                         {/if}
                     {/if}
                     {if $bVoteInfoEnabled} vote-info-enabled{/if}
-                    {if $LS->ACL_CanVoteComment($oUserCurrent, $oComment, false, $oCommentVote)} vote-enabled{/if}
-                    ">
+                    {if $LS->ACL_CanVoteComment($oUserCurrent, $oComment, false, $oCommentVote)} vote-enabled{/if}">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}"{/if}>{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" {if $bVoteInfoEnabled}data-count="{$oComment->getCountVote()}"{/if}>{$oCommentRating}</span>
                     <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                 </div>
             {/if}
