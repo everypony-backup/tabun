@@ -449,7 +449,7 @@
   opacity 1
   &.hidden
     opacity 0
-  @media (min-width:568px)
+  @media not all and (max-width:567px)
     display inline-block
     position absolute
     border-color #c0c4c6
@@ -488,7 +488,7 @@
 
 .vote-list-wrapper
   overflow-y hidden
-  @media (min-width:568px)
+  @media not all and (max-width:567px)
     max-height 320px
   @media (max-width:567px)
     height 100vh
