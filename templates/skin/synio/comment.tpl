@@ -50,7 +50,7 @@
             {if !$bNoCommentFavourites}
             <div class="comment-favourite">
                 {if $oComment->getCountFavourite() > 0}
-                    <div class="favourite {if $oComment->getIsFavourite()}active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                    <div class="favourite{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
                         {if $oComment->getIsFavourite()}
                             {$aLang.comment_favourite_add_already}
                         {else}
