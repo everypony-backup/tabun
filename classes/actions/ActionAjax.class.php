@@ -203,7 +203,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post'));
+		/**
+		 * Комментарий существует?
+		 */
+		if (!($oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_noexists'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -254,7 +260,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oTopic=$this->Topic_GetTopicById(getRequestStr('idTopic',null,'post'));
+		/**
+		 * Топик существует?
+		 */
+		if (!($oTopic=$this->Topic_GetTopicById(getRequestStr('idTopic',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -325,7 +337,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oBlog=$this->Blog_GetBlogById(getRequestStr('idBlog',null,'post'));
+		/**
+		 * Блог существует?
+		 */
+		if (!($oBlog=$this->Blog_GetBlogById(getRequestStr('idBlog',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -374,7 +392,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oUser=$this->User_GetUserById(getRequestStr('idUser',null,'post'));
+		/**
+		 * Пользователь существует?
+		 */
+		if (!($oUser=$this->User_GetUserById(getRequestStr('idUser',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**

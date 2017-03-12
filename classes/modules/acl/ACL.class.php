@@ -205,16 +205,6 @@ class ModuleACL extends Module {
 			return false;
 		}
 		/**
-		 * Комментарий не существует?
-		 */
-		if (!$oComment) {
-			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_noexists';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
 		 * Голосует автор комментария?
 		 */
 		if ($oComment->getUserId()==$oUser->getId()) {
@@ -332,16 +322,6 @@ class ModuleACL extends Module {
 			return false;
 		}
 		/**
-		 * Блог не существует?
-		 */
-		if (!$oBlog) {
-			if($error != null) {
-				$error->sMsgId = 'system_error';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
 		 * Голосует за свой блог?
 		 */
 		if ($oBlog->getOwnerId()==$oUser->getId()) {
@@ -408,16 +388,6 @@ class ModuleACL extends Module {
 		if (!$oUser) {
 			if($error != null) {
 				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
-		 * Топик не существует?
-		 */
-		if (!$oTopic) {
-			if($error != null) {
-				$error->sMsgId = 'system_error';
 				$error->sTitleId = 'error';
 			}
 			return false;
@@ -522,16 +492,6 @@ class ModuleACL extends Module {
 		if (!$oUser) {
 			if($error != null) {
 				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
-		 * Пользователь не существует?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'system_error';
 				$error->sTitleId = 'error';
 			}
 			return false;
