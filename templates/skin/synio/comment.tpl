@@ -97,6 +97,25 @@
                         <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                     {/if}
                 </div>
+                <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
+                    {if $oCommentVoteCount > 0}
+                        {if $oCommentRating > 0} vote-count-positive
+                        {elseif $oCommentRating < 0} vote-count-negative
+                        {else} vote-count-mixed
+                        {/if}
+                    {/if}
+                    {if $oCommentVote} voted
+                        {if $oCommentVote->getDirection() > 0} voted-up
+                        {else} voted-down
+                        {/if}
+                    {elseif !isset($oCommentSelf)}
+                        {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.vote.comment.limit_time'))} vote-enabled{/if}
+                    {/if}
+                    {if $bVoteInfoEnabled} vote-info-enabled{/if}">
+                    <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
+                    <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
+                </div>
                 {/if}
                 {if !$bAllowNewComment}
                     <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
@@ -109,27 +128,6 @@
                     <a class="link-dotted comment-save-edit-bw">{$aLang.comment_save_edit}</a>
                     <a class="link-dotted comment-preview-edit-bw">{$aLang.comment_preview_edit}</a>
                     <a class="link-dotted comment-cancel-edit-bw">{$aLang.comment_cancel_edit}</a>
-                {/if}
-                {if $oComment->getTargetType() != 'talk'}
-                    <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                        {if $oCommentVoteCount > 0}
-                            {if $oCommentRating > 0} vote-count-positive
-                            {elseif $oCommentRating < 0} vote-count-negative
-                            {else} vote-count-mixed
-                            {/if}
-                        {/if}
-                        {if $oCommentVote} voted
-                            {if $oCommentVote->getDirection() > 0} voted-up
-                            {else} voted-down
-                            {/if}
-                        {elseif !isset($oCommentSelf)}
-                            {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.vote.comment.limit_time'))} vote-enabled{/if}
-                        {/if}
-                        {if $bVoteInfoEnabled} vote-info-enabled{/if}">
-                        <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                        <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
-                        <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                    </div>
                 {/if}
                 {hook run='comment_action' comment=$oComment}
                 {include file='comment_modify_notice.tpl'}
