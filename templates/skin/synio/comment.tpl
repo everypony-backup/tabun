@@ -117,9 +117,7 @@
                     <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                 </div>
                 {/if}
-                {if !$bAllowNewComment}
-                    <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
-                {/if}
+                <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
                 {if $oUserCurrent->isAdministrator()}
                     <a class="comment-delete link-dotted">{$aLang.comment_delete}</a>
                 {/if}

@@ -6,7 +6,7 @@
 
 {hook run='comment_tree_begin' iTargetId=$iTargetId sTargetType=$sTargetType}
 
-<div class="comments" id="comments">
+<div class="comments{if !$bAllowNewComment} comments-allowed{/if}" id="comments">
 	<header class="comments-header">
 		<h3><span id="count-comments">{$iCountComment}</span> <span id="name-count-comments">{t plural="comments" count=$iCountComment}comment{/t}</span></h3>
 		
@@ -32,8 +32,8 @@
 	{foreach from=$aComments item=oComment name=rublist}
 		{assign var="cmtlevel" value=$oComment->getLevel()}
 
-		{if $nesting < $cmtlevel} 
-		{elseif $nesting > $cmtlevel}    	
+		{if $nesting < $cmtlevel}
+		{elseif $nesting > $cmtlevel}
 			{section name=closelist1  loop=$nesting-$cmtlevel+1}</div>{/section}
 		{elseif not $smarty.foreach.rublist.first}
 			</div>
@@ -44,10 +44,10 @@
 		{include file='comment.tpl'}
 		{assign var="nesting" value=$cmtlevel}
 		{if $smarty.foreach.rublist.last}
-			{section name=closelist2 loop=$nesting+1}</div>{/section}    
+			{section name=closelist2 loop=$nesting+1}</div>{/section}
 		{/if}
 	{/foreach}
-</div>				
+</div>
 
 {hook run='comment_tree_end' iTargetId=$iTargetId sTargetType=$sTargetType}
 
@@ -62,18 +62,16 @@
 			<a class="link-dotted">{$sNoticeCommentAdd}</a>
 		</h4>
 		
-		
 		<div id="reply" class="reply h-hidden">
 			<form method="post" id="form_comment" onsubmit="return false;" enctype="multipart/form-data">
 				{hook run='form_add_comment_begin'}
-				
+
 				<textarea name="comment_text" id="form_comment_text" class="markitup-editor input-width-full"></textarea>
-				
+
 				{hook run='form_add_comment_end'}
 				
 				<button type="submit" name="submit_comment" id="comment-button-submit" data-target_type="{$sTargetType}" data-target_id="{$iTargetId}" class="button button-primary">{$aLang.comment_add}</button>
 				<button type="button" id="comment-button-preview" class="button">{$aLang.comment_preview}</button>
-				
 				<input type="hidden" name="reply" value="0" id="form_comment_reply" />
 				<input type="hidden" name="cmt_target_id" value="{$iTargetId}" />
 			</form>
