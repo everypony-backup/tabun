@@ -859,7 +859,7 @@ class ModuleACL extends Module {
      *
      * @param  ModuleComment_EntityComment $oComment Комментарий
      * @param  ModuleUser_EntityUser $oUser Пользователь
-     * @param  int|bool $bAllowUserToEditBlogComments
+     * @param  bool|null $bAllowUserToEditBlogComments
      * @return int
      */
     public function GetCommentEditAllowMask($oComment, $oUser, $bAllowUserToEditBlogComments=null)
