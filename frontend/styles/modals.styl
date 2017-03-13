@@ -152,3 +152,20 @@
   position absolute
   z-index 2999
 
+// Only for Modal component
+.overlay
+  top 0
+  left 0
+  height 100%
+  width 100%
+  position fixed
+  z-index 2999
+  opacity 0.5
+  background-color: #000
+
+.react-modal
+  &.opened
+    z-index 3000
+    display block
+  &.closed
+    display none
