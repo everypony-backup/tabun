@@ -512,11 +512,6 @@ commands:
       po2json -f jed1.x messages.po messages.json
       rm messages.po
 
-  watch-static: !Command
-    container: frontend
-    description: Watch and auto-rebuild changed static files
-    run: [webpack, --progress, --watch]
-
   reindex: !Command
     container: php-dev
     description: Rebuild ES index

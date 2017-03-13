@@ -42,7 +42,7 @@ cfg =
     vendor: vendors
 
   output:
-    path: path.join __dirname, 'static', '[hash]'
+    path: path.join __dirname, 'static', (if isProduction then '[hash]' else 'ephemeral')
     publicPath: "./"
     filename: '[name].bundle.js'
 
