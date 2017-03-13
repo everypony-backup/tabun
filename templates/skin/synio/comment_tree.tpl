@@ -6,7 +6,7 @@
 
 {hook run='comment_tree_begin' iTargetId=$iTargetId sTargetType=$sTargetType}
 
-<div class="comments{if !$bAllowNewComment} comments-allowed{/if}" id="comments">
+<div class="comments{if !$bAllowNewComment} comments-allowed{/if}{if $oUserCurrent->isAdministrator()} is-admin{/if}" id="comments">
 	<header class="comments-header">
 		<h3><span id="count-comments">{$iCountComment}</span> <span id="name-count-comments">{t plural="comments" count=$iCountComment}comment{/t}</span></h3>
 		
