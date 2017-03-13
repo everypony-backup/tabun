@@ -2,27 +2,27 @@
 
 return [
     'comment' => [
-        'oa_end' => 1489132800,	// 2017-03-10
+        'as_date' => 1489132800,	// 2017-03-10
         'oa_enable_level' => 0,
         'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'topic' => [
-        'oa_end' => 1489132800,	// 2017-03-10
+        'as_date' => 1489132800,	// 2017-03-10
         'oa_enable_level' => 0,
         'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'blog' => [
-        'oa_end' => 0,
+        'as_date' => 0,
         'oa_enable_level' => 6,
         'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'user' => [
-        'oa_end' => 0,
+        'as_date' => 0,
         'oa_enable_level' => 6,
         'na_enable_level' => 6,	// Allow all users to listen New Age
     ],
 ];
-// oa_end — точка завершения "старого" периода, unix timestamp
+// as_date — точка завершения "старого" периода, unix timestamp
 // oa_enable_level — кому разрешено видеть юзеров оценок за "старый" период
 // na_enable_level — кому разрешено видеть юзеров оценок за "новый" период и запрашивать список оценок в целом
 //	0 — никто
