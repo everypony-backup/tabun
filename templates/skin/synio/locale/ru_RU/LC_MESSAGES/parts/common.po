@@ -155,16 +155,16 @@ msgid "comment_lock_edit"
 msgstr "заблокировать дальнейшее изменение"
 
 msgid "no_votes_comment"
-msgstr "Никто не оценивал комментарий"
+msgstr "Никто не оценивал этот комментарий"
 
 msgid "no_votes_topic"
-msgstr "Никто не оценивал пост"
+msgstr "Никто не оценивал этот пост"
 
 msgid "no_votes_blog"
-msgstr "Никто не оценивал блог"
+msgstr "Никто не оценивал этот блог"
 
 msgid "no_votes_user"
-msgstr "Никто не оценивал пользователя"
+msgstr "Никто не оценивал этого пользователя"
 
 # Editor
 msgid "create"
