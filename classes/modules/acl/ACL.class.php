@@ -193,17 +193,7 @@ class ModuleACL extends Module {
 	 * @param array $error
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser=null, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь не авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует автор комментария?
 		 */
@@ -310,17 +300,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteBlog(ModuleUser_EntityUser $oUser=null, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь не авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует за свой блог?
 		 */
@@ -381,17 +361,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteTopic(ModuleUser_EntityUser $oUser=null, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь не авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует автор топика?
 		 */
@@ -485,17 +455,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteUser(ModuleUser_EntityUser $oUser=null, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует за себя?
 		 */
