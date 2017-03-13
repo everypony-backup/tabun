@@ -886,8 +886,11 @@ class ModuleACL extends Module {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
         }
 
-        if ($targetIsTopic && ($bAllowUserToEditBlogComments !== null || $bAllowUserToEditBlogComments=$this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser))) {
-            if($bAllowUserToEditBlogComments) return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+        if ($targetIsTopic) {
+			if ($bAllowUserToEditBlogComments === null) {
+				$bAllowUserToEditBlogComments = $this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser));
+			}
+            if ($bAllowUserToEditBlogComments) return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
             return 0;
         } else {
             $bEditCondition = (
