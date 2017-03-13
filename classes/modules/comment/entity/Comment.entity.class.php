@@ -499,16 +499,6 @@ class ModuleComment_EntityComment extends Entity {
 	}
 	
 	/**
-	 * Возвращает права на изменение комментария без подробностей
-	 *
-	 * @param ModuleUser_EntityUser $oUser
-	 * @return int
-	 */
-	public function getEditAccessMask($oUser) {
-		return $this->ACL_GetCommentEditAllowMask($this, $oUser);
-	}
-	
-	/**
 	 * Проверяет права на изменение комментария. Обёртка для comment.tpl
 	 *
 	 * @param int $accessMask
