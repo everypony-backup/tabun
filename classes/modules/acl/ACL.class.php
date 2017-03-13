@@ -888,7 +888,7 @@ class ModuleACL extends Module {
 
         if ($targetIsTopic) {
 			if ($bAllowUserToEditBlogComments === null) {
-				$bAllowUserToEditBlogComments = $this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser));
+				$bAllowUserToEditBlogComments = $this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser);
 			}
             if ($bAllowUserToEditBlogComments) return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
             return 0;
