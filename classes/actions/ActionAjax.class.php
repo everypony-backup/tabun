@@ -1228,24 +1228,28 @@ class ActionAjax extends Action {
 				$newAgeEnableLevel = Config::Get('vote_state.comment.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.comment.oa_enable_level');
 				$ageSwitchDate = Config::Get('vote_state.comment.as_date');
+				$dateSort = Config::Get('vote_state.comment.date_sort');
 				break;
 			case 'topic':
 				$oTarget = $this->Topic_GetTopicById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.topic.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.topic.oa_enable_level');
 				$ageSwitchDate = Config::Get('vote_state.topic.as_date');
+				$dateSort = Config::Get('vote_state.topic.date_sort');
 				break;
 			case 'blog':
 				$oTarget = $this->Blog_GetBlogById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.blog.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.blog.oa_enable_level');
 				$ageSwitchDate = Config::Get('vote_state.blog.as_date');
+				$dateSort = Config::Get('vote_state.blog.date_sort');
 				break;
 			case 'user':
 				$oTarget = $this->User_GetUserById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.user.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.user.oa_enable_level');
 				$ageSwitchDate = Config::Get('vote_state.user.as_date');
+				$dateSort = Config::Get('vote_state.user.date_sort');
 				break;
 			default:
 				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
@@ -1284,7 +1288,7 @@ class ActionAjax extends Action {
 				'date' => (string) $oVote->getDate().'+03:00',
 			);
 		}
-		usort($aResult, '_gov_s_date_asc');
+		usort($aResult, $dateSort==SORT_ASC?'_gov_s_date_asc':'_gov_s_date_desc');
 		$this->Viewer_AssignAjax('aVotes',$aResult);
 	}
 }

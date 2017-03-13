@@ -5,21 +5,25 @@ return [
         'as_date' => 1489132800,    // strtotime('2017-03-10')
         'oa_enable_level' => 1,
         'na_enable_level' => 6,     // Allow all allowed users to listen New Age
+        'date_sort' => SORT_ASC,
     ],
     'topic' => [
         'as_date' => 1489132800,    // strtotime('2017-03-10')
         'oa_enable_level' => 1,
         'na_enable_level' => 6,     // Allow all allowed users to listen New Age
+        'date_sort' => SORT_ASC,
     ],
     'blog' => [
         'as_date' => 0,
         'oa_enable_level' => 6,
         'na_enable_level' => 6,     // Allow all allowed users to listen New Age
+        'date_sort' => SORT_DESC,
     ],
     'user' => [
         'as_date' => 1357027200,    // strtotime('2013-01-01')
         'oa_enable_level' => 1,
         'na_enable_level' => 6,     // Allow all users to listen New Age
+        'date_sort' => SORT_DESC,
     ],
 ];
 // as_date — точка завершения "старого" периода, unix timestamp
