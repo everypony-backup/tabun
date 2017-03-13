@@ -58,7 +58,7 @@
 						not-voted
 					{/if}
 					
-					{if $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled
+					{if $oUserCurrent and $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled
 						{if $bVoteInfoEnabled} vote-info-enabled-base{/if}
 					{else}
 						{if $bVoteInfoEnabled} vote-info-enabled{/if}
