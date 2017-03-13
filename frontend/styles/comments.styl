@@ -136,6 +136,9 @@
     width 17px
     &:hover
       background-position -14px -14px
+  .reply-link.link-dotted,
+  .comment-delete.link-dotted
+    display none
   .goto.goto-comment-parent
     color transparent
     text-decoration none
@@ -168,14 +171,15 @@
   .goto.goto-comment-parent
     display inline-block
 
-.comments
+.comments-allowed
   .comment-info
-    .reply-link
-      display none
-  &.comments-allowed
-    .comment-info
-      .reply-link
-        display inline-block
+    .reply-link.link-dotted
+      display inline-block
+
+.is-admin
+  .comment-info
+    .comment-delete.link-dotted
+      display inline-block
 
 .comment-content
   background-color #f7f7f7

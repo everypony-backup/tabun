@@ -118,9 +118,7 @@
                 </div>
                 {/if}
                 <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
-                {if $oUserCurrent->isAdministrator()}
-                    <a class="comment-delete link-dotted">{$aLang.comment_delete}</a>
-                {/if}
+                <a class="comment-delete link-dotted">{$aLang.comment_delete}</a>
                 {if $oComment->testAllowEdit($editAccessMask)}
                     <a class="link-dotted comment-edit-bw" data-lock="{if $oComment->testAllowLock($editAccessMask)}true{else}false{/if}">{$aLang.comment_edit}</a>
                     <a class="link-dotted comment-save-edit-bw">{$aLang.comment_save_edit}</a>
