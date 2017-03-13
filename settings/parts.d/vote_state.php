@@ -2,24 +2,24 @@
 
 return [
     'comment' => [
-        'as_date' => 1489132800,	// 2017-03-10
+        'as_date' => 1489132800,    // strtotime('2017-03-10')
         'oa_enable_level' => 1,
-        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
+        'na_enable_level' => 6,     // Allow all allowed users to listen New Age
     ],
     'topic' => [
-        'as_date' => 1489132800,	// 2017-03-10
+        'as_date' => 1489132800,    // strtotime('2017-03-10')
         'oa_enable_level' => 1,
-        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
+        'na_enable_level' => 6,     // Allow all allowed users to listen New Age
     ],
     'blog' => [
         'as_date' => 0,
         'oa_enable_level' => 6,
-        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
+        'na_enable_level' => 6,     // Allow all allowed users to listen New Age
     ],
     'user' => [
-        'as_date' => 1357027200,	// 2013-01-01
+        'as_date' => 1357027200,    // strtotime('2013-01-01')
         'oa_enable_level' => 1,
-        'na_enable_level' => 6,	// Allow all users to listen New Age
+        'na_enable_level' => 6,     // Allow all users to listen New Age
     ],
 ];
 // as_date — точка завершения "старого" периода, unix timestamp
