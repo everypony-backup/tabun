@@ -1227,25 +1227,25 @@ class ActionAjax extends Action {
 				$oTarget = $this->Comment_GetCommentById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.comment.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.comment.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.comment.as_date');
+				$ageSwitchDate = Config::Get('vote_state.comment.as_date');
 				break;
 			case 'topic':
 				$oTarget = $this->Topic_GetTopicById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.topic.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.topic.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.topic.as_date');
+				$ageSwitchDate = Config::Get('vote_state.topic.as_date');
 				break;
 			case 'blog':
 				$oTarget = $this->Blog_GetBlogById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.blog.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.blog.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.blog.as_date');
+				$ageSwitchDate = Config::Get('vote_state.blog.as_date');
 				break;
 			case 'user':
 				$oTarget = $this->User_GetUserById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.user.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.user.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.user.as_date');
+				$ageSwitchDate = Config::Get('vote_state.user.as_date');
 				break;
 			default:
 				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
@@ -1276,7 +1276,7 @@ class ActionAjax extends Action {
 		$aResult = array();
 		foreach($aVotes as $oVote) {
 			$oUser = $this->User_GetUserById($oVote->getVoterId());
-			$bShowUser = $oUser && (strtotime($oVote->getDate()) > $oldAgeEnd || $this->ACL_CheckSimpleAccessLevel($oldAgeEnableLevel, $this->oUserCurrent, $oTarget, $targetType));
+			$bShowUser = $oUser && (strtotime($oVote->getDate()) > $ageSwitchDate || $this->ACL_CheckSimpleAccessLevel($oldAgeEnableLevel, $this->oUserCurrent, $oTarget, $targetType));
 			$aResult[] = array(
 				'voterName' => $bShowUser ? $oUser->getLogin() : null,
 				'voterAvatar' => $bShowUser ? $oUser->getProfileAvatarPath() : null,
