@@ -824,14 +824,45 @@ class ModuleACL extends Module {
     const EDIT_DENY_REASON_OFFSET = 4;
     const EDIT_DENY_REASON_MASK = 0xF;
 
+    public function IsAllowEditComments($oBlog, $oUser) {
+		return $this::IsAllowAdminComments($oBlog, $oUser);
+	}
+    /**
+     * Проверяет, может ли пользователь администрировать комментарии как администратор блога
+     *
+     * @param  ModuleBlog_EntityBlog $oBlog Блог
+     * @param  ModuleUser_EntityUser $oUser Пользователь
+     * @return bool
+     */
+    public function IsAllowAdminComments($oBlog, $oUser) {
+		if (!$oUser) return false;
+		if ($oUser->isAdministrator()) return true;
+		if(!in_array($oBlog->getType(), ['open', 'close'])) return false;
+		/**
+		 * Разрешаем если это создатель блога
+		 */
+		if ($oBlog->getOwnerId() == $oUser->getId()) {
+			return true;
+		}
+		/**
+		 * Явлется ли авторизованный пользователь администратором блога
+		 */
+		$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId());
+		if ($oBlogUser && $oBlogUser->getIsAdministrator()) {
+			return true;
+		}
+		return false;
+    }
+
     /**
      * Проверяет, может ли пользователь изменить комментарий и заблокировать его дальнейшее изменение
      *
      * @param  ModuleComment_EntityComment $oComment Комментарий
      * @param  ModuleUser_EntityUser $oUser Пользователь
+     * @param  int|bool $bAllowUserToEditBlogComments
      * @return int
      */
-    public function GetCommentEditAllowMask($oComment, $oUser)
+    public function GetCommentEditAllowMask($oComment, $oUser, $bAllowUserToEditBlogComments=null)
     {
         if (!$oUser) {
             return 0;
@@ -850,14 +881,14 @@ class ModuleACL extends Module {
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
         if ($targetIsTopic) {
-            $oBlog = $oComment->getTarget()->getBlog();
             $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
         } else {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
         }
 
-        if ($targetIsTopic && in_array($oBlog->getType(), ['open', 'close']) && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
-            return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+        if ($targetIsTopic && ($bAllowUserToEditBlogComments !== null || $bAllowUserToEditBlogComments=$this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser))) {
+            if($bAllowUserToEditBlogComments) return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+            return 0;
         } else {
             $bEditCondition = (
                 $userIsNotAuthor ||
@@ -884,7 +915,6 @@ class ModuleACL extends Module {
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
         if ($targetIsTopic) {
-            $oBlog = $oComment->getTarget()->getBlog();
             $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
         } else {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
@@ -910,7 +940,7 @@ class ModuleACL extends Module {
             // TODO: Implement more precise ACL here
             if ($oUser->isAdministrator()) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_ADMIN;
-            } else if ($targetIsTopic && in_array($oBlog->getType(), ['open', 'close']) && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
+            } else if ($targetIsTopic && $this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser)) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_BLOG_ADMIN;
             } else {
                 return $deny_flags;

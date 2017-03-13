@@ -26,6 +26,9 @@
 		{* Кэширование допустимо только если все комменты дерева относятся к одной области видимости. *}
 		{assign var="bVoteInfoEnabledForTopic" value=$LS->ACL_CheckSimpleAccessLevel($iVoteInfoNeEnableLevel, $oUserCurrent, $oComment, 'comment')}
 	{/if}
+	{if $sTargetType == 'topic' and $oBlog}
+		{assign var="bAllowUserToEditBlogComments" value=$LS->ACL_IsAllowEditComments($oBlog, $oUserCurrent)}
+	{/if}
 	{foreach from=$aComments item=oComment name=rublist}
 		{assign var="cmtlevel" value=$oComment->getLevel()}
 
