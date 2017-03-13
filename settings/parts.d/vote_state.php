@@ -17,8 +17,8 @@ return [
         'na_enable_level' => 6,	// Allow all allowed users to listen New Age
     ],
     'user' => [
-        'as_date' => 0,
-        'oa_enable_level' => 6,
+        'as_date' => 1357027200,	// 2013-01-01
+        'oa_enable_level' => 0,
         'na_enable_level' => 6,	// Allow all users to listen New Age
     ],
 ];
