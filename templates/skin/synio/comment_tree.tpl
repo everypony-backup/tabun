@@ -24,7 +24,7 @@
 	{assign var="iVoteInfoNeEnableLevel" value=$oConfig->getValue('vote_state.comment.na_enable_level')}
 	{foreach from=$aComments item=oComment name=rublist}
 		{assign var="cmtlevel" value=$oComment->getLevel()}
-		{if $bVoteInfoEnabled === null && $iVoteInfoNeEnableLevel >= 6}
+		{if $bVoteInfoEnabled === null && $iVoteInfoNeEnableLevel != 5}
 			{* Кэширование допустимо только если все комменты дерева относятся к одной области видимости. *}
 			{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($iVoteInfoNeEnableLevel, $oUserCurrent, $oComment, 'comment')}
 		{/if}
