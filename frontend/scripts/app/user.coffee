@@ -2,12 +2,11 @@ $ = require "jquery"
 {forEach, debounce, uniqueId, isString} = require "lodash"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
-{gettext, ngettext} = require "core/lang.coffee"
+{gettext} = require "core/lang.coffee"
 {notice, error} = require "core/messages.coffee"
 {subscribe, unsubscribe} = require "app/stream.coffee"
 routes = require "lib/routes.coffee"
 
-jcropAvatar = null
 jcropFoto = null
 
 addFriend = (obj, idUser, sAction) ->
@@ -50,62 +49,6 @@ removeFriend = (obj, idUser, sAction) ->
     $('#profile_actions').prepend $(result.sToggleText)
   false
 
-uploadAvatar = (form, input) ->
-  if not form and input
-    form = $('<form method="post" enctype="multipart/form-data"></form>').css('display': 'none').appendTo('body')
-    clone = input.clone(true)
-    input.hide()
-    clone.insertAfter input
-    input.appendTo form
-
-  ajaxSubmit routes.image.uploadAvatar, form, (data) ->
-    if data.bStateError
-      error data.sMsgTitle, data.sMsg
-    else
-      showResizeAvatar data.sTmpFile
-
-showResizeAvatar = (sImgFile) ->
-  if jcropAvatar
-    jcropAvatar.destroy()
-
-  $('#avatar-resize-original-img').attr 'src', "#{sImgFile}?#{uniqueId()}"
-  $('#avatar-resize').jqmShow()
-  $('#avatar-resize-original-img').Jcrop {aspectRatio: 1, minSize: [32, 32]}, ->
-    jcropAvatar = @
-    @setSelect [0, 0, 500, 500]
-
-resizeAvatar = ->
-  unless jcropAvatar
-    return false
-
-  params = size: jcropAvatar.tellSelect()
-
-  ajax routes.image.resizeAvatar, params, (result) ->
-    if result.bStateError
-      return error null, result.sMsg
-    $('#avatar-img').attr 'src', "#{result.sFile}?#{uniqueId()}"
-    $('#avatar-resize').jqmHide()
-    $('#avatar-remove').show()
-    $('#avatar-upload').text result.sTitleUpload
-  false
-
-removeAvatar = ->
-  ajax routes.image.removeAvatar, {}, (result) ->
-    if result.bStateError
-      return error null, result.sMsg
-
-    $('#avatar-img').attr 'src', "#{result.sFile}?#{uniqueId()}"
-    $('#avatar-remove').hide()
-    $('#avatar-upload').text result.sTitleUpload
-
-  false
-
-cancelAvatar = ->
-  ajax routes.image.cancelAvatar, {}, (result) ->
-    if result.bStateError
-      return error null, result.sMsg
-    $('#avatar-resize').jqmHide()
-  false
 
 uploadFoto = (form, input) ->
   if not form and input
@@ -242,8 +185,4 @@ module.exports = {
   removeFoto
   resizeFoto
   cancelFoto
-  uploadAvatar
-  removeAvatar
-  resizeAvatar
-  cancelAvatar
 }
