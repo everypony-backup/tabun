@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Baz from 'bazooka';
 
 import ImageUploader from 'components/ImageUploader';
+import {gettext} from 'core/lang';
 
 function initAvatarHandler(node) {
     ReactDOM.render(
@@ -14,7 +15,7 @@ function initAvatarHandler(node) {
             previewClass="avatar"
             linkClass="link-dotted"
             border={50}
-            title="upload_avatar" // TODO: Add translations
+            title={gettext('upload_avatar')}
         />,
         node
     );

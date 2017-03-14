@@ -5,6 +5,7 @@ import AvatarEditor from 'react-avatar-editor'
 
 import Modal from 'components/Modal';
 import FileInput from 'components/FileInput';
+import {gettext} from 'core/lang';
 
 
 @autobind
@@ -87,7 +88,7 @@ export default class ImageUploader extends React.Component {
                     onSave={this.handleSave}
                 />
                 <br />
-                Zoom:
+                {gettext('image_uploader_zoom')}
                 <input
                     name="scale"
                     type="range"
@@ -98,7 +99,7 @@ export default class ImageUploader extends React.Component {
                     onChange={this.handleScale}
                 />
                 <br />
-                <input type="button" onClick={this.handleSave} value="Save"/>
+                <input type="button" onClick={this.handleSave} value={gettext('image_uploader_save')}/>
             </Modal>
         </div>
     }
