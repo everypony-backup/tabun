@@ -7,24 +7,21 @@ import Modal from 'components/Modal';
 import ImageUpload from './subcomponents';
 
 
+@autobind
 export default class AvatarHandler extends React.Component {
-    static editor = null;
+    editor = null;
+    state = {
+        sourceImg: null,
+        croppedImg: null,
+        editorOpened: false,
+        scale: 1.0,
+        borderRadius: 0,
+    };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            sourceImg: null,
-            croppedImg: null,
-            editorOpened: false,
-        };
-    }
-
-    @autobind
     setEditorRef(editor) {
         if (editor) this.editor = editor;
     }
 
-    @autobind
     handleFileChange(dataURI) {
         this.setState({
             sourceImg: dataURI,
@@ -32,20 +29,23 @@ export default class AvatarHandler extends React.Component {
         });
     }
 
-    @autobind
     handleRequestHide() {
         this.setState({editorOpened: false});
     }
 
-    @autobind
+    handleScale({target:{value}}) {
+        this.setState({scale: parseFloat(value)});
+    }
+
     handleSave() {
-        const img = this.editor.getImageScaledToCanvas().toDataURL();
-        this.setState({croppedImg: img});
+        const croppedImg = this.editor.getImageScaledToCanvas().toDataURL();
+        // TODO: actually save image
+        window.console.debug(croppedImg);
     }
 
     render() {
         return <div>
-            <ImageUpload handleChange={this.handleFileChange} />
+            <ImageUpload handleChange={this.handleFileChange}/>
             <Modal
                 header="upload_avatar" // TODO: Add translation
                 onRequestClose={this.handleRequestHide}
@@ -58,13 +58,23 @@ export default class AvatarHandler extends React.Component {
                     height={320}
                     border={50}
                     color={[255, 255, 255, 0.55]}
-                    scale={1.2}
                     rotate={0}
-
+                    scale={this.state.scale}
                     onSave={this.handleSave}
                 />
-                <input type="button" onClick={this.handleSave} value="Preview" />
-                <img src={this.state.croppedImg} />
+                <br />
+                Zoom:
+                <input
+                    name="scale"
+                    type="range"
+                    min="1"
+                    max="2"
+                    step="0.01"
+                    defaultValue="1"
+                    onChange={this.handleScale}
+                />
+                <br />
+                <input type="button" onClick={this.handleSave} value="Save"/>
             </Modal>
         </div>
     }
