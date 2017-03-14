@@ -2,7 +2,6 @@ $ = require "jquery"
 require "jquery.ui"
 require "jquery.jqmodal"
 require "jquery.scrollto"
-require "jquery.file"
 
 {forEach, random} = require "lodash"
 

@@ -14,15 +14,12 @@
 
 <section class="block block-type-profile">
 	<div class="profile-photo-wrapper">
-		<img src="{$oUserProfile->getProfileFotoPath()}" class="profile-photo" id="foto-img" />
-	</div>
 	{if $sAction=='settings' and $oUserCurrent and $oUserCurrent->getId() == $oUserProfile->getId()}
-
-		<p class="upload-photo">
-			<a href="#" id="foto-upload" class="link-dotted">{if $oUserCurrent->getProfileFoto()}{$aLang.settings_profile_photo_change}{else}{$aLang.settings_profile_photo_upload}{/if}</a>&nbsp;&nbsp;&nbsp;
-			<a href="#" id="foto-remove" class="link-dotted" style="{if !$oUserCurrent->getProfileFoto()}display:none;{/if}">{$aLang.settings_profile_foto_delete}</a>
-		</p>
+		<div data-bazooka="FotoUploader" data-foto-url="{$oUserCurrent->getProfileFotoPath()}"></div>
+	{else}
+		<img src="{$oUserProfile->getProfileFotoPath()}" class="profile-photo" id="foto-img" />
 	{/if}
+	</div>
 </section>
 
 {hook run='profile_sidebar_menu_before' oUserProfile=$oUserProfile}

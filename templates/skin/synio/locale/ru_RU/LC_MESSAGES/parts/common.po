@@ -213,6 +213,9 @@ msgstr "Закрыть"
 msgid "upload_avatar"
 msgstr "Загрузить аватар"
 
+msgid "upload_foto"
+msgstr "Загрузить фото"
+
 msgid "image_uploader_zoom"
 msgstr "Масштаб"
 
