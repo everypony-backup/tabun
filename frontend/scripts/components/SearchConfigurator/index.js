@@ -3,6 +3,7 @@ import {transform} from 'lodash';
 import autobind from 'autobind-decorator'
 
 import routes from 'lib/routes';
+import io from 'lib/io';
 import {gettext as _} from 'core/lang';
 
 import SearhParams from './logic.js';
@@ -59,11 +60,7 @@ export default class SearchConfigurator extends React.Component {
             v: this.props.version,
             c: this.state.params.toString()
         };
-        const query = Object
-            .keys(params)
-            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
-            .join('&');
-        document.location.replace(`${routes.search}?${query}`);
+        document.location.replace(`${routes.search}?${io.encodeParams(params)}`);
     }
 
     render() {

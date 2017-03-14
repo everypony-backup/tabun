@@ -2,16 +2,18 @@ import xhr from 'xhr';
 import {merge} from 'lodash';
 import {error, notice} from 'core/messages';
 
-
 import {gettext} from 'core/lang';
 
 
-function post(route, data) {
-    const payload = merge(data, {security_ls_key: window.LIVESTREET_SECURITY_KEY});
-    const body = Object
+function encodeParams(payload) {
+    return Object
         .keys(payload)
         .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(payload[k])}`)
         .join('&');
+}
+
+function post(route, data) {
+    const body = encodeParams(merge(data, {security_ls_key: window.LIVESTREET_SECURITY_KEY}));
     const headers = {'Content-Type': 'application/x-www-form-urlencoded'};
     return new Promise((resolve, reject) => xhr.post(
         route, {body, headers},
@@ -33,4 +35,4 @@ function post(route, data) {
         return Promise.resolve(result);
     })
 }
-export default {post};
+export default {post, encodeParams};
