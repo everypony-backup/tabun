@@ -8,6 +8,8 @@ export default class FileUpload extends React.PureComponent {
     inputField = null;
 
     static propTypes = {
+        title: React.PropTypes.string,
+        titleClass: React.PropTypes.string,
         acceptMime: React.PropTypes.string,
         handleUpload: React.PropTypes.func,
     };
@@ -31,11 +33,18 @@ export default class FileUpload extends React.PureComponent {
     }
 
     render() {
-        return <input
-            onChange={this.handleUpload}
-            ref={this.setRef}
-            type="file"
-            accept={this.props.acceptMime}
-        />
+        const name = String(Math.random() * 10**20);
+        return <div>
+            <input
+                className="react-fileinput"
+                onChange={this.handleUpload}
+                ref={this.setRef}
+                type="file"
+                name={name}
+                id={name}
+                accept={this.props.acceptMime}
+            />
+            <label htmlFor={name} className={this.props.titleClass}>{this.props.title}</label>
+        </div>
     }
 }

@@ -52,7 +52,12 @@ export default class AvatarHandler extends React.Component {
 
     render() {
         return <div>
-            <FileInput handleChange={this.handleFileChange} acceptMime="image/*"/>
+            <FileInput
+                handleChange={this.handleFileChange}
+                acceptMime="image/*"
+                title={this.props.title}
+                titleClass="link-dotted"
+            />
             <Modal
                 header={this.props.title}
                 onRequestClose={this.handleRequestClose}
