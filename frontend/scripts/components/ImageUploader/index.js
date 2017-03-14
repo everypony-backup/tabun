@@ -24,6 +24,9 @@ export default class AvatarHandler extends React.Component {
         modalImgHeight: React.PropTypes.number,
         border: React.PropTypes.number,
         title: React.PropTypes.string,
+        containerClass: React.PropTypes.string,
+        previewClass: React.PropTypes.string,
+        linkClass: React.PropTypes.string,
     };
 
     setEditorRef(editor) {
@@ -57,18 +60,19 @@ export default class AvatarHandler extends React.Component {
     }
 
     render() {
-        return <div>
+        return <div className={this.props.containerClass}>
             {this.state.croppedImg && <img
                 src={this.state.croppedImg}
                 width={this.props.previewImgWidth}
                 height={this.props.previewImgHeight}
                 onClick={this.handleRequestOpen}
+                className={this.props.previewClass}
             />}
             <FileInput
                 handleChange={this.handleFileChange}
                 acceptMime="image/*"
                 title={this.props.title}
-                titleClass="link-dotted"
+                className={this.props.linkClass}
             />
             <Modal
                 header={this.props.title}
