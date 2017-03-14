@@ -55,7 +55,7 @@ export default class AvatarHandler extends React.Component {
             <FileInput handleChange={this.handleFileChange} acceptMime="image/*"/>
             <Modal
                 header={this.props.title}
-                onRequestClose={this.handleRequestHide}
+                onRequestClose={this.handleRequestClose}
                 isOpen={this.state.editorOpened}
             >
                 <AvatarEditor
