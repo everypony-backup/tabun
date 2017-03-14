@@ -7,13 +7,14 @@ ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
 
 vendors = [
-  "lodash"
-  "jquery"
-  "classnames"
-  "jquery.scrollto"
-  "jed"
-  "immutable"
   "bazooka"
+  "classnames"
+  "immutable"
+  "jed"
+  "jquery"
+  "jquery.scrollto"
+  "xhr"
+  "lodash"
 
   # Legacy
   "jquery.jqmodal"
@@ -22,9 +23,9 @@ vendors = [
   "jquery.markitup"
 ]
 if isProduction
-  vendors.push("react", "react-dom")
-else
   vendors.push("react-lite")
+else
+  vendors.push("react", "react-dom")
 
 cfg =
   context: path.join __dirname, 'frontend'
