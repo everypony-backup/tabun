@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator'
 import AvatarEditor from 'react-avatar-editor'
 
 import Modal from 'components/Modal';
-import FileUpload from 'components/FileUpload';
+import FileInput from 'components/FileInput';
 
 
 @autobind
@@ -14,8 +14,14 @@ export default class AvatarHandler extends React.Component {
         sourceImg: null,
         croppedImg: null,
         editorOpened: false,
-        scale: 1.0,
+        scale: 1.5,
         borderRadius: 0,
+    };
+    static propTypes = {
+        width: React.PropTypes.number,
+        height: React.PropTypes.number,
+        border: React.PropTypes.number,
+        title: React.PropTypes.string,
     };
 
     setEditorRef(editor) {
@@ -46,18 +52,18 @@ export default class AvatarHandler extends React.Component {
 
     render() {
         return <div>
-            <FileUpload handleChange={this.handleFileChange} acceptMime="image/*"/>
+            <FileInput handleChange={this.handleFileChange} acceptMime="image/*"/>
             <Modal
-                header="upload_avatar" // TODO: Add translation
+                header={this.props.title}
                 onRequestClose={this.handleRequestHide}
                 isOpen={this.state.editorOpened}
             >
                 <AvatarEditor
                     ref={this.setEditorRef}
                     image={this.state.sourceImg}
-                    width={320}
-                    height={320}
-                    border={50}
+                    width={this.props.width}
+                    height={this.props.height}
+                    border={this.props.border}
                     color={[255, 255, 255, 0.55]}
                     rotate={0}
                     scale={this.state.scale}
@@ -71,7 +77,7 @@ export default class AvatarHandler extends React.Component {
                     min="1"
                     max="2"
                     step="0.01"
-                    defaultValue="1"
+                    defaultValue={this.state.scale}
                     onChange={this.handleScale}
                 />
                 <br />
