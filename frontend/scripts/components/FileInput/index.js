@@ -9,7 +9,7 @@ export default class FileUpload extends React.PureComponent {
 
     static propTypes = {
         title: React.PropTypes.string,
-        titleClass: React.PropTypes.string,
+        className: React.PropTypes.string,
         acceptMime: React.PropTypes.string,
         handleUpload: React.PropTypes.func,
     };
@@ -40,11 +40,10 @@ export default class FileUpload extends React.PureComponent {
                 onChange={this.handleUpload}
                 ref={this.setRef}
                 type="file"
-                name={name}
                 id={name}
                 accept={this.props.acceptMime}
             />
-            <label htmlFor={name} className={this.props.titleClass}>{this.props.title}</label>
+            <label htmlFor={name} className={this.props.className}>{this.props.title}</label>
         </div>
     }
 }
