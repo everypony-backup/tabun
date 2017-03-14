@@ -125,6 +125,36 @@
   &.modal-image-upload
     width 500px
     margin-left -250px
+.react-modal
+  margin-left -180px
+  .modal-content
+    font-size 2em
+    position relative
+    padding 0
+    margin 0 20px 20px
+    input[type="range"]
+      position relative
+      margin 0 35px 0 15px
+      top 8px
+      max-width 250px
+    input[type="button"]
+      color transparent
+      width 20px!important
+      height 20px
+      padding 0
+      overflow hidden
+      background transparent url("images/icons-synio.png") -480px 0
+      border unset
+      position absolute
+      bottom 0
+      right 0
+  .modal-header
+    text-align center
+    padding 5px 5px 0 5px
+
+.profile-photo-wrapper
+  .react-modal
+    margin-left -290px
 
 .jqmOverlay
   background-color #000
@@ -143,7 +173,7 @@
   top 0
   left 0
   height 100%
-  width 100%
+  width 200%
   position fixed
   z-index 2999
   opacity 0.5
