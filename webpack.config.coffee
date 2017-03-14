@@ -5,6 +5,7 @@ postUse = require "postcss-use"
 fs = require 'fs'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
 isProduction = process.env.NODE_ENV == 'production'
+isTrunk = process.env.NODE_ENV == 'trunk'
 
 vendors = [
   "bazooka"
@@ -41,7 +42,7 @@ cfg =
     vendor: vendors
 
   output:
-    path: path.join __dirname, 'static', (if isProduction then '[hash]' else 'ephemeral')
+    path: path.join __dirname, 'static', (if isProduction or isTrunk then '[hash]' else 'ephemeral')
     publicPath: "./"
     filename: '[name].bundle.js'
 
@@ -75,13 +76,6 @@ cfg =
       new ExtractTextPlugin "[name].css"
       new webpack.optimize.DedupePlugin()
       new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
-      () ->
-        @plugin("done", (stats) ->
-          fs.writeFileSync(
-            path.join(__dirname, "frontend.version"),
-            stats.hash
-          )
-        )
     ]
   stylus:
     preferPathResolver: 'webpack'
@@ -97,7 +91,17 @@ if isProduction
     'react-dom': 'react-lite'
 
   cfg.plugins.push(new webpack.optimize.UglifyJsPlugin())
-else
+
+if isProduction or isTrunk
+  cfg.plugins.push(() ->
+    @plugin("done", (stats) ->
+      fs.writeFileSync(
+        path.join(__dirname, "frontend.version"),
+        stats.hash
+      )
+    ))
+
+if not (isProduction or isTrunk)
   cfg.devtool = "#source-map"
 
 module.exports = cfg

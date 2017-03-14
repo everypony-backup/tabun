@@ -78,6 +78,7 @@ containers:
       path: /tmp/package.json
     - !Env
       NODE_PATH: /usr/lib/node_modules
+      NODE_ENV: trunk
     - !RunAs
       work-dir: /tmp
       script: webpack --color
