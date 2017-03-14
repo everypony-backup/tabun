@@ -14,33 +14,12 @@
 
 <section class="block block-type-profile">
 	<div class="profile-photo-wrapper">
-		<a href="{$oUserProfile->getUserWebPath()}"><img src="{$oUserProfile->getProfileFotoPath()}"  class="profile-photo" id="foto-img" /></a>
-	</div>
-
 	{if $sAction=='settings' and $oUserCurrent and $oUserCurrent->getId() == $oUserProfile->getId()}
-
-		<p class="upload-photo">
-			<a href="#" id="foto-upload" class="link-dotted">{if $oUserCurrent->getProfileFoto()}{$aLang.settings_profile_photo_change}{else}{$aLang.settings_profile_photo_upload}{/if}</a>&nbsp;&nbsp;&nbsp;
-			<a href="#" id="foto-remove" class="link-dotted" style="{if !$oUserCurrent->getProfileFoto()}display:none;{/if}">{$aLang.settings_profile_foto_delete}</a>
-		</p>
-
-		<div class="modal modal-upload-photo" id="foto-resize">
-			<header class="modal-header">
-				<h3>{$aLang.settings_profile_avatar_resize_title}</h3>
-			</header>
-
-			<div class="modal-content">
-				<div class="clearfix">
-					<div class="image-border">
-						<img src=""  id="foto-resize-original-img">
-					</div>
-				</div>
-
-				<button type="submit" id="foto-resize-button" class="button button-primary">{$aLang.settings_profile_avatar_resize_apply}</button>
-				<button type="submit" id="foto-cancel-button" class="button">{$aLang.settings_profile_avatar_resize_cancel}</button>
-			</div>
-		</div>
+		<div data-bazooka="FotoUploader" data-foto-url="{$oUserCurrent->getProfileFotoPath()}"></div>
+	{else}
+		<img src="{$oUserProfile->getProfileFotoPath()}" class="profile-photo" id="foto-img" />
 	{/if}
+	</div>
 </section>
 
 {hook run='profile_sidebar_menu_before' oUserProfile=$oUserProfile}

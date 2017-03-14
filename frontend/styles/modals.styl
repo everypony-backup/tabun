@@ -3,7 +3,6 @@
   position fixed
   top 25%
   left 50%
-  width 300px
   margin-left -150px
   color #333
   background-color #fbfcfc
@@ -135,20 +134,24 @@
     .modal
       position absolute
 
-.modal.modal-upload-photo .image-border, .modal.modal-upload-avatar .image-border
-  float left
-  border-radius 5px
-  background #fff
-  padding 5px
-  margin-bottom 15px
-  -webkit-box-shadow 0 0 5px rgba(0,0,0,.2)
-  box-shadow 0 0 5px rgba(0,0,0,.2)
-
-#avatar-resize-original-img
-  max-width 200px
-  width 100%
-
 #window_login_form
   position absolute
   z-index 2999
 
+// Only for Modal component
+.overlay
+  top 0
+  left 0
+  height 100%
+  width 100%
+  position fixed
+  z-index 2999
+  opacity 0.5
+  background-color: #000
+
+.react-modal
+  &.opened
+    z-index 3000
+    display block
+  &.closed
+    display none

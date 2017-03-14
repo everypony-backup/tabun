@@ -3,6 +3,8 @@
 
 {hook run='settings_profile_begin'}
 
+<div data-bazooka="AvatarUploader" data-avatar-url="{$oUserCurrent->getProfileAvatarPath(100)}"></div>
+
 <form method="post" enctype="multipart/form-data" class="form-profile">
 	<div class="wrapper-content">
 		<p id="profile_user_field_template" style="display:none;" class="js-user-field-item">
@@ -14,31 +16,6 @@
 			<input type="text" name="profile_user_field_value[]" value="" class="input-text input-width-200">
 			<a class="icon-synio-remove" title="{$aLang.user_field_delete}"></a>
 		</p>
-
-		<div class="avatar-change">
-			<div class="avatar"><img src="{$oUserCurrent->getProfileAvatarPath(100)}" id="avatar-img" /></div>
-
-			<div>
-				<a href="#" id="avatar-upload" class="link-dotted">{if $oUserCurrent->getProfileAvatar()}{$aLang.settings_profile_avatar_change}{else}{$aLang.settings_profile_avatar_upload}{/if}</a><br />
-				<a href="#" id="avatar-remove" class="link-dotted" style="{if !$oUserCurrent->getProfileAvatar()}display:none;{/if}">{$aLang.settings_profile_avatar_delete}</a>
-			</div>
-
-			<div id="avatar-resize" class="modal modal-upload-avatar">
-				<header class="modal-header">
-					<h3>{$aLang.settings_profile_avatar_resize_title}</h3>
-				</header>
-
-				<div class="modal-content">
-					<div class="clearfix">
-						<div class="image-border">
-							<img src=""  id="avatar-resize-original-img">
-						</div>
-					</div>
-					<button type="submit" id="avatar-resize-button" class="button button-primary">{$aLang.settings_profile_avatar_resize_apply}</button>
-					<button type="submit" id="avatar-cancel-button" class="button">{$aLang.settings_profile_avatar_resize_cancel}</button>
-				</div>
-			</div>
-		</div>
 
 		{hook run='form_settings_profile_begin'}
 
@@ -173,4 +150,4 @@
 
 {hook run='settings_profile_end'}
 
-{include file='footer.tpl'}
+{include file='footer.tpl' scripts=["profile"]}

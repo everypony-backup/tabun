@@ -2,13 +2,11 @@ $ = require "jquery"
 require "jquery.ui"
 require "jquery.jqmodal"
 require "jquery.scrollto"
-require "jquery.jcrop"
-require "jquery.file"
 
 {forEach, random} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 {showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers, textPreview} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
@@ -49,8 +47,6 @@ init = ->
   $('#window_upload_img').jqm()
   $('#favourite-form-tags').jqm()
   $('#modal_write').jqm trigger: '.js-write-window-show'
-  $('#foto-resize').jqm modal: true, toTop: true
-  $('#avatar-resize').jqm modal: true, toTop: true
   $('#userfield_form').jqm toTop: true
 
   # Autocomplete
@@ -136,24 +132,6 @@ init = ->
       ls.user.reactivation()
 
   if window.location.pathname.match "settings/profile"
-    (($) ->
-      $('#foto-upload').file({ name:'foto' }).choose (e, input) ->
-        ls.user.uploadFoto null, input
-      $('#avatar-upload').file({ name:'avatar' }).choose (e, input) ->
-        ls.user.uploadAvatar null, input
-    ) jQuery
-    $('#avatar-remove').on 'click', ->
-      ls.user.removeAvatar()
-    $('#avatar-resize-button').on 'click', ->
-      ls.user.resizeAvatar()
-    $('#avatar-cancel-button').on 'click', ->
-      ls.user.cancelAvatar()
-    $('#foto-remove').on 'click', ->
-      ls.user.removeFoto()
-    $('#foto-resize-button').on 'click', ->
-      ls.user.resizeFoto()
-    $('#foto-cancel-button').on 'click', ->
-      ls.user.cancelFoto()
     $('#form-field-add').on 'click', ->
       ls.userfield.addFormField()
     $(document).on 'change', '#user-field-contact-contener select', ->

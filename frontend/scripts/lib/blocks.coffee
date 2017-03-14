@@ -2,7 +2,7 @@ $ = require "jquery"
 {assign, delay, first, throttle, isString, forEach} = require "lodash"
 {ajax} = require "core/ajax.coffee"
 {error} = require "core/messages.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 options =
   active: 'active'

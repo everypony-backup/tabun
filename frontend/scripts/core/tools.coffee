@@ -6,7 +6,7 @@ $ = require 'jquery'
 
 {notice, error} = require "./messages.coffee"
 {ajax, ajaxSubmit} = require "./ajax.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 _registry = {}
 

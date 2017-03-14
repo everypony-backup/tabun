@@ -20,8 +20,6 @@ vendors = [
   "jquery.ui"
   "jquery.form"
   "jquery.markitup"
-  "jquery.jcrop"
-  "jquery.file"
 ]
 if isProduction
   vendors.push("react", "react-dom")
@@ -38,6 +36,7 @@ cfg =
     editor: "./editor"
     blogs: "./blogs"
     search: "./search"
+    profile: "./profile"
     vendor: vendors
 
   output:
@@ -47,7 +46,7 @@ cfg =
 
   module:
     loaders: [
-      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, query: {presets: ['es2015', 'react']}, compact: true}
+      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, compact: true}
       {test: /\.coffee$/, loader: 'coffee-loader'}
       {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
       {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}

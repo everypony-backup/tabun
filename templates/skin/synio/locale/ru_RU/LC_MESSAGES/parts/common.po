@@ -209,3 +209,15 @@ msgstr "Закрытый — присоединиться можно тольк�
 
 msgid "close"
 msgstr "Закрыть"
+
+msgid "upload_avatar"
+msgstr "Загрузить аватар"
+
+msgid "upload_foto"
+msgstr "Загрузить фото"
+
+msgid "image_uploader_zoom"
+msgstr "Масштаб"
+
+msgid "image_uploader_save"
+msgstr "Сохранить"
