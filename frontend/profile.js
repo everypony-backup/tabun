@@ -4,6 +4,7 @@ import Baz from 'bazooka';
 
 import ImageUploader from 'components/ImageUploader';
 import {gettext} from 'core/lang';
+import {uploadAvatar} from 'app/profile';
 
 function initAvatarHandler(node) {
     ReactDOM.render(
@@ -16,6 +17,7 @@ function initAvatarHandler(node) {
             linkClass="link-dotted"
             border={50}
             title={gettext('upload_avatar')}
+            onUpload={uploadAvatar}
         />,
         node
     );
