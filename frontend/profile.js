@@ -7,8 +7,10 @@ import ImageUploader from 'components/ImageUploader';
 function initAvatarHandler(node) {
     ReactDOM.render(
         <ImageUploader
-            width={320}
-            height={320}
+            modalImgWidth={320}
+            modalImgHeight={320}
+            previewImgWidth={80}
+            previewImgHeight={80}
             border={50}
             title="upload_avatar" // TODO: Add translations
         />,

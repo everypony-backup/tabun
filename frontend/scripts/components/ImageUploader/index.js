@@ -12,14 +12,16 @@ export default class AvatarHandler extends React.Component {
     editor = null;
     state = {
         sourceImg: null,
-        croppedImg: null,
+        croppedImg: this.props.defaultImg,
         editorOpened: false,
         scale: 1.5,
         borderRadius: 0,
     };
     static propTypes = {
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
+        previewImgWidth: React.PropTypes.number,
+        previewImgHeight: React.PropTypes.number,
+        modalImgWidth: React.PropTypes.number,
+        modalImgHeight: React.PropTypes.number,
         border: React.PropTypes.number,
         title: React.PropTypes.string,
     };
@@ -35,6 +37,10 @@ export default class AvatarHandler extends React.Component {
         });
     }
 
+    handleRequestOpen() {
+        this.setState({editorOpened: true});
+    }
+
     handleRequestClose() {
         this.setState({editorOpened: false});
     }
@@ -45,13 +51,19 @@ export default class AvatarHandler extends React.Component {
 
     handleSave() {
         const croppedImg = this.editor.getImageScaledToCanvas().toDataURL();
+        this.setState({croppedImg: croppedImg});
         // TODO: actually save image
-        window.console.debug(croppedImg);
         this.handleRequestClose()
     }
 
     render() {
         return <div>
+            {this.state.croppedImg && <img
+                src={this.state.croppedImg}
+                width={this.props.previewImgWidth}
+                height={this.props.previewImgHeight}
+                onClick={this.handleRequestOpen}
+            />}
             <FileInput
                 handleChange={this.handleFileChange}
                 acceptMime="image/*"
@@ -66,8 +78,8 @@ export default class AvatarHandler extends React.Component {
                 <AvatarEditor
                     ref={this.setEditorRef}
                     image={this.state.sourceImg}
-                    width={this.props.width}
-                    height={this.props.height}
+                    width={this.props.modalImgWidth}
+                    height={this.props.modalImgHeight}
                     border={this.props.border}
                     color={[255, 255, 255, 0.55]}
                     rotate={0}
