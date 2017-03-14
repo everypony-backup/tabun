@@ -90,13 +90,7 @@ export default {
     },
     image: {
         uploadAvatar: '/settings/profile/upload-avatar/',
-        resizeAvatar: '/settings/profile/resize-avatar/',
-        removeAvatar: '/settings/profile/remove-avatar/',
-        cancelAvatar: '/settings/profile/cancel-avatar/',
         uploadFoto: '/settings/profile/upload-foto/',
-        resizeFoto: '/settings/profile/resize-foto/',
-        removeFoto: '/settings/profile/remove-foto/',
-        cancelFoto: '/settings/profile/cancel-foto/',
         uploadImage: '/ajax/upload/image/'
     },
     tag: {

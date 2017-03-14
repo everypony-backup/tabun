@@ -1,5 +1,5 @@
 $ = require "jquery"
-{forEach, debounce, uniqueId, isString} = require "lodash"
+{forEach, debounce, isString} = require "lodash"
 
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 {gettext} = require "core/lang.coffee"
@@ -7,7 +7,6 @@ $ = require "jquery"
 {subscribe, unsubscribe} = require "app/stream.coffee"
 routes = require("lib/routes").default
 
-jcropFoto = null
 
 addFriend = (obj, idUser, sAction) ->
   if sAction not in ['link', 'accept']
@@ -47,64 +46,6 @@ removeFriend = (obj, idUser, sAction) ->
     notice null, result.sMsg
     $('#delete_friend_item').remove()
     $('#profile_actions').prepend $(result.sToggleText)
-  false
-
-
-uploadFoto = (form, input) ->
-  if not form and input
-    form = $('<form method="post" enctype="multipart/form-data"></form>').css('display': 'none').appendTo('body')
-    clone = input.clone(true)
-    input.hide()
-    clone.insertAfter input
-    input.appendTo form
-
-  ajaxSubmit routes.image.uploadFoto, form, (data) ->
-    if data.bStateError
-      return error data.sMsgTitle, data.sMsg
-
-    showResizeFoto data.sTmpFile
-
-showResizeFoto = (sImgFile) ->
-  if jcropFoto
-    jcropFoto.destroy()
-
-  $('#foto-resize-original-img').attr 'src', "#{sImgFile}?#{uniqueId()}"
-  $('#foto-resize').jqmShow()
-  $('#foto-resize-original-img').Jcrop minSize: [32, 32], ->
-    jcropFoto = @
-    @setSelect [0, 0, 500, 500]
-
-resizeFoto = ->
-  unless jcropFoto
-    return false
-  params = size: jcropFoto.tellSelect()
-
-  ajax routes.image.resizeFoto, params, (result) ->
-    if result.bStateError
-      return error null, result.sMsg
-
-    $('#foto-img').attr 'src', "#{result.sFile}?#{uniqueId()}"
-    $('#foto-resize').jqmHide()
-    $('#foto-remove').show()
-    $('#foto-upload').text result.sTitleUpload
-
-  false
-
-removeFoto = ->
-  ajax routes.image.removeFoto, {}, (result) ->
-    if result.bStateError
-      return error null, result.sMsg
-    $('#foto-img').attr 'src', "#{result.sFile}?#{uniqueId()}"
-    $('#foto-remove').hide()
-    $('#foto-upload').text result.sTitleUpload
-
-cancelFoto = ->
-  ajax routes.image.cancelFoto, {}, (result) ->
-    if result.bStateError
-      return error null, result.sMsg
-
-    $('#foto-resize').jqmHide()
-
   false
 
 
@@ -181,8 +122,4 @@ module.exports = {
   removeFriend
   addFriend
   followToggle
-  uploadFoto
-  removeFoto
-  resizeFoto
-  cancelFoto
 }

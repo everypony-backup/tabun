@@ -20,7 +20,6 @@ vendors = [
   "jquery.ui"
   "jquery.form"
   "jquery.markitup"
-  "jquery.file"
 ]
 if isProduction
   vendors.push("react", "react-dom")
