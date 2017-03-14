@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator'
 import AvatarEditor from 'react-avatar-editor'
 
 import Modal from 'components/Modal';
-import ImageUpload from './subcomponents';
+import FileUpload from 'components/FileUpload';
 
 
 @autobind
@@ -29,7 +29,7 @@ export default class AvatarHandler extends React.Component {
         });
     }
 
-    handleRequestHide() {
+    handleRequestClose() {
         this.setState({editorOpened: false});
     }
 
@@ -41,11 +41,12 @@ export default class AvatarHandler extends React.Component {
         const croppedImg = this.editor.getImageScaledToCanvas().toDataURL();
         // TODO: actually save image
         window.console.debug(croppedImg);
+        this.handleRequestClose()
     }
 
     render() {
         return <div>
-            <ImageUpload handleChange={this.handleFileChange}/>
+            <FileUpload handleChange={this.handleFileChange} acceptMime="image/*"/>
             <Modal
                 header="upload_avatar" // TODO: Add translation
                 onRequestClose={this.handleRequestHide}
