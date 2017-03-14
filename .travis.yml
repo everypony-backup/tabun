@@ -20,6 +20,12 @@ before_deploy:
   - chmod 600 /tmp/deploy_rsa
   - ssh-add /tmp/deploy_rsa
 
+branches:
+  only:
+  - master
+  - development
+  - /^v[0-9]+\.[0-9]+.[0-9]+(-[a-z]+([0-9]+)?)?$/
+
 script:
   - vagga _build redis-trunk
   - vagga _build celery-trunk
