@@ -2,27 +2,31 @@
 
 return [
     'comment' => [
-        'oa_end' => 0 /*test*/+strtotime('2017-03-05'),
-        'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
+        'as_date' => 1489132800,    // strtotime('2017-03-10')
+        'oa_enable_level' => 1,
+        'na_enable_level' => 6,     // Allow all allowed users to listen New Age
+        'date_sort' => SORT_ASC,
     ],
     'topic' => [
-        'oa_end' => 0,
-        'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
+        'as_date' => 1489132800,    // strtotime('2017-03-10')
+        'oa_enable_level' => 1,
+        'na_enable_level' => 6,     // Allow all allowed users to listen New Age
+        'date_sort' => SORT_ASC,
     ],
     'blog' => [
-        'oa_end' => 0,
-        'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all allowed users to listen New Age
+        'as_date' => 0,
+        'oa_enable_level' => 6,
+        'na_enable_level' => 6,     // Allow all allowed users to listen New Age
+        'date_sort' => SORT_DESC,
     ],
     'user' => [
-        'oa_end' => 0,
-        'oa_enable_level' => 0,
-        'na_enable_level' => 6,	// Allow all users to listen New Age
+        'as_date' => 1357027200,    // strtotime('2013-01-01')
+        'oa_enable_level' => 1,
+        'na_enable_level' => 6,     // Allow all users to listen New Age
+        'date_sort' => SORT_DESC,
     ],
 ];
-// oa_end — точка завершения "старого" периода, unix timestamp
+// as_date — точка завершения "старого" периода, unix timestamp
 // oa_enable_level — кому разрешено видеть юзеров оценок за "старый" период
 // na_enable_level — кому разрешено видеть юзеров оценок за "новый" период и запрашивать список оценок в целом
 //	0 — никто

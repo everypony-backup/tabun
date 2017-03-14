@@ -203,7 +203,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post'));
+		/**
+		 * Комментарий существует?
+		 */
+		if (!($oComment=$this->Comment_GetCommentById(getRequestStr('idComment',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_noexists'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -254,7 +260,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oTopic=$this->Topic_GetTopicById(getRequestStr('idTopic',null,'post'));
+		/**
+		 * Топик существует?
+		 */
+		if (!($oTopic=$this->Topic_GetTopicById(getRequestStr('idTopic',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -325,7 +337,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oBlog=$this->Blog_GetBlogById(getRequestStr('idBlog',null,'post'));
+		/**
+		 * Блог существует?
+		 */
+		if (!($oBlog=$this->Blog_GetBlogById(getRequestStr('idBlog',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -374,7 +392,13 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('need_authorization'),$this->Lang_Get('error'));
 			return;
 		}
-		$oUser=$this->User_GetUserById(getRequestStr('idUser',null,'post'));
+		/**
+		 * Пользователь существует?
+		 */
+		if (!($oUser=$this->User_GetUserById(getRequestStr('idUser',null,'post')))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
+			return;
+		}
 		
 		$error = new stdClass();
 		/**
@@ -1203,25 +1227,29 @@ class ActionAjax extends Action {
 				$oTarget = $this->Comment_GetCommentById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.comment.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.comment.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.comment.oa_end');
+				$ageSwitchDate = Config::Get('vote_state.comment.as_date');
+				$dateSort = Config::Get('vote_state.comment.date_sort');
 				break;
 			case 'topic':
 				$oTarget = $this->Topic_GetTopicById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.topic.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.topic.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.topic.oa_end');
+				$ageSwitchDate = Config::Get('vote_state.topic.as_date');
+				$dateSort = Config::Get('vote_state.topic.date_sort');
 				break;
 			case 'blog':
 				$oTarget = $this->Blog_GetBlogById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.blog.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.blog.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.blog.oa_end');
+				$ageSwitchDate = Config::Get('vote_state.blog.as_date');
+				$dateSort = Config::Get('vote_state.blog.date_sort');
 				break;
 			case 'user':
 				$oTarget = $this->User_GetUserById($targetId);
 				$newAgeEnableLevel = Config::Get('vote_state.user.na_enable_level');
 				$oldAgeEnableLevel = Config::Get('vote_state.user.oa_enable_level');
-				$oldAgeEnd = Config::Get('vote_state.user.oa_end');
+				$ageSwitchDate = Config::Get('vote_state.user.as_date');
+				$dateSort = Config::Get('vote_state.user.date_sort');
 				break;
 			default:
 				$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
@@ -1252,7 +1280,7 @@ class ActionAjax extends Action {
 		$aResult = array();
 		foreach($aVotes as $oVote) {
 			$oUser = $this->User_GetUserById($oVote->getVoterId());
-			$bShowUser = $oUser && (strtotime($oVote->getDate()) > $oldAgeEnd || $this->ACL_CheckSimpleAccessLevel($oldAgeEnableLevel, $this->oUserCurrent, $oTarget, $targetType));
+			$bShowUser = $oUser && (strtotime($oVote->getDate()) > $ageSwitchDate || $this->ACL_CheckSimpleAccessLevel($oldAgeEnableLevel, $this->oUserCurrent, $oTarget, $targetType));
 			$aResult[] = array(
 				'voterName' => $bShowUser ? $oUser->getLogin() : null,
 				'voterAvatar' => $bShowUser ? $oUser->getProfileAvatarPath() : null,
@@ -1260,7 +1288,7 @@ class ActionAjax extends Action {
 				'date' => (string) $oVote->getDate().'+03:00',
 			);
 		}
-		usort($aResult, '_gov_s_date_asc');
+		usort($aResult, $dateSort==SORT_ASC?'_gov_s_date_asc':'_gov_s_date_desc');
 		$this->Viewer_AssignAjax('aVotes',$aResult);
 	}
 }

@@ -49,10 +49,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanCreateBlog(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanCreateBlog(ModuleUser_EntityUser $oUser) {
 		if ($oUser->getRating()>=Config::Get('acl.create.blog.rating')) {
 			return true;
 		}
@@ -65,10 +62,7 @@ class ModuleACL extends Module {
 	 * @param ModuleBlog_EntityBlog $oBlog	Блог
 	 * @return bool
 	 */
-	public function CanAddTopic(ModuleUser_EntityUser $oUser=null, ModuleBlog_EntityBlog $oBlog) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanAddTopic(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog) {
 		/**
 		 * Если юзер является создателем блога то разрешаем ему постить
 		 */
@@ -89,10 +83,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostComment(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanPostComment(ModuleUser_EntityUser $oUser) {
 		if ($oUser->getRating()>=Config::Get('acl.create.comment.rating')) {
 			return true;
 		}
@@ -104,10 +95,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostCommentTime(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanPostCommentTime(ModuleUser_EntityUser $oUser) {
 		if (Config::Get('acl.create.comment.limit_time')>0 and $oUser->getDateCommentLast()) {
 			$sDateCommentLast=strtotime($oUser->getDateCommentLast());
 			if ($oUser->getRating()<Config::Get('acl.create.comment.limit_time_rating') and ((time()-$sDateCommentLast)<Config::Get('acl.create.comment.limit_time'))) {
@@ -122,10 +110,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostTopicTime(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanPostTopicTime(ModuleUser_EntityUser $oUser) {
 		// Для администраторов ограничение по времени не действует
 		if($oUser->isAdministrator()
 			or Config::Get('acl.create.topic.limit_time')==0
@@ -147,10 +132,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanSendTalkTime(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanSendTalkTime(ModuleUser_EntityUser $oUser) {
 		// Для администраторов ограничение по времени не действует
 		if($oUser->isAdministrator()
 			or Config::Get('acl.create.talk.limit_time')==0
@@ -172,10 +154,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanPostTalkCommentTime(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanPostTalkCommentTime(ModuleUser_EntityUser $oUser) {
 		/**
 		 * Для администраторов ограничение по времени не действует
 		 */
@@ -205,18 +184,6 @@ class ModuleACL extends Module {
 		return true;
 	}
 	/**
-	 * Проверяет может ли пользователь создавать комментарии используя HTML
-	 *
-	 * @param ModuleUser_EntityUser $oUser	Пользователь
-	 * @return bool
-	 */
-	public function CanUseHtmlInComment(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
-		return true;
-	}
-	/**
 	 * Проверяет может ли пользователь голосовать за конкретный комментарий
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
@@ -226,27 +193,7 @@ class ModuleACL extends Module {
 	 * @param array $error
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser=null, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь не авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
-		 * Комментарий не существует?
-		 */
-		if (!$oComment) {
-			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_noexists';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует автор комментария?
 		 */
@@ -353,27 +300,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteBlog(ModuleUser_EntityUser $oUser=null, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь не авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
-		 * Блог не существует?
-		 */
-		if (!$oBlog) {
-			if($error != null) {
-				$error->sMsgId = 'system_error';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует за свой блог?
 		 */
@@ -434,27 +361,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteTopic(ModuleUser_EntityUser $oUser=null, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь не авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
-		 * Топик не существует?
-		 */
-		if (!$oTopic) {
-			if($error != null) {
-				$error->sMsgId = 'system_error';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует автор топика?
 		 */
@@ -548,27 +455,7 @@ class ModuleACL extends Module {
 	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteUser(ModuleUser_EntityUser $oUser=null, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Пользователь авторизован?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'need_authorization';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
-		/**
-		 * Пользователь не существует?
-		 */
-		if (!$oUser) {
-			if($error != null) {
-				$error->sMsgId = 'system_error';
-				$error->sTitleId = 'error';
-			}
-			return false;
-		}
+	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
 		/**
 		 * Голосует за себя?
 		 */
@@ -651,10 +538,7 @@ class ModuleACL extends Module {
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function CanSendInvite(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function CanSendInvite(ModuleUser_EntityUser $oUser) {
 		if ($this->User_GetCountInviteAvailable($oUser)==0) {
 			return false;
 		}
@@ -817,10 +701,7 @@ class ModuleACL extends Module {
 	 * @param  ModuleUser_EntityUser $oUser	Пользователь
 	 * @return bool
 	 */
-	public function IsAllowPublishIndex(ModuleUser_EntityUser $oUser=null) {
-		if (!$oUser) {
-			return false;
-		}
+	public function IsAllowPublishIndex(ModuleUser_EntityUser $oUser) {
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
@@ -903,14 +784,45 @@ class ModuleACL extends Module {
     const EDIT_DENY_REASON_OFFSET = 4;
     const EDIT_DENY_REASON_MASK = 0xF;
 
+    public function IsAllowEditComments($oBlog, $oUser) {
+		return $this::IsAllowAdminComments($oBlog, $oUser);
+	}
+    /**
+     * Проверяет, может ли пользователь администрировать комментарии как администратор блога
+     *
+     * @param  ModuleBlog_EntityBlog $oBlog Блог
+     * @param  ModuleUser_EntityUser $oUser Пользователь
+     * @return bool
+     */
+    public function IsAllowAdminComments($oBlog, $oUser) {
+		if (!$oUser) return false;
+		if ($oUser->isAdministrator()) return true;
+		if(!in_array($oBlog->getType(), ['open', 'close'])) return false;
+		/**
+		 * Разрешаем если это создатель блога
+		 */
+		if ($oBlog->getOwnerId() == $oUser->getId()) {
+			return true;
+		}
+		/**
+		 * Явлется ли авторизованный пользователь администратором блога
+		 */
+		$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $oUser->getId());
+		if ($oBlogUser && $oBlogUser->getIsAdministrator()) {
+			return true;
+		}
+		return false;
+    }
+
     /**
      * Проверяет, может ли пользователь изменить комментарий и заблокировать его дальнейшее изменение
      *
      * @param  ModuleComment_EntityComment $oComment Комментарий
      * @param  ModuleUser_EntityUser $oUser Пользователь
+     * @param  bool|null $bAllowUserToEditBlogComments
      * @return int
      */
-    public function GetCommentEditAllowMask($oComment, $oUser)
+    public function GetCommentEditAllowMask($oComment, $oUser, $bAllowUserToEditBlogComments=null)
     {
         if (!$oUser) {
             return 0;
@@ -929,14 +841,17 @@ class ModuleACL extends Module {
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
         if ($targetIsTopic) {
-            $oBlog = $oComment->getTarget()->getBlog();
             $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
         } else {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
         }
 
-        if ($targetIsTopic && in_array($oBlog->getType(), ['open', 'close']) && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
-            return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+        if ($targetIsTopic) {
+			if ($bAllowUserToEditBlogComments === null) {
+				$bAllowUserToEditBlogComments = $this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser);
+			}
+            if ($bAllowUserToEditBlogComments) return $this::GetAdminCommentEditAllowMask($userIsNotAuthor);
+            return 0;
         } else {
             $bEditCondition = (
                 $userIsNotAuthor ||
@@ -963,7 +878,6 @@ class ModuleACL extends Module {
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
         if ($targetIsTopic) {
-            $oBlog = $oComment->getTarget()->getBlog();
             $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
         } else {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
@@ -989,7 +903,7 @@ class ModuleACL extends Module {
             // TODO: Implement more precise ACL here
             if ($oUser->isAdministrator()) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_ADMIN;
-            } else if ($targetIsTopic && in_array($oBlog->getType(), ['open', 'close']) && ($oBlog->getUserIsAdministrator() || $oBlog->getOwnerId() == $oUser->getId())) {
+            } else if ($targetIsTopic && $this::IsAllowEditComments($oComment->getTarget()->getBlog(), $oUser)) {
                 return $this::GetAdminCommentEditAllowMask($userIsNotAuthor) | $this::EDIT_ALLOWED_AS_BLOG_ADMIN;
             } else {
                 return $deny_flags;

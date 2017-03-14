@@ -44,8 +44,6 @@
                         <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                     {/if}
                 </div>
-                {/if}
-                {if $oComment->getTargetType() != 'talk'}
                 <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
                     {if $oCommentVoteCount > 0}
                         {if $oCommentRating > 0} vote-count-positive
