@@ -73,6 +73,9 @@ containers:
     - !Copy
       source: /work/webpack.config.coffee
       path: /tmp/webpack.config.coffee
+    - !Copy
+      source: /work/package.json
+      path: /tmp/package.json
     - !Env
       NODE_PATH: /usr/lib/node_modules
     - !RunAs
@@ -108,6 +111,9 @@ containers:
     - !Copy
       source: /work/webpack.config.coffee
       path: /tmp/webpack.config.coffee
+    - !Copy
+      source: /work/package.json
+      path: /tmp/package.json
     - !Env
       NODE_PATH: /usr/lib/node_modules
       NODE_ENV: production
