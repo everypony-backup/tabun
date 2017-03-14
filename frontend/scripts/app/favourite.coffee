@@ -4,7 +4,7 @@ $ = require "jquery"
 {ajax, ajaxSubmit} = require "core/ajax.coffee"
 {gettext} = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 
 favTargets =

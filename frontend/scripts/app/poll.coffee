@@ -3,7 +3,7 @@ $ = require "jquery"
 lang = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 
 vote = (idTopic, idAnswer) ->

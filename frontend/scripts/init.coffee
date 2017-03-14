@@ -7,7 +7,7 @@ require "jquery.file"
 {forEach, random} = require "lodash"
 
 blocks = require "lib/blocks.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 {showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers, textPreview} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 

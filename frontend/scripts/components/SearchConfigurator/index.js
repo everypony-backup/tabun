@@ -1,6 +1,6 @@
 import React from 'react';
 import {transform} from 'lodash';
-import {search as searchRoute} from 'lib/routes';
+import routes from 'lib/routes';
 import {gettext as _} from 'core/lang';
 
 import SearhParams from './logic.js';
@@ -72,7 +72,7 @@ export default class SearchConfigurator extends React.Component {
             .keys(params)
             .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
             .join('&');
-        document.location.replace(`${searchRoute}?${query}`);
+        document.location.replace(`${routes.search}?${query}`);
     }
 
     render() {

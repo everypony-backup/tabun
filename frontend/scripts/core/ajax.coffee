@@ -4,7 +4,7 @@ require "jquery.form"
 {forEach, isBoolean, flatten, reduce, values} = require "lodash"
 {gettext} = require "core/lang.coffee"
 {notice, error} = require "core/messages.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 
 allowedUrls = Set flatten reduce(

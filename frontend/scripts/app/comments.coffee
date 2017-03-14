@@ -6,7 +6,7 @@ $ = require "jquery"
 {error, notice} = require "core/messages.coffee"
 {textPreview, registry, prepareJSON, spoilerHandler, contentMakeSpoilers, contentRemoveBadChars} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 {commentFor} = require "lib/markitup.coffee"
 
 

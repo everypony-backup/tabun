@@ -1,7 +1,7 @@
 $ = require "jquery"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 
 toggle = (sTargetType, iTargetId, sMail, iValue) ->

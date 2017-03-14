@@ -5,7 +5,7 @@ $ = require "jquery"
 {gettext} = require "core/lang.coffee"
 {notice, error} = require "core/messages.coffee"
 {subscribe, unsubscribe} = require "app/stream.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 jcropFoto = null
 

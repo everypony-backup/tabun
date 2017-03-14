@@ -5,7 +5,7 @@ classNames = require "classnames"
 {ajax} = require "core/ajax.coffee"
 lang = require "core/lang.coffee"
 {error, notice} = require "core/messages.coffee"
-routes = require "lib/routes.coffee"
+routes = require("lib/routes").default
 
 prefix =
   area: 'vote_area_'
