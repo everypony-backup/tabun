@@ -20,7 +20,6 @@ vendors = [
   "jquery.ui"
   "jquery.form"
   "jquery.markitup"
-  "jquery.jcrop"
   "jquery.file"
 ]
 if isProduction
