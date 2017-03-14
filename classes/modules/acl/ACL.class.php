@@ -916,7 +916,7 @@ class ModuleACL extends Module {
         return $this::EDIT_ALLOW_FIX | ($userIsNotAuthor && Config::Get('acl.edit.comment.enable_lock') ? $this::EDIT_ALLOW_LOCK : 0);
     }
 	
-	public function CheckSimpleAccessLevel($req, $oUser, $oTarget, $sTargetType) {
+	public function CheckSimpleAccessLevel($req, $oUser, $oTarget, $sTargetType, $bCheckForTopicOfComment=false) {
 		if($req == 8) return true;
 		if($req == 0) return false;
 		if(!$oUser && $req < 8) return false;
@@ -926,6 +926,10 @@ class ModuleACL extends Module {
 			if($req >= 2) {
 				switch($sTargetType) {
 					case 'comment':
+						if($bCheckForTopicOfComment) {
+							$oTopic = $oTarget;
+							break;
+						}
 						if($oTarget->getTargetType() === 'topic') {
 							$oTopic = $oTarget->getTarget();
 						} else if($oTarget->getTargetType() === 'talk') {

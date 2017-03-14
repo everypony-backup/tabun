@@ -24,8 +24,7 @@
 	{assign var="iVoteInfoNeEnableLevel" value=$oConfig->getValue('vote_state.comment.na_enable_level')}
 	{if $iVoteInfoNeEnableLevel != 5}
 		{* Кэширование допустимо только если все комменты дерева относятся к одной области видимости. *}
-		{assign var="bVoteInfoEnabledForTopic" value=true}
-		{* to Farxi - oComment ещё не объявлен*}
+		{assign var="bVoteInfoEnabledForTopic" value=$LS->ACL_CheckSimpleAccessLevel($iVoteInfoNeEnableLevel, $oUserCurrent, $oTopic, 'comment', true)}
 	{/if}
 	{if $sTargetType == 'topic' and $oBlog}
 		{assign var="bAllowUserToEditBlogComments" value=$LS->ACL_IsAllowEditComments($oBlog, $oUserCurrent)}
