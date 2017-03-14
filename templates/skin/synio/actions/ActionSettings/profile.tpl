@@ -3,7 +3,7 @@
 
 {hook run='settings_profile_begin'}
 
-<div data-bazooka="AvatarHandler"></div>
+<div data-bazooka="AvatarHandler" data-avatar-url="{$oUserCurrent->getProfileAvatarPath(100)}"></div>
 
 <form method="post" enctype="multipart/form-data" class="form-profile">
 	<div class="wrapper-content">

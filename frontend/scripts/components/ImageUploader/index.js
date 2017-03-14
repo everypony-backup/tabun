@@ -8,20 +8,18 @@ import FileInput from 'components/FileInput';
 
 
 @autobind
-export default class AvatarHandler extends React.Component {
+export default class ImageUploader extends React.Component {
     editor = null;
     state = {
-        sourceImg: null,
+        sourceImg: this.props.defaultImg,
         croppedImg: this.props.defaultImg,
         editorOpened: false,
-        scale: 1.5,
+        scale: 1.2,
         borderRadius: 0,
     };
     static propTypes = {
-        previewImgWidth: React.PropTypes.number,
-        previewImgHeight: React.PropTypes.number,
-        modalImgWidth: React.PropTypes.number,
-        modalImgHeight: React.PropTypes.number,
+        width: React.PropTypes.number,
+        height: React.PropTypes.number,
         border: React.PropTypes.number,
         title: React.PropTypes.string,
         containerClass: React.PropTypes.string,
@@ -63,8 +61,6 @@ export default class AvatarHandler extends React.Component {
         return <div className={this.props.containerClass}>
             {this.state.croppedImg && <img
                 src={this.state.croppedImg}
-                width={this.props.previewImgWidth}
-                height={this.props.previewImgHeight}
                 onClick={this.handleRequestOpen}
                 className={this.props.previewClass}
             />}
@@ -82,10 +78,10 @@ export default class AvatarHandler extends React.Component {
                 <AvatarEditor
                     ref={this.setEditorRef}
                     image={this.state.sourceImg}
-                    width={this.props.modalImgWidth}
-                    height={this.props.modalImgHeight}
+                    width={this.props.width}
+                    height={this.props.height}
                     border={this.props.border}
-                    color={[255, 255, 255, 0.55]}
+                    color={[255, 255, 255, 0.75]}
                     rotate={0}
                     scale={this.state.scale}
                     onSave={this.handleSave}
