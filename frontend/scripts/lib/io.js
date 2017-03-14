@@ -7,12 +7,14 @@ import {gettext} from 'core/lang';
 
 
 function post(route, data) {
-    const options = {
-        json: true,
-        body: merge(data, {security_ls_key: window.LIVESTREET_SECURITY_KEY})
-    }
+    const payload = merge(data, {security_ls_key: window.LIVESTREET_SECURITY_KEY});
+    const body = Object
+        .keys(payload)
+        .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(payload[k])}`)
+        .join('&');
+    const headers = {'Content-Type': 'application/x-www-form-urlencoded'};
     return new Promise((resolve, reject) => xhr.post(
-        route, options,
+        route, {body, headers},
         (err, res, body) => err ? reject(err) : resolve(res)
     ))
     .catch(() => error(gettext('network_error'), gettext('data_not_send')))
