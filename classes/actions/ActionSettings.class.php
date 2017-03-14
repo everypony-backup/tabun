@@ -74,11 +74,9 @@ class ActionSettings extends Action {
 		$this->AddEventPreg('/^profile$/i','/^upload-avatar/i','/^$/i','EventUploadAvatar');
 		$this->AddEventPreg('/^profile$/i','/^resize-avatar/i','/^$/i','EventResizeAvatar');
 		$this->AddEventPreg('/^profile$/i','/^remove-avatar/i','/^$/i','EventRemoveAvatar');
-		$this->AddEventPreg('/^profile$/i','/^cancel-avatar/i','/^$/i','EventCancelAvatar');
 		$this->AddEventPreg('/^profile$/i','/^upload-foto/i','/^$/i','EventUploadFoto');
 		$this->AddEventPreg('/^profile$/i','/^resize-foto/i','/^$/i','EventResizeFoto');
 		$this->AddEventPreg('/^profile$/i','/^remove-foto/i','/^$/i','EventRemoveFoto');
-		$this->AddEventPreg('/^profile$/i','/^cancel-foto/i','/^$/i','EventCancelFoto');
 		$this->AddEvent('profile','EventProfile');
 		$this->AddEvent('invite','EventInvite');
 		$this->AddEvent('tuning','EventTuning');
@@ -216,28 +214,6 @@ class ActionSettings extends Action {
 		$this->Viewer_AssignAjax('sTitleUpload',$this->Lang_Get('settings_profile_photo_upload'));
 	}
 	/**
-	 * Отмена ресайза фотки, необходимо удалить временный файл
-	 */
-	protected function EventCancelFoto() {
-		/**
-		 * Устанавливаем формат Ajax ответа
-		 */
-		$this->Viewer_SetResponseAjax('json');
-		/**
-		 * Достаем из сессии файл и удаляем
-		 */
-		$sFile=$this->Session_Get('sFotoFileTmp');
-		$this->Image_RemoveFile($sFile);
-
-		$sFile=$this->Session_Get('sFotoFilePreviewTmp');
-		$this->Image_RemoveFile($sFile);
-		/**
-		 * Удаляем из сессии
-		 */
-		$this->Session_Drop('sFotoFileTmp');
-		$this->Session_Drop('sFotoFilePreviewTmp');
-	}
-	/**
 	 * Загрузка временной картинки для аватара
 	 */
 	protected function EventUploadAvatar() {
@@ -337,21 +313,6 @@ class ActionSettings extends Action {
 		 */
 		$this->Viewer_AssignAjax('sFile',$this->oUserCurrent->getProfileAvatarPath(100));
 		$this->Viewer_AssignAjax('sTitleUpload',$this->Lang_Get('settings_profile_avatar_upload'));
-	}
-	/**
-	 * Отмена ресайза аватарки, необходимо удалить временный файл
-	 */
-	protected function EventCancelAvatar() {
-		/**
-		 * Устанавливаем формат Ajax ответа
-		 */
-		$this->Viewer_SetResponseAjax('json');
-		/**
-		 * Достаем из сессии файл и удаляем
-		 */
-		$sFileAvatar=$this->Session_Get('sAvatarFileTmp');
-		$this->Image_RemoveFile($sFileAvatar);
-		$this->Session_Drop('sAvatarFileTmp');
 	}
 	/**
 	 * Дополнительные настройки сайта
