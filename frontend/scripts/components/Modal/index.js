@@ -11,7 +11,7 @@ export default class Modal extends React.PureComponent {
     render() {
         return this.props.isOpen && <div>
             <div className="react-modal overlay" onClick={this.props.onRequestClose}/>
-            <div className={classNames("modal", "react-modal", {"opened": this.props.isOpen, "closed": !this.props.isOpen})}>
+            <div className={classNames("modal", "react-modal", {"opened overlay-cover": this.props.isOpen})}>
                 <header className="modal-header">
                     {this.props.header && <h3>{this.props.header}</h3>}
                     <span className="close" onClick={this.props.onRequestClose}/>

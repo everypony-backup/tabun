@@ -1,20 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
+import autobind from 'autobind-decorator'
 import routes from 'lib/routes';
 import {gettext as _, ngettext} from 'core/lang';
 
-const defaultTargetTypes = ['topic', 'question', 'blog', 'talk'];
 
+@autobind
 export default class TargetSelector extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            hidden: true,
-            selectedType: props.selectedType || defaultTargetTypes[0],
-        };
-        this.toggle = this.toggle.bind(this);
-        this.hide = this.hide.bind(this);
-    }
+    defaultTargetTypes = ['topic', 'question', 'blog', 'talk'];
+    state = {
+        hidden: true,
+        selectedType: this.props.selectedType || this.defaultTargetTypes[0],
+    };
     toggle() {
         this.setState({hidden: !this.state.hidden});
     }
@@ -22,7 +19,7 @@ export default class TargetSelector extends React.Component {
         this.setState({hidden: true});
     }
     render() {
-        const targetLinks = defaultTargetTypes.map((targetType) => {
+        const targetLinks = this.defaultTargetTypes.map((targetType) => {
             const selected = this.state.selectedType == targetType;
             return (
                 <li
@@ -42,25 +39,19 @@ export default class TargetSelector extends React.Component {
                 </a>
             </li>
         );
-        return (
-            <div className="dropdown-create">
-                <div
-                    className={classNames("overlay", {"h-hidden": this.state.hidden})}
-                    onClick={this.hide}
-                ></div>
-                <h2 className="page-header">
-                    {_("create")}
-                    &nbsp;
-                    <a className="link-dashed" onClick={this.toggle}>
-                        {_(this.state.selectedType)}
-                    </a>
-                </h2>
-
-                <ul className={classNames("dropdown-menu-create", {"h-hidden": this.state.hidden})}>
-                    {this.props.draftCount ? draftLink : null}
-                    {targetLinks}
-                </ul>
-            </div>
-        )
+        return <div className="dropdown-create">
+            {!this.state.hidden && <div className="overlay" onClick={this.hide}></div>}
+            <h2 className="page-header">
+                {_("create")}
+                &nbsp;
+                <a className="link-dashed" onClick={this.toggle}>
+                    {_(this.state.selectedType)}
+                </a>
+            </h2>
+            {!this.state.hidden && <ul className="dropdown-menu-create overlay-cover">
+                {this.props.draftCount ? draftLink : null}
+                {targetLinks}
+            </ul>}
+        </div>
     }
 }

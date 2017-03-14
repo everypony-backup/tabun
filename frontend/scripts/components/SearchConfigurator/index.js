@@ -1,43 +1,34 @@
 import React from 'react';
 import {transform} from 'lodash';
+import autobind from 'autobind-decorator'
+
 import routes from 'lib/routes';
 import {gettext as _} from 'core/lang';
 
 import SearhParams from './logic.js';
 import {NamedDropdown, NamedRadioGroup} from './views.js';
 
+@autobind
 export default class SearchConfigurator extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            params: new SearhParams(props.coded),
-            query: props.query || ""
-        };
-
-        this.handleQueryInput = this.handleQueryInput.bind(this);
-        this.handleQueryType = this.handleQueryType.bind(this);
-        this.handleSortDir = this.handleSortDir.bind(this);
-        this.handleSortType = this.handleSortType.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-
-        this.sortDirs = transform(
-            SearhParams.SORT_DIRS,
-            (acc, value) => {acc[value] =_(`search_sort_dir_${value}`)},
-            {}
-        );
-        this.sortTypes = transform(
-            SearhParams.SORT_TYPES,
-            (acc, value) => {acc[value] =_(`search_sort_by_${value}`)},
-            {}
-        );
-        this.queryTypes = transform(
-            SearhParams.QUERY_TYPES,
-            (acc, value) => {acc[value] =_(`search_type_${value}`)},
-            {}
-        );
-    }
+    state = {
+        params: new SearhParams(this.props.coded),
+        query: props.query || ""
+    };
+    sortDirs = transform(
+        SearhParams.SORT_DIRS,
+        (acc, value) => {acc[value] =_(`search_sort_dir_${value}`)},
+        {}
+    );
+    sortTypes = transform(
+        SearhParams.SORT_TYPES,
+        (acc, value) => {acc[value] =_(`search_sort_by_${value}`)},
+        {}
+    );
+    queryTypes = transform(
+        SearhParams.QUERY_TYPES,
+        (acc, value) => {acc[value] =_(`search_type_${value}`)},
+        {}
+    );
 
     handleQueryInput (event) {
         // in-time validation/tooltips/help goes here

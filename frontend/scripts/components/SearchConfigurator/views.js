@@ -1,18 +1,14 @@
 import React from 'react';
 import {map} from 'lodash';
 import classNames from 'classnames';
+import autobind from 'autobind-decorator'
 
+@autobind
 export class NamedDropdown extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            opened: false,
-            selected: props.selected
-        };
-        this.toggle = this.toggle.bind(this);
-        this.change = this.change.bind(this);
-    }
+    state = {
+        opened: false,
+        selected: this.props.selected
+    };
 
     change(event) {
         const val = event.target.name;
@@ -63,15 +59,11 @@ export class NamedDropdown extends React.Component {
     }
 }
 
+@autobind
 export class NamedRadioGroup extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: props.selected
-        };
-        this.change = this.change.bind(this);
-    }
+    state = {
+        selected: this.props.selected
+    };
 
     change(event) {
         const val = event.target.value;
