@@ -7,6 +7,8 @@ import Modal from 'components/Modal';
 import FileInput from 'components/FileInput';
 import {gettext} from 'core/lang';
 
+import utils from './utils';
+
 
 @autobind
 export default class ImageUploader extends React.Component {
@@ -26,6 +28,7 @@ export default class ImageUploader extends React.Component {
         containerClass: React.PropTypes.string,
         previewClass: React.PropTypes.string,
         linkClass: React.PropTypes.string,
+        onUpload: React.PropTypes.func,
     };
 
     setEditorRef(editor) {
@@ -54,7 +57,7 @@ export default class ImageUploader extends React.Component {
     handleSave() {
         const croppedImg = this.editor.getImageScaledToCanvas().toDataURL();
         this.setState({croppedImg: croppedImg});
-        // TODO: actually save image
+        this.props.onUpload(utils.extractBase64(croppedImg));
         this.handleRequestClose()
     }
 
