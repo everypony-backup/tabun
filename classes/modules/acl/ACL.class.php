@@ -190,7 +190,7 @@ class ModuleACL extends Module {
 	 * @param ModuleComment_EntityComment $oComment	Комментарий
 	 * @param bool $bFullCheck
 	 * @param ModuleVote_EntityVote $oPresentVote
-	 * @param array $error
+	 * @param object $error
 	 * @return bool
 	 */
 	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
