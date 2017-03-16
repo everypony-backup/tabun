@@ -274,7 +274,7 @@ class ModuleACL extends Module {
 		)) !== true) {
 			if (is_string($mRes)) {
 				if($error != null) {
-					$error->sMsgId = $mRes;
+					$error->sMsg = $mRes;
 					$error->sTitleId = 'attention';
 				}
 				return false;
@@ -429,7 +429,7 @@ class ModuleACL extends Module {
 		)) !== true) {
 			if (is_string($mRes)) {
 				if($error != null) {
-					$error->sMsgId = $mRes;
+					$error->sMsg = $mRes;
 					$error->sTitleId = 'attention';
 				}
 				return false;
@@ -516,7 +516,7 @@ class ModuleACL extends Module {
 		)) !== true) {
 			if (is_string($mRes)) {
 				if($error != null) {
-					$error->sMsgId = $mRes;
+					$error->sMsg = $mRes;
 					$error->sTitleId = 'attention';
 				}
 				return false;

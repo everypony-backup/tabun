@@ -216,7 +216,7 @@ class ActionAjax extends Action {
 		 * Может ли пользователь проголосовать за комментарий?
 		 */
 		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,true,null,$error)) {
-			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
+			$this->Message_AddErrorSingle($error->sMsg ? $error->sMsg : $this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
 
@@ -273,7 +273,7 @@ class ActionAjax extends Action {
 		 * Может ли пользователь проголосовать за топик?
 		 */
 		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic,true,null,$error)) {
-			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
+			$this->Message_AddErrorSingle($error->sMsg ? $error->sMsg : $this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
 		
@@ -350,7 +350,7 @@ class ActionAjax extends Action {
 		 * Может ли пользователь проголосовать за блог?
 		 */
 		if (!$this->ACL_CanVoteBlog($this->oUserCurrent,$oBlog,true,null,$error)) {
-			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
+			$this->Message_AddErrorSingle($error->sMsg ? $error->sMsg : $this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
 
@@ -405,7 +405,7 @@ class ActionAjax extends Action {
 		 * Может ли пользователь проголосовать за другого пользователя?
 		 */
 		if (!$this->ACL_CanVoteUser($this->oUserCurrent,$oUser,true,null,$error)) {
-			$this->Message_AddErrorSingle($this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
+			$this->Message_AddErrorSingle($error->sMsg ? $error->sMsg : $this->Lang_Get($error->sMsgId),$this->Lang_Get($error->sTitleId));
 			return;
 		}
 
