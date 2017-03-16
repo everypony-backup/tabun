@@ -199,8 +199,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oComment->getUserId()==$oUser->getId()) {
 			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_self';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('comment_vote_error_self');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -209,8 +209,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oComment->getTargetType() != 'topic') {
 			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_noexists';
-				$error->sTitleId = 'error';
+				$error->sMsg = Lang::Get('comment_vote_error_noexists');
+				$error->sTitle = Lang::Get('error');
 			}
 			return false;
 		}
@@ -224,8 +224,8 @@ class ModuleACL extends Module {
 		}
 		if ($oVote) {
 			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_already';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('comment_vote_error_already');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -234,8 +234,8 @@ class ModuleACL extends Module {
 		 */
 		if (strtotime($oComment->getDate())<=time()-Config::Get('acl.vote.comment.limit_time')) {
 			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_time';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('comment_vote_error_time');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -244,8 +244,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oUser->getRating()<Config::Get('acl.vote.comment.rating')) {
 			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_acl';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('comment_vote_error_acl');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -256,8 +256,8 @@ class ModuleACL extends Module {
 		if ($bFullCheck)
 		if (!in_array($iValue, [1, -1])) {
 			if($error != null) {
-				$error->sMsgId = 'comment_vote_error_value';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('comment_vote_error_value');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -275,14 +275,14 @@ class ModuleACL extends Module {
 			if (is_string($mRes)) {
 				if($error != null) {
 					$error->sMsg = $mRes;
-					$error->sTitleId = 'attention';
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 				//return Router::Action('error');
 			} else {
 				if($error != null) {
-					$error->sMsgId = 'check_rule_action_error';
-					$error->sTitleId = 'attention';
+					$error->sMsg = Lang::Get('check_rule_action_error');
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 				//return Router::Action('error');
@@ -306,8 +306,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oBlog->getOwnerId()==$oUser->getId()) {
 			if($error != null) {
-				$error->sMsgId = 'blog_vote_error_self';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('blog_vote_error_self');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -321,8 +321,8 @@ class ModuleACL extends Module {
 		}
 		if ($oBlogVote) {
 			if($error != null) {
-				$error->sMsgId = 'blog_vote_error_already';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('blog_vote_error_already');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -333,8 +333,8 @@ class ModuleACL extends Module {
 			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId());
 			if(!$oBlogUser || $oBlogUser->getUserRole()<ModuleBlog::BLOG_USER_ROLE_GUEST) {
 				if($error != null) {
-					$error->sMsgId = 'blog_vote_error_close';
-					$error->sTitleId = 'attention';
+					$error->sMsg = Lang::Get('blog_vote_error_close');
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 			}
@@ -344,8 +344,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oUser->getRating()<Config::Get('acl.vote.blog.rating')) {
 			if($error != null) {
-				$error->sMsgId = 'blog_vote_error_acl';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('blog_vote_error_acl');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -367,8 +367,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oTopic->getUserId()==$oUser->getId()) {
 			if($error != null) {
-				$error->sMsgId = 'topic_vote_error_self';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('topic_vote_error_self');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -382,8 +382,8 @@ class ModuleACL extends Module {
 		}
 		if ($oTopicVote) {
 			if($error != null) {
-				$error->sMsgId = 'topic_vote_error_already';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('topic_vote_error_already');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -392,8 +392,8 @@ class ModuleACL extends Module {
 		 */
 		if (strtotime($oTopic->getDateAdd())<=time()-Config::Get('acl.vote.topic.limit_time')) {
 			if($error != null) {
-				$error->sMsgId = 'topic_vote_error_time';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('topic_vote_error_time');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -402,16 +402,19 @@ class ModuleACL extends Module {
 		 */
 		$iValue=(int)getRequestStr('value',null,'post');
 		if (!in_array($iValue, [1, -1, 0])) {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
-			return;
+			if($error != null) {
+				$error->sMsg = Lang::Get('system_error');
+				$error->sTitle = Lang::Get('attention');
+			}
+			return false;
 		}
 		/**
 		 * Права на голосование
 		 */
 		if ($oUser->getRating()<Config::Get('acl.vote.topic.rating') and $iValue) {
 			if($error != null) {
-				$error->sMsgId = 'topic_vote_error_acl';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('topic_vote_error_acl');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -430,14 +433,14 @@ class ModuleACL extends Module {
 			if (is_string($mRes)) {
 				if($error != null) {
 					$error->sMsg = $mRes;
-					$error->sTitleId = 'attention';
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 				//return Router::Action('error');
 			} else {
 				if($error != null) {
-					$error->sMsgId = 'check_rule_action_error';
-					$error->sTitleId = 'attention';
+					$error->sMsg = Lang::Get('check_rule_action_error');
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 				//return Router::Action('error');
@@ -461,8 +464,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oUserTarget->getId()==$oUser->getId()) {
 			if($error != null) {
-				$error->sMsgId = 'user_vote_error_self';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('user_vote_error_self');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -476,8 +479,8 @@ class ModuleACL extends Module {
 		}
 		if ($oUserVote) {
 			if($error != null) {
-				$error->sMsgId = 'user_vote_error_already';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('user_vote_error_already');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -486,8 +489,8 @@ class ModuleACL extends Module {
 		 */
 		if ($oUser->getRating()<Config::Get('acl.vote.user.rating')) {
 			if($error != null) {
-				$error->sMsgId = 'user_vote_error_acl';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('user_vote_error_acl');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -498,8 +501,8 @@ class ModuleACL extends Module {
 		if ($bFullCheck)
 		if (!in_array($iValue, [1, -1])) {
 			if($error != null) {
-				$error->sMsgId = 'system_error';
-				$error->sTitleId = 'attention';
+				$error->sMsg = Lang::Get('system_error');
+				$error->sTitle = Lang::Get('attention');
 			}
 			return false;
 		}
@@ -517,14 +520,14 @@ class ModuleACL extends Module {
 			if (is_string($mRes)) {
 				if($error != null) {
 					$error->sMsg = $mRes;
-					$error->sTitleId = 'attention';
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 				//return Router::Action('error');
 			} else {
 				if($error != null) {
-					$error->sMsgId = 'check_rule_action_error';
-					$error->sTitleId = 'attention';
+					$error->sMsg = Lang::Get('check_rule_action_error');
+					$error->sTitle = Lang::Get('attention');
 				}
 				return false;
 				//return Router::Action('error');
