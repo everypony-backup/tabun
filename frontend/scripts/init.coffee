@@ -132,6 +132,8 @@ init = ->
       ls.user.reactivation()
 
   if window.location.pathname.match "settings/profile"
+    $(document).ready () ->
+      ls.geo.initSelect()
     $('#form-field-add').on 'click', ->
       ls.userfield.addFormField()
     $(document).on 'change', '#user-field-contact-contener select', ->
