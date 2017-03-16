@@ -80,6 +80,7 @@ return [
                             'imgur.com' => '',
                             'ponyvillelive.com' => '',
                         ],
+                    ],
                     'data-src' => [
                         '#domain' => [
                             'youtube.com' => 'embed/[\w\d\-_]+$',
