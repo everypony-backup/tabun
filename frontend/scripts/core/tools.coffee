@@ -186,6 +186,7 @@ contentMediaParser = (oldText) ->
   unless oldText then return
   temp = document.createElement 'temp'
 
+  # Обрабатываем тэги video и iframe
   if /<video>|<iframe/i.test oldText
     temp.innerHTML = oldText
     video = temp.querySelectorAll "video, iframe"
@@ -221,6 +222,7 @@ contentMediaParser = (oldText) ->
   else
     newText = oldText
 
+  # Обрабатываем спойлеры
   if newText.match /spoiler-body/i
     temp.innerHTML = newText
     spoilers = temp.getElementsByClassName "spoiler"
@@ -237,15 +239,15 @@ contentMediaParser = (oldText) ->
               media[j].setAttribute "src", ""
           spoilers[i].classList.add 'spoiler-media'
 
-        # Убираем ифреймы из заголовка
-        # Нет рутубу вне спойлеров
-        badMedia = temp.querySelectorAll '.spoiler-title iframe, iframe[src*="rutube"]'
-        if badMedia.length
-          j = badMedia.length
-          while j--
-            badMedia[j].outerHTML = ""
+    newText = temp.innerHTML
 
-      newText = temp.innerHTML
+  # Убираем ифреймы из заголовка
+  # Нет рутубу вне спойлеров
+  badMedia = temp.querySelectorAll '.spoiler-title iframe, iframe[src*="rutube"]'
+  if badMedia.length
+    j = badMedia.length
+    while j--
+      badMedia[j].outerHTML = ""
 
   else return newText
   temp.outerHTML = ''
