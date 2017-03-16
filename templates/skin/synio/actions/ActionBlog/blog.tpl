@@ -54,7 +54,7 @@
 															{else}
 																not-voted
 															{/if}
-															{if $oUserCurrent and $LS->ACL_CanVoteBlog($oUserCurrent, $oBlog, false, $oVote)} vote-enabled{/if}
+															{if $oUserCurrent and !$oVote and $oBlog->getOwnerId()!=$oUserCurrent->getId() and $LS->ACL_CanVoteBlog($oUserCurrent, $oBlog)} vote-enabled{/if}
 															{if $bVoteInfoEnabled} vote-info-enabled{/if}
 															">
 		{assign var="iBlogCountVote" value=$oBlog->getCountVote()}

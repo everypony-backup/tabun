@@ -25,7 +25,7 @@
 																		not-voted
 																	{/if}
 																	
-																	{if $oUserCurrent and $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile, false, $oVote)} vote-enabled{/if}
+																	{if $oUserCurrent and $oUserCurrent->getId()==$oUserProfile->getId() and !$oVote and $LS->ACL_CanVoteUser($oUserCurrent,$oUserProfile) and $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile)} vote-enabled{/if}
 																	{if $bVoteInfoEnabled} vote-info-enabled{/if}
 																	">
 			{assign var="iUserProfileCountVote" value=$oUserProfile->getCountVote()}

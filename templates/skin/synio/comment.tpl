@@ -109,7 +109,7 @@
                         {else} voted-down
                         {/if}
                     {elseif !isset($oCommentSelf)}
-                        {if (strtotime($oCommentDate)>=time()-$oConfig->GetValue('acl.vote.comment.limit_time'))} vote-enabled{/if}
+                        {if $oUserCurrent and !$oCommentVote and $oComment->getTargetType() == 'topic' and (strtotime($oCommentDate)>=time()-$oConfig->GetValue('acl.vote.comment.limit_time')) and $LS->ACL_CanVoteComment($oUserCurrent, $oComment)} vote-enabled{/if}
                     {/if}
                     {if $bVoteInfoEnabled} vote-info-enabled{/if}">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>

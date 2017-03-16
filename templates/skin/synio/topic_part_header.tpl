@@ -58,7 +58,7 @@
 						not-voted
 					{/if}
 					
-					{if $oUserCurrent and $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic, false, $oVote)} vote-enabled
+					{if $oUserCurrent and $oTopic->getUserId()!=$oUserCurrent->getId() and strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time') and !$oVote and $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic)} vote-enabled
 						{if $bVoteInfoEnabled} vote-info-enabled-base{/if}
 					{else}
 						{if $bVoteInfoEnabled} vote-info-enabled{/if}

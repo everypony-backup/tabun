@@ -188,352 +188,61 @@ class ModuleACL extends Module {
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleComment_EntityComment $oComment	Комментарий
-	 * @param bool $bFullCheck
-	 * @param ModuleVote_EntityVote $oPresentVote
-	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Голосует автор комментария?
-		 */
-		if ($oComment->getUserId()==$oUser->getId()) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('comment_vote_error_self');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
+	public function CanVoteComment(ModuleUser_EntityUser $oUser, ModuleComment_EntityComment $oComment) {
+		if ($oUser->getRating()>=Config::Get('acl.vote.comment.rating')) {
+			return true;
 		}
-		/**
-		 * Комментарий не в блоге?
-		 */
-		if ($oComment->getTargetType() != 'topic') {
-			if($error != null) {
-				$error->sMsg = Lang::Get('comment_vote_error_noexists');
-				$error->sTitle = Lang::Get('error');
-			}
-			return false;
-		}
-		/**
-		 * Пользователь уже голосовал?
-		 */
-		if ($bFullCheck) {
-			$oVote=$this->Vote_GetVote($oComment->getId(),'comment',$oUser->getId());
-		} else {
-			$oVote=$oPresentVote;
-		}
-		if ($oVote) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('comment_vote_error_already');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Время голосования истекло?
-		 */
-		if (strtotime($oComment->getDate())<=time()-Config::Get('acl.vote.comment.limit_time')) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('comment_vote_error_time');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Пользователь не имеет права голоса?
-		 */
-		if ($oUser->getRating()<Config::Get('acl.vote.comment.rating')) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('comment_vote_error_acl');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Как именно голосует пользователь
-		 */
-		$iValue=(int)getRequestStr('value', null, 'post');
-		if ($bFullCheck)
-		if (!in_array($iValue, [1, -1])) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('comment_vote_error_value');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * А можно ли ему вообще голосовать?
-		 */
-		if ($bFullCheck)
-		if (($mRes = $this->Magicrule_CheckRuleAction(
-			'vote_comment',
-			$oUser,
-			[
-				'vote_value' => $iValue
-			]
-		)) !== true) {
-			if (is_string($mRes)) {
-				if($error != null) {
-					$error->sMsg = $mRes;
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
-				//return Router::Action('error');
-			} else {
-				if($error != null) {
-					$error->sMsg = Lang::Get('check_rule_action_error');
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
-				//return Router::Action('error');
-			}
-		}
-		return true;
+		return false;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретный блог
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleBlog_EntityBlog $oBlog	Блог
-	 * @param bool $bFullCheck
-	 * @param ModuleVote_EntityVote $oPresentVote
-	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Голосует за свой блог?
-		 */
-		if ($oBlog->getOwnerId()==$oUser->getId()) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('blog_vote_error_self');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Уже голосовал?
-		 */
-		if ($bFullCheck) {
-			$oBlogVote=$this->Vote_GetVote($oBlog->getId(),'blog',$oUser->getId());
-		} else {
-			$oBlogVote=$oPresentVote;
-		}
-		if ($oBlogVote) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('blog_vote_error_already');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
+	public function CanVoteBlog(ModuleUser_EntityUser $oUser, ModuleBlog_EntityBlog $oBlog) {
 		/**
 		 * Если блог закрытый, проверяем является ли пользователь его читателем
 		 */
 		if($oBlog->getType()=='close') {
 			$oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId());
 			if(!$oBlogUser || $oBlogUser->getUserRole()<ModuleBlog::BLOG_USER_ROLE_GUEST) {
-				if($error != null) {
-					$error->sMsg = Lang::Get('blog_vote_error_close');
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
+				return self::CAN_VOTE_BLOG_ERROR_CLOSE;
 			}
 		}
-		/**
-		 * Имеет право на голосование?
-		 */
-		if ($oUser->getRating()<Config::Get('acl.vote.blog.rating')) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('blog_vote_error_acl');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
+		if ($oUser->getRating()>=Config::Get('acl.vote.blog.rating')) {
+			return self::CAN_VOTE_BLOG_TRUE;
 		}
-		return true;
+		return self::CAN_VOTE_BLOG_FALSE;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретный топик
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleTopic_EntityTopic $oTopic	Топик
-	 * @param bool $bFullCheck
-	 * @param ModuleVote_EntityVote $oPresentVote
-	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Голосует автор топика?
-		 */
-		if ($oTopic->getUserId()==$oUser->getId()) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('topic_vote_error_self');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
+	public function CanVoteTopic(ModuleUser_EntityUser $oUser, ModuleTopic_EntityTopic $oTopic) {
+		if ($oUser->getRating()>=Config::Get('acl.vote.topic.rating')) {
+			return true;
 		}
-		/**
-		 * Пользователь уже голосовал?
-		 */
-		if ($bFullCheck) {
-			$oTopicVote=$this->Vote_GetVote($oTopic->getId(),'topic',$oUser->getId());
-		} else {
-			$oTopicVote=$oPresentVote;
-		}
-		if ($oTopicVote) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('topic_vote_error_already');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Время голосования истекло?
-		 */
-		if (strtotime($oTopic->getDateAdd())<=time()-Config::Get('acl.vote.topic.limit_time')) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('topic_vote_error_time');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Как проголосовал пользователь
-		 */
-		$iValue=(int)getRequestStr('value',null,'post');
-		if (!in_array($iValue, [1, -1, 0])) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('system_error');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Права на голосование
-		 */
-		if ($oUser->getRating()<Config::Get('acl.vote.topic.rating') and $iValue) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('topic_vote_error_acl');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-        /**
-         * А можно ли ему вообще голосовать?
-         */
-		if ($iValue != 0)	// проверяем только если пользователь голосует, а не запрашивает рейтинг
-		if ($bFullCheck)
-		if (($mRes = $this->Magicrule_CheckRuleAction(
-			'vote_topic',
-			$oUser,
-			[
-				'vote_value' => $iValue
-			]
-		)) !== true) {
-			if (is_string($mRes)) {
-				if($error != null) {
-					$error->sMsg = $mRes;
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
-				//return Router::Action('error');
-			} else {
-				if($error != null) {
-					$error->sMsg = Lang::Get('check_rule_action_error');
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
-				//return Router::Action('error');
-			}
-		}
-		return true;
+		return false;
 	}
 	/**
 	 * Проверяет может ли пользователь голосовать за конкретного пользователя
 	 *
 	 * @param ModuleUser_EntityUser $oUser	Пользователь
 	 * @param ModuleUser_EntityUser $oUserTarget	Пользователь за которого голосуем
-	 * @param bool $bFullCheck
-	 * @param ModuleVote_EntityVote $oPresentVote
-	 * @param object $error
 	 * @return bool
 	 */
-	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget, $bFullCheck=true, $oPresentVote=null, $error=null) {
-		/**
-		 * Голосует за себя?
-		 */
-		if ($oUserTarget->getId()==$oUser->getId()) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('user_vote_error_self');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
+	public function CanVoteUser(ModuleUser_EntityUser $oUser, ModuleUser_EntityUser $oUserTarget) {
+		if ($oUser->getRating()>=Config::Get('acl.vote.user.rating')) {
+			return true;
 		}
-		/**
-		 * Уже голосовал?
-		 */
-		if ($bFullCheck) {
-			$oUserVote=$this->Vote_GetVote($oUserTarget->getId(),'user',$oUser->getId());
-		} else {
-			$oUserVote=$oPresentVote;
-		}
-		if ($oUserVote) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('user_vote_error_already');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Имеет право на голосование?
-		 */
-		if ($oUser->getRating()<Config::Get('acl.vote.user.rating')) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('user_vote_error_acl');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * Как проголосовал
-		 */
-		$iValue=(int)getRequestStr('value',null,'post');
-		if ($bFullCheck)
-		if (!in_array($iValue, [1, -1])) {
-			if($error != null) {
-				$error->sMsg = Lang::Get('system_error');
-				$error->sTitle = Lang::Get('attention');
-			}
-			return false;
-		}
-		/**
-		 * А можно ли ему вообще голосовать?
-		 */
-		if ($bFullCheck)
-		if (($mRes = $this->Magicrule_CheckRuleAction(
-			'vote_user',
-			$oUser,
-			[
-				'vote_value' => $iValue
-			]
-		)) !== true) {
-			if (is_string($mRes)) {
-				if($error != null) {
-					$error->sMsg = $mRes;
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
-				//return Router::Action('error');
-			} else {
-				if($error != null) {
-					$error->sMsg = Lang::Get('check_rule_action_error');
-					$error->sTitle = Lang::Get('attention');
-				}
-				return false;
-				//return Router::Action('error');
-			}
-		}
-		return true;
+		return false;
 	}
 	/**
 	 * Проверяет можно ли юзеру слать инвайты

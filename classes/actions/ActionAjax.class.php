@@ -210,17 +210,70 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_noexists'),$this->Lang_Get('error'));
 			return;
 		}
-		
-		$error = new stdClass();
 		/**
-		 * Может ли пользователь проголосовать за комментарий?
+		 * Голосует автор комментария?
 		 */
-		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment,true,null,$error)) {
-			$this->Message_AddErrorSingle($error->sMsg,$error->sTitle);
+		if ($oComment->getUserId()==$this->oUserCurrent->getId()) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_self'),$this->Lang_Get('attention'));
+			return;
+		}
+        /**
+         * Комментарий не в блоге?
+         */
+        if ($oComment->getTargetType() != 'topic') {
+            $this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_noexists'),$this->Lang_Get('error'));
+            return;
+        }
+		/**
+		 * Пользователь уже голосовал?
+		 */
+		if ($oTopicCommentVote=$this->Vote_GetVote($oComment->getId(),'comment',$this->oUserCurrent->getId())) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_already'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Время голосования истекло?
+		 */
+		if (strtotime($oComment->getDate())<=time()-Config::Get('acl.vote.comment.limit_time')) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_time'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Пользователь имеет право голоса?
+		 */
+		if (!$this->ACL_CanVoteComment($this->oUserCurrent,$oComment)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_acl'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Как именно голосует пользователь
+		 */
+		$iValue=getRequestStr('value', null, 'post');
+		if (!in_array($iValue,array('1','-1'))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('comment_vote_error_value'),$this->Lang_Get('attention'));
 			return;
 		}
 
-		$iValue=getRequestStr('value', null, 'post');
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'vote_comment',
+            $this->oUserCurrent,
+            [
+                'vote_value' => (int)getRequest('value', null, 'post')
+            ]
+        );
+        if ($mRes !== true) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
+
 		/**
 		 * Голосуем
 		 */
@@ -267,17 +320,62 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
 			return;
 		}
-		
-		$error = new stdClass();
 		/**
-		 * Может ли пользователь проголосовать за топик?
+		 * Голосует автор топика?
 		 */
-		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic,true,null,$error)) {
-			$this->Message_AddErrorSingle($error->sMsg,$error->sTitle);
+		if ($oTopic->getUserId()==$this->oUserCurrent->getId()) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_self'),$this->Lang_Get('attention'));
 			return;
 		}
-		
-		$iValue=(int)getRequestStr('value', null, 'post');
+		/**
+		 * Пользователь уже голосовал?
+		 */
+		if ($oTopicVote=$this->Vote_GetVote($oTopic->getId(),'topic',$this->oUserCurrent->getId())) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_already'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Время голосования истекло?
+		 */
+		if (strtotime($oTopic->getDateAdd())<=time()-Config::Get('acl.vote.topic.limit_time')) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_time'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Как проголосовал пользователь
+		 */
+		$iValue=getRequestStr('value',null,'post');
+		if (!in_array($iValue,array('1','-1','0'))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Права на голосование
+		 */
+		if (!$this->ACL_CanVoteTopic($this->oUserCurrent,$oTopic) and $iValue) {
+			$this->Message_AddErrorSingle($this->Lang_Get('topic_vote_error_acl'),$this->Lang_Get('attention'));
+			return;
+		}
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'vote_topic',
+            $this->oUserCurrent,
+            [
+                'vote_value' => (int)getRequest('value', null, 'post')
+            ]
+        );
+        if ($mRes !== true) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
+
 		/**
 		 * Голосуем
 		 */
@@ -344,40 +442,63 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
 			return;
 		}
-		
-		$error = new stdClass();
 		/**
-		 * Может ли пользователь проголосовать за блог?
+		 * Голосует за свой блог?
 		 */
-		if (!$this->ACL_CanVoteBlog($this->oUserCurrent,$oBlog,true,null,$error)) {
-			$this->Message_AddErrorSingle($error->sMsg,$error->sTitle);
+		if ($oBlog->getOwnerId()==$this->oUserCurrent->getId()) {
+			$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_self'),$this->Lang_Get('attention'));
 			return;
 		}
-
-		$iValue=(int)getRequestStr('value', null, 'post');
 		/**
-		 * Голосуем
+		 * Уже голосовал?
 		 */
-		$oBlogVote=Engine::GetEntity('Vote');
-		$oBlogVote->setTargetId($oBlog->getId());
-		$oBlogVote->setTargetType('blog');
-		$oBlogVote->setVoterId($this->oUserCurrent->getId());
-		$oBlogVote->setDirection($iValue);
-		$oBlogVote->setDate(date("Y-m-d H:i:s"));
-		$iVal=(float)$this->Rating_VoteBlog($this->oUserCurrent,$oBlog,$iValue);
-		$oBlogVote->setValue($iVal);
-		$oBlog->setCountVote($oBlog->getCountVote()+1);
-		if ($this->Vote_AddVote($oBlogVote) and $this->Blog_UpdateBlog($oBlog)) {
-			$this->Viewer_AssignAjax('iCountVote',$oBlog->getCountVote());
-			$this->Viewer_AssignAjax('iRating',$oBlog->getRating());
-			$this->Message_AddNoticeSingle($this->Lang_Get('blog_vote_ok'),$this->Lang_Get('attention'));
-			/**
-			 * Добавляем событие в ленту
-			 */
-			$this->Stream_write($oBlogVote->getVoterId(), 'vote_blog', $oBlog->getId());
-		} else {
-			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+		if ($oBlogVote=$this->Vote_GetVote($oBlog->getId(),'blog',$this->oUserCurrent->getId())) {
+			$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_already'),$this->Lang_Get('attention'));
 			return;
+		}
+		/**
+		 * Имеет право на голосование?
+		 */
+		switch($this->ACL_CanVoteBlog($this->oUserCurrent,$oBlog)) {
+			case ModuleACL::CAN_VOTE_BLOG_TRUE:
+				$iValue=getRequestStr('value',null,'post');
+				if (in_array($iValue,array('1','-1'))) {
+					$oBlogVote=Engine::GetEntity('Vote');
+					$oBlogVote->setTargetId($oBlog->getId());
+					$oBlogVote->setTargetType('blog');
+					$oBlogVote->setVoterId($this->oUserCurrent->getId());
+					$oBlogVote->setDirection($iValue);
+					$oBlogVote->setDate(date("Y-m-d H:i:s"));
+					$iVal=(float)$this->Rating_VoteBlog($this->oUserCurrent,$oBlog,$iValue);
+					$oBlogVote->setValue($iVal);
+					$oBlog->setCountVote($oBlog->getCountVote()+1);
+					if ($this->Vote_AddVote($oBlogVote) and $this->Blog_UpdateBlog($oBlog)) {
+						$this->Viewer_AssignAjax('iCountVote',$oBlog->getCountVote());
+						$this->Viewer_AssignAjax('iRating',$oBlog->getRating());
+						$this->Message_AddNoticeSingle($this->Lang_Get('blog_vote_ok'),$this->Lang_Get('attention'));
+						/**
+						 * Добавляем событие в ленту
+						 */
+						$this->Stream_write($oBlogVote->getVoterId(), 'vote_blog', $oBlog->getId());
+					} else {
+						$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+						return;
+					}
+				} else {
+					$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
+					return;
+				}
+				break;
+			case ModuleACL::CAN_VOTE_BLOG_ERROR_CLOSE:
+				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_close'),$this->Lang_Get('attention'));
+				return;
+				break;
+
+			default:
+			case ModuleACL::CAN_VOTE_BLOG_FALSE:
+				$this->Message_AddErrorSingle($this->Lang_Get('blog_vote_error_acl'),$this->Lang_Get('attention'));
+				return;
+				break;
 		}
 	}
 	/**
@@ -399,17 +520,56 @@ class ActionAjax extends Action {
 			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('error'));
 			return;
 		}
-		
-		$error = new stdClass();
 		/**
-		 * Может ли пользователь проголосовать за другого пользователя?
+		 * Голосует за себя?
 		 */
-		if (!$this->ACL_CanVoteUser($this->oUserCurrent,$oUser,true,null,$error)) {
-			$this->Message_AddErrorSingle($error->sMsg,$error->sTitle);
+		if ($oUser->getId()==$this->oUserCurrent->getId()) {
+			$this->Message_AddErrorSingle($this->Lang_Get('user_vote_error_self'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Уже голосовал?
+		 */
+		if ($oUserVote=$this->Vote_GetVote($oUser->getId(),'user',$this->oUserCurrent->getId())) {
+			$this->Message_AddErrorSingle($this->Lang_Get('user_vote_error_already'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Имеет право на голосование?
+		 */
+		if (!$this->ACL_CanVoteUser($this->oUserCurrent,$oUser)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('user_vote_error_acl'),$this->Lang_Get('attention'));
+			return;
+		}
+		/**
+		 * Как проголосовал
+		 */
+		$iValue=getRequestStr('value',null,'post');
+		if (!in_array($iValue,array('1','-1'))) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'),$this->Lang_Get('attention'));
 			return;
 		}
 
-		$iValue=(int)getRequestStr('value', null, 'post');
+        /**
+         * А можно ли ему вообще голосовать?
+         */
+        $mRes = $this->Magicrule_CheckRuleAction(
+            'vote_user',
+            $this->oUserCurrent,
+            [
+                'vote_value' => (int)getRequest('value', null, 'post')
+            ]
+        );
+        if ($mRes !== true) {
+            if (is_string($mRes)) {
+                $this->Message_AddErrorSingle($mRes,$this->Lang_Get('attention'));
+                return Router::Action('error');
+            } else {
+                $this->Message_AddErrorSingle($this->Lang_Get('check_rule_action_error'), $this->Lang_Get('attention'));
+                return Router::Action('error');
+            }
+        }
+
 		/**
 		 * Голосуем
 		 */
