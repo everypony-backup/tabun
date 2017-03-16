@@ -228,14 +228,6 @@ contentMediaParser = (oldText) ->
       i = spoilers.length
       while i--
 
-        # Убираем ифреймы из заголовка
-        # Нет рутубу вне спойлеров
-        badMedia = temp.querySelectorAll ".spoiler-title iframe, iframe[src*=rutube]"
-        if badMedia.length
-          j = badMedia.length
-          while j--
-            badMedia[j].outerHTML = ""
-
         media = spoilers[i].querySelectorAll ".spoiler-body img, iframe"
         if media.length
           j = media.length
@@ -244,6 +236,14 @@ contentMediaParser = (oldText) ->
               media[j].dataset.src = media[j].getAttribute "src"
               media[j].setAttribute "src", ""
           spoilers[i].classList.add 'spoiler-media'
+
+        # Убираем ифреймы из заголовка
+        # Нет рутубу вне спойлеров
+        badMedia = temp.querySelectorAll '.spoiler-title iframe, iframe[src*="rutube"]'
+        if badMedia.length
+          j = badMedia.length
+          while j--
+            badMedia[j].outerHTML = ""
 
       newText = temp.innerHTML
 
