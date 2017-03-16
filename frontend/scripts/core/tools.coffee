@@ -214,7 +214,7 @@ contentMediaParser = (oldText) ->
         else if video[i].nodeName == "IFRAME"
           continue
         if src
-          video[i].outerHTML = '<iframe width="560" height="310" src="'+src+'" frameborder="0" allowfullscreen></iframe>'
+          video[i].outerHTML = '<iframe width="560" height="310" src="'+src+'" frameborder="0" allowfullscreen="1"></iframe>'
         else
           video[i].outerHTML = ''
     newText = temp.innerHTML
@@ -228,7 +228,9 @@ contentMediaParser = (oldText) ->
       i = spoilers.length
       while i--
 
-        badMedia = temp.querySelectorAll ".spoiler-title iframe"
+        # Убираем ифреймы из заголовка
+        # Нет рутубу вне спойлеров
+        badMedia = temp.querySelectorAll ".spoiler-title iframe, iframe[src*=rutube]"
         if badMedia.length
           j = badMedia.length
           while j--
