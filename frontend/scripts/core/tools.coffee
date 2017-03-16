@@ -106,23 +106,147 @@ contentRemoveBadChars = (oldText) ->
       i++
   return newText
 
-contentMakeSpoilers = (oldText) ->
+youtube = (str) ->
+  unless str then return
+
+  shortcode = /youtube:\/\/|https?:\/\/youtu\.be\//g
+  if shortcode.test str
+    shortcodeid = str.split(shortcode)[1]
+    return shortcodeid
+
+  inlinev = /\/v\/|\/vi\//g
+  if inlinev.test str
+    inlineid = str.split(inlinev)[1]
+    return inlineid
+
+  parameterv = /v=|vi=/g
+  if parameterv.test str
+    arr = str.split parameterv
+    return arr[1].split('&')[0]
+
+  embedreg = /\/embed\//g
+  if embedreg.test str
+    embedid = str.split(embedreg)[1]
+    return embedid
+
+  userreg = /\/user\//g
+  if userreg.test str
+    elements = str.split '/'
+    return elements.pop()
+
+  attrreg = /\/attribution_link\?.*v%3D([^%&]*)(%26|&|$)/
+  if attrreg.test str
+    return str.match(attrreg)[1]
+
+vimeo = (str) ->
+  unless str then return
+  if str.indexOf('#') > -1
+    strNew = str.split('#')[0]
+  else
+    strNew = str
+  if /https?:\/\/vimeo\.com\/[0-9]+$|https?:\/\/player\.vimeo\.com\/video\/[0-9]+$/igm.test strNew
+    arr = strNew.split '/'
+    if arr && arr.length
+      return arr.pop()
+
+dailymotion = (str) ->
+  unless str then return
+
+  shortcode = /dai\.ly\//
+  if shortcode.test str
+    return str.split(shortcode)[1]
+
+  video = /dailymotion\.com\/video\//
+  if video.test str
+    return str.split(video)[1].split('_')[0]
+
+coub = (str) ->
+  unless str then return
+
+  view = /\/view\//
+  if view.test str
+    return str.split(view)[1]
+
+  embed = /\/embed\//
+  if embed.test str
+    return str.split(embed)[1].split("?")[0]
+
+rutube = (str) ->
+  unless str then return
+
+  embed = /\/embed\//
+  if embed.test str
+    return str.split(embed)[1]
+
+  video = /\/video\//
+  if video.test str
+    return str.split(video)[1].split("/")[0]
+
+contentMediaParser = (oldText) ->
   unless oldText then return
-  if oldText.match /spoiler-body/i
-    temp = document.createElement 'temp'
+  temp = document.createElement 'temp'
+
+  if /<video>|<iframe/i.test oldText
     temp.innerHTML = oldText
-    spoilers = temp.querySelectorAll ".spoiler:not(.spoiler-media)"
+    video = temp.querySelectorAll "video, iframe"
+    if video.length
+      i = video.length
+      while i--
+        if video[i].nodeName == "VIDEO"
+          url = video[i].textContent
+        else
+          url = video[i].getAttribute "src"
+          if !url
+            url = video[i].dataset.src
+        if !url
+          video[i].outerHTML = ''
+          continue
+        if /youtube|youtu\.be/.test url
+          src = '//www.youtube.com/embed/' + youtube url
+        else if /vimeo/.test url
+          src = '//player.vimeo.com/video/' + vimeo url
+        else if /dailymotion|dai\.ly/.test url
+          src = '//www.dailymotion.com/embed/video/' + dailymotion url
+        else if /coub\.com/.test url
+          src = '//coub.com/embed/' + coub url
+        else if /rutube/.test url
+          src = '//rutube.ru/video/embed/' + rutube url
+        else if video[i].nodeName == "IFRAME"
+          continue
+        if src
+          video[i].outerHTML = '<iframe width="560" height="310" src="'+src+'" frameborder="0" allowfullscreen></iframe>'
+        else
+          video[i].outerHTML = ''
+    newText = temp.innerHTML
+  else
+    newText = oldText
+
+  if newText.match /spoiler-body/i
+    temp.innerHTML = newText
+    spoilers = temp.getElementsByClassName "spoiler"
     if spoilers.length
       i = spoilers.length
       while i--
-        if spoilers[i].children[1].innerHTML.match /src="/i
-          spoilers[i].children[1].innerHTML = spoilers[i].children[1].innerHTML.replace /src="/gi, 'data-src="'
-          spoilers[i].children[1].parentNode.classList.add 'spoiler-media'
+
+        badMedia = temp.querySelectorAll ".spoiler-title iframe"
+        if badMedia.length
+          j = badMedia.length
+          while j--
+            badMedia[j].outerHTML = ""
+
+        media = spoilers[i].querySelectorAll ".spoiler-body img, iframe"
+        if media.length
+          j = media.length
+          while j--
+            if media[j].getAttribute "src"
+              media[j].dataset.src = media[j].getAttribute "src"
+              media[j].setAttribute "src", ""
+          spoilers[i].classList.add 'spoiler-media'
+
       newText = temp.innerHTML
-    else
-      newText = oldText
-    temp.outerHTML = ''
-  else return oldText
+
+  else return newText
+  temp.outerHTML = ''
   return newText
 
-module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers}
+module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg, spoilerHandler, contentRemoveBadChars, contentMediaParser}

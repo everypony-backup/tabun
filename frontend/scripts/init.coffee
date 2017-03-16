@@ -7,7 +7,7 @@ require "jquery.scrollto"
 
 blocks = require "lib/blocks.coffee"
 routes = require("lib/routes").default
-{showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMakeSpoilers, textPreview} = require "core/tools.coffee"
+{showPinkie, registry, spoilerHandler, contentRemoveBadChars, contentMediaParser, textPreview} = require "core/tools.coffee"
 autocomplete = require "core/autocomplete.coffee"
 
 talk = require "app/talk.coffee"
@@ -196,7 +196,7 @@ init = ->
     $('#fake_talk_add, #talk_preview').on 'click', (e) ->
       e.preventDefault()
       document.getElementById('talk_title').value = contentRemoveBadChars document.getElementById('talk_title').value
-      document.getElementById('talk_text').value = contentMakeSpoilers contentRemoveBadChars document.getElementById('talk_text').value
+      document.getElementById('talk_text').value = contentMediaParser contentRemoveBadChars document.getElementById('talk_text').value
       if (this.id == 'talk_preview')
         document.getElementById('text_preview').parentNode.style.display = 'block'
         textPreview 'talk_text', false
@@ -225,7 +225,7 @@ init = ->
       e.preventDefault()
       document.getElementById('topic_title').value = contentRemoveBadChars document.getElementById('topic_title').value
       document.getElementById('topic_tags').value = contentRemoveBadChars document.getElementById('topic_tags').value
-      document.getElementById('topic_text').value = contentRemoveBadChars contentMakeSpoilers document.getElementById('topic_text').value
+      document.getElementById('topic_text').value = contentRemoveBadChars contentMediaParser document.getElementById('topic_text').value
       if this.dataset.target
         document.getElementById(this.dataset.target).click()
       else

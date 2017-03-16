@@ -4,7 +4,7 @@ $ = require "jquery"
 {gettext, ngettext} = require "core/lang.coffee"
 {ajax} = require "core/ajax.coffee"
 {error, notice} = require "core/messages.coffee"
-{textPreview, registry, prepareJSON, spoilerHandler, contentMakeSpoilers, contentRemoveBadChars} = require "core/tools.coffee"
+{textPreview, registry, prepareJSON, spoilerHandler, contentMediaParser, contentRemoveBadChars} = require "core/tools.coffee"
 blocks = require "lib/blocks.coffee"
 routes = require("lib/routes").default
 {commentFor} = require "lib/markitup.coffee"
@@ -339,10 +339,10 @@ initEvent = ->
     $(".reply-header>a").on 'click', () ->
       ls.comments.toggleCommentForm 0
     $("#comment-button-submit").on 'click', () ->
-      commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
+      commentForm.value = contentRemoveBadChars contentMediaParser commentForm.value
       ls.comments.add 'form_comment', this.dataset.target_id, this.dataset.target_type
     $("#comment-button-preview").on 'click', () ->
-      commentForm.value = contentRemoveBadChars contentMakeSpoilers commentForm.value
+      commentForm.value = contentRemoveBadChars contentMediaParser commentForm.value
       ls.comments.preview()
     $(document)
       .on('click', ".comment-info>.reply-link", () ->
@@ -353,11 +353,11 @@ initEvent = ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock)
       .on('click', ".comment-save-edit-bw", () ->
         editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
-        editForm.value = contentRemoveBadChars contentMakeSpoilers editForm.value
+        editForm.value = contentRemoveBadChars contentMediaParser editForm.value
         ls.comments.saveEdit this.parentNode.dataset.id)
       .on('click', ".comment-preview-edit-bw", () ->
         editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
-        editForm.value = contentRemoveBadChars contentMakeSpoilers editForm.value
+        editForm.value = contentRemoveBadChars contentMediaParser editForm.value
         ls.comments.previewEdit this.parentNode.dataset.id)
       .on('click', ".comment-cancel-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, false)

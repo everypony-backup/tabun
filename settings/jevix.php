@@ -8,7 +8,7 @@ return [
             [[
                 'strong', 'em', 'u', 's', 'sup', 'sub', 'small',
                 'h4', 'h5', 'h6', 'br', 'li', 'ol', 'ul',
-                'a', 'img', 'video', 'blockquote', 'cut', 'smile',
+                'a', 'img', 'blockquote', 'cut', 'smile',
                 'ls', 'pre', 'iframe', 'span', 'text', 'p', 'hr'
             ]],
 
@@ -20,7 +20,7 @@ return [
         // Преформатированные теги
         'cfgSetTagPreformatted' => [
             [
-                ['pre', 'video']
+                ['pre']
             ],
         ],
         // Разрешённые параметры тегов
@@ -71,6 +71,22 @@ return [
                             'player.vimeo.com' => '',
                             'dailymotion.com' => '',
                             'coub.com' => '',
+                            'rutube.ru' => '',
+                            'w.soundcloud.com' => '',
+                            'vk.com' => "video_ext\.php",
+                            'radio.everypony.ru' => '',
+                            'pony.fm' => '',
+                            'eqbeats.org' => '',
+                            'imgur.com' => '',
+                            'ponyvillelive.com' => '',
+                        ],
+                    'data-src' => [
+                        '#domain' => [
+                            'youtube.com' => 'embed/[\w\d\-_]+$',
+                            'player.vimeo.com' => '',
+                            'dailymotion.com' => '',
+                            'coub.com' => '',
+                            'rutube.ru' => '',
                             'w.soundcloud.com' => '',
                             'vk.com' => "video_ext\.php",
                             'radio.everypony.ru' => '',
@@ -117,12 +133,7 @@ return [
             ],
         ],
         // Параметры тегов являющиеся обязательными
-        'cfgSetTagParamsRequired' => [
-            [
-                'iframe',
-                'src'
-            ],
-        ],
+        'cfgSetTagParamsRequired' => [],
         // Теги которые необходимо вырезать из текста вместе с контентом
         'cfgSetTagCutWithContent' => [
             [
@@ -163,7 +174,7 @@ return [
         ],
         'cfgSetTagNoTypography' => [
             [
-                ['pre', 'video']
+                ['pre']
             ],
         ],
         // Теги, после которых необходимо пропускать одну пробельную строку

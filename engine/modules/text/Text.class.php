@@ -209,7 +209,7 @@ class ModuleText extends Module {
 			return '';
 		}
 		$sResult=$this->JevixParser($sText);
-		$sResult=$this->VideoParser($sResult);
+		// $sResult=$this->VideoParser($sResult);
 		if($actionType === $this::ACT_CREATE || $actionType === $this::ACT_UPDATE) {
 			// Don't parce dices for edited comments
             $sResult=$this->DiceParser($sResult);
