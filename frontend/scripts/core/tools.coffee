@@ -248,8 +248,8 @@ contentMediaParser = (oldText) ->
     j = badMedia.length
     while j--
       badMedia[j].outerHTML = ""
+    newText = temp.innerHTML
 
-  else return newText
   temp.outerHTML = ''
   return newText
 
