@@ -68,11 +68,8 @@ onVoteUser = (idTarget, objVote, value, type, result) ->
   $("#user_skill_#{idTarget}").text result.iSkill
 
 getVotes = (targetId, targetType, el) ->
-  unless el.parentNode.classList.contains "vote-info-enabled"
-    if el.dataset.target_type != "topic"
-      return false
-    else if el.parentNode.classList.contains("not-voted") && UI.voteNeutral
-      return false
+  if el.dataset.target_type == "topic" && el.parentNode.classList.contains("not-voted") && UI.voteNeutral
+    return false
 
   params = {}
   params['targetId'] = targetId

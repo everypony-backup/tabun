@@ -8,11 +8,6 @@
 {if $oUserCurrent}
     {assign var="oCommentVote" value=$oComment->getVote()}
     {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
-	{if $bVoteInfoEnabledForTopic !== null}
-		{assign var="bVoteInfoEnabled" value=$bVoteInfoEnabledForTopic}
-	{else}
-		{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
-	{/if}
     {if $oCommentAuthorId == $oUserCurrent->getId()}
         {assign var="oCommentSelf" value="comment-self"}
     {/if}
