@@ -35,7 +35,7 @@
 			</time>
 		</li>
 		<li class="topic-info-favourite">
-			<div class="favourite {if $oUserCurrent && $oTopic->getIsFavourite()}active{/if}" data-target_id="{$oTopicId}" data-target_type="topic">{if $oTopic->getIsFavourite()}{t}favourite_in{/t}{else}{t}favourite_add{/t}{/if}</div>
+			<div class="favourite link-dotted{if $oUserCurrent && $oTopic->getIsFavourite()} active{/if}" data-target_id="{$oTopicId}" data-target_type="topic">{if $oTopic->getIsFavourite()}{t}favourite_in{/t}{else}{t}favourite_add{/t}{/if}</div>
 			<span class="favourite-count" id="fav_count_topic_{$oTopicId}">{if $oTopic->getCountFavourite() > 0}{$oTopic->getCountFavourite()}{/if}</span>
 		</li>
 

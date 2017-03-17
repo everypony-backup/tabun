@@ -20,7 +20,7 @@
 			{assign var="oTalkUserAuthor" value=$oTalk->getTalkUser()}
 			<tr>
 				<td class="cell-favourite">
-	                <div class="favourite {if $oTalk->getIsFavourite()}active{/if}" data-target_id="{$oTalk->getId()}" data-target_type="talk">
+	                <div class="favourite link-dotted{if $oTalk->getIsFavourite()} active{/if}" data-target_id="{$oTalk->getId()}" data-target_type="talk">
 	                    {if $oTalk->getIsFavourite()}
 	                        {t}favourite_in{/t}
 	                    {else}

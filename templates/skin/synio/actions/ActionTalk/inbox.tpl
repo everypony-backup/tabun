@@ -63,7 +63,7 @@
 						</td>
 						<td class="cell-date ta-r">
 						{date_format date=$oTalk->getDate() format="j F Y"}<br/>
-			                <div class="favourite {if $oTalk->getIsFavourite()}active{/if}" data-target_id="{$oTalk->getId()}" data-target_type="talk">
+			                <div class="favourite link-dotted{if $oTalk->getIsFavourite()} active{/if}" data-target_id="{$oTalk->getId()}" data-target_type="talk">
 			                    {if $oTalk->getIsFavourite()}
 			                        {t}favourite_in{/t}
 			                    {else}

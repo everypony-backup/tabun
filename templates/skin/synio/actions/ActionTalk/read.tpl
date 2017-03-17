@@ -31,7 +31,7 @@
 				</time>
 			</li>
 			<li class="topic-info-favourite">
-                <div class="favourite {if $oTalk->getIsFavourite()}active{/if}" data-target_id="{$oTalkId}" data-target_type="talk">
+                <div class="favourite link-dotted{if $oTalk->getIsFavourite()} active{/if}" data-target_id="{$oTalkId}" data-target_type="talk">
                     {if $oTalk->getIsFavourite()}
                         {t}favourite_in{/t}
                     {else}
