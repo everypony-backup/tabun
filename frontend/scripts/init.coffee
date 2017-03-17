@@ -119,7 +119,7 @@ init = ->
       ls.vote.vote this.dataset.target_id, this, this.dataset.direction, this.dataset.target_type
 
   # get votes
-  $(document).on 'click', ".vote-count", () ->
+  $(document).on 'click', ".vote-info-enabled .vote-count", () ->
     ls.vote.getVotes this.dataset.target_id, this.dataset.target_type, this
 
   # favourite

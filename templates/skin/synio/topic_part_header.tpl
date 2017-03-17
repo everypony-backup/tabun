@@ -28,39 +28,33 @@
 			<div class="topic-info-vote">
 				<div id="vote_area_topic_{$oTopicId}" class="vote-topic
 					{if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
-						{if $oTopicRating > 0}
-							vote-count-positive
-						{elseif $oTopicRating < 0}
-							vote-count-negative
-						{*
-						{elseif $oTopicRating == 0 and $bVoteInfoEnabled and $oTopic->getCountVote() > 0}
-							vote-count-mixed
-						*}
-						{elseif $oTopicRating == 0}
+						{if $oTopic->getCountVote() > 0}
+							{if $oTopicRating > 0}
+								vote-count-positive
+							{elseif $oTopicRating < 0}
+								vote-count-negative
+							{else}
+								vote-count-mixed
+							{/if}
+						{else}
 							vote-count-zero
 						{/if}
 					{/if}
-					
-					{if !$oUserCurrent or ($oUserCurrent && $oTopic->getUserId() != $oUserCurrent->getId())}
-						vote-not-self
-					{/if}
-					
-					{if $oVote} 
-						voted
-						{if $oVote->getDirection() > 0}
-							voted-up
-						{elseif $oVote->getDirection() < 0}
-							voted-down
-						{elseif $oVote->getDirection() == 0}
-							voted-zero
+					{if $oUserCurrent}
+						{if $oVote}
+							voted
+							{if $oVote->getDirection() > 0}
+								voted-up
+							{elseif $oVote->getDirection() < 0}
+								voted-down
+							{else}
+								voted-zero
+							{/if}
+						{else}
+							not-voted
+							{if $oTopic->getUserId()!=$oUserCurrent->getId() and strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')} vote-enabled
+							{/if}
 						{/if}
-					{else}
-						not-voted
-					{/if}
-					
-					{if $oUserCurrent and $oTopic->getUserId()!=$oUserCurrent->getId() and strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time') and !$oVote and $LS->ACL_CanVoteTopic($oUserCurrent, $oTopic)} vote-enabled
-						{if $bVoteInfoEnabled} vote-info-enabled-base{/if}
-					{else}
 						{if $bVoteInfoEnabled} vote-info-enabled{/if}
 					{/if}
 					">

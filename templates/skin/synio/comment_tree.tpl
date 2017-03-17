@@ -8,9 +8,16 @@
 {else}
 	{assign var="bAllowUserToEditBlogComments" value=false}
 {/if}
+{assign var="iVoteInfoNeEnableLevel" value=$oConfig->getValue('vote_state.comment.na_enable_level')}
+{if $oUserCurrent and $iVoteInfoNeEnableLevel != 5}
+	{* Кэширование допустимо только если все комменты дерева относятся к одной области видимости. *}
+	{assign var="bVoteInfoEnabledForTopic" value=$LS->ACL_CheckSimpleAccessLevel($iVoteInfoNeEnableLevel, $oUserCurrent, $oTopic, 'comment', true)}
+{else}
+	{assign var="bVoteInfoEnabledForTopic" value=false}
+{/if}
 {hook run='comment_tree_begin' iTargetId=$iTargetId sTargetType=$sTargetType}
 
-<div class="comments{if !$bAllowNewComment} comments-allowed{/if}{if $oUserCurrent->isAdministrator()} is-admin{/if} {if $bAllowUserToEditBlogComments} is-moder{/if}" id="comments">
+<div class="comments{if !$bAllowNewComment} comments-allowed{/if}{if $oUserCurrent->isAdministrator()} is-admin{/if}{if $bAllowUserToEditBlogComments} is-moder{/if}{if $bVoteInfoEnabledForTopic} vote-info-enabled{/if}" id="comments">
 	<header class="comments-header">
 		<h3><span id="count-comments">{$iCountComment}</span> <span id="name-count-comments">{t plural="comments" count=$iCountComment}comment{/t}</span></h3>
 		
@@ -25,11 +32,6 @@
 	</header>
 
 	{assign var="nesting" value="-1"}
-	{assign var="iVoteInfoNeEnableLevel" value=$oConfig->getValue('vote_state.comment.na_enable_level')}
-	{if $iVoteInfoNeEnableLevel != 5}
-		{* Кэширование допустимо только если все комменты дерева относятся к одной области видимости. *}
-		{assign var="bVoteInfoEnabledForTopic" value=$LS->ACL_CheckSimpleAccessLevel($iVoteInfoNeEnableLevel, $oUserCurrent, $oTopic, 'comment', true)}
-	{/if}
 	{foreach from=$aComments item=oComment name=rublist}
 		{assign var="cmtlevel" value=$oComment->getLevel()}
 

@@ -1,4 +1,7 @@
 <div class="comments comment-list">
+{if $oUserCurrent}
+    {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
+{/if}
 {foreach from=$aComments item=oComment}
     {assign var="oCommentAuthor" value=$oComment->getUser()}
     {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
@@ -10,10 +13,9 @@
     {if $oUserCurrent}
         {assign var="oCommentRating" value=$oComment->getRating()}
         {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
-        {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
     {/if}
 
-    <section class="comment">
+    <section class="comment{if $bVoteInfoEnabled} vote-info-enabled{/if}">
         <div class="comment-content">
             <div class="text">{$oComment->getText()}</div>
         </div>
