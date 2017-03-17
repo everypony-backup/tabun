@@ -7,7 +7,6 @@
 {assign var="oCommentDate" value=$oComment->getDate()}
 {if $oUserCurrent}
     {assign var="oCommentVote" value=$oComment->getVote()}
-    {assign var="editAccessMask" value=$LS->ACL_GetCommentEditAllowMask($oComment, $oUserCurrent, $bAllowUserToEditBlogComments)}
     {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
 	{if $bVoteInfoEnabledForTopic !== null}
 		{assign var="bVoteInfoEnabled" value=$bVoteInfoEnabledForTopic}
@@ -84,7 +83,7 @@
                 {if !$bNoCommentFavourites}
                 <div class="comment-favourite">
                     {if $oComment->getCountFavourite() > 0}
-                        <div class="favourite{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                        <div class="favourite link-dotted{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
                             {if $oComment->getIsFavourite()}
                                 {$aLang.comment_favourite_add_already}
                             {else}
@@ -93,7 +92,7 @@
                         </div>
                         <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
                     {else}
-                        <div class="favourite" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
+                        <div class="favourite link-dotted" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
                         <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                     {/if}
                 </div>
@@ -118,13 +117,7 @@
                 </div>
                 {/if}
                 <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
-                <a class="comment-delete link-dotted">{$aLang.comment_delete}</a>
-                {if $oComment->testAllowEdit($editAccessMask)}
-                    <a class="link-dotted comment-edit-bw" data-lock="{if $oComment->testAllowLock($editAccessMask)}true{else}false{/if}">{$aLang.comment_edit}</a>
-                    <a class="link-dotted comment-save-edit-bw">{$aLang.comment_save_edit}</a>
-                    <a class="link-dotted comment-preview-edit-bw">{$aLang.comment_preview_edit}</a>
-                    <a class="link-dotted comment-cancel-edit-bw">{$aLang.comment_cancel_edit}</a>
-                {/if}
+                <a class="link-dotted comment-edit-bw {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.edit.comment.limit_time'))} edit-timeout{/if}">{$aLang.comment_edit}</a>
                 {hook run='comment_action' comment=$oComment}
                 {include file='comment_modify_notice.tpl'}
             {/if}

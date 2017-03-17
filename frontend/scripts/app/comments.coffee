@@ -101,13 +101,20 @@ toggleCommentForm = (idComment, bNoFocus) ->
     commentForm.focus()
 
 
-toggleEditForm = (idComment, bOpen, bAllowLock=false) ->
+toggleEditForm = (idComment, bOpen) ->
   contentWrapper = document.getElementById "comment_content_id_#{idComment}"
+  if !contentWrapper.querySelector ".comment-delete"
+    contentWrapper.querySelector(".comment-edit-bw").outerHTML =
+      '<a class="link-dotted comment-delete">Удалить</a>
+      <a class="link-dotted comment-edit-bw">Изменить</a>
+      <a class="link-dotted comment-save-edit-bw">Сохранить</a>
+      <a class="link-dotted comment-preview-edit-bw">Предпросмотр</a>
+      <a class="link-dotted comment-cancel-edit-bw">Отмена</a>'
   if bOpen
     preview = document.createElement "div"
     preview.className = "text preview"
     preview.id = "comment_preview_edit_#{idComment}"
-    currentText = contentWrapper.querySelector(".text.current")
+    currentText = contentWrapper.querySelector ".text.current"
     editForm = document.createElement "div"
     editForm.id = "comment_edit_#{idComment}"
     editForm.className = "edit-form"
@@ -118,12 +125,13 @@ toggleEditForm = (idComment, bOpen, bAllowLock=false) ->
     edit.value = currentText.innerHTML.replace(/<br[\s]*\/?>\r?\n/gmi, "\n").trim()
     editForm.appendChild preview
     editForm.appendChild edit
-    if bAllowLock and document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
+    if document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
       lockCB = document.createElement "input"
       lockCB.type = "checkbox"
       lockLabel = document.createElement "label"
+      lockLabel.classList.add "lock-edit"
       lockLabel.appendChild lockCB
-      lockLabel.appendChild document.createTextNode " "+gettext("comment_lock_edit")
+      lockLabel.appendChild document.createTextNode " " + gettext "comment_lock_edit"
       editForm.appendChild lockLabel
     contentWrapper.parentNode?.classList.add "editable"
     contentWrapper.appendChild editForm
@@ -350,7 +358,7 @@ initEvent = ->
       .on('click', ".comment-delete,.comment-repair", () ->
         ls.comments.toggle this this.parentNode.dataset.id)
       .on('click', ".comment-edit-bw", () ->
-        ls.comments.toggleEditForm this.parentNode.dataset.id, true, this.dataset.lock)
+        ls.comments.toggleEditForm this.parentNode.dataset.id, true)
       .on('click', ".comment-save-edit-bw", () ->
         editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
         editForm.value = contentRemoveBadChars contentMediaParser editForm.value

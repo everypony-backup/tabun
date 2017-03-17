@@ -136,13 +136,9 @@
     width 17px
     &:hover
       background-position -14px -14px
-  .reply-link.link-dotted,
-  .comment-delete.link-dotted
-    display none
   .goto.goto-comment-parent
     color transparent
     text-decoration none
-    display none
     width 14px
     height 14px
     overflow hidden
@@ -161,25 +157,42 @@
     .vote-count
       font-size 12px
       margin 0
-.comment-info>a,
-.comment-info>div,
-.comment-info>time,
+.comment-info>a
+.comment-info>div
+.comment-info>time
 .comment-info>span
   margin-right 10px
 
+a.comment-edit-bw
+a.comment-edit-bw.edit-timeout
+a.comment-delete
+a.reply-link
+a.goto-comment-parent
+.lock-edit
+  display none
+
 .comment-level-1
-  .goto.goto-comment-parent
+  .goto-comment-parent
     display inline-block
 
 .comments-allowed
-  .comment-info
-    .reply-link.link-dotted
-      display inline-block
+  .reply-link
+    display inline-block
 
 .is-admin
-  .comment-info
-    .comment-delete.link-dotted
-      display inline-block
+  .comment-delete
+    display inline-block
+
+.is-admin
+.is-moder
+  .comment-edit-bw
+  .comment-edit-bw.edit-timeout
+  .lock-edit
+    display inline-block
+
+.comment-self
+  .comment-edit-bw
+    display inline-block
 
 .comment-content
   background-color #f7f7f7

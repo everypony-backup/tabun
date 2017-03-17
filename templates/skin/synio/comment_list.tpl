@@ -31,7 +31,7 @@
                 {if !$bNoCommentFavourites}
                 <div class="comment-favourite">
                     {if $oComment->getCountFavourite() > 0}
-                        <div class="favourite{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                        <div class="favourite link-dotted{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
                             {if $oComment->getIsFavourite()}
                                 {$aLang.comment_favourite_add_already}
                             {else}
@@ -40,7 +40,7 @@
                         </div>
                         <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
                     {else}
-                        <div class="favourite" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
+                        <div class="favourite link-dotted" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
                         <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                     {/if}
                 </div>
@@ -55,6 +55,7 @@
                     <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
                 </div>
                 {/if}
+                {include file='comment_modify_notice.tpl' bGetShort=true}
             {/if}
             <div>
                 {if $oBlog}
@@ -64,7 +65,6 @@
                 <a href="{$oTopic->getUrl()}" class="comment-path-topic">{$oTopic->getTitle()|escape:'html'}</a>
                 <a href="{$oTopic->getUrl()}#comments"  class="comment-path-comments">{$oTopic->getCountComment()}</a>
             </div>
-            {include file='comment_modify_notice.tpl' bGetShort=true}
         </div>
     </section>
 {/foreach}
