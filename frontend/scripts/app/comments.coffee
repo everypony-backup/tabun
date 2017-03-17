@@ -103,10 +103,10 @@ toggleCommentForm = (idComment, bNoFocus) ->
 
 toggleEditForm = (idComment, bOpen) ->
   contentWrapper = document.getElementById "comment_content_id_#{idComment}"
-  if !contentWrapper.querySelector ".comment-delete"
-    contentWrapper.querySelector(".comment-edit-bw").outerHTML =
+  if !document.querySelector "#comment_id_#{idComment} .buttons-ready"
+    document.querySelector("#comment_id_#{idComment} .comment-edit-bw").outerHTML =
       '<a class="link-dotted comment-delete">Удалить</a>
-      <a class="link-dotted comment-edit-bw">Изменить</a>
+      <a class="link-dotted comment-edit-bw .buttons-ready">Изменить</a>
       <a class="link-dotted comment-save-edit-bw">Сохранить</a>
       <a class="link-dotted comment-preview-edit-bw">Предпросмотр</a>
       <a class="link-dotted comment-cancel-edit-bw">Отмена</a>'
