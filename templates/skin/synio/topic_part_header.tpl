@@ -51,8 +51,9 @@
 								voted-zero
 							{/if}
 						{else}
-							not-voted
-							{if $oTopic->getUserId()!=$oUserCurrent->getId() and strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')} vote-enabled
+							{if $oTopic->getUserId()!=$oUserCurrent->getId()}
+								not-voted
+								{if strtotime($oTopic->getDateAdd()) > $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')} vote-enabled{/if}
 							{/if}
 						{/if}
 						{if $bVoteInfoEnabled} vote-info-enabled{/if}
