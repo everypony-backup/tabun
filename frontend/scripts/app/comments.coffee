@@ -353,11 +353,11 @@ initEvent = ->
       commentForm.value = contentRemoveBadChars contentMediaParser commentForm.value
       ls.comments.preview()
     $(document)
-      .on('click', ".comment-info>.reply-link", () ->
+      .on('click', ".comments-allowed .reply-link", () ->
         ls.comments.toggleCommentForm this.parentNode.dataset.id)
-      .on('click', ".comment-delete,.comment-repair", () ->
+      .on('click', ".is-admin .comment-delete,.is-admin .comment-repair", () ->
         ls.comments.toggle this this.parentNode.dataset.id)
-      .on('click', ".comment-edit-bw", () ->
+      .on('click', ".comment-self .comment-edit-bw, is-admin .comment-edit-bw, is-moder .comment-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, true)
       .on('click', ".comment-save-edit-bw", () ->
         editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
@@ -374,7 +374,7 @@ initEvent = ->
     this.parentNode.classList.add 'h-hidden'
     $('.'+classes.comment_folded).removeClass classes.comment_folded
   $(document)
-    .on('click', ".goto-comment-parent", () ->
+    .on('click', ".comment-level-1 .goto-comment-parent", () ->
       ls.comments.showComment this.parentNode.dataset.id, true)
     .on('click', ".folding", () ->
       $(this).nextAll().toggleClass 'h-hidden')
