@@ -357,7 +357,7 @@ initEvent = ->
         ls.comments.toggleCommentForm this.parentNode.dataset.id)
       .on('click', ".is-admin .comment-delete,.is-admin .comment-repair", () ->
         ls.comments.toggle this this.parentNode.dataset.id)
-      .on('click', ".comment-self .comment-edit-bw, is-admin .comment-edit-bw, is-moder .comment-edit-bw", () ->
+      .on('click', ".comment-self .comment-edit-bw, .is-admin .comment-edit-bw, .is-moder .comment-edit-bw", () ->
         ls.comments.toggleEditForm this.parentNode.dataset.id, true)
       .on('click', ".comment-save-edit-bw", () ->
         editForm = document.getElementById "comment_edit_input_" + this.parentNode.dataset.id
