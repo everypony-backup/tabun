@@ -46,7 +46,7 @@ commentForm = document.getElementById "form_comment_text"
 updateButton = document.getElementById "update-comments"
 message = document.getElementById "hidden-message"
 originalTitle = document.title
-topicAuthor = document.querySelector(".topic-info a[rel=author]").textContent
+topicAuthor = document.querySelector ".topic-info a[rel=author]"
 
 toggleCommentFormState = (state) ->
   submitButton = document.getElementById "comment-button-submit"
@@ -198,7 +198,7 @@ inject = ({pid, id, html}) ->
   newComment.classList.add (classes.level + level)
   target.appendChild newComment
   commentAuthor = newComment.querySelector ".comment-author"
-  if commentAuthor.textContent == topicAuthor
+  if commentAuthor.textContent == topicAuthor.textContent
     commentAuthor.classList.add "comment-topic-author"
     commentAuthor.setAttribute "title", "Автор"
   if newComment.getElementsByClassName(classes.self).length
