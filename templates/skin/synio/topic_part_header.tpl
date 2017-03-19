@@ -27,7 +27,7 @@
 		<div class="topic-info">
 			<div class="topic-info-vote">
 				<div id="vote_area_topic_{$oTopicId}" class="vote-topic
-					{if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
+					{if $bVoteInfoShow}
 						{if $oTopic->getCountVote() > 0}
 							{if $oTopicRating > 0}
 								vote-count-positive
@@ -76,7 +76,6 @@
 			<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(48)}"  class="avatar" /></a>
 			<a rel="author" href="{$oUser->getUserWebPath()}" data-user_id="{$oUser->getId()}">{$oUser->getLogin()}</a> в блоге
 			<a href="{$oBlog->getUrlFull()}" class="topic-blog{if $oBlog->getType()=='close'} private-blog{/if}">{$oBlog->getTitle()|escape:'html'}</a>
-
 
 		{if $oTopic->getIsAllowAction()}
 			<span class="topic-actions">

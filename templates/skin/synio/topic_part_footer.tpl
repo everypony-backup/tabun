@@ -60,10 +60,6 @@
 			</li>
 		{/if}
 
-		{if $oVote || ($oUserCurrent && $oTopic->getUserId() == $oUserCurrent->getId()) || strtotime($oTopic->getDateAdd()) < $smarty.now-$oConfig->GetValue('acl.vote.topic.limit_time')}
-			{assign var="bVoteInfoShow" value=true}
-		{/if}
-
 		{hook run='topic_show_info' topic=$oTopic}
 	</ul>
 
