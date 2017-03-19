@@ -16,6 +16,10 @@
 				<a href="{router page='topic'}add" class="write-item-image"></a>
 				<a href="{router page='topic'}add" class="write-item-link">{$aLang.block_create_topic_topic}</a>
 			</li>
+			<li class="write-item-type-topic">
+				<a href="{router page='question'}add" class="write-item-image"></a>
+				<a href="{router page='question'}add" class="write-item-link">{$aLang.block_create_topic_question}</a>
+			</li>
 			<li class="write-item-type-blog">
 				<a href="{router page='blog'}add" class="write-item-image"></a>
 				<a href="{router page='blog'}add" class="write-item-link">{$aLang.block_create_blog}</a>
