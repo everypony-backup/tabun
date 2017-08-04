@@ -120,7 +120,7 @@ quotesAndSpoilers = [
   {
     name: 'Lite-спойлер'
     className: 'edit-spoiler-gray'
-    openWith: '<span class="spoiler-gray">'
+    openWith: '<span class="spoiler-gray" onclick="">'
     closeWith: '</span>'
   }
   {separator: '---------------'}

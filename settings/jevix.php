@@ -118,7 +118,7 @@ return [
                     'class' => [
                         'spoiler',
                         'spoiler-title',
-                        'spoiler-body', 
+                        'spoiler-body',
                         'spoiler-gray',
                         'spoiler spoiler-media',
                         'h-top',
@@ -128,7 +128,8 @@ return [
                         'h-center',
                     ],
                     'onclick' => [
-                        'return true;'
+                        'return true;',
+                        ''
                     ]
                 ]
             ],
