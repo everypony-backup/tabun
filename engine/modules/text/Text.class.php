@@ -169,6 +169,13 @@ class ModuleText extends Module {
 		$g_tpl = '<iframe src="//gfycat.com/ifr/$2$3" allowfullscreen="true" frameborder="0" width="560" height="315"></iframe>';
 		$sText = preg_replace($g_video_pattern, $g_tpl, $sText);
 
+		/**
+		 * vault.mle.party (PeerTube)
+		 */
+		$vault99_video_pattern = "/(<video>)(?:https?:\/\/)?(?:www\.)?vault.mle.party\/videos\/\w+\/([\w\d-_]+)\/?(\?[\w\d-_\/=%&]*)?(<\/video>)/ui";
+		$vault99_tpl = '<iframe src="//vault.mle.party/videos/embed/$2" allowfullscreen="true" frameborder="0" width="560" height="315"></iframe>';
+		$sText = preg_replace($vault99_video_pattern, $vault99_tpl, $sText);
+
 		return $sText;
 	}
 	/**

@@ -80,6 +80,7 @@ return [
                             'imgur.com' => '',
                             'ponyvillelive.com' => '',
                             'gfycat.com' => 'ifr/',
+                            'vault.mle.party' => 'videos/embed/',
                         ],
                     ],
                     'data-src' => [
@@ -97,6 +98,7 @@ return [
                             'imgur.com' => '',
                             'ponyvillelive.com' => '',
                             'gfycat.com' => 'ifr/',
+                            'vault.mle.party' => 'videos/embed/',
                         ],
                     ],
                     'allowscriptaccess' => '#text',

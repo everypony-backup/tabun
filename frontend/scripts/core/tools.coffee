@@ -190,6 +190,14 @@ gfycat = (str) ->
   if m
     return m[1]
 
+vault99 = (str) ->
+  unless str then return
+
+  pattern = /vault\.mle\.party\/videos\/\w+\/([\w\d-_]+)/
+  m = pattern.exec str
+  if m
+    return m[1]
+
 contentMediaParser = (oldText) ->
   unless oldText then return
   temp = document.createElement 'temp'
@@ -235,6 +243,10 @@ contentMediaParser = (oldText) ->
           parsedUrl = gfycat url
           if parsedUrl
             src = '//gfycat.com/ifr/' + parsedUrl + '?controls=0'
+        else if /vault\.mle\.party/.test url
+          parsedUrl = vault99 url
+          if parsedUrl
+            src = '//vault.mle.party/videos/embed/' + parsedUrl
         else if video[i].nodeName == "IFRAME"
           continue
         if src
