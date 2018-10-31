@@ -162,6 +162,13 @@ class ModuleText extends Module {
 		$r_tpl = '<iframe src="//rutube.ru/video/embed/$2" allowfullscreen="true" frameborder="0" width="560" height="315"></iframe>';
 		$sText = preg_replace($r_video_pattern, $r_tpl, $sText);
 
+		/**
+		 * gfycat.com
+		 */
+		$g_video_pattern = "/(<video>)(?:https?:\/\/)?(?:www\.)?gfycat.com\/(?:[\w\d-_\/]+\/)?([\w\d-_]+)(\?[\w\d-_\/=%&]*)?(<\/video>)/ui";
+		$g_tpl = '<iframe src="//gfycat.com/ifr/$2$3" allowfullscreen="true" frameborder="0" width="560" height="315"></iframe>';
+		$sText = preg_replace($g_video_pattern, $g_tpl, $sText);
+
 		return $sText;
 	}
 	/**

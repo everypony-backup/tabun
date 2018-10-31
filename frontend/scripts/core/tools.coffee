@@ -182,6 +182,14 @@ rutube = (str) ->
   if video.test str
     return str.split(video)[1].split("/")[0]
 
+gfycat = (str) ->
+  unless str then return
+
+  pattern = /gfycat\.com\/[\w\d-_\/]+\/([\w\d-_]+)/
+  m = pattern.exec str
+  if m
+    return m[1]
+
 contentMediaParser = (oldText) ->
   unless oldText then return
   temp = document.createElement 'temp'
@@ -223,6 +231,10 @@ contentMediaParser = (oldText) ->
           parsedUrl = rutube url
           if parsedUrl
             src = '//rutube.ru/video/embed/' + parsedUrl
+        else if /gfycat/.test url
+          parsedUrl = gfycat url
+          if parsedUrl
+            src = '//gfycat.com/ifr/' + parsedUrl + '?controls=0'
         else if video[i].nodeName == "IFRAME"
           continue
         if src
