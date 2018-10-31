@@ -117,6 +117,8 @@ class ModuleText extends Module {
 	 * @return string
 	 */
 	public function VideoParser($sText) {
+		// Сейчас эта функция не используется; см. function Parser
+
 		/**
 		 * youtube.com
 		 */
