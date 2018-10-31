@@ -79,6 +79,8 @@ return [
                             'eqbeats.org' => '',
                             'imgur.com' => '',
                             'ponyvillelive.com' => '',
+                            'gfycat.com' => 'ifr/',
+                            'vault.mle.party' => 'videos/embed/',
                         ],
                     ],
                     'data-src' => [
@@ -95,6 +97,8 @@ return [
                             'eqbeats.org' => '',
                             'imgur.com' => '',
                             'ponyvillelive.com' => '',
+                            'gfycat.com' => 'ifr/',
+                            'vault.mle.party' => 'videos/embed/',
                         ],
                     ],
                     'allowscriptaccess' => '#text',

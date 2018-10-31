@@ -182,6 +182,22 @@ rutube = (str) ->
   if video.test str
     return str.split(video)[1].split("/")[0]
 
+gfycat = (str) ->
+  unless str then return
+
+  pattern = /gfycat\.com\/[\w\d-_\/]+\/([\w\d-_]+)/
+  m = pattern.exec str
+  if m
+    return m[1]
+
+vault99 = (str) ->
+  unless str then return
+
+  pattern = /vault\.mle\.party\/videos\/\w+\/([\w\d-_]+)/
+  m = pattern.exec str
+  if m
+    return m[1]
+
 contentMediaParser = (oldText) ->
   unless oldText then return
   temp = document.createElement 'temp'
@@ -190,6 +206,7 @@ contentMediaParser = (oldText) ->
   if /<video>|<iframe/i.test oldText
     temp.innerHTML = oldText
     video = temp.querySelectorAll "video, iframe"
+    changed = false
     if video.length
       i = video.length
       while i--
@@ -200,25 +217,44 @@ contentMediaParser = (oldText) ->
           if !url
             url = video[i].dataset.src
         if !url
-          video[i].outerHTML = ''
           continue
+        src = ''
         if /youtube|youtu\.be/.test url
-          src = '//www.youtube.com/embed/' + youtube url
+          parsedUrl = youtube url
+          if parsedUrl
+            src = '//www.youtube.com/embed/' + parsedUrl
         else if /vimeo/.test url
-          src = '//player.vimeo.com/video/' + vimeo url
+          parsedUrl = vimeo url
+          if parsedUrl
+            src = '//player.vimeo.com/video/' + parsedUrl
         else if /dailymotion|dai\.ly/.test url
-          src = '//www.dailymotion.com/embed/video/' + dailymotion url
+          parsedUrl = dailymotion url
+          if parsedUrl
+            src = '//www.dailymotion.com/embed/video/' + parsedUrl
         else if /coub\.com/.test url
-          src = '//coub.com/embed/' + coub url
+          parsedUrl = coub url
+          if parsedUrl
+            src = '//coub.com/embed/' + parsedUrl
         else if /rutube/.test url
-          src = '//rutube.ru/video/embed/' + rutube url
+          parsedUrl = rutube url
+          if parsedUrl
+            src = '//rutube.ru/video/embed/' + parsedUrl
+        else if /gfycat/.test url
+          parsedUrl = gfycat url
+          if parsedUrl
+            src = '//gfycat.com/ifr/' + parsedUrl + '?controls=0'
+        else if /vault\.mle\.party/.test url
+          parsedUrl = vault99 url
+          if parsedUrl
+            src = '//vault.mle.party/videos/embed/' + parsedUrl
         else if video[i].nodeName == "IFRAME"
           continue
         if src
           video[i].outerHTML = '<iframe width="560" height="310" src="'+src+'" frameborder="0" allowfullscreen="1"></iframe>'
+          changed = true
         else
-          video[i].outerHTML = ''
-    newText = temp.innerHTML
+          continue
+    newText = if changed then temp.innerHTML else oldText
   else
     newText = oldText
 
@@ -226,6 +262,7 @@ contentMediaParser = (oldText) ->
   if newText.match /spoiler-body/i
     temp.innerHTML = newText
     spoilers = temp.getElementsByClassName "spoiler"
+    changed = false
     if spoilers.length
       i = spoilers.length
       while i--
@@ -235,11 +272,13 @@ contentMediaParser = (oldText) ->
           j = media.length
           while j--
             if media[j].getAttribute "src"
+              changed = true
               media[j].dataset.src = media[j].getAttribute "src"
               media[j].setAttribute "src", ""
           spoilers[i].classList.add 'spoiler-media'
 
-    newText = temp.innerHTML
+    if changed
+      newText = temp.innerHTML
 
   # Убираем ифреймы из заголовка
   # Нет рутубу вне спойлеров
