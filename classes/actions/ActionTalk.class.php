@@ -718,6 +718,7 @@ class ActionTalk extends Action {
 			foreach ($aUsersTalk as $oUserTalk) {
 				if ($oUserTalk->getId()!=$oCommentNew->getUserId()) {
 					$this->Notify_SendTalkCommentNew($oUserTalk,$this->oUserCurrent,$oTalk,$oCommentNew);
+					$this->Cache_Delete("talk_count_all_new_user_{$oUserTalk->getId()}");
 				}
 			}
 			/**

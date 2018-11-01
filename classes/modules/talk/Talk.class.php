@@ -404,6 +404,7 @@ class ModuleTalk extends Module {
 				"update_talk_user_{$oTalkUser->getTalkId()}"
             ]
 		);
+		$this->Cache_Delete("talk_count_all_new_user_{$oTalkUser->getUserId()}");
 		return $this->oMapper->AddTalkUser($oTalkUser);
 	}
 	/**
