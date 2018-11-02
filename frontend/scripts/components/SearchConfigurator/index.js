@@ -13,7 +13,7 @@ import {NamedDropdown, NamedRadioGroup} from './views.js';
 export default class SearchConfigurator extends React.Component {
     state = {
         params: new SearhParams(this.props.coded),
-        query: props.query || ""
+        query: this.props.query || ""
     };
     sortDirs = transform(
         SearhParams.SORT_DIRS,
