@@ -46,17 +46,17 @@ class Notifier
     box
 
   events: (box, seed) ->
-    $(box).bind 'click', ->
-      seed = $(this).attr('id')
+    $(box).bind 'click', (event) =>
+      seed = $(event.currentTarget).attr('id')
       @destroy seed, true
 
-    $(box).bind 'mouseover', ->
-      if @notices[$(this).attr('id')].interval
-        seed = $(this).attr('id')
+    $(box).bind 'mouseover', (event) =>
+      if @notices[$(event.currentTarget).attr('id')].interval
+        seed = $(event.currentTarget).attr('id')
         @destroy seed
 
-    $(box).bind 'mouseout', ->
-      @life this, $(this).attr('id')
+    $(box).bind 'mouseout', (event) =>
+      @life event.currentTarget, $(event.currentTarget).attr('id')
 
   life: (box, seed) ->
     if !@notices[seed].duration
