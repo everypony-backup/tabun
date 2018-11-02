@@ -26,7 +26,7 @@ return array(
 	 */
 	'menu_main' => 'Блог',
 	'menu_forum' => 'Форум',
-	'menu_stories' => 'Рассказы',
+	'menu_stories' => 'Библиотека',
 	'menu_radio' => 'Радио',
 	'menu_wiki' => 'Вики',
 	'menu_minecraft' => 'Майнкрафт',
