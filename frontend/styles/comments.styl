@@ -13,17 +13,6 @@
     input
       top 2px
 
-.comments
-  margin-bottom 30px
-  &.comment-list
-    .comment
-      margin-bottom 12px
-    .comment-path
-      font-size 11px
-      color #a2b6cd
-      .comment-path-topic
-        color #275ec2
-
 .comment-wrapper
   position relative
   .comment-wrapper
@@ -104,9 +93,18 @@
       display inline
       margin-right 10px
 
-.comments.comment-list .comment-path .blog-name,
-.comments.comment-list .comment-path .comment-path-comments
-  color #000
+.comments
+  margin-bottom 30px
+  &.comment-list
+    .comment
+      margin-bottom 12px
+    .comment-info
+      .blog-name
+        color #000
+      .comment-path-topic
+        color #275ec2
+      .comment-path-comments
+        color #000
 
 .comment-info
   display flex
