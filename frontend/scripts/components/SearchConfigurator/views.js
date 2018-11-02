@@ -37,10 +37,6 @@ export class NamedDropdown extends React.Component {
 
         return (
             <div className="input-group-btn">
-                <div
-                    className={classNames("overlay", {"h-hidden": !this.state.opened})}
-                    onClick={this.hide}
-                ></div>
                 <div className={classNames("btn-group", {"open": this.state.opened})}>
                     <button
                         className="btn btn-default dropdown-toggle"
