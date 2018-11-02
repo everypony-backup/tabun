@@ -27,6 +27,9 @@
                 {date_format date=$oCommentDate format="j F Y, H:i"}
             </time>
             <a class="comment-link icon-synio-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
+            {if $oComment->getPid()}
+                <a href="{router page='comments'}{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+            {/if}
             {if $oUserCurrent}
                 {if !$bNoCommentFavourites}
                 <div class="comment-favourite">

@@ -29,7 +29,9 @@
                     {date_format date=$oCommentDate format="j F Y, H:i"}
                 </time>
                 <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
-                <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {if $oComment->getPid()}
+                    <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {/if}
                 <span>{$aLang.comment_was_hidden}</span>
             </div>
     {else}
@@ -50,7 +52,9 @@
                     {date_format date=$oCommentDate format="j F Y, H:i"}
                 </time>
                 <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
-                <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {if $oComment->getPid()}
+                    <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {/if}
                 <a class="comment-repair link-dotted">{$aLang.comment_repair}</a>
                 <span>{$aLang.comment_was_delete}</span>
             </div>
@@ -73,7 +77,9 @@
                 {date_format date=$oCommentDate format="j F Y, H:i"}
             </time>
             <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
-            <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+            {if $oComment->getPid()}
+                <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+            {/if}
             {if $oUserCurrent}
                 {if !$bNoCommentFavourites}
                 <div class="comment-favourite">

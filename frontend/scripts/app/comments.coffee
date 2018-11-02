@@ -379,8 +379,9 @@ initEvent = ->
     this.parentNode.classList.add 'h-hidden'
     $('.'+classes.comment_folded).removeClass classes.comment_folded
   $(document)
-    .on('click', ".comment-level-1 .goto-comment-parent", () ->
-      ls.comments.showComment this.parentNode.dataset.id, true)
+    .on('click', ".comment-level-1 .goto-comment-parent", (event) ->
+      ls.comments.showComment this.parentNode.dataset.id, true
+      event.preventDefault())
     .on('click', ".folding", () ->
       $(this).nextAll().toggleClass 'h-hidden')
 
