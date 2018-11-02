@@ -65,6 +65,7 @@
     {/if}
 {else}
     <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oComment->isBad()}comment-bad{/if} {$oCommentSelf} {$oCommentNew}">
+        <a id="comment{$oCommentId}"></a>
         <div id="comment_content_id_{$oCommentId}" class="comment-content">
             <div class="text current">{$oComment->getText()}</div>
         </div>
