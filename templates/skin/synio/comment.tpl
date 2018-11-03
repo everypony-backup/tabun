@@ -19,6 +19,7 @@
 {if $oCommentRating <= $oConfig->GetValue('module.user.bad_rating')}
     {if $oUserCurrent and $oUserCurrent->isAdministrator()}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
+            <a id="comment{$oCommentId}"></a>
             <div class="text current">{$oComment->getText()}</div>
             <div class="comment-info" data-id="{$oCommentId}">
                 <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
@@ -42,6 +43,7 @@
 {elseif $oComment->getDelete()}
     {if $oUserCurrent and $oUserCurrent->isAdministrator()}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
+            <a id="comment{$oCommentId}"></a>
             <div class="text current">{$oComment->getText()}</div>
             <div class="comment-info" data-id="{$oCommentId}">
                 <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
@@ -60,6 +62,7 @@
             </div>
     {else}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted">
+            <a id="comment{$oCommentId}"></a>
             <div class="text current"><em>{$aLang.comment_was_delete}</em></div>
             <div class="comment-info" data-id="{$oCommentId}"></div>
     {/if}
