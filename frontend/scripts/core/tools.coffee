@@ -97,6 +97,7 @@ spoilerHandler = (target, action) ->
 contentRemoveBadChars = (oldText) ->
   unless oldText then return
   newText = ''
+  unless oldText.codePointAt then return oldText  # TODO: IE11 support
   i = -1
   while ++i < oldText.length
     if oldText.codePointAt(i) < 65535
