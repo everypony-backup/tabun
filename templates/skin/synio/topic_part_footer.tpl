@@ -22,7 +22,7 @@
 					{/foreach}
 				{/if}
 				<span class="topic-tags-edit js-favourite-tag-edit" {if !$oFavourite}style="display:none;"{/if}>
-					<a href="#" onclick="return ls.favourite.showEditTags({$oTopicId},'topic',this);" class="link-dotted">{$aLang.favourite_form_tags_button_show}</a>
+					<a href="#" onclick="return ls.favourite.showEditTags({$oTopicId},'topic',this);">{$aLang.favourite_form_tags_button_show}</a>
 				</span>
 			{/if}
 		{/strip}
@@ -35,7 +35,7 @@
 			</time>
 		</li>
 		<li class="topic-info-favourite">
-			<div class="favourite link-dotted{if $oUserCurrent && $oTopic->getIsFavourite()} active{/if}" data-target_id="{$oTopicId}" data-target_type="topic">{if $oTopic->getIsFavourite()}{t}favourite_in{/t}{else}{t}favourite_add{/t}{/if}</div>
+			<div class="favourite{if $oUserCurrent && $oTopic->getIsFavourite()} active{/if}" data-target_id="{$oTopicId}" data-target_type="topic">{if $oTopic->getIsFavourite()}{t}favourite_in{/t}{else}{t}favourite_add{/t}{/if}</div>
 			<span class="favourite-count" id="fav_count_topic_{$oTopicId}">{if $oTopic->getCountFavourite() > 0}{$oTopic->getCountFavourite()}{/if}</span>
 		</li>
 

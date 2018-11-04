@@ -36,8 +36,7 @@ toggle = (idTarget, objFavourite, type) ->
       hideTags type, idTarget
 
     favCount = $ "#fav_count_#{type}_#{idTarget}"
-    favCount.text result.iCount
-    if result.iCount > 0 then favCount.show() else favCount.hide()
+    favCount.text result.iCount || ''
   false
 
 showEditTags = (idTarget, type, obj) ->
@@ -75,7 +74,7 @@ saveTags = (form) ->
     tags.find('.js-favourite-tag-user').detach()
     edit = tags.find('.js-favourite-tag-edit')
     forEach result.aTags, (value) ->
-      edit.before """<li class="#{type}-tags-user js-favourite-tag-user">, <a rel="tag" href="#{value.url}">#{value.tag}</a></li>"""
+      edit.before """<span class="#{type}-tags-user js-favourite-tag-user">, <a rel="tag" href="#{value.url}">#{value.tag}</a></span>"""
   false
 
 hideTags = (targetType, targetId) ->
