@@ -1,4 +1,4 @@
-minimum-vagga: v0.6.1
+minimum-vagga: v0.8.0
 
 _templates:
   local_volumes: &local_volumes
