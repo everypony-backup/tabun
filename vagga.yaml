@@ -436,6 +436,13 @@ containers:
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
+  mail-dev:
+    setup:
+      - !Alpine v3.8
+      - !Install [libstdc++, ruby-json, ruby-etc, sqlite-libs]
+      - !BuildDeps [sqlite-dev]
+      - !GemInstall [mailcatcher]
+
 commands:
   _write-version: !Command
     container: php-dev
@@ -569,9 +576,9 @@ commands:
     run: [innobackupex]
 
   mail: &mail !Command
-    container: celery
+    container: mail-dev
     description: Run simple mail server (just for test)
-    run: python3 -m smtpd -c DebuggingServer -d -n 127.0.0.1:1025
+    run: [mailcatcher, --foreground]
 
   celery: &celery !Command
     container: celery
