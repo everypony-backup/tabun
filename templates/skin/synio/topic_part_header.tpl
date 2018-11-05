@@ -64,7 +64,7 @@
 					<div class="vote-item vote-up" data-direction="1" data-target_id="{$oTopicId}" data-target_type="topic"></div>
 					<span id="vote_total_topic_{$oTopicId}" class="vote-item vote-count" title="{$aLang.topic_vote_count}: {$iTopicCountVote}" data-count="{$iTopicCountVote}" data-direction="0" data-target_id="{$oTopicId}" data-target_type="topic">
 							{if $bVoteInfoShow}
-								{$oTopicRating}
+								{if $oTopicRating > 0}+{/if}{$oTopicRating}
 							{else}
 								?
 							{/if}

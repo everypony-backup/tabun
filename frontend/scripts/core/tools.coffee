@@ -95,8 +95,9 @@ spoilerHandler = (target, action) ->
   return false
 
 contentRemoveBadChars = (oldText) ->
-  unless oldText then return
   newText = ''
+  unless oldText then return newText
+  unless oldText.codePointAt then return oldText  # TODO: IE11 support
   i = -1
   while ++i < oldText.length
     if oldText.codePointAt(i) < 65535
@@ -199,7 +200,7 @@ vault99 = (str) ->
     return m[1]
 
 contentMediaParser = (oldText) ->
-  unless oldText then return
+  unless oldText then return oldText
   temp = document.createElement 'temp'
 
   # Обрабатываем тэги video и iframe
@@ -286,10 +287,10 @@ contentMediaParser = (oldText) ->
   if badMedia.length
     j = badMedia.length
     while j--
-      badMedia[j].outerHTML = ""
+      badMedia[j].parentNode.removeChild badMedia[j]
     newText = temp.innerHTML
 
-  temp.outerHTML = ''
+  temp.innerHTML = ''
   return newText
 
 module.exports = {registry, textPreview, showPinkie, prepareJSON, uploadImg, spoilerHandler, contentRemoveBadChars, contentMediaParser}

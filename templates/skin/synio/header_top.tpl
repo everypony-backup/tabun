@@ -5,14 +5,14 @@
 
         <li><a href="//everypony.ru">{$aLang.menu_main}</a></li>
         <li><a href="//forum.everypony.ru">{$aLang.menu_forum}</a></li>
-        <li><a href="//stories.everypony.ru">{$aLang.menu_stories}</a></li>
+        <li><a href="//ponyfiction.org">{$aLang.menu_stories}</a></li>
         <li><a href="//radio.everypony.ru">{$aLang.menu_radio}</a></li>
         <li><a href="//wiki.everypony.ru">{$aLang.menu_wiki}</a></li>
-        <li><a href="//minecraft.everypony.ru">{$aLang.menu_minecraft}</a></li>
+        <li><a href="//blog.mc4ep.ru">{$aLang.menu_minecraft}</a></li>
     </ul>
     <ul>
         <li><a class="rss" href="/rss/" title="RSS поток Табуна"></a></li>
-        <li><a class="twitter" href="https://twitter.com/#!/everypony_ru" title="Твиттер Everypony.ru"></a></li>
+        <li><a class="twitter" href="https://twitter.com/everypony_ru" title="Твиттер Everypony.ru"></a></li>
     </ul>
 </div>
 <header id="header" role="banner">

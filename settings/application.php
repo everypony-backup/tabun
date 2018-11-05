@@ -242,7 +242,7 @@ $config['db']['tables']['engine'] = 'InnoDB';
  * Установка локали
  */
 $config['locale']['path'] = 'locale';                // файлы l10n
-$config['locale']['lang'] = 'ru_RU';
+$config['locale']['lang'] = 'ru_RU.UTF-8';
 $config['locale']['timezone'] = 'Europe/Moscow';
 
 /**

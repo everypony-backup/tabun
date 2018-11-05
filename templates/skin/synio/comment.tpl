@@ -19,6 +19,7 @@
 {if $oCommentRating <= $oConfig->GetValue('module.user.bad_rating')}
     {if $oUserCurrent and $oUserCurrent->isAdministrator()}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
+            <a id="comment{$oCommentId}"></a>
             <div class="text current">{$oComment->getText()}</div>
             <div class="comment-info" data-id="{$oCommentId}">
                 <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
@@ -29,7 +30,9 @@
                     {date_format date=$oCommentDate format="j F Y, H:i"}
                 </time>
                 <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
-                <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {if $oComment->getPid()}
+                    <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {/if}
                 <span>{$aLang.comment_was_hidden}</span>
             </div>
     {else}
@@ -40,6 +43,7 @@
 {elseif $oComment->getDelete()}
     {if $oUserCurrent and $oUserCurrent->isAdministrator()}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
+            <a id="comment{$oCommentId}"></a>
             <div class="text current">{$oComment->getText()}</div>
             <div class="comment-info" data-id="{$oCommentId}">
                 <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
@@ -50,17 +54,21 @@
                     {date_format date=$oCommentDate format="j F Y, H:i"}
                 </time>
                 <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
-                <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {if $oComment->getPid()}
+                    <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {/if}
                 <a class="comment-repair link-dotted">{$aLang.comment_repair}</a>
                 <span>{$aLang.comment_was_delete}</span>
             </div>
     {else}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted">
+            <a id="comment{$oCommentId}"></a>
             <div class="text current"><em>{$aLang.comment_was_delete}</em></div>
             <div class="comment-info" data-id="{$oCommentId}"></div>
     {/if}
 {else}
     <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oComment->isBad()}comment-bad{/if} {$oCommentSelf} {$oCommentNew}">
+        <a id="comment{$oCommentId}"></a>
         <div id="comment_content_id_{$oCommentId}" class="comment-content">
             <div class="text current">{$oComment->getText()}</div>
         </div>
@@ -73,7 +81,9 @@
                 {date_format date=$oCommentDate format="j F Y, H:i"}
             </time>
             <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
-            <a class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+            {if $oComment->getPid()}
+                <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+            {/if}
             {if $oUserCurrent}
                 {if !$bNoCommentFavourites}
                 <div class="comment-favourite">
@@ -107,7 +117,7 @@
                     {/if}
                     ">
                     <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
                     <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
                 </div>
                 {/if}
