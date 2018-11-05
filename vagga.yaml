@@ -282,8 +282,6 @@ containers:
       - php5.6-imagick
       - php5.6-bcmath
       - php5.6-mbstring
-      - php5.6-xcache
-      - gettext
       - imagemagick
     - !BuildDeps [unzip]
     - !ComposerConfig
@@ -302,7 +300,7 @@ containers:
         - git
       - !Copy
         source: /work/config/local/php
-        path: /etc/php5
+        path: /etc/php/5.6/fpm
     volumes:
       <<: *local_volumes
       /storage: !Persistent {name: storage}
@@ -317,7 +315,7 @@ containers:
         - *host_resolution
       - !Copy
         source: /config/php
-        path: /etc/php5
+        path: /etc/php/5.6/fpm
       - !EnsureDir /app
       - !Copy
         source: /work
@@ -348,13 +346,13 @@ containers:
   php-production:
     setup:
       - !Container _php-base
-      - !Install [php5-xcache@main]
+      - !Install [php5.6-xcache]
       - !*Unpack
         - *production_stuff
         - *host_resolution
       - !Copy
         source: /config/php
-        path: /etc/php5
+        path: /etc/php/5.6/fpm
       - !EnsureDir /app
       - !Copy
         source: /work
