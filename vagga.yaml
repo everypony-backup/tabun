@@ -220,11 +220,6 @@ containers:
   mysql-dev:
     setup:
     - !Container _base_alpine
-    # TODO: Replace with ordinary install when https://github.com/alpinelinux/aports/pull/808/files will be merged
-    - !Download
-      url: https://files.everypony.org/alpine/testing/x86_64/xtrabackup-2.4.5-r0.apk
-      path: /tmp/xtrabackup-2.4.5-r0.apk
-    - !Sh apk add /tmp/xtrabackup-2.4.5-r0.apk --allow-untrusted
     - !Install
       - mariadb
       - mariadb-client
@@ -291,6 +286,10 @@ containers:
       optimize_autoloader: true
     - !EnsureDir /log
     - !EnsureDir /storage
+    - !EnsureDir /config
+    # TODO: common configuration should be also copied on this stage
+    # NOTE: Move session.save_path to pool-specific configuration
+    - !Remove /etc/php/5.6/fpm/pool.d/www.conf
 
   php-dev:
     setup:
@@ -588,7 +587,7 @@ commands:
     description: Run php-fpm (application)
     user-id: 1
     external-user-id: 0
-    run: [php-fpm, -eFO]
+    run: [php-fpm5.6, -eFO]
 
   elastic: &elastic !Command
     description: Run elasticsearch
@@ -621,4 +620,4 @@ commands:
       mail: *mail
       celery: *celery
       php: *php
-      elastic: *elastic
+#      elastic: *elastic
