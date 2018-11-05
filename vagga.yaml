@@ -1,4 +1,4 @@
-minimum-vagga: v0.6.1
+minimum-vagga: v0.8.0
 
 _templates:
   local_volumes: &local_volumes
@@ -220,11 +220,6 @@ containers:
   mysql-dev:
     setup:
     - !Container _base_alpine
-    # TODO: Replace with ordinary install when https://github.com/alpinelinux/aports/pull/808/files will be merged
-    - !Download
-      url: https://files.everypony.org/alpine/testing/x86_64/xtrabackup-2.4.5-r0.apk
-      path: /tmp/xtrabackup-2.4.5-r0.apk
-    - !Sh apk add /tmp/xtrabackup-2.4.5-r0.apk --allow-untrusted
     - !Install
       - mariadb
       - mariadb-client
@@ -266,35 +261,45 @@ containers:
 
   _php-base:
     setup:
-    - !Container _base_alpine
+    - !Ubuntu bionic
+    - !AptTrust
+      keys: [14AA40EC0831756756D7F66C4F4EA0AAE5267A6C]
+    - !UbuntuPPA ondrej/php
     - !Install
-      - php5-fpm
-      - libressl@main
-      - php5-mysql
-      - php5-pdo_mysql
-      - php5-mcrypt
-      - php5-redis@testing
-      - php5-gettext
-      - php5-json
-      - php5-curl
-      - php5-imagick@community
-      - php5-bcmath
-      - imagemagick@main
+      - php5.6
+      - php5.6-fpm
+      - php5.6-mysql
+      - php5.6-mcrypt
+      - php5.6-redis
+      - php5.6-gettext
+      - php5.6-json
+      - php5.6-curl
+      - php5.6-imagick
+      - php5.6-bcmath
+      - php5.6-mbstring
+      - imagemagick
+    - !BuildDeps [unzip]
+    - !ComposerConfig
+      install_runtime: false
+      runtime_exe: /usr/bin/php5.6
     - !ComposerDependencies
       optimize_autoloader: true
     - !EnsureDir /log
     - !EnsureDir /storage
+    - !EnsureDir /config
+    # TODO: common configuration should be also copied on this stage
+    # NOTE: Move session.save_path to pool-specific configuration
+    - !Remove /etc/php/5.6/fpm/pool.d/www.conf
 
   php-dev:
     setup:
       - !Container _php-base
       - !Install
-        - php5-xdebug@community
-        - php5-cli
+        - php5.6-xdebug
         - git
       - !Copy
         source: /work/config/local/php
-        path: /etc/php5
+        path: /etc/php/5.6/fpm
     volumes:
       <<: *local_volumes
       /storage: !Persistent {name: storage}
@@ -309,7 +314,7 @@ containers:
         - *host_resolution
       - !Copy
         source: /config/php
-        path: /etc/php5
+        path: /etc/php/5.6/fpm
       - !EnsureDir /app
       - !Copy
         source: /work
@@ -340,13 +345,13 @@ containers:
   php-production:
     setup:
       - !Container _php-base
-      - !Install [php5-xcache@main]
+      - !Install [php5.6-xcache]
       - !*Unpack
         - *production_stuff
         - *host_resolution
       - !Copy
         source: /config/php
-        path: /etc/php5
+        path: /etc/php/5.6/fpm
       - !EnsureDir /app
       - !Copy
         source: /work
@@ -582,7 +587,7 @@ commands:
     description: Run php-fpm (application)
     user-id: 1
     external-user-id: 0
-    run: [php-fpm, -eFO]
+    run: [php-fpm5.6, -eFO]
 
   elastic: &elastic !Command
     description: Run elasticsearch
@@ -615,4 +620,4 @@ commands:
       mail: *mail
       celery: *celery
       php: *php
-      elastic: *elastic
+#      elastic: *elastic
