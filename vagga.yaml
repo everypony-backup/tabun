@@ -32,10 +32,7 @@ _templates:
 containers:
   _base_alpine:
     setup:
-    - !Alpine v3.4
-    - !AlpineRepo {branch: edge, repo: main, tag: main}
-    - !AlpineRepo {branch: edge, repo: testing, tag: testing}
-    - !AlpineRepo {branch: edge, repo: community, tag: community}
+    - !Alpine v3.8
     - !EnsureDir /config
     - !Sh "chmod +r /bin/bbsuid"
 
