@@ -378,9 +378,10 @@ containers:
 
   elastic-dev:
     setup:
-    - !Ubuntu xenial
+    - !Ubuntu bionic
     - !UbuntuUniverse
     - !EnsureDir /config
+    - !BuildDeps [gnupg]
     - !AptTrust
       server: pgp.mit.edu
       keys: [D88E42B4]
