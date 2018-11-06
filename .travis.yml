@@ -1,5 +1,5 @@
 language: generic
-dist: trusty
+dist: xenial
 sudo: required
 
 cache:
@@ -7,7 +7,8 @@ cache:
     - .vagga/.cache
 
 install:
-  - "echo ubuntu-mirror: http://mirrors.us.kernel.org/ubuntu/ > ~/.vagga.yaml"
+  - "echo nameserver 1.1.1.1 | sudo tee /etc/resolv.conf"
+  - "echo ubuntu-mirror: http://us.archive.ubuntu.com/ubuntu/ > ~/.vagga.yaml"
   - "echo alpine-mirror: http://mirrors.gigenet.com/alpinelinux/ >> ~/.vagga.yaml"
   - "echo travis:100000:65536 | sudo tee /etc/subuid | sudo tee /etc/subgid"
   - sudo apt-get install uidmap -y
