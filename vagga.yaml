@@ -405,8 +405,8 @@ containers:
     - !EnsureDir /config
     - !BuildDeps [gnupg]
     - !AptTrust
-      server: pgp.mit.edu
-      keys: [D88E42B4]
+      server: keyserver.ubuntu.com
+      keys: [D27D666CD88E42B4]
     - !UbuntuRepo
       url: https://artifacts.elastic.co/packages/6.x/apt
       suite: stable
