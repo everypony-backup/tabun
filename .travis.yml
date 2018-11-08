@@ -1,5 +1,5 @@
 language: generic
-dist: xenial
+dist: trusty
 sudo: required
 
 cache:
@@ -7,7 +7,6 @@ cache:
     - .vagga/.cache
 
 install:
-  - "echo nameserver 1.1.1.1 | sudo tee /etc/resolv.conf"
   - "echo ubuntu-mirror: http://us.archive.ubuntu.com/ubuntu/ > ~/.vagga.yaml"
   - "echo alpine-mirror: http://mirrors.gigenet.com/alpinelinux/ >> ~/.vagga.yaml"
   - "echo travis:100000:65536 | sudo tee /etc/subuid | sudo tee /etc/subgid"
@@ -28,7 +27,7 @@ script:
   - vagga _build mysql-trunk
   - vagga _build static-trunk
   - vagga _build elastic-trunk
-  - vagga _build logs-trunk
+  # FIXME: - vagga _build logs-trunk
 
 deploy:
   - provider: script
@@ -38,7 +37,7 @@ deploy:
       --project tabun
       --type trunk
       --blobs "static"
-      --containers "redis celery php mysql elastic logs"
+      --containers "redis celery php mysql elastic"
       --destination $deploy_destination
       --server $deploy_host
       --port $deploy_port

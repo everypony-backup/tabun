@@ -154,11 +154,14 @@ containers:
     - !Container celery
     - !*Unpack
       - *trunk_stuff
-      - *host_resolution
     - !Copy
       source: /work/celery_tasks
       path: /app
     - !Sh python3 -m compileall /app
+    - !*Unpack
+      - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -167,11 +170,14 @@ containers:
     - !Container celery
     - !*Unpack
       - *production_stuff
-      - *host_resolution
     - !Copy
       source: /work/celery_tasks
       path: /app
     - !Sh python3 -m compileall /app
+    - !*Unpack
+      - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -192,6 +198,8 @@ containers:
     - !*Unpack
       - *trunk_stuff
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -201,6 +209,8 @@ containers:
     - !*Unpack
       - *production_stuff
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -237,10 +247,13 @@ containers:
     - !Container mysql-dev
     - !*Unpack
       - *trunk_stuff
-      - *host_resolution
     - !Copy
       source: /config/mysql
       path: /etc/mysql
+    - !*Unpack
+      - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -249,10 +262,13 @@ containers:
     - !Container mysql-dev
     - !*Unpack
       - *production_stuff
-      - *host_resolution
     - !Copy
       source: /config/mysql
       path: /etc/mysql
+    - !*Unpack
+      - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -308,7 +324,6 @@ containers:
       - !Container _php-base
       - !*Unpack
         - *trunk_stuff
-        - *host_resolution
       - !Copy
         source: /config/php
         path: /etc/php/5.6/fpm
@@ -336,6 +351,10 @@ containers:
       - !Copy
         source: /mnt/frontend.version
         path: /app/frontend.version
+      - !*Unpack
+        - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -345,7 +364,6 @@ containers:
       - !Install [php5.6-xcache]
       - !*Unpack
         - *production_stuff
-        - *host_resolution
       - !Copy
         source: /config/php
         path: /etc/php/5.6/fpm
@@ -373,6 +391,10 @@ containers:
       - !Copy
         source: /mnt/frontend.version
         path: /app/frontend.version
+      - !*Unpack
+        - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -406,10 +428,13 @@ containers:
       - !Container elastic-dev
       - !*Unpack
         - *trunk_stuff
-        - *host_resolution
       - !Copy
         source: /config/elasticsearch
         path: /etc/elasticsearch
+      - !*Unpack
+        - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -418,10 +443,13 @@ containers:
       - !Container elastic-dev
       - !*Unpack
         - *production_stuff
-        - *host_resolution
       - !Copy
         source: /config/elasticsearch
         path: /etc/elasticsearch
+      - !*Unpack
+        - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -437,10 +465,13 @@ containers:
         - log.io
       - !*Unpack
         - *trunk_stuff
-        - *host_resolution
       - !Copy
         source: /config/.log.io
         path: /opt/.log.io
+      - !*Unpack
+        - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
