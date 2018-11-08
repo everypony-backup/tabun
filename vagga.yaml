@@ -160,6 +160,8 @@ containers:
     - !Sh python3 -m compileall /app
     - !*Unpack
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -174,6 +176,8 @@ containers:
     - !Sh python3 -m compileall /app
     - !*Unpack
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -194,6 +198,8 @@ containers:
     - !*Unpack
       - *trunk_stuff
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -203,6 +209,8 @@ containers:
     - !*Unpack
       - *production_stuff
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -244,6 +252,8 @@ containers:
       path: /etc/mysql
     - !*Unpack
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -257,6 +267,8 @@ containers:
       path: /etc/mysql
     - !*Unpack
       - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -341,6 +353,8 @@ containers:
         path: /app/frontend.version
       - !*Unpack
         - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -379,6 +393,8 @@ containers:
         path: /app/frontend.version
       - !*Unpack
         - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -417,6 +433,8 @@ containers:
         path: /etc/elasticsearch
       - !*Unpack
         - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -430,6 +448,8 @@ containers:
         path: /etc/elasticsearch
       - !*Unpack
         - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
@@ -450,6 +470,8 @@ containers:
         path: /opt/.log.io
       - !*Unpack
         - *host_resolution
+    volumes:
+      /state: !Tmpfs
     resolv-conf-path: /state/resolv.conf
     hosts-file-path: /state/hosts
 
