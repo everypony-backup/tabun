@@ -284,7 +284,8 @@ containers:
         path: /app/index.php
       - !BuildDeps [gettext]
       # FIXME: Implicit locale build
-      - !GitDescribe /app/backend.version
+      - !BuildDeps [git]
+      - !Sh git describe --always > /app/backend.version
       - !Build
         container: assets
         source: /static
@@ -314,7 +315,8 @@ containers:
         source: /work/index.php
         path: /app/index.php
       # FIXME: Implicit locale build
-      - !GitDescribe /app/backend.version
+      - !BuildDeps [git]
+      - !Sh git describe --always > /app/backend.version
       - !Build
         container: assets
         source: /static
