@@ -41,6 +41,8 @@ containers:
     - !Container _base_alpine
     - !Env
       TRAVIS: true
+      NODE_PATH: /usr/lib/node_modules
+    - !EnsureDir /usr/lib/node_modules/.cache
     - !NpmDependencies
       file: package.json
       peer: true
@@ -50,6 +52,8 @@ containers:
       - gettext
     environ:
       NODE_PATH: /usr/lib/node_modules
+    volumes:
+      /work/node_modules: !Empty
 
   static-trunk:
     setup:
@@ -483,9 +487,9 @@ containers:
       - !GemInstall [mailcatcher]
 
 commands:
-  _write-version: !Command
-    container: php-dev
-    run: git describe --always --dirty=-dev > /work/backend.version
+  _mk-node-modules-dir: !Command
+    container: _base_alpine
+    run: mkdir -p /work/node_modules
 
   _init_db: !Command
     description: Initialize and populate MySQL database
@@ -546,19 +550,13 @@ commands:
       mysqladmin shutdown
 
   build-static: !Command
-    prerequisites: [_clean-old-static, compile-locales]
+    description: Build static
     container: frontend
-    description: Build static files using webpack
-    run: |
-      webpack --progress
-      cp -r frontend/images/local static/local
-
-  _clean-old-static: !Command
-    container: frontend
-    description: Clean static files
-    run: |
-     mkdir -vp /work/static
-     rm -rf /work/static/*
+    prerequisites: [compile-locales]
+    volumes: &node_volumes
+      /work/node_modules: !BindRO /vagga/root/usr/lib/node_modules
+      /usr/lib/node_modules/.cache: !Persistent node_cache
+    run: webpack --color --progress -p
 
   compile-locales: !Command
     container: frontend
@@ -582,7 +580,9 @@ commands:
 
   webpack: !Command
     container: frontend
+    prerequisites: [_mk-node-modules-dir, compile-locales]
     description: Webpack CLI
+    volumes: *node_volumes
     run: [webpack]
 
   redis-cli: &redis !Command
