@@ -109,6 +109,8 @@ cfg =
     maxEntrypointSize: 2048000
     maxAssetSize: 1024000
 
+  devtool: "source-map"
+
 if isProduction
   cfg.resolve.alias =
     'react': 'react-lite'
@@ -122,8 +124,5 @@ if isProduction or isTrunk
         stats.hash
       )
     ))
-
-if not (isProduction or isTrunk)
-  cfg.devtool = "source-map"
 
 module.exports = cfg
