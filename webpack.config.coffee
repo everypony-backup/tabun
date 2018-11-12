@@ -3,32 +3,36 @@ webpack = require 'webpack'
 poststylus = require 'poststylus'
 postUse = require "postcss-use"
 fs = require 'fs'
-ExtractTextPlugin = require 'extract-text-webpack-plugin'
+MiniCssExtractPlugin = require 'mini-css-extract-plugin'
+
 isProduction = process.env.NODE_ENV == 'production'
 isTrunk = process.env.NODE_ENV == 'trunk'
+nodePath = process.env.NODE_PATH or path.join(__dirname, 'node_modules')
 
-vendors = [
-  "bazooka"
-  "classnames"
-  "immutable"
-  "jed"
-  "jquery"
-  "jquery.scrollto"
-  "xhr"
-  "lodash"
+extractLoaderOptions =
+  publicPath: './'
 
-  # Legacy
-  "jquery.jqmodal"
-  "jquery.ui"
-  "jquery.form"
-  "jquery.markitup"
-]
-if isProduction
-  vendors.push("react-lite")
-else
-  vendors.push("react", "react-dom")
+cssLoaderOptions =
+  modules: false
+  importLoaders: 1
+  url: true
+  sourceMap: true
+
+stylusLoaderOptions =
+  preferPathResolver: 'webpack'
+  use: [
+    require('bootstrap-styl')()
+    poststylus([ postUse({ modules: ['postcss-selector-namespace']}) ])
+  ]
+  compress: isProduction
+  sourceMap: true
+
+fileLoaderOptions =
+  name: if isProduction then 'img/[hash:4].[ext]' else 'img/[name].[ext]'
+  publicPath: './'
 
 cfg =
+  mode: if isProduction then 'production' else 'none'
   context: path.join __dirname, 'frontend'
   cache: true
 
@@ -39,7 +43,6 @@ cfg =
     blogs: "./blogs"
     search: "./search"
     profile: "./profile"
-    vendor: vendors
 
   output:
     path: path.join __dirname, 'static', (if isProduction or isTrunk then '[hash]' else 'ephemeral')
@@ -47,50 +50,65 @@ cfg =
     filename: '[name].bundle.js'
 
   module:
-    loaders: [
-      {test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/, compact: true}
-      {test: /\.coffee$/, loader: 'coffee-loader'}
-      {test: /\.styl$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader")}
-      {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
-      {test: /\.json$/, loader: 'json'}
+    rules: [
+      {test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/}
+      {test: /\.coffee$/, use: ['babel-loader', 'coffee-loader']}
       {
-        test: /.*\.(gif|png|jpg|jpeg|svg)$/,
-        loaders: (if isProduction then ['file?name=img/[hash:4].[ext]'] else ['file?name=img/[name].[ext]'])
+        test: /\.css$/,
+        use: [
+          {loader: MiniCssExtractPlugin.loader, options: extractLoaderOptions}
+          {loader: 'css-loader', options: cssLoaderOptions}
+        ]
+      }
+      {
+        test: /\.styl$/,
+        use: [
+          {loader: MiniCssExtractPlugin.loader, options: extractLoaderOptions}
+          {loader: 'css-loader', options: cssLoaderOptions}
+          {loader: 'stylus-loader', options: stylusLoaderOptions}
+        ]
+      }
+      {
+        test: /\.(png|jpe?g|jp2|gif|svg|ico|bmp|webp|webm|mp4|mkv|mp3|ogg|aac|ttf|otf|woff2?|eot|txt)$/,
+        use: [
+          {loader: 'file-loader', options: fileLoaderOptions},
+        ],
       }
     ]
 
   resolve:
-    extensions: ['', '.coffee', '.js', '.styl', '.css']
-    modulesDirectories: ['node_modules', 'scripts']
-    root: [
-      process.env.NODE_PATH
-      path.resolve(__dirname)
+    extensions: ['.coffee', '.js', '.styl', '.css']
+    modules: [
+      nodePath
+      path.resolve(path.join(__dirname, 'frontend', 'scripts'))
       path.resolve(path.join(__dirname, 'frontend', 'vendor'))
       path.resolve(path.join(__dirname, 'templates', 'skin', 'synio'))
     ]
+    mainFiles: ['main', 'index']
+    mainFields: ['main', 'module']
 
   resolveLoader:
-    root: process.env.NODE_PATH
+    modules: [nodePath]
 
   plugins: [
-      new ExtractTextPlugin "[name].css"
-      new webpack.optimize.DedupePlugin()
-      new webpack.optimize.CommonsChunkPlugin name: 'vendor', minChunks: Infinity
-    ]
-  stylus:
-    preferPathResolver: 'webpack'
-    use: [
-      require('bootstrap-styl')()
-      poststylus([ postUse({ modules: ['postcss-selector-namespace']}) ])
-    ]
-    compress: true
+    new MiniCssExtractPlugin { filename: '[name].css' }
+  ]
+
+  optimization:
+    minimize: isProduction
+    runtimeChunk:
+      name: 'vendor'
+    splitChunks:
+      cacheGroups:
+        vendor:
+          name: 'vendor'
+          test: /\/(node_modules)|(vendor)\//
+          chunks: 'all'
 
 if isProduction
   cfg.resolve.alias =
     'react': 'react-lite'
     'react-dom': 'react-lite'
-
-  cfg.plugins.push(new webpack.optimize.UglifyJsPlugin())
 
 if isProduction or isTrunk
   cfg.plugins.push(() ->
@@ -102,6 +120,6 @@ if isProduction or isTrunk
     ))
 
 if not (isProduction or isTrunk)
-  cfg.devtool = "#source-map"
+  cfg.devtool = "source-map"
 
 module.exports = cfg
