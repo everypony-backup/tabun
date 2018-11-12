@@ -5,6 +5,7 @@
     "bazooka": "^0.9.1",
     "bootstrap-styl": "^5.0.8",
     "classnames": "^2.2.6",
+    "core-js": "^2.5.7",
     "immutable": "3.8.2",
     "jed": "~1.1.1",
     "jquery": "~2.2.4",
@@ -53,7 +54,8 @@
               "> 1%",
               "IE 11"
             ]
-          }
+          },
+          "useBuiltIns": "usage"
         }
       ]
     ],
