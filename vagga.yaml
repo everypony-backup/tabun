@@ -41,6 +41,8 @@ containers:
     - !Container _base_alpine
     - !Env
       TRAVIS: true
+      NODE_PATH: /usr/lib/node_modules
+    - !EnsureDir /usr/lib/node_modules/.cache
     - !NpmDependencies
       file: package.json
       peer: true
@@ -50,83 +52,32 @@ containers:
       - gettext
     environ:
       NODE_PATH: /usr/lib/node_modules
+    volumes:
+      /work/node_modules: !Empty
 
-  static-trunk:
+  assets:
     setup:
-    - !Container frontend
-    - !EnsureDir /static
-    - !Copy
-      source: /work/frontend
-      path: /tmp/frontend
-    - !Copy
-      source: /work/templates/skin/synio/locale
-      path: /tmp/locale
-    - !RunAs
-      work-dir: /tmp/locale/ru_RU/LC_MESSAGES
-      script: |
-        msgcat -n -F -o messages.po parts/*
-        msgfmt messages.po
-        po2json -f jed1.x messages.po messages.json
-    - !Copy
-      source: /work/webpack.config.coffee
-      path: /tmp/webpack.config.coffee
-    - !Copy
-      source: /work/package.json
-      path: /tmp/package.json
-    - !Env
-      NODE_PATH: /usr/lib/node_modules
-      NODE_ENV: trunk
-    - !RunAs
-      work-dir: /tmp
-      script: webpack --color
-    - !Copy
-      source: /tmp/static
-      path: /static
-    - !Copy
-      source: /tmp/frontend/images/local
-      path: /static/local
-    - !Copy
-      source: /tmp/frontend.version
-      path: /static/frontend.version
-    data-dirs: [/static]
-
-  static-production:
-    setup:
-    - !Container frontend
-    - !EnsureDir /static
-    - !Copy
-      source: /work/frontend
-      path: /tmp/frontend
-    - !Copy
-      source: /work/templates/skin/synio/locale
-      path: /tmp/locale
-    - !RunAs
-      work-dir: /tmp/locale/ru_RU/LC_MESSAGES
-      script: |
-        msgcat -n -F -o messages.po parts/*
-        msgfmt messages.po
-        po2json -f jed1.x messages.po messages.json
-    - !Copy
-      source: /work/webpack.config.coffee
-      path: /tmp/webpack.config.coffee
-    - !Copy
-      source: /work/package.json
-      path: /tmp/package.json
-    - !Env
-      NODE_PATH: /usr/lib/node_modules
-      NODE_ENV: production
-    - !RunAs
-      work-dir: /tmp
-      script: webpack --color
-    - !Copy
-      source: /tmp/static
-      path: /static
-    - !Copy
-      source: /tmp/frontend/images/local
-      path: /static/local
-    - !Copy
-      source: /tmp/frontend.version
-      path: /static/frontend.version
+      - !Container frontend
+      - !EnsureDir /static
+      - !RunAs
+        work-dir: templates/skin/synio/locale/ru_RU/LC_MESSAGES
+        script: &compile_locales |
+          msgcat -n -F -o messages.po parts/*
+          msgfmt messages.po
+          po2json -f jed1.x messages.po messages.json
+          rm messages.po
+      - !Build
+        container: frontend
+        source: /usr/lib/node_modules
+        temporary-mount: /work/node_modules
+      - !Env
+        NODE_ENV: production
+        NODE_PATH: /usr/lib/node_modules
+        BABEL_CACHE_PATH: /tmp/.babel.json
+      - !Sh webpack --color --progress -p
+      - !Copy
+        source: /work/static
+        path: /static
     data-dirs: [/static]
 
   celery:
@@ -303,6 +254,8 @@ containers:
     # TODO: common configuration should be also copied on this stage
     # NOTE: Move session.save_path to pool-specific configuration
     - !Remove /etc/php/5.6/fpm/pool.d/www.conf
+    - !EnsureDir /static
+    - !EnsureDir /app
 
   php-dev:
     setup:
@@ -313,11 +266,6 @@ containers:
       - !Copy
         source: /work/config/local/php
         path: /etc/php/5.6/fpm
-    volumes:
-      <<: *local_volumes
-      /storage: !Persistent {name: storage}
-      /log: !Persistent {name: php_log}
-      /var/log: !Snapshot
 
   php-trunk:
     setup:
@@ -327,7 +275,6 @@ containers:
       - !Copy
         source: /config/php
         path: /etc/php/5.6/fpm
-      - !EnsureDir /app
       - !Copy
         source: /work
         path: /app
@@ -336,21 +283,12 @@ containers:
         source: /work/index.php
         path: /app/index.php
       - !BuildDeps [gettext]
-      - !RunAs
-        work-dir: /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
-        script: |
-          msgcat -n -F -o messages.po parts/*
-          msgfmt messages.po
-          rm -vr messages.po parts
-      - !BuildDeps [git]
-      - !Sh git describe --always > /app/backend.version
+      # FIXME: Implicit locale build
+      - !GitDescribe /app/backend.version
       - !Build
-        container: static-trunk
+        container: assets
         source: /static
-        temporary-mount: /mnt
-      - !Copy
-        source: /mnt/frontend.version
-        path: /app/frontend.version
+        path: /static
       - !*Unpack
         - *host_resolution
     volumes:
@@ -375,22 +313,12 @@ containers:
       - !Copy
         source: /work/index.php
         path: /app/index.php
-      - !BuildDeps [gettext]
-      - !RunAs
-        work-dir: /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
-        script: |
-          msgcat -n -F -o messages.po parts/*
-          msgfmt messages.po
-          rm -vr messages.po parts
-      - !BuildDeps [git]
-      - !Sh git describe --always > /app/backend.version
+      # FIXME: Implicit locale build
+      - !GitDescribe /app/backend.version
       - !Build
-        container: static-production
+        container: assets
         source: /static
-        temporary-mount: /mnt
-      - !Copy
-        source: /mnt/frontend.version
-        path: /app/frontend.version
+        path: /static
       - !*Unpack
         - *host_resolution
     volumes:
@@ -483,9 +411,9 @@ containers:
       - !GemInstall [mailcatcher]
 
 commands:
-  _write-version: !Command
-    container: php-dev
-    run: git describe --always --dirty=-dev > /work/backend.version
+  _mk-node-modules-dir: !Command
+    container: _base_alpine
+    run: mkdir -p /work/node_modules
 
   _init_db: !Command
     description: Initialize and populate MySQL database
@@ -546,29 +474,19 @@ commands:
       mysqladmin shutdown
 
   build-static: !Command
-    prerequisites: [_clean-old-static, compile-locales]
+    description: Build static
     container: frontend
-    description: Build static files using webpack
-    run: |
-      webpack --progress
-      cp -r frontend/images/local static/local
-
-  _clean-old-static: !Command
-    container: frontend
-    description: Clean static files
-    run: |
-     mkdir -vp /work/static
-     rm -rf /work/static/*
+    prerequisites: [compile-locales]
+    volumes: &node_volumes
+      /work/node_modules: !BindRO /vagga/root/usr/lib/node_modules
+      /usr/lib/node_modules/.cache: !Persistent node_cache
+    run: webpack --color --progress -p
 
   compile-locales: !Command
     container: frontend
     description: Comlile locale files
     work-dir: templates/skin/synio/locale/ru_RU/LC_MESSAGES
-    run: |
-      msgcat -n -F -o messages.po parts/*
-      msgfmt messages.po
-      po2json -f jed1.x messages.po messages.json
-      rm messages.po
+    run: *compile_locales
 
   reindex: !Command
     container: php-dev
@@ -582,7 +500,9 @@ commands:
 
   webpack: !Command
     container: frontend
+    prerequisites: [_mk-node-modules-dir, compile-locales]
     description: Webpack CLI
+    volumes: *node_volumes
     run: [webpack]
 
   redis-cli: &redis !Command
@@ -628,12 +548,19 @@ commands:
     run: celery worker --pool=solo
 
   php: &php !Command
-    prerequisites: [_write-version]
+    prerequisites: [compile-locales]
     container: php-dev
     description: Run php-fpm (application)
     user-id: 1
     external-user-id: 0
     run: [php-fpm5.6, -eFO]
+    volumes:
+      <<: *local_volumes
+      /storage: !Persistent {name: storage}
+      /static: !BindRO /work/static
+      /app: !BindRO /work
+      /log: !Persistent {name: php_log}
+      /var/log: !Snapshot
 
   elastic: &elastic !Command
     container: elastic-dev

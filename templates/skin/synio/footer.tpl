@@ -4,7 +4,7 @@
 	</div> <!-- /wrapper -->
 
 
-	
+
 	<footer id="footer">
 		<p>Все права принадлежат пони. Весь мир принадлежит пони.</p>
 		<div class="text version">
@@ -37,8 +37,8 @@
         voteNeutral: window.localStorage.getItem('UI-voteNeutral') !== "false"
     }
 </script>
-<script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/vendor.bundle.js" type="text/javascript"></script>
-<script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.bundle.js" type="text/javascript"></script>
+<script src="{cfg name='path.static.url'}/vendor.{cfg name='misc.ver.front'}.js" type="text/javascript"></script>
+<script src="{cfg name='path.static.url'}/main.{cfg name='misc.ver.front'}.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     ls.tools.registry.loadJSON({json var=$aFrontendRegistry});
@@ -46,7 +46,7 @@
 </script>
 {if isset($scripts)}
     {foreach from=$scripts item=item}
-        <script src="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.bundle.js" type="text/javascript"></script>
+        <script src="{cfg name='path.static.url'}/{$item}.{cfg name='misc.ver.front'}.js" type="text/javascript"></script>
     {/foreach}
 {/if}
 {include 'analytics.tpl'}

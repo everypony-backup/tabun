@@ -13,10 +13,10 @@
     <meta name="description" content="{$sHtmlDescription}">
     <meta name="keywords" content="{$sHtmlKeywords}">
 
-    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.css">
+    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/main.{cfg name='misc.ver.front'}.css">
     {if isset($styles)}
         {foreach from=$styles item=item}
-            <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.css">
+            <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{$item}.{cfg name='misc.ver.front'}.css">
         {/foreach}
     {/if}
 
