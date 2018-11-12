@@ -105,6 +105,10 @@ cfg =
           test: /\/(node_modules)|(vendor)\//
           chunks: 'all'
 
+  performance:
+    maxEntrypointSize: 2048000
+    maxAssetSize: 1024000
+
 if isProduction
   cfg.resolve.alias =
     'react': 'react-lite'
