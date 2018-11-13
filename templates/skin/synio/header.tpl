@@ -84,6 +84,6 @@
             <div id="content" role="main" {if $sMenuItemSelect=='profile'}itemscope
                  itemtype="http://data-vocabulary.org/Person"{/if}>
                 {include file='nav_content.tpl'}
-                {include file='system_message.tpl' noShowSystemMessage=false}
+                {include file='system_message.tpl'}
 
                 {hook run='content_begin'}
