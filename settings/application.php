@@ -23,7 +23,7 @@ $config['view']['name'] = 'Табун - место, где пасутся бро
 $config['view']['description'] = 'Блогосфера фандома My Little Pony: Friendship is Magic';
 $config['view']['keywords'] = 'пони, брони, my little pony, friendship is magic';
 $config['view']['noindex'] = false;             // "прятать" или нет ссылки от поисковиков, оборачивая их в тег <noindex> и добавляя rel="nofollow"
-$config['view']['img_resize_width'] = 570;      // до какого размера в пикселях ужимать картинку по щирине при загрузки её в топики и комменты
+$config['view']['img_resize_width'] = 570;      // до какого размера в пикселях ужимать картинку по ширине при её загрузке в топики и комменты
 $config['view']['img_max_width'] = 10000;       // максимальная ширина загружаемых изображений в пикселях
 $config['view']['img_max_height'] = 10000;      // максимальная высота загружаемых изображений в пикселях
 
