@@ -184,6 +184,7 @@ class ActionLogin extends Action {
 	protected function EventExit() {
 		$this->Security_ValidateSendForm();
 		$this->User_Logout();
+		$this->Message_AddNoticeSingle($this->Lang_Get('user_exit_notice'), null, true);
 		Router::Location(Config::Get('path.root.web').'/');
 	}
 	/**
