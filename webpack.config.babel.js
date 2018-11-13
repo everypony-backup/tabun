@@ -10,6 +10,7 @@ const ENV = process.env.NODE_ENV || 'development';
 const isDev = ENV === 'development';
 const devPrefix = isDev ? 'dev' : '[hash]';
 const outputPath = path.resolve(__dirname, 'static');
+const nodePath = process.env.NODE_PATH || path.join(__dirname, 'node_modules');
 
 class WriteVersionPlugin {
   constructor(filename, dev) {
@@ -76,7 +77,7 @@ module.exports = {
   resolve: {
     extensions: ['.coffee', '.jsx', '.js', '.json'],
     modules: [
-      process.env.NODE_PATH,
+      nodePath,
       'node_modules',
       path.resolve(__dirname, 'frontend'),
       path.resolve(path.join(__dirname, 'frontend', 'vendor')),
@@ -86,7 +87,7 @@ module.exports = {
   resolveLoader: {
     modules: [
       'node_modules',
-      process.env.NODE_PATH,
+      nodePath,
     ]
   },
 
