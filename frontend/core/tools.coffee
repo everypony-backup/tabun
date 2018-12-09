@@ -235,7 +235,7 @@ contentMediaParser = (oldText) ->
           parsedUrl = rutube url
           if parsedUrl
             src = '//rutube.ru/video/embed/' + parsedUrl
-        else if /gfycat/.test url
+        else if /gfycat\.com/.test url
           parsedUrl = gfycat url
           if parsedUrl
             src = '//gfycat.com/ifr/' + parsedUrl + '?controls=0'
