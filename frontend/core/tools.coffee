@@ -183,6 +183,14 @@ rutube = (str) ->
   if video.test str
     return str.split(video)[1].split("/")[0]
 
+giphy = (str) ->
+  unless str then return
+
+  pattern = /giphy\.com\/gifs\/([^\/]+-)?([\w\d]+)/
+  m = pattern.exec str
+  if m
+    return m[2]
+
 gfycat = (str) ->
   unless str then return
 
@@ -235,6 +243,10 @@ contentMediaParser = (oldText) ->
           parsedUrl = rutube url
           if parsedUrl
             src = '//rutube.ru/video/embed/' + parsedUrl
+        else if /giphy\.com/.test url
+          parsedUrl = giphy url
+          if parsedUrl
+            src = '//giphy.com/embed/' + parsedUrl
         else if /gfycat\.com/.test url
           parsedUrl = gfycat url
           if parsedUrl
