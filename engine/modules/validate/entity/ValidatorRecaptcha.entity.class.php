@@ -21,7 +21,8 @@
  * @package engine.modules.validate
  * @since 1.0
  */
-class ModuleValidate_EntityValidatorRecaptcha extends ModuleValidate_EntityValidator {
+class ModuleValidate_EntityValidatorRecaptcha extends ModuleValidate_EntityValidator
+{
     /**
      * Запуск валидации
      *
@@ -29,7 +30,8 @@ class ModuleValidate_EntityValidatorRecaptcha extends ModuleValidate_EntityValid
      *
      * @return bool|string
      */
-    public function validate($sValue) {
+    public function validate($sValue)
+    {
         $secret = Config::Get('recaptcha.secret');
         $url = Config::Get('recaptcha.url');
         $q = "?secret=".$secret."&response=".$sValue;
