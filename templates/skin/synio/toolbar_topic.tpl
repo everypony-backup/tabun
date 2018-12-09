@@ -4,5 +4,3 @@
 		<a title="{$aLang.toolbar_topic_next}" class="toolbar-topic-next"><i></i></a>
 	</section>
 {/if}
-
-	
