@@ -1647,7 +1647,10 @@ class ActionBlog extends Action
         if (!$bAccess=$this->ACL_IsAllowDeleteBlog($oBlog, $this->oUserCurrent)) {
             return parent::EventNotFound();
         }
-        $aTopics =  $this->Topic_GetTopicsByBlogId($sBlogId);
+        // FIXME: $aTopics был всегда пуст https://github.com/everypony/tabun/issues/123
+        // Это временно исправлено костылём с $iPerPage=10000, но, очевидно,
+        // это будет неправильно работать с блогами, где больше 10000 постов
+        $aTopics = $this->Topic_GetTopicsByBlogId($sBlogId, 1, 10000);
         switch ($bAccess) {
             case ModuleACL::CAN_DELETE_BLOG_EMPTY_ONLY:
                 if (is_array($aTopics) and count($aTopics)) {
@@ -1679,6 +1682,7 @@ class ActionBlog extends Action
                      */
                     $this->Topic_MoveTopics($sBlogId, $sBlogIdNew);
                 }
+                // TODO: что-то сделать с постами, когда $sBlogIdNew == -1
                 break;
             default:
                 return parent::EventNotFound();
