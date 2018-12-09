@@ -70,25 +70,20 @@ class ModuleDatabase extends Module
      * Получает объект БД
      *
      * @param array|null $aConfig - конфиг подключения к БД(хост, логин, пароль, тип бд, имя бд), если null, то используются параметры из конфига Config::Get('db.params')
-     * @return DbSimple_Generic_Database DbSimple
+     * @return DbSimple_Database DbSimple
      */
-    public function GetConnect($aConfig=null)
+    public function GetConnect($aConfig = null)
     {
         /**
-         * Если конфиг не передан то используем главный конфиг БД из config.php
+         * Получаем DSN
          */
-        if (is_null($aConfig)) {
-            $aConfig = Config::Get('db.params');
-        }
-        $sParams='';
-        if (isset($aConfig['params']) and is_array($aConfig['params'])) {
-            $sParams='?'.http_build_query($aConfig['params'], '', '&');
-        }
-        $sDSN=$aConfig['type'].'wrapper://'.$aConfig['user'].':'.$aConfig['pass'].'@'.$aConfig['host'].':'.$aConfig['port'].'/'.$aConfig['dbname'].$sParams;
+        $sDSN = $this->GetDSNByConfig($aConfig);
+
         /**
          * Создаём хеш подключения, уникальный для каждого конфига
          */
-        $sDSNKey=md5($sDSN);
+        $sDSNKey = md5($sDSN);
+
         /**
          * Проверяем создавали ли уже коннект с такими параметрами подключения(DSN)
          */
@@ -98,7 +93,7 @@ class ModuleDatabase extends Module
             /**
              * Если такого коннекта еще не было то создаём его
              */
-            $oDbSimple=DbSimple_Generic::connect($sDSN);
+            $oDbSimple = DbSimple_Generic::connect($sDSN);
             /**
              * Устанавливаем хук на перехват ошибок при работе с БД
              */
@@ -114,11 +109,11 @@ class ModuleDatabase extends Module
              * считайте это костылём
              */
             $oDbSimple->query("set character_set_client='utf8', character_set_results='utf8', collation_connection='utf8_bin' ");
-            $oWrapper=new ModuleDatabase_DbSimpleWrapper($oDbSimple);
+            $oWrapper = new ModuleDatabase_DbSimpleWrapper($oDbSimple);
             /**
              * Сохраняем коннект
              */
-            $this->aInstance[$sDSNKey]=$oWrapper;
+            $this->aInstance[$sDSNKey] = $oWrapper;
             /**
              * Возвращаем коннект
              */
@@ -207,6 +202,28 @@ class ModuleDatabase extends Module
         }
         return array('result'=>false,'errors'=>$aErrors);
     }
+
+    /**
+     * Возвращает DSN строку из конфига
+     *
+     * @param null $aConfig
+     *
+     * @return string
+     */
+    protected function GetDSNByConfig($aConfig=null) {
+        /**
+         * Если конфиг не передан то используем главный конфиг БД из config.php
+         */
+        if (is_null($aConfig)) {
+            $aConfig = Config::Get('db.params');
+        }
+        $sParams = '';
+        if (isset($aConfig['params']) and is_array($aConfig['params'])) {
+            $sParams = '?' . http_build_query($aConfig['params'], '', '&');
+        }
+        return $aConfig['type'] . '://' . $aConfig['user'] . ':' . $aConfig['pass'] . '@' . $aConfig['host'] . ':' . $aConfig['port'] . '/' . $aConfig['dbname'] . $sParams;
+    }
+
     public function LogQuery($sStr)
     {
         $this->sQueryLog  .= ("\n" . $sStr);

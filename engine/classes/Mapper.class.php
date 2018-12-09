@@ -27,14 +27,14 @@ abstract class Mapper extends LsObject
     /**
      * Объект подключения к базе данных
      *
-     * @var DbSimple_Generic_Database
+     * @var DbSimple_Database
      */
     protected $oDb;
 
     /**
      * Передаем коннект к БД
      *
-     * @param DbSimple_Generic_Database|object $oDb
+     * @param DbSimple_Database|object $oDb
      */
     public function __construct($oDb)
     {
