@@ -680,6 +680,12 @@ class ActionBlog extends Action
             return parent::EventNotFound();
         }
         /**
+         * Обход старого бага: в базе могут попадаться посты из удалённых блогов
+         */
+        if (!$oTopic->getBlog()) {
+            return parent::EventNotFound();
+        }
+        /**
          * Определяем права на отображение записи из закрытого блога
          */
         if ($oTopic->getBlog()->getType()=='close'
