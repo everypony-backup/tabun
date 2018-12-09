@@ -30,7 +30,7 @@ function smarty_block_hookb($aParams,$sContent,&$oSmarty,&$bRepeat) {
 		trigger_error("Hook: missing 'run' parametr",E_USER_WARNING);
 		return;
 	}
-	
+
 	if ($sContent) {
 		$sHookName='template_block_'.strtolower($aParams['run']);
 		unset($aParams['run']);
@@ -43,4 +43,3 @@ function smarty_block_hookb($aParams,$sContent,&$oSmarty,&$bRepeat) {
 		echo $sContent;
 	}
 }
-?>

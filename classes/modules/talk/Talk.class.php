@@ -276,7 +276,7 @@ class ModuleTalk extends Module {
 				$this->Cache_Set(
                     $oTalk,
                     "talk_{$oTalk->getId()}",
-                    [] 
+                    []
                 );
 				$aTalkIdNeedStore=array_diff($aTalkIdNeedStore,array($oTalk->getId()));
 			}
@@ -812,4 +812,3 @@ class ModuleTalk extends Module {
 		$this->Comment_DeleteCommentByTargetId($iTalkId,'talk');
 	}
 }
-?>

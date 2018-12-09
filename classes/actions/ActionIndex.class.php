@@ -319,4 +319,4 @@ class ActionIndex extends Action {
 		$this->Viewer_Assign('iCountTopicsPersonalNew',$this->iCountTopicsPersonalNew);
 	}
 }
-?>
+

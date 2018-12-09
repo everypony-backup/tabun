@@ -22,6 +22,5 @@
  * @since 1.0
  */
 class ModuleGeo_EntityTarget extends Entity {
-    
+
 }
-?>

@@ -152,4 +152,4 @@ class ActionPersonalBlog extends Action {
 		$this->Viewer_Assign('iCountTopicsNew',$iCountTopicsNew);
 	}
 }
-?>
+

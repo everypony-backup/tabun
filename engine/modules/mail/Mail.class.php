@@ -188,4 +188,3 @@ class ModuleMail extends Module {
 		return '';
 	}
 }
-?>

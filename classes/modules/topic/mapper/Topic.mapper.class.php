@@ -908,4 +908,4 @@ class ModuleTopic_MapperTopic extends Mapper {
 		return false;
 	}
 }
-?>
+

@@ -72,4 +72,3 @@ class ModuleTopic_EntityTopicQuestionVote extends Entity {
 		$this->_aData['answer']=$data;
 	}
 }
-?>

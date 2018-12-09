@@ -560,4 +560,3 @@ class ModuleTalk_MapperTalk extends Mapper {
 		return $bOk;
 	}
 }
-?>

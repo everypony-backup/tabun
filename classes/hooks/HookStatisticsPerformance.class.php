@@ -54,4 +54,3 @@ class HookStatisticsPerformance extends Hook {
 		return $this->Viewer_Fetch('statistics_performance.tpl');
 	}
 }
-?>

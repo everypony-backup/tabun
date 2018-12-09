@@ -311,4 +311,3 @@ class ModuleLogger extends Module {
 		rename($this->sPathLogs.$this->getFileName(),$pathinfo['dirname'].'/'.$aName[0].".1.".$aName[1]);
 	}
 }
-?>

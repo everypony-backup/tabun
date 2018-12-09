@@ -48,4 +48,3 @@ function smarty_function_lang_load($params, &$smarty)
 	}
 }
 
-?>

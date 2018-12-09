@@ -306,4 +306,3 @@ class ModuleLang extends Module {
 		$this->AssignToJs();
 	}
 }
-?>

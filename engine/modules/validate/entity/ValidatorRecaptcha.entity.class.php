@@ -57,4 +57,3 @@ class ModuleValidate_EntityValidatorRecaptcha extends ModuleValidate_EntityValid
         return $result;
     }
 }
-?>

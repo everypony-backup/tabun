@@ -52,4 +52,3 @@ function smarty_function_json($params, &$smarty)
 	}
 }
 
-?>

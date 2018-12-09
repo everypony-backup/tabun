@@ -885,4 +885,3 @@ class ModuleTopic_EntityTopic extends Entity {
 		$this->_aData['topic_count_favourite']=$data;
 	}
 }
-?>

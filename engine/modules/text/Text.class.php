@@ -182,7 +182,7 @@ class ModuleText extends Module {
 	}
 	/**
 	 * Парсинг дайсов в тексте
-     * 
+     *
      * TODO: Переписать
 	 *
 	 * @param string $sText
@@ -298,4 +298,4 @@ class ModuleText extends Module {
 			return $sText;
         }
 }
-?>
+

@@ -47,4 +47,3 @@ function smarty_function_add_block($params, &$smarty)
 	return '';
 }
 
-?>

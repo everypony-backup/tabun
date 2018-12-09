@@ -102,8 +102,8 @@ class ModuleFavourite extends Module {
 				 */
 				$aFavourite[$oFavourite->getTargetId()]=$oFavourite;
 				$this->Cache_Set(
-					$oFavourite, 
-                    "favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$sUserId}", 
+					$oFavourite,
+                    "favourite_{$oFavourite->getTargetType()}_{$oFavourite->getTargetId()}_{$sUserId}",
                     []
                 );
 				$aIdNeedStore=array_diff($aIdNeedStore,array($oFavourite->getTargetId()));
@@ -114,7 +114,7 @@ class ModuleFavourite extends Module {
 		 */
 		foreach ($aIdNeedStore as $sId) {
 			$this->Cache_Set(
-                null, 
+                null,
                 "favourite_{$sTargetType}_{$sId}_{$sUserId}",
                 []
             );
@@ -507,4 +507,4 @@ class ModuleFavourite extends Module {
 		return false;
 	}
 }
-?>
+

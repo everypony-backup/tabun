@@ -561,4 +561,3 @@ class ModuleBlog_MapperBlog extends Mapper {
 		return $aResult;
 	}
 }
-?>

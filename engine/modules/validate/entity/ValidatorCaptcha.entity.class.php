@@ -50,4 +50,3 @@ class ModuleValidate_EntityValidatorCaptcha extends ModuleValidate_EntityValidat
 		return true;
 	}
 }
-?>

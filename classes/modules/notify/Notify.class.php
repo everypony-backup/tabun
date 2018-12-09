@@ -493,4 +493,3 @@ class ModuleNotify extends Module {
 		}
 	}
 }
-?>

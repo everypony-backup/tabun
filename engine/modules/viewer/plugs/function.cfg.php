@@ -23,7 +23,7 @@
  * @param   Smarty $oSmarty
  * @return  string
  */
-function smarty_function_cfg($aParams,&$oSmarty) {	
+function smarty_function_cfg($aParams,&$oSmarty) {
 	if(empty($aParams['name'])) {
 		trigger_error("Config: missing 'name' parametr",E_USER_WARNING);
 		return ;
@@ -32,10 +32,9 @@ function smarty_function_cfg($aParams,&$oSmarty) {
 	if(!isset($aParams['instance'])) {
 		$aParams['instance'] = Config::DEFAULT_CONFIG_INSTANCE;
 	}
-	
+
 	/**
 	 * Возвращаем значение из конфигурации
 	 */
 	return Config::Get($aParams['name'],$aParams['instance']);
 }
-?>

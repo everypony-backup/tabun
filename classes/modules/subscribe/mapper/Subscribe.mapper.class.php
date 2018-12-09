@@ -127,4 +127,3 @@ class ModuleSubscribe_MapperSubscribe extends Mapper {
 		return $aResult;
 	}
 }
-?>

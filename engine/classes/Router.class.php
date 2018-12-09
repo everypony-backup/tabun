@@ -291,7 +291,7 @@ class Router extends LsObject {
 		} elseif (self::$sAction===null) {
 			self::$sAction=$this->aConfigRoute['config']['action_default'];
 		} else {
-			//Если не находим нужного класса то отправляем на страницу ошибки			
+			//Если не находим нужного класса то отправляем на страницу ошибки
 			self::$sAction=$this->aConfigRoute['config']['action_not_found'];
 			self::$sActionEvent='404';
 		}
@@ -490,4 +490,3 @@ class Router extends LsObject {
 		func_header_location($sLocation);
 	}
 }
-?>

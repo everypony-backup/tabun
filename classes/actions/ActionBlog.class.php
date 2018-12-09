@@ -1823,4 +1823,4 @@ class ActionBlog extends Action {
 		$this->Viewer_Assign('BLOG_USER_ROLE_BAN', ModuleBlog::BLOG_USER_ROLE_BAN);
 	}
 }
-?>
+

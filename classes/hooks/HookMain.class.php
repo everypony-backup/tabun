@@ -48,4 +48,3 @@ class HookMain extends Hook {
 		}
 	}
 }
-?>

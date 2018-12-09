@@ -130,4 +130,3 @@ class ActionComments extends Action {
 		$this->Viewer_Assign('sMenuHeadItemSelect',$this->sMenuHeadItemSelect);
 	}
 }
-?>

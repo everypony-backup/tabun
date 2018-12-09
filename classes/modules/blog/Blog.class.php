@@ -603,7 +603,7 @@ class ModuleBlog extends Module {
 				 */
 				$aBlogUsers[$oBlogUser->getBlogId()]=$oBlogUser;
 				$this->Cache_Set(
-                    $oBlogUser, 
+                    $oBlogUser,
                     "blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}",
                     []
                 );
@@ -615,7 +615,7 @@ class ModuleBlog extends Module {
 		 */
 		foreach ($aBlogIdNeedStore as $sId) {
 			$this->Cache_Set(
-                null, 
+                null,
                 "blog_relation_user_{$sId}_{$sUserId}",
                 []
             );
@@ -661,8 +661,8 @@ class ModuleBlog extends Module {
 		if (false === ($data = $this->Cache_Get($sKey))) {
 			$data = array('collection'=>$this->oMapperBlog->GetBlogsByFilter($aFilter,$aOrder,$iCount,$iCurrPage,$iPerPage),'count'=>$iCount);
 			$this->Cache_Set(
-                $data, 
-                $sKey, 
+                $data,
+                $sKey,
                 [
                     "blog_update",
                     "blog_new"
@@ -758,7 +758,7 @@ class ModuleBlog extends Module {
 			 */
 			$aOpenBlogsUser=array_merge($aOpenBlogsUser,$this->GetBlogUsersByUserId($oUser->getId(),null,true));
 			$this->Cache_Set(
-                $aOpenBlogsUser, 
+                $aOpenBlogsUser,
                 $sCacheKey,
                 [
                     'blog_new',
@@ -803,7 +803,7 @@ class ModuleBlog extends Module {
 			if ($oUser) {
 				$this->Cache_Set(
                     $aCloseBlogs,
-                    $sCacheKey, 
+                    $sCacheKey,
                     [
                         'blog_new',
                         'blog_update',
@@ -813,7 +813,7 @@ class ModuleBlog extends Module {
 			} else {
 				$this->Cache_Set(
                     $aCloseBlogs,
-                    $sCacheKey, 
+                    $sCacheKey,
                     [
                         'blog_new',
                         'blog_update'
@@ -848,9 +848,9 @@ class ModuleBlog extends Module {
 		$this->Cache_Clean(
 			Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
 			[
-				"blog_update", 
+				"blog_update",
                 "blog_relation_change_blog_{$iBlogId}",
-				"topic_update", 
+				"topic_update",
                 "comment_online_update_topic",
                 "comment_update"
             ]
@@ -995,4 +995,3 @@ class ModuleBlog extends Module {
 		return $this->GetBlogsByArrayId($aBlogId);
 	}
 }
-?>

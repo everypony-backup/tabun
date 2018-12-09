@@ -198,4 +198,3 @@ abstract class ModuleValidate_EntityValidator extends Entity {
 		}
 	}
 }
-?>

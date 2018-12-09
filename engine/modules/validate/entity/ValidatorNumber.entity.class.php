@@ -111,4 +111,3 @@ class ModuleValidate_EntityValidatorNumber extends ModuleValidate_EntityValidato
 		return true;
 	}
 }
-?>

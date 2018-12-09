@@ -1207,4 +1207,4 @@ class ActionTalk extends Action {
 		$this->Viewer_Assign('TALK_USER_DELETE_BY_AUTHOR',ModuleTalk::TALK_USER_DELETE_BY_AUTHOR);
 	}
 }
-?>
+

@@ -78,4 +78,3 @@ class ActionError extends Action {
 		$this->SetTemplateAction('index');
 	}
 }
-?>

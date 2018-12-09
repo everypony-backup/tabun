@@ -625,4 +625,3 @@ class ModulePlugin extends Module {
 		return array_keys($this->aDelegates);
 	}
 }
-?>

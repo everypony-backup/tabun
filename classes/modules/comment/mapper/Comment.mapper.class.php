@@ -776,7 +776,7 @@ class ModuleComment_MapperComment extends Mapper {
 		}
 		return $aResult;
 	}
-	
+
 	/**
 	 * Обновляет флаги коммента
 	 *
@@ -819,4 +819,4 @@ class ModuleComment_MapperComment extends Mapper {
 		);
 	}
 }
-?>
+

@@ -33,4 +33,3 @@ function smarty_function_get_blocks($params, &$smarty)
 	return '';
 }
 
-?>

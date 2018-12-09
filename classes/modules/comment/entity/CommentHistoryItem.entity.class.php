@@ -29,4 +29,3 @@ class ModuleComment_EntityCommentHistoryItem extends Entity {
 		return $this->_aData;
 	}
 }
-?>

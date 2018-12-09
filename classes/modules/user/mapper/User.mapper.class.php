@@ -1244,4 +1244,3 @@ class ModuleUser_MapperUser extends Mapper {
 		return $aReturn;
 	}
 }
-?>

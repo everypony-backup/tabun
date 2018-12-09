@@ -167,4 +167,3 @@ function smarty_function_date_format($aParams,&$oSmarty) {
 
 	return date($sFormat,$iDate);
 }
-?>

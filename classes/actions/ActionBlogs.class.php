@@ -133,4 +133,3 @@ class ActionBlogs extends Action {
 		$this->SetTemplateAction('index');
 	}
 }
-?>

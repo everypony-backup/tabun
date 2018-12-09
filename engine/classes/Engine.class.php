@@ -1171,4 +1171,3 @@ class LS extends LsObject {
 	}
 }
 
-?>

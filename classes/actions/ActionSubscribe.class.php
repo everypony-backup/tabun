@@ -139,4 +139,3 @@ class ActionSubscribe extends Action {
 		return ;
 	}
 }
-?>

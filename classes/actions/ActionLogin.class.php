@@ -252,4 +252,4 @@ class ActionLogin extends Action {
 		}
 	}
 }
-?>
+

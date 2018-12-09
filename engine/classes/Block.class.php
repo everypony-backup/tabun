@@ -78,4 +78,3 @@ abstract class Block extends LsObject {
 	 */
 	abstract public function Exec();
 }
-?>

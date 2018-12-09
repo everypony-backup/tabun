@@ -352,4 +352,3 @@ class ActionRegistration extends Action {
 	protected function EventConfirm() {
 	}
 }
-?>

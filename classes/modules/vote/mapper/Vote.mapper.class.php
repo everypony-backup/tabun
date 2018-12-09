@@ -122,4 +122,3 @@ class ModuleVote_MapperVote extends Mapper {
 		return false;
 	}
 }
-?>
