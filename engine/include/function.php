@@ -130,7 +130,7 @@ function func_generator($iLength=10)
     if ($iLength>32) {
         $iLength=32;
     }
-    return substr(bin2hex(mcrypt_create_iv(32)), 0, $iLength);
+    return substr(bin2hex(openssl_random_pseudo_bytes(16)), 0, $iLength);
 }
 
 /**
