@@ -44,7 +44,13 @@ class MapperORM extends Mapper
      */
     public function UpdateEntity($oEntity)
     {
+        $oDb = $this->oDb;
+
         $sTableName = self::GetTableName($oEntity);
+
+        $function_escape = function ($k, $v) use ($oDb) {
+            return "{$oDb->escape($k,true)} = {$oDb->escape($v)}";
+        };
 
         if ($aPrimaryKey=$oEntity->_getPrimaryKey()) {
             // Возможен составной ключ
@@ -53,18 +59,21 @@ class MapperORM extends Mapper
             }
             $sWhere=' 1 = 1 ';
             foreach ($aPrimaryKey as $sField) {
-                $sWhere.=' and '.$this->oDb->escape($sField, true)." = ".$this->oDb->escape($oEntity->_getDataOne($sField));
+                $sWhere .= " AND {$oDb->escape($sField, true)} = {$oDb->escape($oEntity->_getDataOne($sField))}";
             }
-            $sql = "UPDATE ".$sTableName." SET ?a WHERE {$sWhere}";
-            return $this->oDb->query($sql, $oEntity->_getData());
+            $sql = "UPDATE {$sTableName} SET ?a WHERE {$sWhere}";
+
+            return $oDb->query($sql, $oEntity->_getData());
+
         } else {
             $aOriginalData = $oEntity->_getOriginalData();
-            $sWhere = implode(' AND ', array_map(create_function(
-                                                    '$k,$v,$oDb',
-                                                    'return "{$oDb->escape($k,true)} = {$oDb->escape($v)}";'
-                                                ), array_keys($aOriginalData), array_values($aOriginalData), array_fill(0, count($aOriginalData), $this->oDb)));
-            $sql = "UPDATE ".$sTableName." SET ?a WHERE 1=1 AND ". $sWhere;
-            return $this->oDb->query($sql, $oEntity->_getData());
+            $sWhere = implode(' AND ', array_map(
+                $function_escape,
+                array_keys($aOriginalData),
+                array_values($aOriginalData)));
+
+            $sql = "UPDATE {$sTableName} SET ?a WHERE 1=1 AND " . $sWhere;
+            return $oDb->query($sql, $oEntity->_getData());
         }
     }
     /**
@@ -75,7 +84,13 @@ class MapperORM extends Mapper
      */
     public function DeleteEntity($oEntity)
     {
+        $oDb = $this->oDb;
+
         $sTableName = self::GetTableName($oEntity);
+
+        $function_escape = function ($k, $v) use ($oDb) {
+            return "{$oDb->escape($k,true)} = {$oDb->escape($v)}";
+        };
 
         if ($aPrimaryKey=$oEntity->_getPrimaryKey()) {
             // Возможен составной ключ
@@ -84,17 +99,20 @@ class MapperORM extends Mapper
             }
             $sWhere=' 1 = 1 ';
             foreach ($aPrimaryKey as $sField) {
-                $sWhere.=' and '.$this->oDb->escape($sField, true)." = ".$this->oDb->escape($oEntity->_getDataOne($sField));
+                $sWhere .= " AND {$oDb->escape($sField, true)} = {$oDb->escape($oEntity->_getDataOne($sField))}";
             }
-            $sql = "DELETE FROM ".$sTableName." WHERE {$sWhere}";
+            $sql = "DELETE FROM {$sTableName} WHERE {$sWhere}";
             return $this->oDb->query($sql);
         } else {
             $aOriginalData = $oEntity->_getOriginalData();
-            $sWhere = implode(' AND ', array_map(create_function(
-                                                    '$k,$v,$oDb',
-                                                    'return "{$oDb->escape($k,true)} = {$oDb->escape($v)}";'
-                                                ), array_keys($aOriginalData), array_values($aOriginalData), array_fill(0, count($aOriginalData), $this->oDb)));
-            $sql = "DELETE FROM ".$sTableName." WHERE 1=1 AND ". $sWhere;
+            $sWhere = implode(' AND ', array_map(
+                    $function_escape,
+                    array_keys($aOriginalData),
+                    array_values($aOriginalData)
+                )
+            );
+            $sql = "DELETE FROM {$sTableName} WHERE 1=1 AND " . $sWhere;
+
             return $this->oDb->query($sql);
         }
     }

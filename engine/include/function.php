@@ -15,32 +15,6 @@
 ---------------------------------------------------------
 */
 
-/**
- * Если не стоит расширения mb
- *
- * @param unknown_type $s
- * @return unknown
- */
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($s, $sEncode="UTF-8")
-    {
-        $length = strlen(iconv($sEncode, 'Windows-1251', $s));
-        return (int)$length;
-    }
-}
-
-/**
- * Если не стоит расширения mb
- */
-if (!function_exists('mb_strtolower')) {
-    function mb_strtolower($s, $sEncode="UTF-8")
-    {
-        $s=iconv($sEncode, "Windows-1251", $s);
-        $s=strtolower($s);
-        $s=iconv("Windows-1251", $sEncode, $s);
-        return $s;
-    }
-}
 
 /**
  * Проверяет запрос послан как ajax или нет
@@ -130,7 +104,7 @@ function func_generator($iLength=10)
     if ($iLength>32) {
         $iLength=32;
     }
-    return substr(bin2hex(mcrypt_create_iv(32)), 0, $iLength);
+    return substr(bin2hex(openssl_random_pseudo_bytes(16)), 0, $iLength);
 }
 
 /**

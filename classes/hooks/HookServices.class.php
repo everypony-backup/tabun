@@ -39,7 +39,7 @@ class HookServices extends Hook
 
         $aDecoded = $this->getJSON("twicher");
 
-        if (array_key_exists('text', $aDecoded)) {
+        if ($aDecoded && array_key_exists('text', $aDecoded)) {
             return $aDecoded['text'];
         } else {
             return $sNotFound;

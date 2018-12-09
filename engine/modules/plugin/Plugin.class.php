@@ -115,10 +115,19 @@ class ModulePlugin extends Module
         /**
          * Если нужно сортировать плагины
          */
+        $function_rule_compare_propery_name_data = function ($a, $b) {
+            if ((string)$a['property']->name->data == (string)$b['property']->name->data) {
+                return 0;
+            }
+            return ((string)$a['property']->name->data < (string)$b['property']->name->data)
+                ? -1
+                : 1;
+        };
+
         if (isset($aFilter['order'])) {
             if ($aFilter['order']=='name') {
                 $aPlugins=$this->aPluginsList;
-                uasort($aPlugins, create_function('$a,$b', "if ((string)\$a['property']->name->data == (string)\$b['property']->name->data) { return 0; } return ((string)\$a['property']->name->data < (string)\$b['property']->name->data) ? -1 : 1;"));
+                uasort($aPlugins, $function_rule_compare_propery_name_data);
                 return $aPlugins;
             }
         }

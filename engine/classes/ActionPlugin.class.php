@@ -39,6 +39,11 @@ abstract class ActionPlugin extends Action
      */
     public function getTemplatePathPlugin()
     {
+        $function_return_first_match = function ($sPath) {
+            preg_match("/skin\/([\w\-]+)\/actions/i", $sPath, $aMatches);
+            return $aMatches[1];
+        };
+
         if (is_null($this->sTemplatePathPlugin)) {
             preg_match('/^Plugin([\w]+)_Action([\w]+)$/i', $this->GetActionClass(), $aMatches);
             /**
@@ -49,10 +54,7 @@ abstract class ActionPlugin extends Action
             $sTemplateName=($aPaths and in_array(
                 Config::Get('view.skin'),
                 array_map(
-                    create_function(
-                        '$sPath',
-                        'preg_match("/skin\/([\w\-]+)\/actions/i",$sPath,$aMatches); return $aMatches[1];'
-                    ),
+                        $function_return_first_match,
                     $aPaths
                 )
             ))
