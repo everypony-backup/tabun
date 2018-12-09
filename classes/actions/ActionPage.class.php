@@ -21,7 +21,6 @@
  */
 class ActionPage extends Action
 {
-
     public function Init()
     {
         /**
@@ -76,8 +75,11 @@ class ActionPage extends Action
          * Добавляем блок
          */
         if (Config::Get('page.show_block_structure')) {
-            $this->Viewer_AddBlock('right', 'structure',
-                array('plugin' => Plugin::GetPluginCode($this), 'current_page' => $oPage));
+            $this->Viewer_AddBlock(
+                'right',
+                'structure',
+                array('plugin' => Plugin::GetPluginCode($this), 'current_page' => $oPage)
+            );
         }
         /**
          * Устанавливаем шаблон для вывода

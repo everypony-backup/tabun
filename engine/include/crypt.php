@@ -4,26 +4,26 @@
  * Copyright (c) 2013, Taylor Hornby
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice, 
+ * 1. Redistributions of source code must retain the above copyright notice,
  * this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation 
+ * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -43,7 +43,7 @@ function create_hash($password)
 {
     // format: algorithm:iterations:salt:hash
     $salt = base64_encode(mcrypt_create_iv(PBKDF2_SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));
-    return PBKDF2_HASH_ALGORITHM . ":" . PBKDF2_ITERATIONS . ":" .  $salt . ":" . 
+    return PBKDF2_HASH_ALGORITHM . ":" . PBKDF2_ITERATIONS . ":" .  $salt . ":" .
         base64_encode(pbkdf2(
             PBKDF2_HASH_ALGORITHM,
             $password,
@@ -57,8 +57,9 @@ function create_hash($password)
 function validate_password($password, $correct_hash)
 {
     $params = explode(":", $correct_hash);
-    if(count($params) < HASH_SECTIONS)
-       return false; 
+    if (count($params) < HASH_SECTIONS) {
+        return false;
+    }
     $pbkdf2 = base64_decode($params[HASH_PBKDF2_INDEX]);
     return slow_equals(
         $pbkdf2,
@@ -77,11 +78,10 @@ function validate_password($password, $correct_hash)
 function slow_equals($a, $b)
 {
     $diff = strlen($a) ^ strlen($b);
-    for($i = 0; $i < strlen($a) && $i < strlen($b); $i++)
-    {
+    for ($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
         $diff |= ord($a[$i]) ^ ord($b[$i]);
     }
-    return $diff === 0; 
+    return $diff === 0;
 }
 
 /*
@@ -102,10 +102,12 @@ function slow_equals($a, $b)
 function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output = false)
 {
     $algorithm = strtolower($algorithm);
-    if(!in_array($algorithm, hash_algos(), true))
+    if (!in_array($algorithm, hash_algos(), true)) {
         trigger_error('PBKDF2 ERROR: Invalid hash algorithm.', E_USER_ERROR);
-    if($count <= 0 || $key_length <= 0)
+    }
+    if ($count <= 0 || $key_length <= 0) {
         trigger_error('PBKDF2 ERROR: Invalid parameters.', E_USER_ERROR);
+    }
 
     if (function_exists("hash_pbkdf2")) {
         // The output length is in NIBBLES (4-bits) if $raw_output is false!
@@ -119,7 +121,7 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
     $block_count = ceil($key_length / $hash_length);
 
     $output = "";
-    for($i = 1; $i <= $block_count; $i++) {
+    for ($i = 1; $i <= $block_count; $i++) {
         // $i encoded as 4 bytes, big endian.
         $last = $salt . pack("N", $i);
         // first iteration
@@ -131,9 +133,9 @@ function pbkdf2($algorithm, $password, $salt, $count, $key_length, $raw_output =
         $output .= $xorsum;
     }
 
-    if($raw_output)
+    if ($raw_output) {
         return substr($output, 0, $key_length);
-    else
+    } else {
         return bin2hex(substr($output, 0, $key_length));
+    }
 }
-?>
