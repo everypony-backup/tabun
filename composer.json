@@ -2,11 +2,15 @@
   "repositories": [
     {
       "type": "vcs",
+      "url": "https://github.com/everypony/Jevix"
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/ussignal/redis-cache-zend-framework"
     }
   ],
   "require": {
-    "agelxnash/jevix": "^1.2",
+    "agelxnash/jevix": "dev-master#10414d411ba0e4180f655de42018be98aa40936c",
     "smarty-gettext/smarty-gettext": "1.4.0",
     "zf1/zend-cache": "1.12.11",
     "massivescale/celery-php": "2.1.1",

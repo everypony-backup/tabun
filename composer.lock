@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8cc09ca25c725625e8abc325912c342",
+    "content-hash": "6b6139d4cf47e736dd3d2925e6fedc24",
     "packages": [
         {
             "name": "agelxnash/jevix",
-            "version": "1.2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AgelxNash/Jevix.git",
-                "reference": "5165067f12126c0c56e3d20abe548c682120ead9"
+                "url": "https://github.com/everypony/Jevix.git",
+                "reference": "10414d411ba0e4180f655de42018be98aa40936c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AgelxNash/Jevix/zipball/5165067f12126c0c56e3d20abe548c682120ead9",
-                "reference": "5165067f12126c0c56e3d20abe548c682120ead9",
+                "url": "https://api.github.com/repos/everypony/Jevix/zipball/10414d411ba0e4180f655de42018be98aa40936c",
+                "reference": "10414d411ba0e4180f655de42018be98aa40936c",
                 "shasum": ""
             },
             "type": "library",
@@ -29,12 +29,7 @@
                     "Jevix": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "authors": [
-                {
-                    "name": "Roman Shamritskiy",
-                    "email": "roman@litgroup.ru"
-                },
                 {
                     "name": "ur001"
                 },
@@ -45,12 +40,19 @@
                     "name": "Bezumkin"
                 },
                 {
+                    "name": "Roman Shamritskiy",
+                    "email": "roman@litgroup.ru"
+                },
+                {
                     "name": "Evgeniy Borisov",
                     "email": "agel-nash@mail.ru"
                 }
             ],
             "description": "Library for html filtering",
-            "time": "2018-10-17T07:34:34+00:00"
+            "support": {
+                "source": "https://github.com/everypony/Jevix/tree/master"
+            },
+            "time": "2018-12-09T19:38:56+00:00"
         },
         {
             "name": "elasticsearch/elasticsearch",
@@ -758,6 +760,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "agelxnash/jevix": 20,
         "kalaspuff/redis-cache-zend-framework": 20
     },
     "prefer-stable": false,
