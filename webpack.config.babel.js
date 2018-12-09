@@ -56,6 +56,18 @@ const fileLoaderOptions = {
   publicPath: './'
 };
 
+const basePlugins = [
+  new MiniCssExtractPlugin({
+    filename: `[name].${devPrefix}.css`,
+  }),
+  new WriteVersionPlugin('frontend.version', isDev),
+];
+
+const plugins = isDev ? [
+  new CleanWebpackPlugin(outputPath, {watch: true, beforeEmit: true}),
+  ...basePlugins,
+] : basePlugins;
+
 module.exports = {
   mode: ENV,
   context: path.resolve(__dirname, 'frontend'),
@@ -131,14 +143,7 @@ module.exports = {
       }
     ],
   },
-  plugins: ([
-    new MiniCssExtractPlugin({
-      filename: `[name].${devPrefix}.css`,
-    }),
-    new CleanWebpackPlugin(outputPath, { watch: true, beforeEmit: true }),
-    new WriteVersionPlugin('frontend.version', isDev),
-  ]),
-
+  plugins,
   stats: { colors: true },
 
   optimization: {
