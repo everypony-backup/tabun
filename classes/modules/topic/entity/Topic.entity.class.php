@@ -568,10 +568,19 @@ class ModuleTopic_EntityTopic extends Entity
             return null;
         }
 
+        $function_sort_rule = function ($a, $b) {
+            if ($a['count'] == $b['count']) {
+                return 0;
+            }
+            return ($a['count'] < $b['count'])
+                ? 1
+                : -1;
+        };
+
         if ($this->getExtraValue('answers')) {
             $aAnswers=$this->getExtraValue('answers');
             if ($bSortVote) {
-                uasort($aAnswers, create_function('$a,$b', "if (\$a['count'] == \$b['count']) { return 0; } return (\$a['count'] < \$b['count']) ? 1 : -1;"));
+                uasort($aAnswers, $function_sort_rule);
             }
             return $aAnswers;
         }
