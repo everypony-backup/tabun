@@ -186,7 +186,7 @@ $config['db']['params']['host'] = 'localhost';
 $config['db']['params']['port'] = '3306';
 $config['db']['params']['user'] = '';
 $config['db']['params']['pass'] = '';
-$config['db']['params']['type'] = 'mysql';
+$config['db']['params']['type'] = 'mysqli';
 $config['db']['params']['dbname'] = '';
 /**
  * Настройка таблиц базы данных
