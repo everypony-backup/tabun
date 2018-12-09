@@ -1,9 +1,6 @@
 import React from 'react';
 
-import autobind from 'autobind-decorator'
 
-
-@autobind
 export default class FileUpload extends React.PureComponent {
     inputField = null;
 
@@ -14,23 +11,23 @@ export default class FileUpload extends React.PureComponent {
         handleUpload: React.PropTypes.func,
     };
 
-    onLoad(image) {
+    onLoad = (image) => {
         this.inputField.value = '';
         this.props.handleChange(image.target.result);
-    }
+    };
 
-    setRef(inputField) {
+    setRef = (inputField) => {
         if (inputField) this.inputField = inputField;
-    }
+    };
 
-    handleUpload({target:{files}}) {
+    handleUpload = ({target:{files}}) => {
         const file = files[0];
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = this.onLoad;
         reader.readAsDataURL(file);
-    }
+    };
 
     render() {
         const name = String(Math.random() * 10**20);

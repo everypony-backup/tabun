@@ -1,23 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
-import autobind from 'autobind-decorator'
 import routes from 'lib/routes';
 import {gettext as _, ngettext} from 'core/lang';
 
 
-@autobind
 export default class TargetSelector extends React.Component {
     defaultTargetTypes = ['topic', 'question', 'blog', 'talk'];
     state = {
         hidden: true,
         selectedType: this.props.selectedType || this.defaultTargetTypes[0],
     };
-    toggle() {
+    toggle = () => {
         this.setState({hidden: !this.state.hidden});
-    }
-    hide() {
+    };
+    hide = () => {
         this.setState({hidden: true});
-    }
+    };
     render() {
         const targetLinks = this.defaultTargetTypes.map((targetType) => {
             const selected = this.state.selectedType == targetType;

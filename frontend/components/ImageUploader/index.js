@@ -1,5 +1,4 @@
 import React from 'react';
-import autobind from 'autobind-decorator'
 
 import AvatarEditor from 'react-avatar-editor'
 
@@ -10,7 +9,6 @@ import {gettext} from 'core/lang';
 import utils from './utils';
 
 
-@autobind
 export default class ImageUploader extends React.Component {
     editor = null;
     state = {
@@ -31,35 +29,35 @@ export default class ImageUploader extends React.Component {
         onUpload: React.PropTypes.func,
     };
 
-    setEditorRef(editor) {
+    setEditorRef = (editor) => {
         if (editor) this.editor = editor;
-    }
+    };
 
-    handleFileChange(dataURI) {
+    handleFileChange = (dataURI) => {
         this.setState({
             sourceImg: dataURI,
             editorOpened: true
         });
-    }
+    };
 
-    handleRequestOpen() {
+    handleRequestOpen = () => {
         this.setState({editorOpened: true});
-    }
+    };
 
-    handleRequestClose() {
+    handleRequestClose = () => {
         this.setState({editorOpened: false});
-    }
+    };
 
-    handleScale({target:{value}}) {
+    handleScale = ({target:{value}}) => {
         this.setState({scale: parseFloat(value)});
-    }
+    };
 
-    handleSave() {
+    handleSave = () => {
         const croppedImg = this.editor.getImageScaledToCanvas().toDataURL();
         this.setState({croppedImg: croppedImg});
         this.props.onUpload(utils.extractBase64(croppedImg));
         this.handleRequestClose()
-    }
+    };
 
     render() {
         return <div className={this.props.containerClass}>

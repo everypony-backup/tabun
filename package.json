@@ -2,7 +2,6 @@
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "autobind-decorator": "^2.2.1",
     "bazooka": "^0.9.1",
     "bootstrap-styl": "^5.0.8",
     "classnames": "^2.2.6",
@@ -20,7 +19,6 @@
   "devDependencies": {
     "@babel/core": "^7.1.5",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/plugin-transform-react-jsx": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "@babel/register": "^7.0.0",

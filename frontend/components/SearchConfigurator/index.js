@@ -1,6 +1,5 @@
 import React from 'react';
 import {transform} from 'lodash';
-import autobind from 'autobind-decorator'
 
 import routes from 'lib/routes';
 import io from 'lib/io';
@@ -9,7 +8,6 @@ import {gettext as _} from 'core/lang';
 import SearhParams from './logic.js';
 import {NamedDropdown, NamedRadioGroup} from './views.js';
 
-@autobind
 export default class SearchConfigurator extends React.Component {
     state = {
         params: new SearhParams(this.props.coded),
@@ -31,37 +29,37 @@ export default class SearchConfigurator extends React.Component {
         {}
     );
 
-    handleQueryInput (event) {
+    handleQueryInput = (event) => {
         // in-time validation/tooltips/help goes here
         this.setState({query: event.target.value});
-    }
+    };
 
-    handleQueryType (value) {
+    handleQueryType = (value) => {
         const newParams = this.state.params;
         newParams.queryType = value;
         this.setState({params: newParams});
-    }
+    };
 
-    handleSortDir (value) {
+    handleSortDir = (value) => {
         const newParams = this.state.params;
         newParams.sortDir = value;
         this.setState({params: newParams});
-    }
+    };
 
-    handleSortType (value) {
+    handleSortType = (value) => {
         const newParams = this.state.params;
         newParams.sortType = value;
         this.setState({params: newParams});
-    }
+    };
 
-    handleSubmit () {
+    handleSubmit = () => {
         const params = {
             q: this.state.query,
             v: this.props.version,
             c: this.state.params.toString()
         };
         document.location.replace(`${routes.search}?${io.encodeParams(params)}`);
-    }
+    };
 
     render() {
         return (
