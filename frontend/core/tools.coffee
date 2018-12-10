@@ -212,19 +212,14 @@ contentMediaParser = (oldText) ->
   temp = document.createElement 'temp'
 
   # Обрабатываем тэги video и iframe
-  if /<video>|<iframe/i.test oldText
+  if /<video>/i.test oldText
     temp.innerHTML = oldText
-    video = temp.querySelectorAll "video, iframe"
+    video = temp.querySelectorAll "video"
     changed = false
     if video.length
       i = video.length
       while i--
-        if video[i].nodeName == "VIDEO"
-          url = video[i].textContent
-        else
-          url = video[i].getAttribute "src"
-          if !url
-            url = video[i].dataset.src
+        url = video[i].textContent
         if !url
           continue
         src = ''
@@ -252,7 +247,7 @@ contentMediaParser = (oldText) ->
           parsedUrl = giphy url
           if parsedUrl
             src = '//giphy.com/embed/' + parsedUrl
-        else if /gfycat/.test url
+        else if /gfycat\.com/.test url
           parsedUrl = gfycat url
           if parsedUrl
             src = '//gfycat.com/ifr/' + parsedUrl + '?controls=0'
