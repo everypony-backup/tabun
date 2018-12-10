@@ -126,9 +126,8 @@ toggleEditForm = (idComment, bOpen) ->
     edit.value = currentText.innerHTML.replace(/<br[\s]*\/?>\r?\n/gmi, "\n").trim()
     editForm.appendChild preview
     editForm.appendChild edit
-    ###
-    # Исключение из активного кода до лучших времён
-    if document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
+    bCommentSelf = contentWrapper.parentNode?.classList.contains "comment-self"
+    if Capabilities.allowCommentsEditingLock and !bCommentSelf and document.querySelector("#comment_id_#{idComment} .modify-notice>*")?.dataset.locked != "1"
       lockCB = document.createElement "input"
       lockCB.type = "checkbox"
       lockLabel = document.createElement "label"
@@ -136,7 +135,6 @@ toggleEditForm = (idComment, bOpen) ->
       lockLabel.appendChild lockCB
       lockLabel.appendChild document.createTextNode " " + gettext "comment_lock_edit"
       editForm.appendChild lockLabel
-    ###
     contentWrapper.parentNode?.classList.add "editable"
     contentWrapper.appendChild editForm
     commentFor edit
