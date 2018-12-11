@@ -4,14 +4,16 @@
 {assign var="isLocked" value=($flags & ModuleComment_EntityComment::FLAG_LOCK_MODIFY) !== 0}
 {strip}
 {if $isModified or $isLocked}
-	{assign var="title" value=""}
-	{assign var="titleSuffix" value=""}
+	{assign var="label" value=""}
+	{assign var="descHead" value=""}
+	{assign var="descHeadSuffix" value=""}
 	{assign var="desc" value=""}
 	{if $isModified}
+		{assign var="label" value=$aLang.commentEditNotice_flagChanged}
 		{assign var="lastModifyId" value=$oComment->getLastModifyId()}
 		{assign var="editorId" value=$oComment->getLastModifyUserId()}
 		{assign var="isSelfModified" value=$editorId == $oComment->getUserId()}
-		{assign var="title" value=$aLang.commentEditNotice_prefixChanged}
+		{assign var="descHead" value=$aLang.commentEditNotice_prefixChanged}
 		{if $isSelfModified}
 			{assign var="desc" value=$LS->Lang_Get('commentEditNotice_descChanged_byAuthor', ['date' => {date_format date=$oComment->getLastModifyDate() format="j F Y, H:i:s"}])}
 		{else}
@@ -26,11 +28,12 @@
 		{assign var="lastModifyId" value="0"}
 	{/if}
 	{if $isLocked}
+		{assign var="label" value="$label`$aLang.commentEditNotice_flagLocked`"}
 		{if $isModified}
 			{assign var="desc" value="$desc\n"}
-			{assign var="titleSuffix" value=$aLang.commentEditNotice_suffixLocked}
+			{assign var="descHeadSuffix" value=$aLang.commentEditNotice_suffixLocked}
 		{else}
-			{assign var="title" value=$aLang.commentEditNotice_prefixLocked}
+			{assign var="descHead" value=$aLang.commentEditNotice_prefixLocked}
 		{/if}
 		{assign var="lockerId" value=$oComment->getLockModifyUserId()}
 		{assign var="locker" value=$LS->User_GetUserById($lockerId)}
@@ -39,12 +42,13 @@
 	{/if}
 	{if !$bGetShort}
 		{if $isSelfModified}
-			{assign var="title" value="$title`$aLang.commentEditNotice_byAuthor`"}
+			{assign var="descHead" value="$descHead`$aLang.commentEditNotice_byAuthor`"}
 		{else}
-			{assign var="title" value="$title`$aLang.commentEditNotice_byAdmin`"}
+			{assign var="descHead" value="$descHead`$aLang.commentEditNotice_byAdmin`"}
 		{/if}
 	{/if}
-	{assign var="title" value="$title$titleSuffix"}
-	<span class="modify-notice {if $isHardModified}hard-modified{else if $isSelfModified}self-modified{else}adm-modified{/if}" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">{$title|escape:"html"}</span>
+	{assign var="descHead" value="$descHead$descHeadSuffix"}
+	{assign var="desc" value="$descHead\n$desc"}
+	<span class="modify-notice {if $isHardModified}hard-modified{else if $isSelfModified}self-modified{else}adm-modified{/if}" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">{$label}</span>
 {/if}
 {/strip}
