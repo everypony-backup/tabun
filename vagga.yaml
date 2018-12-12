@@ -1,8 +1,6 @@
 minimum-vagga: v0.8.0
 
 _templates:
-  local_volumes: &local_volumes
-    /config: !BindRO /work/config/local
   snippets:
     - &trunk_stuff
       - !Copy
@@ -529,11 +527,11 @@ commands:
     external-user-id: 0
     run: [php-fpm7.2, -eFO]
     volumes:
-      <<: *local_volumes
+      /config: !BindRO /work/config/local
       /storage: !Persistent {name: storage}
       /static: !BindRO /work/static
       /app: !BindRO /work
-      /etc/php/7.2/fpm/pool.d: !BindRO /work/config/local/php
+      /etc/php/7.2/fpm/pool.d/www.conf: !BindRO /work/config/local/php.conf
       /var/log: !Snapshot
 
   elastic: &elastic !Command
