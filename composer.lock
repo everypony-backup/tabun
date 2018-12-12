@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f50becfc63a9b2efcd63ee0370691b8",
+    "content-hash": "bfb96ba0f13cda0263af8319010e25aa",
     "packages": [
         {
             "name": "agelxnash/jevix",
@@ -114,16 +114,16 @@
         },
         {
             "name": "everypony/zend-cache-redis",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/everypony/zend-cache-redis.git",
-                "reference": "914bbe7589c97e5c788d25310951339700e41de6"
+                "reference": "c1c0ba0f0156c00cb2c57b5275ce154ff4f4cf91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/everypony/zend-cache-redis/zipball/914bbe7589c97e5c788d25310951339700e41de6",
-                "reference": "914bbe7589c97e5c788d25310951339700e41de6",
+                "url": "https://api.github.com/repos/everypony/zend-cache-redis/zipball/c1c0ba0f0156c00cb2c57b5275ce154ff4f4cf91",
+                "reference": "c1c0ba0f0156c00cb2c57b5275ce154ff4f4cf91",
                 "shasum": ""
             },
             "require": {
@@ -160,7 +160,7 @@
                 "redis",
                 "zend"
             ],
-            "time": "2018-12-12T10:31:30+00:00"
+            "time": "2018-12-12T18:58:09+00:00"
         },
         {
             "name": "guzzlehttp/ringphp",
