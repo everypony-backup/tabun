@@ -181,17 +181,7 @@ containers:
     - !Install
       - mariadb
       - mariadb-client
-      - perl
-      - perl-dbd-mysql
-      - rsync
-    - !Copy
-      source: /work/config/local/mysql
-      path: /etc/mysql
     - !EnsureDir /storage
-    - !EnsureDir /backup
-    volumes:
-      /storage: !Persistent {name: mysql, init-command: _init_db}
-      /backup: !Persistent {name: backup}
 
   mysql-trunk:
     setup:
@@ -438,6 +428,9 @@ commands:
       done
 
       mysqladmin shutdown
+    volumes:
+      /etc/mysql: !BindRO /work/config/local/mysql
+      /storage: !Persistent {name: mysql}
 
   _load_fixture: !Command
     description: Load fixture into database
@@ -519,13 +512,9 @@ commands:
     user-id: 1
     external-user-id: 0
     run: mysqld_safe --skip-syslog --console --debug-gdb
-
-  innobackupex: &innobackupex !Command
-    container: mysql-dev
-    description: Run innobackupex command
-    user-id: 1
-    external-user-id: 0
-    run: [innobackupex]
+    volumes:
+      /etc/mysql: !BindRO /work/config/local/mysql
+      /storage: !Persistent {name: mysql, init-command: _init_db}
 
   mail: &mail !Command
     container: mail-dev
