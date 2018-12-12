@@ -242,27 +242,23 @@ a.reply-link
 .modify-notice
   font-size 10px
   font-style italic
-  &.self-modified
-    color #69b55b
-    >.fa
-      filter invert(63%) sepia(51%) saturate(398%) hue-rotate(64deg) brightness(90%) contrast(95%)
-  &.adm-modified
-    color #aaaa00
-    >.fa
-      filter invert(59%) sepia(69%) saturate(2141%) hue-rotate(27deg) brightness(98%) contrast(101%)
-  &.hard-modified
-    color #d5883c
-    >.fa
-      filter invert(51%) sepia(99%) saturate(313%) hue-rotate(349deg) brightness(95%) contrast(93%)
   .fa
     display inline-block
     vertical-align bottom
     height 14px
     width 14px
+    &.fa
+      background-color transparent
+      background-repeat no-repeat
+      margin-right 1px
     &.fa-edit
-      background transparent url(images/fa-colored/edit-solid.svg) no-repeat
+      background-image url(images/fa-colored/edit-solid.svg) 
     &.fa-lock
-      background transparent url(images/fa-colored/lock-solid.svg) no-repeat
+      background-image url(images/fa-colored/lock-solid.svg)
+    &.fa-user-cog
+      background-image url(images/fa-colored/user-cog-solid.svg)
+    &.fa-stream
+      background-image url(images/fa-colored/stream-solid.svg)
 
 .comment:not(.editable)
   .comment-save-edit-bw,

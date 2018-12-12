@@ -5,15 +5,23 @@
 {strip}
 {if $isModified or $isLocked}
 	{assign var="label" value=""}
-	{assign var="descHead" value=""}
-	{assign var="descHeadSuffix" value=""}
+	{assign var="title" value=""}
 	{assign var="desc" value=""}
 	{if $isModified}
-		{assign var="label" value=$aLang.commentEditNotice_flagChanged}
-		{assign var="lastModifyId" value=$oComment->getLastModifyId()}
+		{assign var="label" value="$label`$aLang.commentEditNotice_flagChanged`"}
+		{assign var="title" value=$aLang.commentEditNotice_capitalChanged}
 		{assign var="editorId" value=$oComment->getLastModifyUserId()}
 		{assign var="isSelfModified" value=$editorId == $oComment->getUserId()}
-		{assign var="descHead" value=$aLang.commentEditNotice_prefixChanged}
+		{if $isSelfModified and not $isHardModified}
+			{assign var="title" value="$title `$aLang.commentEditNotice_byAuthor`"}
+		{else}
+			{assign var="label" value="$label`$aLang.commentEditNotice_flagByAdmin`"}
+			{assign var="title" value="$title `$aLang.commentEditNotice_byAdmin`"}
+		{/if}
+		{if $isHardModified}
+			{assign var="label" value="$label`$aLang.commentEditNotice_flagAfterAnswer`"}
+			{assign var="title" value="$title `$aLang.commentEditNotice_afterAnswer`"}
+		{/if}
 		{if $isSelfModified}
 			{assign var="desc" value=$LS->Lang_Get('commentEditNotice_descChanged_byAuthor', ['date' => {date_format date=$oComment->getLastModifyDate() format="j F Y, H:i:s"}])}
 		{else}
@@ -21,34 +29,24 @@
 			{if $editor != null}{assign var="editorName" value=$editor->getLogin()}{/if}
 			{assign var="desc" value="$desc`$LS->Lang_Get('commentEditNotice_descChanged_byAdminFull', ['user' => $editorName,'date' => {date_format date=$oComment->getLastModifyDate() format="j F Y, H:i:s"}])`"}
 		{/if}
-		{if $isHardModified}
-			{assign var="desc" value="$desc`$aLang.commentEditNotice_suffixHard`"}
-		{/if}
+		{assign var="lastModifyId" value=$oComment->getLastModifyId()}
 	{else}
 		{assign var="lastModifyId" value="0"}
 	{/if}
 	{if $isLocked}
 		{assign var="label" value="$label`$aLang.commentEditNotice_flagLocked`"}
 		{if $isModified}
+			{assign var="title" value="$title `$aLang.commentEditNotice_withLocked`"}
 			{assign var="desc" value="$desc\n"}
-			{assign var="descHeadSuffix" value=$aLang.commentEditNotice_suffixLocked}
 		{else}
-			{assign var="descHead" value=$aLang.commentEditNotice_prefixLocked}
+			{assign var="title" value=$aLang.commentEditNotice_capitalLocked}
 		{/if}
 		{assign var="lockerId" value=$oComment->getLockModifyUserId()}
 		{assign var="locker" value=$LS->User_GetUserById($lockerId)}
 		{if $locker != null}{assign var="lockerName" value=$locker->getLogin()}{/if}
 		{assign var="desc" value="$desc`$LS->Lang_Get('commentEditNotice_descLocked_byAdminFull', ['user' => $lockerName,'date' => {date_format date=$oComment->getLockModifyDate() format="j F Y, H:i:s"}])`"}
 	{/if}
-	{if !$bGetShort}
-		{if $isSelfModified}
-			{assign var="descHead" value="$descHead`$aLang.commentEditNotice_byAuthor`"}
-		{else}
-			{assign var="descHead" value="$descHead`$aLang.commentEditNotice_byAdmin`"}
-		{/if}
-	{/if}
-	{assign var="descHead" value="$descHead$descHeadSuffix"}
-	{assign var="desc" value="$descHead\n$desc"}
-	<span class="modify-notice {if $isHardModified}hard-modified{else if $isSelfModified}self-modified{else}adm-modified{/if}" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">{$label}</span>
+	{assign var="desc" value="$title\n$desc"}
+	<span class="modify-notice" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">{$label}</span>
 {/if}
 {/strip}
