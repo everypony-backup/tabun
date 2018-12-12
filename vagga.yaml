@@ -129,11 +129,6 @@ containers:
     - !Container _base_alpine
     - !Install [redis]
     - !EnsureDir /storage
-    volumes:
-      <<: *local_volumes
-      /storage: !Tmpfs
-        size: 128Mi
-        mode: 0o1700
 
   redis-trunk:
     setup:
@@ -473,7 +468,7 @@ commands:
     volumes: *node_volumes
     run: [webpack]
 
-  redis-cli: &redis !Command
+  redis-cli: !Command
     container: redis
     description: Run redis CLI
     run: [redis-cli]
@@ -481,7 +476,10 @@ commands:
   redis: &redis !Command
     container: redis
     description: Run redis server (cache and broker for celery)
-    run: redis-server /config/redis.conf
+    run: [redis-server]
+    volumes:
+      /etc/redis.conf: !BindRO /work/config/local/redis.conf
+      /storage: !Tmpfs
 
   nginx: &nginx !Command
     container: nginx
