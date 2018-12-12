@@ -162,10 +162,6 @@ containers:
     - !Container _base_alpine
     - !Install [nginx]
     - !EnsureDir /storage
-    volumes:
-      <<: *local_volumes
-      /storage: !Persistent {name: storage}
-      /var/log/nginx: !Snapshot
 
   mysql-dev:
     setup:
@@ -490,7 +486,11 @@ commands:
   nginx: &nginx !Command
     container: nginx
     description: Run nginx webserver
-    run: nginx -c /config/nginx.conf
+    run: [nginx]
+    volumes:
+      /etc/nginx/nginx.conf: !BindRO /work/config/local/nginx.conf
+      /storage: !Persistent {name: storage}
+      /var/log/nginx: !Snapshot
 
   mysql: &mysql !Command
     container: mysql-dev
