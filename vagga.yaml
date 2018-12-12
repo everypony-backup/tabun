@@ -238,9 +238,6 @@ containers:
     - !EnsureDir /log
     - !EnsureDir /storage
     - !EnsureDir /config
-    # TODO: common configuration should be also copied on this stage
-    # NOTE: Move session.save_path to pool-specific configuration
-    - !Remove /etc/php/7.2/fpm/pool.d/www.conf
     - !EnsureDir /static
     - !EnsureDir /app
 
@@ -250,9 +247,6 @@ containers:
       - !Install
         - php-xdebug
         - git
-      - !Copy
-        source: /work/config/local/php
-        path: /etc/php/7.2/fpm
 
   php-trunk:
     setup:
@@ -541,7 +535,7 @@ commands:
       /storage: !Persistent {name: storage}
       /static: !BindRO /work/static
       /app: !BindRO /work
-      /log: !Persistent {name: php_log}
+      /etc/php/7.2/fpm/pool.d: !BindRO /work/config/local/php
       /var/log: !Snapshot
 
   elastic: &elastic !Command
