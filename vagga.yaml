@@ -1,31 +1,8 @@
 minimum-vagga: v0.8.0
 
-_templates:
-  snippets:
-    - &trunk_stuff
-      - !Copy
-        source: /work/config/trunk
-        path: /config
-      - !EnsureDir /log
-      - !EnsureDir /lithos
-      - !Copy
-        source: /work/lithos/trunk
-        path: /lithos
-    - &production_stuff
-      - !Copy
-        source: /work/config/production
-        path: /config
-      - !EnsureDir /local
-      - !EnsureDir /log
-      - !EnsureDir /lithos
-      - !Copy
-        source: /work/lithos/production
-        path: /lithos
-    - &host_resolution
-      - !EnsureDir /state
-      - !Sh |
-          /bin/ln -sfn /state/hosts /etc/hosts
-          /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+mixins:
+  - vagga/trunk.yaml
+  - vagga/production.yaml
 
 containers:
   _base_alpine:
@@ -78,7 +55,7 @@ containers:
         path: /static
     data-dirs: [/static]
 
-  celery:
+  celery-dev:
     setup:
     - !Container _base_alpine
     - !Install [python3]
@@ -90,65 +67,11 @@ containers:
       - elasticsearch
     - !EnsureDir /app
 
-  celery-trunk:
-    setup:
-    - !Container celery
-    - !*Unpack
-      - *trunk_stuff
-    - !Copy
-      source: /work/celery_tasks
-      path: /app
-    - !Sh python3 -m compileall /app
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  celery-production:
-    setup:
-    - !Container celery
-    - !*Unpack
-      - *production_stuff
-    - !Copy
-      source: /work/celery_tasks
-      path: /app
-    - !Sh python3 -m compileall /app
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  redis:
+  redis-dev:
     setup:
     - !Container _base_alpine
     - !Install [redis]
     - !EnsureDir /storage
-
-  redis-trunk:
-    setup:
-    - !Container redis
-    - !*Unpack
-      - *trunk_stuff
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  redis-production:
-    setup:
-    - !Container redis
-    - !*Unpack
-      - *production_stuff
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   nginx:
     setup:
@@ -163,36 +86,6 @@ containers:
       - mariadb
       - mariadb-client
     - !EnsureDir /storage
-
-  mysql-trunk:
-    setup:
-    - !Container mysql-dev
-    - !*Unpack
-      - *trunk_stuff
-    - !Copy
-      source: /config/mysql
-      path: /etc/mysql
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  mysql-production:
-    setup:
-    - !Container mysql-dev
-    - !*Unpack
-      - *production_stuff
-    - !Copy
-      source: /config/mysql
-      path: /etc/mysql
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   _php-base:
     setup:
@@ -229,66 +122,6 @@ containers:
         - php-xdebug
         - git
 
-  php-trunk:
-    setup:
-      - !Container _php-base
-      - !*Unpack
-        - *trunk_stuff
-      - !Copy
-        source: /config/php
-        path: /etc/php/7.2/fpm
-      - !Copy
-        source: /work
-        path: /app
-        include-regex: ^(classes|settings|engine|templates)/*
-      - !Copy
-        source: /work/index.php
-        path: /app/index.php
-      - !BuildDeps [gettext]
-      # FIXME: Implicit locale build
-      - !BuildDeps [git]
-      - !Sh git describe --always > /app/backend.version
-      - !Build
-        container: assets
-        source: /static
-        path: /static
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  php-production:
-    setup:
-      - !Container _php-base
-      - !*Unpack
-        - *production_stuff
-      - !Copy
-        source: /config/php
-        path: /etc/php/7.2/fpm
-      - !EnsureDir /app
-      - !Copy
-        source: /work
-        path: /app
-        include-regex: ^(classes|settings|engine|templates)/*
-      - !Copy
-        source: /work/index.php
-        path: /app/index.php
-      # FIXME: Implicit locale build
-      - !BuildDeps [git]
-      - !Sh git describe --always > /app/backend.version
-      - !Build
-        container: assets
-        source: /static
-        path: /static
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
   elastic-dev:
     setup:
     - !Ubuntu bionic
@@ -308,58 +141,6 @@ containers:
       - openjdk-8-jre-headless
       - elasticsearch=6.2.3
     - !EnsureDir /storage
-
-  elastic-trunk:
-    setup:
-      - !Container elastic-dev
-      - !*Unpack
-        - *trunk_stuff
-      - !Copy
-        source: /config/elasticsearch
-        path: /etc/elasticsearch
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  elastic-production:
-    setup:
-      - !Container elastic-dev
-      - !*Unpack
-        - *production_stuff
-      - !Copy
-        source: /config/elasticsearch
-        path: /etc/elasticsearch
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  logs-trunk:
-    setup:
-      - !Container _base_alpine
-      - !BuildDeps
-        - python
-        - python-dev
-      - !Env
-        HOME: /opt
-      - !NpmInstall
-        - log.io
-      - !*Unpack
-        - *trunk_stuff
-      - !Copy
-        source: /config/.log.io
-        path: /opt/.log.io
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   mail-dev:
     setup:
@@ -467,12 +248,12 @@ commands:
     run: [webpack]
 
   redis-cli: !Command
-    container: redis
+    container: redis-dev
     description: Run redis CLI
     run: [redis-cli]
 
   redis: &redis !Command
-    container: redis
+    container: redis-dev
     description: Run redis server (cache and broker for celery)
     run: [redis-server]
     volumes:
@@ -504,7 +285,7 @@ commands:
     run: [mailcatcher, --foreground]
 
   celery: &celery !Command
-    container: celery
+    container: celery-dev
     description: Run celery worker for async tasks
     user-id: 1
     group-id: 1
