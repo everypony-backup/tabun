@@ -342,12 +342,7 @@ containers:
       - ca-certificates-java
       - openjdk-8-jre-headless
       - elasticsearch=6.2.3
-    - !EnsureDir /log
     - !EnsureDir /storage
-    volumes:
-      /etc/elasticsearch: !BindRO /work/config/local/elasticsearch
-      /log: !Persistent {name: elastic_log}
-      /storage: !Persistent {name: elastic}
 
   elastic-trunk:
     setup:
@@ -567,6 +562,9 @@ commands:
     external-user-id: 0
     work-dir: /usr/share/elasticsearch
     run: ./bin/elasticsearch
+    volumes:
+      /etc/elasticsearch: !BindRO /work/config/local/elasticsearch
+      /storage: !Persistent {name: elastic}
 
   run: !Supervise
     description: Run full server stack
