@@ -91,14 +91,6 @@ containers:
       - beautifulsoup4
       - elasticsearch
     - !EnsureDir /app
-    volumes:
-      <<: *local_volumes
-      /app: !BindRO /work/celery_tasks
-    environ:
-      PYTHONPATH: /config/celeryconfig:/app
-      CELERY_CONFIG_MODULE: cfg
-      CELERY_MAILER_HOST: localhost
-      CELERY_MAILER_PORT: 1025
 
   celery-trunk:
     setup:
@@ -522,6 +514,14 @@ commands:
     group-id: 1
     external-user-id: 0
     run: celery worker --pool=solo
+    volumes:
+      /config: !BindRO /work/config/local/celery
+      /app: !BindRO /work/celery_tasks
+    environ:
+      PYTHONPATH: /config:/app
+      CELERY_CONFIG_MODULE: cfg
+      CELERY_MAILER_HOST: localhost
+      CELERY_MAILER_PORT: 1025
 
   php: &php !Command
     prerequisites: [compile-locales]
