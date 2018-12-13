@@ -1,33 +1,8 @@
 minimum-vagga: v0.8.0
 
-_templates:
-  local_volumes: &local_volumes
-    /config: !BindRO /work/config/local
-  snippets:
-    - &trunk_stuff
-      - !Copy
-        source: /work/config/trunk
-        path: /config
-      - !EnsureDir /log
-      - !EnsureDir /lithos
-      - !Copy
-        source: /work/lithos/trunk
-        path: /lithos
-    - &production_stuff
-      - !Copy
-        source: /work/config/production
-        path: /config
-      - !EnsureDir /local
-      - !EnsureDir /log
-      - !EnsureDir /lithos
-      - !Copy
-        source: /work/lithos/production
-        path: /lithos
-    - &host_resolution
-      - !EnsureDir /state
-      - !Sh |
-          /bin/ln -sfn /state/hosts /etc/hosts
-          /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+mixins:
+  - vagga/trunk.yaml
+  - vagga/production.yaml
 
 containers:
   _base_alpine:
@@ -80,7 +55,7 @@ containers:
         path: /static
     data-dirs: [/static]
 
-  celery:
+  celery-dev:
     setup:
     - !Container _base_alpine
     - !Install [python3]
@@ -91,89 +66,18 @@ containers:
       - beautifulsoup4
       - elasticsearch
     - !EnsureDir /app
-    volumes:
-      <<: *local_volumes
-      /app: !BindRO /work/celery_tasks
-    environ:
-      PYTHONPATH: /config/celeryconfig:/app
-      CELERY_CONFIG_MODULE: cfg
-      CELERY_MAILER_HOST: localhost
-      CELERY_MAILER_PORT: 1025
 
-  celery-trunk:
-    setup:
-    - !Container celery
-    - !*Unpack
-      - *trunk_stuff
-    - !Copy
-      source: /work/celery_tasks
-      path: /app
-    - !Sh python3 -m compileall /app
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  celery-production:
-    setup:
-    - !Container celery
-    - !*Unpack
-      - *production_stuff
-    - !Copy
-      source: /work/celery_tasks
-      path: /app
-    - !Sh python3 -m compileall /app
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  redis:
+  redis-dev:
     setup:
     - !Container _base_alpine
     - !Install [redis]
     - !EnsureDir /storage
-    volumes:
-      <<: *local_volumes
-      /storage: !Tmpfs
-        size: 128Mi
-        mode: 0o1700
-
-  redis-trunk:
-    setup:
-    - !Container redis
-    - !*Unpack
-      - *trunk_stuff
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  redis-production:
-    setup:
-    - !Container redis
-    - !*Unpack
-      - *production_stuff
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   nginx:
     setup:
     - !Container _base_alpine
     - !Install [nginx]
     - !EnsureDir /storage
-    volumes:
-      <<: *local_volumes
-      /storage: !Persistent {name: storage}
-      /var/log/nginx: !Snapshot
 
   mysql-dev:
     setup:
@@ -181,47 +85,7 @@ containers:
     - !Install
       - mariadb
       - mariadb-client
-      - perl
-      - perl-dbd-mysql
-      - rsync
-    - !Copy
-      source: /work/config/local/mysql
-      path: /etc/mysql
     - !EnsureDir /storage
-    - !EnsureDir /backup
-    volumes:
-      /storage: !Persistent {name: mysql, init-command: _init_db}
-      /backup: !Persistent {name: backup}
-
-  mysql-trunk:
-    setup:
-    - !Container mysql-dev
-    - !*Unpack
-      - *trunk_stuff
-    - !Copy
-      source: /config/mysql
-      path: /etc/mysql
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  mysql-production:
-    setup:
-    - !Container mysql-dev
-    - !*Unpack
-      - *production_stuff
-    - !Copy
-      source: /config/mysql
-      path: /etc/mysql
-    - !*Unpack
-      - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   _php-base:
     setup:
@@ -248,9 +112,6 @@ containers:
     - !EnsureDir /log
     - !EnsureDir /storage
     - !EnsureDir /config
-    # TODO: common configuration should be also copied on this stage
-    # NOTE: Move session.save_path to pool-specific configuration
-    - !Remove /etc/php/7.2/fpm/pool.d/www.conf
     - !EnsureDir /static
     - !EnsureDir /app
 
@@ -260,69 +121,6 @@ containers:
       - !Install
         - php-xdebug
         - git
-      - !Copy
-        source: /work/config/local/php
-        path: /etc/php/7.2/fpm
-
-  php-trunk:
-    setup:
-      - !Container _php-base
-      - !*Unpack
-        - *trunk_stuff
-      - !Copy
-        source: /config/php
-        path: /etc/php/7.2/fpm
-      - !Copy
-        source: /work
-        path: /app
-        include-regex: ^(classes|settings|engine|templates)/*
-      - !Copy
-        source: /work/index.php
-        path: /app/index.php
-      - !BuildDeps [gettext]
-      # FIXME: Implicit locale build
-      - !BuildDeps [git]
-      - !Sh git describe --always > /app/backend.version
-      - !Build
-        container: assets
-        source: /static
-        path: /static
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  php-production:
-    setup:
-      - !Container _php-base
-      - !*Unpack
-        - *production_stuff
-      - !Copy
-        source: /config/php
-        path: /etc/php/7.2/fpm
-      - !EnsureDir /app
-      - !Copy
-        source: /work
-        path: /app
-        include-regex: ^(classes|settings|engine|templates)/*
-      - !Copy
-        source: /work/index.php
-        path: /app/index.php
-      # FIXME: Implicit locale build
-      - !BuildDeps [git]
-      - !Sh git describe --always > /app/backend.version
-      - !Build
-        container: assets
-        source: /static
-        path: /static
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   elastic-dev:
     setup:
@@ -342,64 +140,7 @@ containers:
       - ca-certificates-java
       - openjdk-8-jre-headless
       - elasticsearch=6.2.3
-    - !EnsureDir /log
     - !EnsureDir /storage
-    volumes:
-      /etc/elasticsearch: !BindRO /work/config/local/elasticsearch
-      /log: !Persistent {name: elastic_log}
-      /storage: !Persistent {name: elastic}
-
-  elastic-trunk:
-    setup:
-      - !Container elastic-dev
-      - !*Unpack
-        - *trunk_stuff
-      - !Copy
-        source: /config/elasticsearch
-        path: /etc/elasticsearch
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  elastic-production:
-    setup:
-      - !Container elastic-dev
-      - !*Unpack
-        - *production_stuff
-      - !Copy
-        source: /config/elasticsearch
-        path: /etc/elasticsearch
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
-
-  logs-trunk:
-    setup:
-      - !Container _base_alpine
-      - !BuildDeps
-        - python
-        - python-dev
-      - !Env
-        HOME: /opt
-      - !NpmInstall
-        - log.io
-      - !*Unpack
-        - *trunk_stuff
-      - !Copy
-        source: /config/.log.io
-        path: /opt/.log.io
-      - !*Unpack
-        - *host_resolution
-    volumes:
-      /state: !Tmpfs
-    resolv-conf-path: /state/resolv.conf
-    hosts-file-path: /state/hosts
 
   mail-dev:
     setup:
@@ -443,6 +184,9 @@ commands:
       done
 
       mysqladmin shutdown
+    volumes:
+      /etc/mysql: !BindRO /work/config/local/mysql
+      /storage: !Persistent {name: mysql}
 
   _load_fixture: !Command
     description: Load fixture into database
@@ -503,20 +247,27 @@ commands:
     volumes: *node_volumes
     run: [webpack]
 
-  redis-cli: &redis !Command
-    container: redis
+  redis-cli: !Command
+    container: redis-dev
     description: Run redis CLI
     run: [redis-cli]
 
   redis: &redis !Command
-    container: redis
+    container: redis-dev
     description: Run redis server (cache and broker for celery)
-    run: redis-server /config/redis.conf
+    run: [redis-server]
+    volumes:
+      /etc/redis.conf: !BindRO /work/config/local/redis.conf
+      /storage: !Tmpfs
 
   nginx: &nginx !Command
     container: nginx
     description: Run nginx webserver
-    run: nginx -c /config/nginx.conf
+    run: [nginx]
+    volumes:
+      /etc/nginx/nginx.conf: !BindRO /work/config/local/nginx.conf
+      /storage: !Persistent {name: storage}
+      /var/log/nginx: !Snapshot
 
   mysql: &mysql !Command
     container: mysql-dev
@@ -524,13 +275,9 @@ commands:
     user-id: 1
     external-user-id: 0
     run: mysqld_safe --skip-syslog --console --debug-gdb
-
-  innobackupex: &innobackupex !Command
-    container: mysql-dev
-    description: Run innobackupex command
-    user-id: 1
-    external-user-id: 0
-    run: [innobackupex]
+    volumes:
+      /etc/mysql: !BindRO /work/config/local/mysql
+      /storage: !Persistent {name: mysql, init-command: _init_db}
 
   mail: &mail !Command
     container: mail-dev
@@ -538,12 +285,20 @@ commands:
     run: [mailcatcher, --foreground]
 
   celery: &celery !Command
-    container: celery
+    container: celery-dev
     description: Run celery worker for async tasks
     user-id: 1
     group-id: 1
     external-user-id: 0
     run: celery worker --pool=solo
+    volumes:
+      /config: !BindRO /work/config/local/celery
+      /app: !BindRO /work/celery_tasks
+    environ:
+      PYTHONPATH: /config:/app
+      CELERY_CONFIG_MODULE: cfg
+      CELERY_MAILER_HOST: localhost
+      CELERY_MAILER_PORT: 1025
 
   php: &php !Command
     prerequisites: [compile-locales]
@@ -553,11 +308,11 @@ commands:
     external-user-id: 0
     run: [php-fpm7.2, -eFO]
     volumes:
-      <<: *local_volumes
+      /config: !BindRO /work/config/local
       /storage: !Persistent {name: storage}
       /static: !BindRO /work/static
       /app: !BindRO /work
-      /log: !Persistent {name: php_log}
+      /etc/php/7.2/fpm/pool.d/www.conf: !BindRO /work/config/local/php.conf
       /var/log: !Snapshot
 
   elastic: &elastic !Command
@@ -567,6 +322,9 @@ commands:
     external-user-id: 0
     work-dir: /usr/share/elasticsearch
     run: ./bin/elasticsearch
+    volumes:
+      /etc/elasticsearch: !BindRO /work/config/local/elasticsearch
+      /storage: !Persistent {name: elastic}
 
   run: !Supervise
     description: Run full server stack

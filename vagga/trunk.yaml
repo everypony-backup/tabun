@@ -1,0 +1,103 @@
+_trunk_templates:  # FIXME
+  - &trunk_stuff
+    - !Copy
+      source: /work/config/trunk
+      path: /config
+    - !EnsureDir /log
+    - !EnsureDir /lithos
+    - !Copy
+      source: /work/lithos/trunk
+      path: /lithos
+  - &trunk_host_resolution
+    - !EnsureDir /state
+    - !Sh |
+        /bin/ln -sfn /state/hosts /etc/hosts
+        /bin/ln -sfn /state/resolv.conf /etc/resolv.conf
+
+containers:
+  celery-trunk:
+    setup:
+      - !Container celery-dev
+      - !*Unpack
+        - *trunk_stuff
+      - !Copy
+        source: /work/celery_tasks
+        path: /app
+      - !Sh python3 -m compileall /app
+      - !*Unpack
+        - *trunk_host_resolution
+    volumes:
+      /state: !Tmpfs
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
+  redis-trunk:
+    setup:
+      - !Container redis-dev
+      - !*Unpack
+        - *trunk_stuff
+        - *trunk_host_resolution
+    volumes:
+      /state: !Tmpfs
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
+  mysql-trunk:
+    setup:
+      - !Container mysql-dev
+      - !*Unpack
+        - *trunk_stuff
+      - !Copy
+        source: /config/mysql
+        path: /etc/mysql
+      - !*Unpack
+        - *trunk_host_resolution
+    volumes:
+      /state: !Tmpfs
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
+  php-trunk:
+    setup:
+      - !Container _php-base
+      - !*Unpack
+        - *trunk_stuff
+      - !Copy
+        source: /config/php
+        path: /etc/php/7.2/fpm
+      - !Copy
+        source: /work
+        path: /app
+        include-regex: ^(classes|settings|engine|templates)/*
+      - !Copy
+        source: /work/index.php
+        path: /app/index.php
+      - !BuildDeps [gettext]
+      # FIXME: Implicit locale build
+      - !BuildDeps [git]
+      - !Sh git describe --always > /app/backend.version
+      - !Build
+        container: assets
+        source: /static
+        path: /static
+      - !*Unpack
+        - *trunk_host_resolution
+    volumes:
+      /state: !Tmpfs
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
+
+  elastic-trunk:
+    setup:
+      - !Container elastic-dev
+      - !*Unpack
+        - *trunk_stuff
+      - !Copy
+        source: /config/elasticsearch
+        path: /etc/elasticsearch
+      - !*Unpack
+        - *trunk_host_resolution
+    volumes:
+      /state: !Tmpfs
+    resolv-conf-path: /state/resolv.conf
+    hosts-file-path: /state/hosts
