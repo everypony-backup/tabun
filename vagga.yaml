@@ -71,7 +71,6 @@ containers:
     setup:
     - !Container _base_alpine
     - !Install [redis]
-    - !EnsureDir /storage
 
   nginx:
     setup:
@@ -255,10 +254,9 @@ commands:
   redis: &redis !Command
     container: redis-dev
     description: Run redis server (cache and broker for celery)
-    run: [redis-server]
+    run: [redis-server, --port, 6379]
     volumes:
-      /etc/redis.conf: !BindRO /work/config/local/redis.conf
-      /storage: !Tmpfs
+      /var/lib/redis: !Tmpfs
 
   nginx: &nginx !Command
     container: nginx
