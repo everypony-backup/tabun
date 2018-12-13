@@ -15,7 +15,6 @@
 ---------------------------------------------------------
 */
 
-require_once(Config::Get('path.root.engine').'/lib/external/Smarty/libs/Smarty.class.php');
 
 /**
  * Модуль обработки шаблонов используя шаблонизатор Smarty
