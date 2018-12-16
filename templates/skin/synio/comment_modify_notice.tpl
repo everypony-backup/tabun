@@ -43,10 +43,10 @@
 	{/if}
 	{assign var="desc" value="$title\n$desc"}
 	<span class="modify-notice" data-locked="{if $isLocked}1{else}0{/if}" data-last-modify-id="{$lastModifyId}" title="{$desc|escape:"html"}">
-	{if $isModified}<i class="fa fa-edit"></i>{/if}
-	{if $isHardModified or not $isSelfModified}<i class="fa fa-user-cog"></i>{/if}
-	{if $isHardModified}<i class="fa fa-stream"></i>{/if}
-	{if $isLocked}<i class="fa fa-lock"></i>{/if}
+	{if $isModified}<i class="vicon vicon-edit"></i>{/if}
+	{if $isHardModified or not $isSelfModified}<i class="vicon vicon-admin"></i>{/if}
+	{if $isHardModified}<i class="vicon vicon-answers"></i>{/if}
+	{if $isLocked}<i class="vicon vicon-lock"></i>{/if}
 	</span>
 {/if}
 {/strip}

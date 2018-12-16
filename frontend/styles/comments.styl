@@ -240,10 +240,16 @@ a.reply-link
     margin-bottom 10px
 
 .modify-notice
-  >.fa
-    color #999
-    font-size 9pt
-    margin-right 0.3em
+  >.vicon
+    vector_icon_style(#999, bottom, 0 0.3em 0 0)
+  >.vicon-edit
+    vector_icon_image(9pt * (576 / 512), 9pt, "images/vector-icons/fa/edit-solid.svg")
+  >.vicon-admin
+    vector_icon_image(9pt * (640 / 512), 9pt, "images/vector-icons/fa/user-cog-solid.svg")
+  >.vicon-answers
+    vector_icon_image(9pt * (512 / 512), 9pt, "images/vector-icons/fa/stream-solid.svg")
+  >.vicon-lock
+    vector_icon_image(9pt * (448 / 512), 9pt, "images/vector-icons/fa/lock-solid.svg")
 
 .comment:not(.editable)
   .comment-save-edit-bw,
