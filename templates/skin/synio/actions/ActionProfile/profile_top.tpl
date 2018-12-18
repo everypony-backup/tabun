@@ -1,8 +1,7 @@
 {assign var="oUserProfileId" value=$oUserProfile->getId()}
 <div class="profile">
 	{hook run='profile_top_begin' oUserProfile=$oUserProfile}
-	
-	{assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_list.user.user_required_level'), $oUserCurrent, $oUserProfile, 'user')}
+
 	<div class="vote-profile">
 		<div id="vote_area_user_{$oUserProfileId}" class="vote-topic
 																	{if $oUserProfile->getRating() > 0}
@@ -12,10 +11,10 @@
 																	{elseif $oUserProfile->getRating() == 0}
 																		vote-count-zero
 																	{/if}
-																	
-																	{if $oVote} 
-																		voted 
-																		
+
+																	{if $oVote}
+																		voted
+
 																		{if $oVote->getDirection() > 0}
 																			voted-up
 																		{elseif $oVote->getDirection() < 0}
@@ -24,9 +23,9 @@
 																	{else}
 																		not-voted
 																	{/if}
-																	
-																	{if $oUserCurrent and $oUserCurrent->getId()!=$oUserProfile->getId() and !$oVote and $LS->ACL_CanVoteUser($oUserCurrent,$oUserProfile) and $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile)} vote-enabled{/if}
-																	{if $bVoteInfoEnabled} vote-info-enabled{/if}
+
+																	{if $oUserCurrent and $oUserCurrent->getId()==$oUserProfile->getId() and !$oVote and $LS->ACL_CanVoteUser($oUserCurrent,$oUserProfile) and $LS->ACL_CanVoteUser($oUserCurrent, $oUserProfile)} vote-enabled{/if}
+																	{if $bVoteInfoEnabledForProfile} vote-info-enabled{/if}
 																	">
 			{assign var="iUserProfileCountVote" value=$oUserProfile->getCountVote()}
 			<div class="vote-item vote-up" data-direction="1" data-target_id="{$oUserProfileId}" data-target_type="user"></div>
@@ -35,7 +34,7 @@
 		</div>
 		<div class="vote-label">{$aLang.user_vote_count}: {$iUserProfileCountVote}</div>
 	</div>
-	
+
 	<div class="strength">
 		<div class="count" id="user_skill_{$oUserProfileId}">{$oUserProfile->getSkill()}</div>
 		<div class="vote-label">{$aLang.user_skill}</div>
@@ -46,10 +45,11 @@
 	{/if}
 
 	<h2 class="page-header user-login word-wrap {if !$oUserProfile->getProfileName()}no-user-name{/if}" itemprop="nickname">{$oUserProfile->getLogin()}</h2>
-	
+
 	{if $oUserProfile->getProfileName()}
 		<p class="user-name" itemprop="name" data-user_id="{$oUserProfile->getId()}">{$oUserProfile->getProfileName()|escape:'html'}</p>
 	{/if}
-	
+
 	{hook run='profile_top_end' oUserProfile=$oUserProfile}
 </div>
+
