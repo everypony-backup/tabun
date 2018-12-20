@@ -78,7 +78,7 @@
 				<div class="system-message-notice">Вы создатель этого блога</div>
 			{else}
 				{assign var="oBlogUser" value=$LS->Blog_GetBlogUserByBlogIdAndUserId($oBlogId,$oUserCurrent->getId())}
-				{if oBlogUser}
+				{if $oBlogUser}
 					{if $oBlogUser->getIsAdministrator()}
 						<div class="system-message-notice">Вы администрируете этот блог</div>
 					{elseif $oBlogUser->getIsModerator()}
