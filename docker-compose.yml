@@ -18,3 +18,10 @@ services:
      - .:/app
     depends_on: 
      - php-fpm
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    volumes:
+     - .:/app
