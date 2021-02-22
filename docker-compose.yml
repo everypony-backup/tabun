@@ -23,8 +23,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: docker/php/Dockerfile
-      target: frontend
+      dockerfile: docker/frontend/Dockerfile
     volumes:
       - .:/app
-    command: npx webpack watch -p --color
+    command: npm i && npx webpack --watch -p --color --progress

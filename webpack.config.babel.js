@@ -19,10 +19,15 @@ class WriteVersionPlugin {
   }
 
   apply = (compiler) => {
-    compiler.plugin('done', stats => fs.writeFileSync(
-      path.join(stats.compilation.compiler.outputPath, this.filename),
-      this.dev ? 'dev' : stats.hash,
-    ));
+    compiler.plugin('done', stats => {
+      if (!fs.existsSync(stats.compilation.compiler.outputPath)){
+        fs.mkdirSync(stats.compilation.compiler.outputPath);
+      }
+      fs.writeFileSync(
+        path.join(stats.compilation.compiler.outputPath, this.filename),
+        this.dev ? 'dev' : stats.hash,
+      );
+    });
   }
 }
 
