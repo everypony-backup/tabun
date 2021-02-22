@@ -5,23 +5,26 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+      target: dev
     volumes:
-     - .:/app
+      - .:/app
 
   nginx:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
     ports:
-     - '8000:80'
+      - '8000:80'
     volumes:
-     - .:/app
+      - .:/app
     depends_on: 
-     - php-fpm
+      - php-fpm
 
   frontend:
     build:
       context: .
-      dockerfile: docker/frontend/Dockerfile
+      dockerfile: docker/php/Dockerfile
+      target: frontend
     volumes:
-     - .:/app
+      - .:/app
+    command: npx webpack watch -p --color
