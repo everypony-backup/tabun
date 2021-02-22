@@ -6,6 +6,9 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
       target: dev
+    ports:
+      - '9000:9000'
+      - '39000:39000'
     volumes:
       - .:/app
 
@@ -28,3 +31,8 @@ services:
       - .:/app
     depends_on: 
       - php-fpm
+
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'

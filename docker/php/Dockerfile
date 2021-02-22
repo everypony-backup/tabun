@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
         libonig-dev \
         libcurl4-openssl-dev \
         imagemagick libmagickwand-dev libmagickcore-dev \
-    && pecl install imagick redis && docker-php-ext-enable imagick redis \
+    && pecl install imagick redis xdebug && docker-php-ext-enable imagick redis xdebug \
     && docker-php-ext-install mysqli gettext json curl bcmath mbstring zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=1.10.17 \
     && rm -rf /var/lib/apt/lists/* \
@@ -31,6 +31,8 @@ RUN apt-get update && apt-get install -y \
 
 ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /app
+
+COPY ./docker/php/www-dev.conf /usr/local/etc/php-fpm.d/www.conf
 
 CMD ["php-fpm"]
 
