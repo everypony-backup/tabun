@@ -278,7 +278,7 @@ $config['sys']['elastic']['hosts'] = [
  * Разное
  */
 $config['misc']['ga'] = '';
-$config['misc']['ver']['front'] = file_get_contents("/static/frontend.version");
+$config['misc']['ver']['front'] = file_get_contents("/app/static/frontend.version");
 $config['misc']['ver']['code'] = file_get_contents("/app/backend.version") ?: "dev"; // Just for convenience
 $config['misc']['debug'] = false;
 

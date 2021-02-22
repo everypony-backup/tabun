@@ -9,6 +9,15 @@ services:
     volumes:
       - .:/app
 
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: frontend
+    volumes:
+      - .:/app
+    command: npx webpack --watch -p --color --progress
+
   nginx:
     build:
       context: .
@@ -19,11 +28,3 @@ services:
       - .:/app
     depends_on: 
       - php-fpm
-
-  frontend:
-    build:
-      context: .
-      dockerfile: docker/frontend/Dockerfile
-    volumes:
-      - .:/app
-    command: npm i && npx webpack --watch -p --color --progress
