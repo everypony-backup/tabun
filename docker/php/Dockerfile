@@ -33,6 +33,8 @@ ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /app
 
 COPY ./docker/php/www-dev.conf /usr/local/etc/php-fpm.d/www.conf
+COPY composer.* ./
+RUN composer install
 
 CMD ["php-fpm"]
 

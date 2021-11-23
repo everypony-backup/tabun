@@ -14,6 +14,7 @@ services:
       - '39000:39000'
     volumes:
       - .:/app
+      - /app/vendor
       - static:/static
 
   frontend:
