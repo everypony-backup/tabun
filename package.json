@@ -1,5 +1,9 @@
 {
   "private": true,
+  "scripts": {
+    "build": "webpack -p --color --progress",
+    "build-dev": "webpack --watch -p --color --progress"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "bazooka": "^0.9.1",
