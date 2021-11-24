@@ -37,6 +37,11 @@ COPY ./docker/php/www-dev.conf /usr/local/etc/php-fpm.d/www.conf
 COPY composer.* ./
 RUN composer install
 
+# FIXME: Придумать что-то более красивое, чем это
+RUN sed -ri 's/^www-data:x:82:82:/www-data:x:1000:50:/' /etc/passwd
+RUN mkdir -p /storage
+RUN chown -R www-data:www-data /storage
+
 CMD ["php-fpm"]
 
 

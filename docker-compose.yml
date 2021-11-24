@@ -3,6 +3,7 @@ version: '3.7'
 volumes:
   static:
   elastic:
+  storage:
 
 services:
   php-fpm:
@@ -17,6 +18,7 @@ services:
       - .:/app
       - /app/vendor
       - static:/static
+      - storage:/storage
     depends_on:
       - mariadb
 
@@ -41,6 +43,7 @@ services:
     volumes:
       - .:/app
       - static:/app/static
+      - storage:/storage
     depends_on:
       - php-fpm
 
