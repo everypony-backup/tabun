@@ -8,6 +8,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN sh ./docker/compile_locales.sh
+RUN mkdir ./static
 RUN git describe --always > /app/static/backend.version
 
 FROM frontend AS frontend-prod
