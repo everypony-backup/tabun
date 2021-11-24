@@ -16,6 +16,8 @@ services:
       - .:/app
       - /app/vendor
       - static:/static
+    depends_on:
+      - mariadb
 
   frontend:
     build:
@@ -40,6 +42,11 @@ services:
       - static:/app/static
     depends_on: 
       - php-fpm
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: docker/mariadb/Dockerfile
 
   redis:
     image: redis:alpine

@@ -1,7 +1,7 @@
 <?php
 $config['path']['root']['web'] = 'http://' . $_SERVER['HTTP_HOST'];
 
-$config['db']['params']['host'] = '127.0.0.1';
+$config['db']['params']['host'] = 'mariadb';
 $config['db']['params']['port'] = '3306';
 $config['db']['params']['user'] = 'tabun';
 $config['db']['params']['pass'] = 'tabun';
