@@ -17,7 +17,7 @@ $config['path']['smarty']['cache'] = '/tmp/smarty/cache';
 
 $config['sys']['elastic']['hosts'] = ["127.0.0.1:9200"];
 
-$config['sys']['celery']['host'] = '127.0.0.1';
+$config['sys']['celery']['host'] = 'redis';
 $config['sys']['celery']['port'] = 6379;
 $config['sys']['celery']['db'] = 1;
 
