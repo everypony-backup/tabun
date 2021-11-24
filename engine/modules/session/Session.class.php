@@ -74,8 +74,8 @@ class ModuleSession extends Module
             if (@ini_get('session.use_only_cookies') === "0" and isset($aRequest[Config::Get('sys.session.name')]) and !is_string($aRequest[Config::Get('sys.session.name')])) {
                 session_name($this->GenerateId());
             }
-            session_start();
             session_regenerate_id();
+            session_start();
         }
     }
     /**
