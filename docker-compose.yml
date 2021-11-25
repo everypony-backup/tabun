@@ -51,6 +51,11 @@ services:
     build:
       context: .
       dockerfile: docker/mariadb/Dockerfile
+    environment:
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD}
 
   redis:
     image: redis:alpine
