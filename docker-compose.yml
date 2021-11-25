@@ -56,6 +56,8 @@ services:
       MARIADB_PASSWORD: ${MARIADB_PASSWORD}
       MARIADB_DATABASE: ${MARIADB_DATABASE}
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD}
+    volumes:
+      - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
 
   redis:
     image: redis:alpine
