@@ -21,6 +21,10 @@ services:
       - storage:/storage
     depends_on:
       - mariadb
+    environment:
+      MARIADB_USER: ${MARIADB_USER:-tabun}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
 
   frontend:
     build:
@@ -52,10 +56,10 @@ services:
       context: .
       dockerfile: docker/mariadb/Dockerfile
     environment:
-      MARIADB_USER: ${MARIADB_USER}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
-      MARIADB_DATABASE: ${MARIADB_DATABASE}
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER:-tabun}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD:-true}
     volumes:
       - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
 
