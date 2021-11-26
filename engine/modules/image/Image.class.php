@@ -148,6 +148,7 @@ class ModuleImage extends Module
             return false;
         }
 
+        $fileMode = Config::Get('uploads.file_permission');
         if ($iWidthDest) {
             if ($bForcedMinSize and ($iWidthDest>$oImage->get_image_params('width'))) {
                 $iWidthDest=$oImage->get_image_params('width');
@@ -161,9 +162,9 @@ class ModuleImage extends Module
 
             $sFileTmp=Config::Get('sys.cache.dir').func_generator(20);
             $oImage->output(null, $sFileTmp);
-            return $this->SaveFile($sFileTmp, $sDirDest, $sFileDest, 0644, true);
+            return $this->SaveFile($sFileTmp, $sDirDest, $sFileDest, $fileMode, true);
         } else {
-            return $this->SaveFile($sFileSrc, $sDirDest, $sFileDest, 0644, false);
+            return $this->SaveFile($sFileSrc, $sDirDest, $sFileDest, $fileMode, false);
         }
     }
     /**

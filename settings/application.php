@@ -51,6 +51,10 @@ $config['path']['uploads']['url'] = '/storage';                             // u
 $config['path']['uploads']['storage'] = '___path.root.server___/storage';   // путь для хранения загруженых файлов
 $config['path']['offset_request_url'] = 0;                                  // иногда помогает если сервер использует внутренние реврайты
 /**
+ * Настройка загрузок
+ */
+$config['uploads']['file_permission'] = 0644;
+/**
  * Настройки шаблонизатора Smarty
  */
 $config['path']['smarty']['template'] = '___path.root.server___/templates/skin/___view.skin___';
