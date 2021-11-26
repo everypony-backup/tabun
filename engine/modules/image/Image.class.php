@@ -161,9 +161,9 @@ class ModuleImage extends Module
 
             $sFileTmp=Config::Get('sys.cache.dir').func_generator(20);
             $oImage->output(null, $sFileTmp);
-            return $this->SaveFile($sFileTmp, $sDirDest, $sFileDest, 0666, true);
+            return $this->SaveFile($sFileTmp, $sDirDest, $sFileDest, 0644, true);
         } else {
-            return $this->SaveFile($sFileSrc, $sDirDest, $sFileDest, 0666, false);
+            return $this->SaveFile($sFileSrc, $sDirDest, $sFileDest, 0644, false);
         }
     }
     /**

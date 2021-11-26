@@ -1685,7 +1685,7 @@ class ModuleTopic extends Module
         $sDirUpload=$this->Image_GetIdDir($oUser->getId());
         $sExt = $this->Image_ValidateImageFile($sFileTmp);
         if (is_string($sExt)) {
-            $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0666, true);
+            $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0644, true);
             return $this->Image_GetWebPath($sFileImage);
         } else {
             @unlink($sFileTmp);
@@ -1769,7 +1769,7 @@ class ModuleTopic extends Module
         $sDirUpload=$this->Image_GetIdDir($oUser->getId());
         $sExt = $this->Image_ValidateImageFile($sFileTmp);
         if (is_string($sExt)) {
-            $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0666, true);
+            $sFileImage = $this->Image_SaveFile($sFileTmp, $sDirUpload, func_generator().".".$sExt, 0644, true);
             return $this->Image_GetWebPath($sFileImage);
         } else {
             @unlink($sFileTmp);
