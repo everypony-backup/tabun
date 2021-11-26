@@ -4,6 +4,7 @@ volumes:
   static:
   elastic:
   storage:
+  database:
 
 services:
   php-fpm:
@@ -62,6 +63,7 @@ services:
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD:-true}
     volumes:
       - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
+      - database:/var/lib/mysql
 
   redis:
     image: redis:alpine
