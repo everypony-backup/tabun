@@ -184,14 +184,19 @@ class ModuleImage extends Module
             return $this::UPLOAD_IMAGE_ERROR_FS;
         }
         $sMime = finfo_file($this->fileInfo, $sFile);
-        $aAllowedMimes = Config::Get('module.image.allowed_mime');
+        $aAllowedMimes = [
+            "image/gif" => "gif",
+            "image/png" => "png",
+            "image/jpeg" => "jpg",
+            "image/pjpeg" => "jpg"
+        ];
         if (!array_key_exists($sMime, $aAllowedMimes)) {
             return $this::UPLOAD_IMAGE_ERROR_TYPE;
         }
-        $this->magic->readImage($sFile);
+        $imageInfo = getimagesize($sFile);
         if (
-            (int)$this->magic->getImageWidth() <= Config::Get('module.image.max_x') &&
-            (int)$this->magic->getImageHeight() <= Config::Get('module.image.max_y')
+            (int)$imageInfo[0] <= Config::Get('view.img_max_width') &&
+            (int)$imageInfo[1] <= Config::Get('view.img_max_height')
         ) {
             return $aAllowedMimes[$sMime];
         } else {
