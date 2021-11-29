@@ -44,6 +44,8 @@ class ModuleTopic extends Module
         'topic','question'
     );
 
+    protected $sUserAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0";
+
     /**
      * Инициализация
      *
@@ -1703,7 +1705,7 @@ class ModuleTopic extends Module
         // Url
         curl_setopt($ch, CURLOPT_URL, $sUrl);
         // Browser/user agent
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:42.0) Gecko/20100101 Firefox/42.0");
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->sUserAgent);
         // Automatically follow Location: headers (ie redirects)
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         // Auto set the referer in the event of a redirect
