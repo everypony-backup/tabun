@@ -1724,6 +1724,8 @@ class ModuleTopic extends Module
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         // Set buffer to 100k
         curl_setopt($ch, CURLOPT_BUFFERSIZE, 1024*100);
+        // Protocol whitelist
+        curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
         // Manual progress handling
         curl_setopt($ch, CURLOPT_NOPROGRESS, false);
         // Abort upload too large files
