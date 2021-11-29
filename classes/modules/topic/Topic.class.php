@@ -1702,6 +1702,13 @@ class ModuleTopic extends Module
     public function UploadTopicImageUrl($sUrl, $oUser)
     {
         $ch = curl_init();
+        // Filter requests to private ranges
+        $host = parse_url($sUrl, PHP_URL_HOST);
+	    if (
+            $host === 'localhost' || (
+	            (filter_var($host, FILTER_VALIDATE_IP) !== false) && (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false)
+            )
+        ) return ModuleImage::UPLOAD_IMAGE_ERROR;
         // Url
         curl_setopt($ch, CURLOPT_URL, $sUrl);
         // Browser/user agent
