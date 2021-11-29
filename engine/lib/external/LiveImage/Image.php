@@ -108,6 +108,18 @@ class LiveImage {
      * MIME database
      */
     private $fileInfo;
+    /**
+     * Разрешенные типы изображений
+     */
+    const aAllowedMimes = [
+        "image/gif" => "gif",
+        "image/png" => "png",
+        "image/x-png" => "png",
+        "image/jpg" => "jpg",
+        "image/jpeg" => "jpg",
+        "image/pjpeg" => "jpg",
+        "image/webp" => "webp"
+    ];
 
 	/**
 	 * Создает объект изображения из переданного файла
@@ -116,18 +128,13 @@ class LiveImage {
 	 * @return bool|mixed
 	 */
 	public function __construct($sFile) {
-        $sMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $sFile);
-        $aAllowedMimes = [
-            "image/gif" => "gif",
-            "image/png" => "png",
-            "image/jpeg" => "jpg",
-            "image/pjpeg" => "jpg"
-        ];
-        if (!array_key_exists($sMime, $aAllowedMimes)) {
-            //echo ;
-            $this->set_last_error(4);
+        $this->fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+        $sMime = finfo_file($this->fileInfo, $sFile);
+        if (!array_key_exists($sMime, $this::aAllowedMimes)) {
+            $this->set_last_error(5);
             return false;
         }
+        $this->format = $this::aAllowedMimes[$sMime];
 
         $img_max_width = Config::Get('view.processing.img_max_width');
         $img_max_height = Config::Get('view.processing.img_max_height');
@@ -147,41 +154,17 @@ class LiveImage {
 			$this->set_last_error(4);
 			return false;
 		}
-		
-        $this->fileInfo = finfo_open(FILEINFO_MIME_TYPE);
 
 		if(!$sFile) {
 			$this->set_last_error(3);
 			return false;
 		}
 
-        $sMime = finfo_file($this->fileInfo, $sFile);
-
         $iFileLength = (int) $this->magic->getImageLength();
         if(!$iFileLength) {
             $this->set_last_error(3);
             return false;
         }
-		/**
-		 * Определяем тип файла изображения
-		 */
-		switch ($sMime) {
-			case 'image/png':
-			case "image/x-png":			
-				$this->format='png';
-				break;
-			case 'image/gif':
-				$this->format='gif';
-				break;
-		    case "image/pjpeg":
-			case "image/jpeg":
-			case "image/jpg":
-				$this->format='jpg';
-				break;
-			default:
-				$this->set_last_error(5);				
-				return false;
-		}		
 
 		$this->image=$this->magic;
 		$this->width=(int)$this->magic->getImageWidth();

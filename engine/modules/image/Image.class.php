@@ -145,18 +145,26 @@ class ModuleImage extends Module
          * Если объект не передан как параметр,
          * создаем новый
          */
+        $sMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $sFileSrc);
+        if (!array_key_exists($sMime, $this::aAllowedMimes)) {
+            $this->SetLastError(4);
+            return false;
+        }
+
+        $imageInfo = getimagesize($sFileSrc);
+        if (
+            (int)$imageInfo[0] > $iWidthMax ||
+            (int)$imageInfo[1] > $iHeightMax
+        ) {
+            return false;
+        }
+
         if (!$oImage) {
             $oImage=$this->CreateImageObject($sFileSrc);
         }
 
         if ($oImage->get_last_error()) {
             $this->SetLastError($oImage->get_last_error());
-            return false;
-        }
-
-        $sFileDest.='.'.$oImage->get_image_params('format');
-        if (($oImage->get_image_params('width')>$iWidthMax)
-            or ($oImage->get_image_params('height')>$iHeightMax)) {
             return false;
         }
 
