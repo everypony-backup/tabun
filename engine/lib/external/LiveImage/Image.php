@@ -116,6 +116,30 @@ class LiveImage {
 	 * @return bool|mixed
 	 */
 	public function __construct($sFile) {
+        $sMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $sFile);
+        $aAllowedMimes = [
+            "image/gif" => "gif",
+            "image/png" => "png",
+            "image/jpeg" => "jpg",
+            "image/pjpeg" => "jpg"
+        ];
+        if (!array_key_exists($sMime, $aAllowedMimes)) {
+            //echo ;
+            $this->set_last_error(4);
+            return false;
+        }
+
+        $img_max_width = Config::Get('view.processing.img_max_width');
+        $img_max_height = Config::Get('view.processing.img_max_height');
+        $imageInfo = getimagesize($sFile);
+        if (
+            (int)$imageInfo[0] > $img_max_width ||
+            (int)$imageInfo[1] > $img_max_height
+        ) {
+            $this->set_last_error(4);
+            return false;
+        }
+
         $this->magic = new Imagick();
 		try {
 			$this->magic->readImage($sFile);

@@ -1186,7 +1186,7 @@ class ModuleUser extends Module
      * @param  array $aSize Размер области из которой нужно вырезать картинку - array('x1'=>0,'y1'=>0,'x2'=>100,'y2'=>100)
      * @return string|bool
      */
-    public function UploadAvatar($sFileTmp, $oUser, $aSize=array())
+    public function UploadAvatar($sFileTmp, $oUser)
     {
         if (!file_exists($sFileTmp)) {
             return false;
@@ -1208,60 +1208,19 @@ class ModuleUser extends Module
             return false;
         }
 
-        if (!$aSize) {
-            $oImage = $this->Image_CropSquare($oImage);
-            $oImage->output(null, $sFileTmp);
-        } else {
-            $iWSource=$oImage->get_image_params('width');
-            $iHSource=$oImage->get_image_params('height');
-            /**
-             * Достаем переменные x1 и т.п. из $aSize
-             */
-            extract($aSize, EXTR_PREFIX_SAME, 'ops');
-            if ($x1>$x2) {
-                // меняем значения переменных
-                $x1 = $x1 + $x2;
-                $x2 = $x1 - $x2;
-                $x1 = $x1 - $x2;
-            }
-            if ($y1>$y2) {
-                $y1 = $y1 + $y2;
-                $y2 = $y1 - $y2;
-                $y1 = $y1 - $y2;
-            }
-            if ($x1<0) {
-                $x1=0;
-            }
-            if ($y1<0) {
-                $y1=0;
-            }
-            if ($x2>$iWSource) {
-                $x2=$iWSource;
-            }
-            if ($y2>$iHSource) {
-                $y2=$iHSource;
-            }
+        $oImage = $this->Image_CropSquare($oImage);
+        $oImage->output(null, $sFileTmp);
 
-            $iW=$x2-$x1;
-            // Допускаем минимальный клип в 32px (исключая маленькие изображения)
-            if ($iW<32 && $x1+32<=$iWSource) {
-                $iW=32;
-            }
-            $iH=$iW;
-            if ($iH+$y1>$iHSource) {
-                $iH=$iHSource-$y1;
-            }
-            $oImage->crop($iW, $iH, $x1, $y1);
-            $oImage->output(null, $sFileTmp);
-        }
+        $img_max_width = Config::Get('view.processing.img_max_width');
+        $img_max_height = Config::Get('view.processing.img_max_height');
 
-        if ($sFileAvatar=$this->Image_Resize($sFileTmp, $sPath, 'avatar_100x100', Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), 100, 100, false)) {
+        if ($sFileAvatar=$this->Image_Resize($sFileTmp, $sPath, 'avatar_100x100', $img_max_width, $img_max_height, 100, 100, false)) {
             $aSize=Config::Get('module.user.avatar_size');
             foreach ($aSize as $iSize) {
                 if ($iSize==0) {
-                    $this->Image_Resize($sFileTmp, $sPath, 'avatar', Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), null, null, false);
+                    $this->Image_Resize($sFileTmp, $sPath, 'avatar', $img_max_width, $img_max_height, null, null, false);
                 } else {
-                    $this->Image_Resize($sFileTmp, $sPath, "avatar_{$iSize}x{$iSize}", Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), $iSize, $iSize, false);
+                    $this->Image_Resize($sFileTmp, $sPath, "avatar_{$iSize}x{$iSize}", $img_max_width, $img_max_height, $iSize, $iSize, false);
                 }
             }
             @unlink($sFileTmp);
@@ -1301,67 +1260,18 @@ class ModuleUser extends Module
      * @param  array $aSize Размер области из которой нужно вырезать картинку - array('x1'=>0,'y1'=>0,'x2'=>100,'y2'=>100)
      * @return string|bool
      */
-    public function UploadFoto($sFileTmp, $oUser, $aSize=array())
+    public function UploadFoto($sFileTmp, $oUser)
     {
         if (!file_exists($sFileTmp)) {
             return false;
         }
         $sDirUpload=$this->Image_GetIdDir($oUser->getId());
 
-        if ($aSize) {
-            $oImage = $this->Image_CreateImageObject($sFileTmp);
-            /**
-             * Если объект изображения не создан,
-             * возвращаем ошибку
-             */
-            if ($sError=$oImage->get_last_error()) {
-                // Вывод сообщения об ошибки, произошедшей при создании объекта изображения
-                // $this->Message_AddError($sError,$this->Lang_Get('error'));
-                @unlink($sFileTmp);
-                return false;
-            }
+        $img_max_width = Config::Get('view.processing.img_max_width');
+        $img_max_height = Config::Get('view.processing.img_max_height');
+        $profile_photo_width = Config::Get('module.user.profile_photo_width');
 
-            $iWSource=$oImage->get_image_params('width');
-            $iHSource=$oImage->get_image_params('height');
-            /**
-             * Достаем переменные x1 и т.п. из $aSize
-             */
-            extract($aSize, EXTR_PREFIX_SAME, 'ops');
-            if ($x1>$x2) {
-                // меняем значения переменных
-                $x1 = $x1 + $x2;
-                $x2 = $x1 - $x2;
-                $x1 = $x1 - $x2;
-            }
-            if ($y1>$y2) {
-                $y1 = $y1 + $y2;
-                $y2 = $y1 - $y2;
-                $y1 = $y1 - $y2;
-            }
-            if ($x1<0) {
-                $x1=0;
-            }
-            if ($y1<0) {
-                $y1=0;
-            }
-            if ($x2>$iWSource) {
-                $x2=$iWSource;
-            }
-            if ($y2>$iHSource) {
-                $y2=$iHSource;
-            }
-
-            $iW=$x2-$x1;
-            // Допускаем минимальный клип в 32px (исключая маленькие изображения)
-            if ($iW<32 && $x1+32<=$iWSource) {
-                $iW=32;
-            }
-            $iH=$y2-$y1;
-            $oImage->crop($iW, $iH, $x1, $y1);
-            $oImage->output(null, $sFileTmp);
-        }
-
-        if ($sFileFoto=$this->Image_Resize($sFileTmp, $sDirUpload, func_generator(6), Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), Config::Get('module.user.profile_photo_width'), null, true)) {
+        if ($sFileFoto = $this->Image_Resize($sFileTmp, $sDirUpload, func_generator(6), $img_max_width, $img_max_height, $profile_photo_width, null, true)) {
             @unlink($sFileTmp);
             /**
              * удаляем старое фото
