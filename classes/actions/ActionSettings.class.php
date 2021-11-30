@@ -90,6 +90,14 @@ class ActionSettings extends Action
      **********************************************************************************
      */
 
+    protected function CreateTempFileFromBase64($base64str=null){
+        $fileData=base64_decode($base64str, true);
+        $sFile = Config::Get('sys.cache.dir').func_generator();
+        if ($fileData && file_put_contents($sFile, $fileData)){
+            return $sFile;
+        }
+        return false;
+    }
     /**
      * Загрузка временной картинки фото для последущего ресайза
      */
@@ -100,29 +108,23 @@ class ActionSettings extends Action
          */
         $this->Viewer_SetResponseAjax('jsonIframe', false);
 
-        if($fileFoto=base64_decode($_POST["image"], true)){
-            $sFile = Config::Get('sys.cache.dir').func_generator();
-            if (file_put_contents($sFile, $fileFoto)) {
-                if ($sFileWeb = $this->User_UploadFoto($sFile, $this->oUserCurrent)) {
-                    $this->Image_RemoveFile($sFile);
-                    if ($sFileWeb != $this->oUserCurrent->getProfileFoto()) {
-                        $this->User_DeleteFoto($this->oUserCurrent);
-                    }
-
-                    $this->oUserCurrent->setProfileFoto($sFileWeb);
-                    $this->User_Update($this->oUserCurrent);
-
-                    $this->Viewer_AssignAjax('sFile', $this->oUserCurrent->getProfileFoto());
-                    $this->Viewer_AssignAjax('sTitleUpload', $this->Lang_Get('settings_profile_photo_change'));
-                } else {
-                    $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
-                }
-            } else {
-                $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
+        $sFile = $this->CreateTempFileFromBase64($_POST["image"]);
+        if($sFile && $sFileWeb = $this->User_UploadFoto($sFile, $this->oUserCurrent)){
+            $this->Image_RemoveFile($sFile);
+            if ($sFileWeb != $this->oUserCurrent->getProfileFoto()) {
+                $this->User_DeleteFoto($this->oUserCurrent);
             }
-        } else {
-            $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
+
+            $this->oUserCurrent->setProfileFoto($sFileWeb);
+            $this->User_Update($this->oUserCurrent);
+
+            $this->Viewer_AssignAjax('sFile', $this->oUserCurrent->getProfileFoto());
+            $this->Viewer_AssignAjax('sTitleUpload', $this->Lang_Get('settings_profile_photo_change'));
+            return true;
         }
+
+        $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
+        return false;
     }
     /**
      * Удаляет фото
@@ -155,29 +157,23 @@ class ActionSettings extends Action
          */
         $this->Viewer_SetResponseAjax('jsonIframe', false);
 
-        if($imageAvatar=base64_decode($_POST["image"], true)){
-            $sFile = Config::Get('sys.cache.dir').func_generator();
-            if (file_put_contents($sFile, $imageAvatar)) {
-                if ($sFileWeb = $this->User_UploadAvatar($sFile, $this->oUserCurrent)) {
-                    $this->Image_RemoveFile($sFile);
-                    if ($sFileWeb != $this->oUserCurrent->getProfileAvatar()) {
-                        $this->User_DeleteAvatar($this->oUserCurrent);
-                    }
-
-                    $this->oUserCurrent->setProfileAvatar($sFileWeb);
-                    $this->User_Update($this->oUserCurrent);
-
-                    $this->Viewer_AssignAjax('sFile', $this->oUserCurrent->getProfileAvatarPath(100));
-                    $this->Viewer_AssignAjax('sTitleUpload', $this->Lang_Get('settings_profile_avatar_change'));
-                } else {
-                    $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
-                }
-            } else {
-                $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
+        $sFile = $this->CreateTempFileFromBase64($_POST["image"]);
+        if($sFile && $sFileWeb = $this->User_UploadAvatar($sFile, $this->oUserCurrent)){
+            $this->Image_RemoveFile($sFile);
+            if ($sFileWeb != $this->oUserCurrent->getProfileAvatar()) {
+                $this->User_DeleteAvatar($this->oUserCurrent);
             }
-        } else {
-            $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
+
+            $this->oUserCurrent->setProfileAvatar($sFileWeb);
+            $this->User_Update($this->oUserCurrent);
+
+            $this->Viewer_AssignAjax('sFile', $this->oUserCurrent->getProfileAvatarPath(100));
+            $this->Viewer_AssignAjax('sTitleUpload', $this->Lang_Get('settings_profile_avatar_change'));
+            return true;
         }
+
+        $this->Message_AddError($this->Lang_Get('settings_profile_avatar_error'), $this->Lang_Get('error'));
+        return false;
     }
     /**
      * Удаляет аватар
