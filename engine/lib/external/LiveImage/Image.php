@@ -369,7 +369,14 @@ class LiveImage {
 					header("Content-type: image/gif");
 				}
 				break;
-		}
+
+            case 'webp':
+                $this->image->setFormat("webp");
+                if(!$file) {
+                    header("Content-type: image/webp");
+                }
+                break;
+        }
 
 		if(!$file) {
 			echo $this->image->getImageBlob();
