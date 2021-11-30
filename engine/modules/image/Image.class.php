@@ -167,6 +167,7 @@ class ModuleImage extends Module
             $this->SetLastError($oImage->get_last_error());
             return false;
         }
+        $sFileDest.='.'.$oImage->get_image_params('format');
 
         $fileMode = Config::Get('uploads.file_permission');
         if ($iWidthDest) {
