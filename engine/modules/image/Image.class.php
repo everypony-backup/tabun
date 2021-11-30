@@ -51,18 +51,6 @@ class ModuleImage extends Module
      */
     const UPLOAD_IMAGE_ERROR_NETWORK = 32;
     /**
-     * Разрешенные типы изображений
-     */
-    const aAllowedMimes = [
-        "image/gif" => "gif",
-        "image/png" => "png",
-        "image/x-png" => "png",
-        "image/jpg" => "jpg",
-        "image/jpeg" => "jpg",
-        "image/pjpeg" => "jpg",
-        "image/webp" => "webp"
-    ];
-    /**
      * Тескт последней ошибки
      *
      * @var string
@@ -146,7 +134,7 @@ class ModuleImage extends Module
          * создаем новый
          */
         $sMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $sFileSrc);
-        if (!array_key_exists($sMime, $this::aAllowedMimes)) {
+        if (!array_key_exists($sMime, LiveImage::aAllowedMimes)) {
             $this->SetLastError(4);
             return false;
         }
@@ -205,7 +193,7 @@ class ModuleImage extends Module
             return $this::UPLOAD_IMAGE_ERROR_FS;
         }
         $sMime = finfo_file($this->fileInfo, $sFile);
-        if (!array_key_exists($sMime, $this::aAllowedMimes)) {
+        if (!array_key_exists($sMime, LiveImage::aAllowedMimes)) {
             return $this::UPLOAD_IMAGE_ERROR_TYPE;
         }
         $imageInfo = getimagesize($sFile);
@@ -213,7 +201,7 @@ class ModuleImage extends Module
             (int)$imageInfo[0] <= Config::Get('view.img_max_width') &&
             (int)$imageInfo[1] <= Config::Get('view.img_max_height')
         ) {
-            return $this::aAllowedMimes[$sMime];
+            return LiveImage::aAllowedMimes[$sMime];
         } else {
             return $this::UPLOAD_IMAGE_ERROR_TYPE;
         }
