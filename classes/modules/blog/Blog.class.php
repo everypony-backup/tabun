@@ -955,12 +955,16 @@ class ModuleBlog extends Module
         $aSize=Config::Get('module.blog.avatar_size');
         rsort($aSize, SORT_NUMERIC);
         $sSizeBig=array_shift($aSize);
-        if ($oImage && $sFileAvatar=$this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}_{$sSizeBig}x{$sSizeBig}", Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), $sSizeBig, $sSizeBig, false, $oImage)) {
+        
+        $img_max_width = Config::Get('view.processing.img_max_width');
+        $img_max_height = Config::Get('view.processing.img_max_height');
+        
+        if ($oImage && $sFileAvatar=$this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}_{$sSizeBig}x{$sSizeBig}", $img_max_width, $img_max_height, $sSizeBig, $sSizeBig, false, $oImage)) {
             foreach ($aSize as $iSize) {
                 if ($iSize==0) {
-                    $this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}", Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), null, null, false, $oImage);
+                    $this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}", $img_max_width, $img_max_height, null, null, false, $oImage);
                 } else {
-                    $this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}_{$iSize}x{$iSize}", Config::Get('view.img_max_width'), Config::Get('view.img_max_height'), $iSize, $iSize, false, $oImage);
+                    $this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}_{$iSize}x{$iSize}", $img_max_width, $img_max_height, $iSize, $iSize, false, $oImage);
                 }
             }
             @unlink($sFileTmp);
