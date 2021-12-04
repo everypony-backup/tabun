@@ -9,3 +9,4 @@ backend-version:
 
 compile-locales:
 	docker-compose run --rm frontend sh ./docker/compile_locales.sh
+	docker-compose restart php-fpm || true # ignore error if php-fpm container is not started

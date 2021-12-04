@@ -35,7 +35,6 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
       - static:/app/static
     command: npm run build-dev
 

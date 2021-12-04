@@ -24,11 +24,13 @@ RUN apt-get update && apt-get install -y \
         libonig-dev \
         libcurl4-openssl-dev \
         imagemagick libmagickwand-dev libmagickcore-dev \
+        locales \
     && pecl install imagick redis xdebug && docker-php-ext-enable imagick redis xdebug \
     && docker-php-ext-install mysqli gettext json curl bcmath mbstring zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=1.10.17 \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-source delete
+    && docker-php-source delete \
+    && sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
 
 ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /app
