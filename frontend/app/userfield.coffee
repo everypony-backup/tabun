@@ -18,6 +18,7 @@ showAddForm = ->
   $('#user_fields_form_type').val ''
   $('#user_fields_form_action').val 'add'
   $('#userfield_form').jqmShow()
+  return
 
 showEditForm = (id) ->
   $('#user_fields_form_action').val 'update'
@@ -31,6 +32,7 @@ showEditForm = (id) ->
   $('#user_fields_form_type').val type
   $('#user_fields_form_id').val id
   $('#userfield_form').jqmShow()
+  return
   
 
 applyForm = ->
@@ -58,6 +60,8 @@ addUserfield = ->
     $("#field_#{data.id} .userfield_admin_title").text title
     $("#field_#{data.id} .userfield_admin_pattern").text pattern
     $("#field_#{data.id} .userfield_admin_type").text type
+    return
+  return
 
 
 updateUserfield = ->
@@ -77,6 +81,8 @@ updateUserfield = ->
     $("#field_#{id} .userfield_admin_title").text title
     $("#field_#{id} .userfield_admin_pattern").text pattern
     $("#field_#{id} .userfield_admin_type").text type
+    return
+  return
 
 
 deleteUserfield = (id) ->
@@ -92,6 +98,8 @@ deleteUserfield = (id) ->
 
     notice data.sMsgTitle, data.sMsg
     $('#field_' + id).remove()
+    return
+  return
 
 
 addFormField = ->
