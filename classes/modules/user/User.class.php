@@ -562,7 +562,7 @@ class ModuleUser extends Module
     {
         $sKeyFromCookies = getRequestStr('key', null, 'cookie');
 
-        if ($this->oUserCurrent && !$this->ValidateUserKey($this->oUserCurrent, $sKeyFromCookies)) {
+        if ($this->oUserCurrent && !empty($sKeyFromCookies) && !$this->ValidateUserKey($this->oUserCurrent, $sKeyFromCookies)) {
             $this->Logout();
             return;
         }
