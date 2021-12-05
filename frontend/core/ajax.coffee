@@ -10,7 +10,10 @@ routes = require("lib/routes").default
 allowedUrls = Set flatten reduce(
   values routes
   (acc, x) ->
-    acc.push values x
+    if typeof x == "string"
+      acc.push x
+    else
+      acc.push values x
     acc
   []
 )
