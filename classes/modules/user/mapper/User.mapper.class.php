@@ -956,11 +956,17 @@ class ModuleUser_MapperUser extends Mapper
     public function deleteUserField($iId)
     {
         $sql = 'DELETE FROM '.Config::Get('db.table.user_field_value').' WHERE field_id = ?d';
-        $this->oDb->query($sql, $iId);
+        $result = $this->oDb->query($sql, $iId);
+
+        if ($result === false) {
+            return false;
+        }
+
         $sql =  'DELETE FROM '.Config::Get('db.table.user_field').' WHERE
                     id = ?d';
-        $this->oDb->query($sql, $iId);
-        return true;
+        $result = $this->oDb->query($sql, $iId);
+
+        return $result !== false;
     }
     /**
      * Изменить поле
@@ -973,8 +979,9 @@ class ModuleUser_MapperUser extends Mapper
         $sql =  'UPDATE '.Config::Get('db.table.user_field').' SET
                     name = ?, title = ?, pattern = ?, type = ?
                     WHERE id = ?d';
-        $this->oDb->query($sql, $oField->getName(), $oField->getTitle(), $oField->getPattern(), $oField->getType(), $oField->getId());
-        return true;
+        $result = $this->oDb->query($sql, $oField->getName(), $oField->getTitle(), $oField->getPattern(), $oField->getType(), $oField->getId());
+
+        return $result !== false;
     }
     /**
      * Проверяет существует ли поле с таким именем

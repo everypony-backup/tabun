@@ -211,7 +211,10 @@ class ActionAdmin extends Action
                     $this->Message_AddError($this->Lang_Get('system_error'), $this->Lang_Get('error'));
                     return;
                 }
-                $this->User_deleteUserField(getRequestStr('id'));
+                if (!$this->User_deleteUserField(getRequestStr('id'))) {
+                    $this->Message_AddError($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+                    return;
+                }
                 $this->Message_AddNotice($this->Lang_Get('user_field_deleted'), $this->Lang_Get('attention'));
                 break;
             /**
