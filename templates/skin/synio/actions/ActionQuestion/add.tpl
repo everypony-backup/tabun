@@ -29,7 +29,7 @@
 	<div class="poll-create">
 		<label>{$aLang.topic_question_create_answers}:</label>
 		<ul class="question-list" id="question_list">
-			{if count($_aRequest.answer)>=2}
+			{if $_aRequest.answer && count($_aRequest.answer) >=2}
 				{foreach from=$_aRequest.answer item=sAnswer key=i}
 					<li>
 						<input type="text" value="{$sAnswer}" name="answer[]" class="input-text input-width-300" {if $bEditDisabled}disabled{/if} />

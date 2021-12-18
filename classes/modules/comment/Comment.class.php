@@ -427,7 +427,7 @@ class ModuleComment extends Module
 
         if (false === ($aCommentsRec = $this->Cache_Get($sCacheKey))) {
             $aCommentsRow=$this->oMapper->GetCommentsByTargetId($sId, $sTargetType);
-            if (!is_null($aCommentsRow) && count($aCommentsRow)) {
+            if ($aCommentsRow && count($aCommentsRow)) {
                 $aCommentsRec=$this->BuildCommentsRecursive($aCommentsRow);
             }
             
