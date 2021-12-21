@@ -486,7 +486,10 @@ class ModuleTopic_EntityTopic extends Entity
 	 * @return bool
 	 */
 	public function getIsAllowReadComments() {
-		return $this->ACL_IsAllowReadCommentsInBlog($this->getBlog(),$oUser);
+        if ($oUser=$this->User_GetUserCurrent()) {
+		    return $this->ACL_IsAllowReadCommentsInBlog($this->getBlog(),$oUser);
+        }
+        return false;
 	}
 	/**
      * Возвращает количество добавивших топик в избранное
