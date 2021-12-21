@@ -5,20 +5,23 @@
  * Reworked by SparklingFire
  */
 
-class ModuleMagicrule_EntityBlock extends EntityORM {
-
-    protected function beforeSave() {
+class ModuleMagicrule_EntityBlock extends EntityORM
+{
+    protected function beforeSave()
+    {
         if ($this->_isNew()) {
             $this->setDateCreate(date("Y-m-d H:i:s"));
         }
         return true;
     }
 
-    public function setData($aData) {
+    public function setData($aData)
+    {
         $this->_aData['data']=serialize($aData);
     }
 
-    public function getData($sKey=null) {
+    public function getData($sKey=null)
+    {
         $aData=$this->_getDataOne('data');
         $aReturn=@unserialize($aData);
 
@@ -28,7 +31,7 @@ class ModuleMagicrule_EntityBlock extends EntityORM {
             }
             return array();
         } else {
-            if ($aReturn and array_key_exists($sKey,$aReturn)) {
+            if ($aReturn and array_key_exists($sKey, $aReturn)) {
                 return $aReturn[$sKey];
             } else {
                 return null;

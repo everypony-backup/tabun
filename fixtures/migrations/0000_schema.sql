@@ -33,7 +33,7 @@ CREATE TABLE `ls_adminban` (
   `banactive` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=889 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,7 +54,7 @@ CREATE TABLE `ls_adminips` (
   `banactive` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`ip1`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `ls_adminset` (
   `adminset_key` varchar(100) NOT NULL,
   `adminset_val` text NOT NULL,
   PRIMARY KEY (`adminset_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `ls_blog` (
   KEY `blog_count_topic` (`blog_count_topic`),
   KEY `blog_type__blog_id` (`blog_type`,`blog_id`),
   CONSTRAINT `ls_blog_fk` FOREIGN KEY (`user_owner_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=54269 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +171,7 @@ CREATE TABLE `ls_comment` (
   KEY `type_delete_publish_parent` (`target_type`,`comment_delete`,`comment_publish`,`target_parent_id`),
   KEY `type_delete_publish_id` (`target_type`,`comment_delete`,`comment_publish`,`comment_id`),
   CONSTRAINT `topic_comment_fk1` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11510445 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +192,7 @@ CREATE TABLE `ls_comment_online` (
   KEY `comment_id` (`comment_id`),
   KEY `type_parent` (`target_type`,`target_parent_id`),
   CONSTRAINT `ls_topic_comment_online_fk1` FOREIGN KEY (`comment_id`) REFERENCES `ls_comment` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9773486 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,7 +278,7 @@ CREATE TABLE `ls_geo_city` (
   KEY `name_en` (`name_en`),
   CONSTRAINT `ls_geo_city_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `ls_geo_country` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ls_geo_city_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `ls_geo_region` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17590 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +299,7 @@ CREATE TABLE `ls_geo_country` (
   KEY `name_ru` (`name_ru`),
   KEY `name_en` (`name_en`),
   KEY `code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=219 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -321,7 +321,7 @@ CREATE TABLE `ls_geo_region` (
   KEY `name_ru` (`name_ru`),
   KEY `name_en` (`name_en`),
   CONSTRAINT `ls_geo_region_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `ls_geo_country` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1612 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -430,7 +430,7 @@ CREATE TABLE `ls_magicrule_block` (
   KEY `rule_target` (`target`),
   KEY `type` (`type`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46126 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +530,7 @@ CREATE TABLE `ls_page` (
   KEY `page_title` (`page_title`),
   KEY `page_sort` (`page_sort`),
   KEY `page_main` (`page_main`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -573,7 +573,7 @@ CREATE TABLE `ls_role` (
   `role_avatar` varchar(255) DEFAULT NULL,
   `role_place` text,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -622,7 +622,7 @@ CREATE TABLE `ls_role_user` (
   `role_id` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`role_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -681,7 +681,7 @@ CREATE TABLE `ls_stream_event` (
   KEY `event_type_publish` (`event_type`,`publish`),
   KEY `event_type_single` (`event_type`),
   CONSTRAINT `ls_stream_event_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14088965 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -738,7 +738,7 @@ CREATE TABLE `ls_subscribe` (
   KEY `key` (`key`),
   KEY `target_id` (`target_id`),
   KEY `ip` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=120425 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -766,7 +766,7 @@ CREATE TABLE `ls_talk` (
   KEY `talk_date_last` (`talk_date_last`),
   KEY `talk_user_id_last` (`talk_user_id_last`),
   CONSTRAINT `ls_talk_fk` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=229197 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -783,7 +783,7 @@ CREATE TABLE `ls_talk_bell` (
   `user_data_comment` longtext,
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`talk_bell_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4426 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -869,7 +869,7 @@ CREATE TABLE `ls_topic` (
   KEY `topic_count_comment` (`topic_count_comment`),
   CONSTRAINT `ls_topic_fk` FOREIGN KEY (`blog_id`) REFERENCES `ls_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ls_topic_fk1` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=160983 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -906,7 +906,7 @@ CREATE TABLE `ls_topic_photo` (
   KEY `topic_id` (`topic_id`),
   KEY `target_tmp` (`target_tmp`),
   CONSTRAINT `ls_topic_photo_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `ls_topic` (`topic_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=293 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -969,7 +969,7 @@ CREATE TABLE `ls_topic_tag` (
   CONSTRAINT `ls_topic_tag_fk` FOREIGN KEY (`topic_id`) REFERENCES `ls_topic` (`topic_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ls_topic_tag_fk1` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ls_topic_tag_fk2` FOREIGN KEY (`blog_id`) REFERENCES `ls_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=677023 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1020,7 +1020,7 @@ CREATE TABLE `ls_user` (
   KEY `user_activate` (`user_activate`),
   KEY `user_rating` (`user_rating`),
   KEY `user_profile_sex` (`user_profile_sex`)
-) ENGINE=InnoDB AUTO_INCREMENT=53228 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1061,7 +1061,7 @@ CREATE TABLE `ls_user_changemail` (
   KEY `code_from` (`code_from`),
   KEY `code_to` (`code_to`),
   CONSTRAINT `ls_user_changemail_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1477 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1080,7 +1080,7 @@ CREATE TABLE `ls_user_field` (
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1148,7 +1148,7 @@ CREATE TABLE `ls_user_note` (
   KEY `target_user_id` (`target_user_id`),
   CONSTRAINT `ls_user_note_ibfk_1` FOREIGN KEY (`target_user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ls_user_note_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4363 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1214,7 +1214,7 @@ CREATE TABLE `ls_wall` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `ls_wall_ibfk_1` FOREIGN KEY (`wall_user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ls_wall_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ls_user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

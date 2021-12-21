@@ -1,16 +1,6 @@
 {assign var="noSidebar" value=true}
 {include file='header.tpl'}
 
-<script type="text/javascript">
-	jQuery(document).ready(function($){
-		$('#reactivation-form').bind('submit',function(){
-			ls.user.reactivation('reactivation-form');
-			return false;
-		});
-		$('#reactivation-form-submit').attr('disabled',false);
-	});
-</script>
-
 <h2 class="page-header">{$aLang.reactivation}</h2>
 
 <form action="{router page='login'}reactivation/" method="POST" id="reactivation-form">

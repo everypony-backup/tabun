@@ -24,7 +24,7 @@ msgid "search_sort_by_date"
 msgstr "дате"
 
 msgid "search_sort_by_score"
-msgstr "релеватности"
+msgstr "релевантности"
 
 msgid "search_sort_by_rating"
 msgstr "рейтингу"

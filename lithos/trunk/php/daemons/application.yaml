@@ -1,0 +1,26 @@
+user-id: 1
+group-id: 1
+fileno-limit: 100ki
+memory-limit: 4Gi
+cpu-shares: 1024
+volumes:
+  /state: !Statedir {}
+  /tmp: !Tmpfs
+    size: 256Mi
+    mode: 0o1777
+  /storage: !Persistent
+    path: /storage/php
+    mkdir: true
+    mode: 0o700
+    user: 1
+    group: 1
+  /log: !Persistent
+    path: /log/php
+    mkdir: true
+    mode: 0o700
+    user: 1
+    group: 1
+workdir: /app
+executable: /usr/bin/php-fpm
+arguments:
+- -FO

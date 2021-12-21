@@ -8,7 +8,7 @@
 	</ul>
 
     {if !$bDisableGetMoreButton}
-        <span class="stream-get-more" id="stream_get_more" data-last-id="{$iStreamLastId}" onclick="ls.stream.getMore()">{$aLang.stream_get_more} &darr;</span>
+        <span class="stream-get-more" id="stream_get_more" data-last-id="{$iStreamLastId}">{$aLang.stream_get_more} &darr;</span>
     {/if}
 {else}
     {$aLang.stream_no_events}

@@ -119,7 +119,7 @@ class Reindex extends LSC
                     $row
                 )
             );
-        var_dump($row);
+            var_dump($row);
         }
     }
 }

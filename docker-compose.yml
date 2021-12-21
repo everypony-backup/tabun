@@ -1,0 +1,95 @@
+version: '3.7'
+
+volumes:
+  static:
+  elastic:
+  storage:
+  database:
+
+services:
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: dev
+    ports:
+      - '9000:9000'
+      - '39000:39000'
+    volumes:
+      - .:/app
+      - /app/vendor
+      - static:/static
+      - storage:/storage
+    depends_on:
+      - mariadb
+    environment:
+      MARIADB_USER: ${MARIADB_USER:-tabun}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: frontend
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - static:/app/static
+    command: npm run build-dev
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - '8000:80'
+    volumes:
+      - .:/app
+      - static:/app/static
+      - storage:/storage
+    depends_on:
+      - php-fpm
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: docker/mariadb/Dockerfile
+    environment:
+      MARIADB_USER: ${MARIADB_USER:-tabun}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD:-true}
+    volumes:
+      - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
+      - database:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+
+  celery:
+    build:
+      context: .
+      dockerfile: docker/celery/Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - CELERY_MAILER_HOST=mailcatcher
+      - CELERY_MAILER_PORT=1025
+    command: celery worker --pool=solo
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.16
+    volumes:
+      - elastic:/usr/share/elasticsearch/data
+    environment:
+      - cluster.name=tabun
+      - discovery.type=single-node
+      - path.repo=/usr/share/elasticsearch
+      - "ES_JAVA_OPTS=-Xms512m -Xmx2048m"
+      - xpack.security.enabled=false
+
+  mailcatcher:
+    image: schickling/mailcatcher:latest
+    ports:
+      - '1080:1080'

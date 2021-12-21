@@ -21,7 +21,6 @@
  * @package modules.favourite
  * @since 1.0
  */
-class ModuleFavourite_EntityTag extends Entity {
-
+class ModuleFavourite_EntityTag extends Entity
+{
 }
-?>

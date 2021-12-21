@@ -1,78 +1,77 @@
 <div class="comments comment-list">
-    {foreach from=$aComments item=oComment}
-        {assign var="oUser" value=$oComment->getUser()}
-        {assign var="oTopic" value=$oComment->getTarget()}
-        {if $oTopic}
-            {assign var="oBlog" value=$oTopic->getBlog()}
-        {/if}
-        <section class="comment">
+{foreach from=$aComments item=oComment}
+    {assign var="oCommentAuthor" value=$oComment->getUser()}
+    {assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
+    {assign var="oCommentId" value=$oComment->getId()}
+    {assign var="oCommentDate" value=$oComment->getDate()}
+    {assign var="oTopic" value=$oComment->getTarget()}
+    {if $oTopic}
+        {assign var="oBlog" value=$oTopic->getBlog()}
+    {/if}
+    {if $oUserCurrent}
+        {assign var="oCommentRating" value=$oComment->getRating()}
+        {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
+        {assign var="bVoteInfoEnabled" value=$LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
+    {/if}
 
-            <div class="comment-content">
-                <div class="text">{$oComment->getText()}</div>
-            </div>
-
-            <div class="comment-path">
-
-                <ul class="comment-info">
-                    <li class="comment-author">
-                        <a href="{$oUser->getUserWebPath()}">
-					<img src="{$oUser->getProfileAvatarPath(24)}"  class="comment-avatar" />
-                        </a>
-                        <a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
-                    </li>
-                    <li class="comment-date">
-                        <time datetime="{date_format date=$oComment->getDate() format='c'}"
-                              title="{date_format date=$oComment->getDate()
-					  format="j F Y, H:i"}"
-                >
-					{date_format date=$oComment->getDate() hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}
-                        </time>
-                    </li>
-                    {if $oComment->getTargetType() != 'talk'}
-                            <li id="vote_area_comment_{$oComment->getId()}"
-                                class="vote
-                                {if $oComment->getRating() > 0}
-                                    vote-count-positive
-                                {elseif $oComment->getRating() < 0}
-                                    vote-count-negative
-                                {/if}
-                            ">
-                                <span class="vote-count" id="vote_total_comment_{$oComment->getId()}">{$oComment->getRating()}</span>
-                            </li>
+    <section class="comment">
+        <div class="comment-content">
+            <div class="text">{$oComment->getText()}</div>
+        </div>
+        <div class="comment-info" data-id="{$oCommentId}">
+            <a href="/profile/{$oCommentAuthorLogin}">
+                <img src="{$oCommentAuthor->getProfileAvatarPath(24)}"  class="comment-avatar"/>
+            </a>
+            <a class="comment-author {if $iAuthorId == $oCommentAuthor->getId()}comment-topic-author{/if}" {if sAuthorNotice} title="{$sAuthorNotice}"{/if} href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
+            <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}"
+                      title="{date_format date=$oCommentDate hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
+                {date_format date=$oCommentDate format="j F Y, H:i"}
+            </time>
+            <a class="comment-link icon-synio-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
+            {if $oComment->getPid()}
+                <a href="{router page='comments'}{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+            {/if}
+            {if $oUserCurrent}
+                {if !$bNoCommentFavourites}
+                <div class="comment-favourite">
+                    {if $oComment->getCountFavourite() > 0}
+                        <div class="favourite link-dotted{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                            {if $oComment->getIsFavourite()}
+                                {$aLang.comment_favourite_add_already}
+                            {else}
+                                {$aLang.comment_favourite_add}
+                            {/if}
+                        </div>
+                        <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
+                    {else}
+                        <div class="favourite link-dotted" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
+                        <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                     {/if}
-                    {if $oUserCurrent and !$bNoCommentFavourites}
-                        <li class="comment-favourite">
-                            <div onclick="return ls.favourite.toggle({$oComment->getId()},this,'comment');"
-                                 class="favourite {if $oComment->getIsFavourite()}active{/if}">В избранное
-                            </div>
-                            <span class="favourite-count" id="fav_count_comment_{$oComment->getId()}" {if $oComment->getCountFavourite() == 0}hidden{/if}>{if $oComment->getCountFavourite() > 0}{$oComment->getCountFavourite()}{/if}</span>
-                        </li>
-                    {/if}
-                    <li class="comment-link">
-                        <a href="{$oTopic->getUrl()}#comment{$oComment->getId()}" title="{$aLang.comment_url_notice}">
-                            <i class="icon-synio-link"></i>
-                        </a>
-                    </li>
-                    {if $oComment->getPid()}
-                        <li class="goto goto-comment-parent">
-                            <a href="{router page='comments'}{$oComment->getPid()}"
-                                onclick="ls.comments.goToParentComment({$oComment->getId()},{$oComment->getPid()}); return false;"
-                                title="{$aLang.comment_goto_parent}">↑</a>
-                        </li>
-                    {/if}
-                    <li>
-                        {if $oBlog}
-                            <a href="{$oBlog->getUrlFull()}" class="blog-name">{$oBlog->getTitle()|escape:'html'}</a>
-                            &rarr;
+                </div>
+                <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
+                    {if $oCommentVoteCount > 0}
+                        {if $oCommentRating > 0} vote-count-positive
+                        {elseif $oCommentRating < 0} vote-count-negative
+                        {else} vote-count-mixed
                         {/if}
-                        <a href="{$oTopic->getUrl()}" class="comment-path-topic">{$oTopic->getTitle()|escape:'html'}</a>
-                        <a href="{$oTopic->getUrl()}#comments"  class="comment-path-comments">{$oTopic->getCountComment()}</a>
-                    </li>
-                    {include file='comment_modify_notice.tpl' bGetShort=true}
-                </ul>
+                    {/if}
+                    {if $bVoteInfoEnabled} vote-info-enabled{/if}">
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{$oCommentRating}</span>
+                </div>
+                {/if}
+                {include file='comment_modify_notice.tpl' bGetShort=true}
+            {/if}
+            <div>
+                {if $oBlog}
+                    <a href="{$oBlog->getUrlFull()}" class="blog-name">{$oBlog->getTitle()|escape:'html'}</a>
+                    &rarr;
+                {/if}
+                <a href="{$oTopic->getUrl()}" class="comment-path-topic">{$oTopic->getTitle()|escape:'html'}</a>
+                <a href="{$oTopic->getUrl()}#comments"  class="comment-path-comments">{$oTopic->getCountComment()}</a>
             </div>
-        </section>
-    {/foreach}
+        </div>
+    </section>
+{/foreach}
 </div>
 
 {include file='paging.tpl' aPaging=$aPaging}

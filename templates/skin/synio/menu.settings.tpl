@@ -15,7 +15,3 @@
 </ul>
 
 {hook run='menu_settings'}
-		
-		
-		
-

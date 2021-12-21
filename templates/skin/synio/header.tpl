@@ -13,10 +13,11 @@
     <meta name="description" content="{$sHtmlDescription}">
     <meta name="keywords" content="{$sHtmlKeywords}">
 
-    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/main.css">
+    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/main.{cfg name='misc.ver.front'}.css">
+    <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/vendor.{cfg name='misc.ver.front'}.css">
     {if isset($styles)}
         {foreach from=$styles item=item}
-            <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{cfg name='misc.ver.front'}/{$item}.css">
+            <link rel="stylesheet" type="text/css" href="{cfg name='path.static.url'}/{$item}.{cfg name='misc.ver.front'}.css">
         {/foreach}
     {/if}
 
@@ -35,8 +36,8 @@
     {if isset($bRefreshToHome)}
         <meta HTTP-EQUIV="Refresh" CONTENT="3; URL={cfg name='path.root.web'}/">
     {/if}
-    {include 'analytics.tpl'}
     {hook run='html_head_end'}
+    <style id="UI-custom-style"></style>
 </head>
 
 {add_block group='toolbar' name='toolbar_admin.tpl' priority=100}
@@ -84,6 +85,6 @@
             <div id="content" role="main" {if $sMenuItemSelect=='profile'}itemscope
                  itemtype="http://data-vocabulary.org/Person"{/if}>
                 {include file='nav_content.tpl'}
-                {include file='system_message.tpl' noShowSystemMessage=false}
+                {include file='system_message.tpl'}
 
                 {hook run='content_begin'}

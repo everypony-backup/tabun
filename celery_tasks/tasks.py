@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from celery.decorators import task
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch()
+es = Elasticsearch(['elastic'])
 
 SMTP_HOST = environ.get("CELERY_MAILER_HOST")
 SMTP_PORT = environ.get("CELERY_MAILER_PORT")

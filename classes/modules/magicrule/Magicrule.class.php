@@ -5,8 +5,8 @@
  * Reworked by SparklingFire
  */
 
-class ModuleMagicrule extends ModuleORM {
-
+class ModuleMagicrule extends ModuleORM
+{
     const BLOCK_TYPE_VOTE = 1;
     const BLOCK_TYPE_CREATE = 2;
 
@@ -27,12 +27,14 @@ class ModuleMagicrule extends ModuleORM {
      * Инициализация
      *
      */
-    public function Init() {
+    public function Init()
+    {
         parent::Init();
         $this->oMapper = Engine::GetMapper(__CLASS__);
     }
 
-    public function CheckRuleAction($sAction,$oUser,$aParams=array()) {
+    public function CheckRuleAction($sAction, $oUser, $aParams=array())
+    {
         if ($oUser->isAdministrator()) {
             return true;
         }
@@ -42,7 +44,7 @@ class ModuleMagicrule extends ModuleORM {
          */
         list($iBlockType, $sBlockTarget) = $this->GetTypeAndTargetByAction($sAction);
 
-        if ($mRes=$this->CheckRuleBlock($iBlockType,$sBlockTarget,$oUser,$aParams) !== true) {
+        if ($mRes=$this->CheckRuleBlock($iBlockType, $sBlockTarget, $oUser, $aParams) !== true) {
             return $mRes ? $mRes : false;
         }
 
@@ -65,9 +67,9 @@ class ModuleMagicrule extends ModuleORM {
 
         $aGroups = (array)Config::Get('module.magicrule.rule_disallow.'.$sAction.'.groups');
         if (!$bSkip and count($aGroups)) {
-            foreach($aGroups as $aRule) {
+            foreach ($aGroups as $aRule) {
                 $bCheck = true;
-                foreach($aRule as $sParam => $mValue) {
+                foreach ($aRule as $sParam => $mValue) {
                     if (!$this->CheckRuleDisallowActionParam($sParam, $mValue, $oUser, $aParams)) {
                         $bCheck = false;
                         break;
@@ -90,9 +92,9 @@ class ModuleMagicrule extends ModuleORM {
         if ('NOT_FOUND_LANG_TEXT' != $sMsgLang=$this->Lang_Get($sMsg)) {
             $sMsg = $sMsgLang;
         }
-        foreach($aGroups as $aRule) {
+        foreach ($aGroups as $aRule) {
             $bCheck=true;
-            foreach($aRule as $sParam => $mValue) {
+            foreach ($aRule as $sParam => $mValue) {
                 if (!$this->CheckRuleActionParam($sParam, $mValue, $oUser, $aParams)) {
                     $bCheck=false;
                     break;
@@ -105,8 +107,9 @@ class ModuleMagicrule extends ModuleORM {
         return $sMsg ? $sMsg : false;
     }
 
-    public function GetTypeAndTargetByAction($sAction) {
-        $aPath=explode('_',strtolower($sAction));
+    public function GetTypeAndTargetByAction($sAction)
+    {
+        $aPath=explode('_', strtolower($sAction));
 
         if (isset($aPath[0]) and isset($aPath[1])) {
             $iBlockType = null;
@@ -120,7 +123,8 @@ class ModuleMagicrule extends ModuleORM {
         return [null,null];
     }
 
-    public function CheckRuleBlock($iType, $sTarget, $oUser, $aParams = array()) {
+    public function CheckRuleBlock($iType, $sTarget, $oUser, $aParams = array())
+    {
         $aBlockItems=$this->GetBlockItemsByFilter([
             'user_id' => $oUser->getId(),
             'type' => $iType,
@@ -130,7 +134,7 @@ class ModuleMagicrule extends ModuleORM {
         /**
          * Проверяем все действующие блокировки
          */
-        foreach($aBlockItems as $oBlock) {
+        foreach ($aBlockItems as $oBlock) {
             /**
              * Проверяем на направление голосования
              */
@@ -153,31 +157,37 @@ class ModuleMagicrule extends ModuleORM {
         return true;
     }
 
-    public function CheckRuleActionParam($sParam, $mValue, $oUser, $aParams = array()) {
-        switch($sParam) {
+    public function CheckRuleActionParam($sParam, $mValue, $oUser, $aParams = array())
+    {
+        switch ($sParam) {
             case 'registration_time':
-                if (time() - strtotime($oUser->getDateRegister()) >= $mValue)
+                if (time() - strtotime($oUser->getDateRegister()) >= $mValue) {
                     return true;
+                }
                 break;
 
             case 'rating':
-                if ($oUser->getRating() >= $mValue)
+                if ($oUser->getRating() >= $mValue) {
                     return true;
+                }
                 break;
 
             case 'skill':
-                if ($oUser->getSkill() >= $mValue)
+                if ($oUser->getSkill() >= $mValue) {
                     return true;
+                }
                 break;
 
             case 'count_comment':
-                if ($this->Comment_GetCountCommentsByUserId($oUser->getId(), 'topic') >= $mValue)
+                if ($this->Comment_GetCountCommentsByUserId($oUser->getId(), 'topic') >= $mValue) {
                     return true;
+                }
                 break;
 
             case 'count_topic':
-                if ($this->Topic_GetCountTopicsPersonalByUser($oUser->getId(), 1) >= $mValue)
+                if ($this->Topic_GetCountTopicsPersonalByUser($oUser->getId(), 1) >= $mValue) {
                     return true;
+                }
                 break;
 
             case 'rating_sum_topic':
@@ -188,8 +198,9 @@ class ModuleMagicrule extends ModuleORM {
                     $iRating=$mValue;
                     $iTime=60*60*24*14;
                 }
-                if ($this->GetSumRatingTopic($oUser->getId(), date("Y-m-d H:i:s", time() - $iTime)) >= $iRating)
+                if ($this->GetSumRatingTopic($oUser->getId(), date("Y-m-d H:i:s", time() - $iTime)) >= $iRating) {
                     return true;
+                }
                 break;
 
             case 'rating_sum_comment':
@@ -200,14 +211,16 @@ class ModuleMagicrule extends ModuleORM {
                     $iRating=$mValue;
                     $iTime=60*60*24*7;
                 }
-                if ($this->GetSumRatingComment($oUser->getId(), date("Y-m-d H:i:s", time() - $iTime)) >= $iRating)
+                if ($this->GetSumRatingComment($oUser->getId(), date("Y-m-d H:i:s", time() - $iTime)) >= $iRating) {
                     return true;
+                }
                 break;
         }
         return false;
     }
 
-    public function CheckRuleDisallowActionParam($sParam, $mValue, $oUser, $aParams=array()) {
+    public function CheckRuleDisallowActionParam($sParam, $mValue, $oUser, $aParams=array())
+    {
         if ($sParam == 'user_id') {
             if (!is_array($mValue)) {
                 $mValue = array($mValue);
@@ -221,14 +234,15 @@ class ModuleMagicrule extends ModuleORM {
         return false;
     }
 
-    public function CheckForCreateBlockVote($oVote) {
+    public function CheckForCreateBlockVote($oVote)
+    {
         if (!($oUser = $this->User_GetUserById($oVote->getVoterId()))) {
             return false;
         }
         $sTarget = $oVote->getTargetType();
         $sType = $this->aVoteMirrow[$oVote->getDirection()];
         $aGroups = (array)Config::Get('module.magicrule.block_rule_vote');
-        foreach($aGroups as $aRule) {
+        foreach ($aGroups as $aRule) {
             if (!in_array($sTarget, $aRule['target'])) {
                 continue;
             }
@@ -268,15 +282,18 @@ class ModuleMagicrule extends ModuleORM {
         }
     }
 
-    public function GetCountVote($iUserId, $sTargetType, $sDate) {
+    public function GetCountVote($iUserId, $sTargetType, $sDate)
+    {
         return $this->oMapper->GetCountVote($iUserId, $sTargetType, $sDate);
     }
 
-    public function GetSumRatingTopic($iUserId, $sDate = null) {
+    public function GetSumRatingTopic($iUserId, $sDate = null)
+    {
         return $this->oMapper->GetSumRatingTopic($iUserId, $sDate);
     }
 
-    public function GetSumRatingComment($iUserId, $sDate = null) {
+    public function GetSumRatingComment($iUserId, $sDate = null)
+    {
         return $this->oMapper->GetSumRatingComment($iUserId, $sDate);
     }
 }

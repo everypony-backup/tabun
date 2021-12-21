@@ -9,9 +9,14 @@
     height 20px
     margin-bottom -5px
 
-.private-blog
+.private-blog:after
   background transparent url(images/lock.png) no-repeat 100% 0
-  padding-right 20px
+  margin-left 4px
+  content ""
+  display inline-block
+  vertical-align middle
+  width 16px
+  height 16px
 
 .topic-header
   position relative
@@ -95,6 +100,8 @@
         border-color #333
   .topic-tags-edit
     margin-left 20px
+    a
+      text-decoration-style dotted
   .topic-tags-user
     a
       color #139643
@@ -122,6 +129,14 @@
 li
   &.topic-info-date
     color #7b848d
+  &.topic-info-favourite
+    white-space nowrap
+    .favourite
+      color #999
+      display inline
+      cursor pointer
+      text-decoration underline
+      text-decoration-style dotted
   &.topic-info-comments
     a
       color #727fa0
@@ -139,14 +154,6 @@ li
     i
       float left
       margin-right 7px
-  &.topic-info-favourite
-    color #828a93
-    cursor pointer
-    .favourite
-      text-decoration underline
-      font-style normal
-      &:hover
-        text-decoration none
 
 .poll
   margin-bottom 15px
@@ -212,4 +219,3 @@ li
 .vote-topic-info
   li
     margin-bottom 3px
-

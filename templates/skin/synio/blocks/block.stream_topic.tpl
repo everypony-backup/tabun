@@ -21,4 +21,3 @@
 <footer>
 	<a href="{router page='index'}new/">{$aLang.block_stream_topics_all}</a> · <a href="{router page='rss'}new/">RSS</a>
 </footer>
-					
