@@ -1,20 +1,180 @@
-@use postcss-selector-namespace {
-  namespace: ".bs"
-};
+.advanced-search
+  padding 0 15px
+  margin 0 0 15px
+  font-family Arial, sans-serif
+  font-size 14px
+  color #555555
+  box-sizing border-box
 
-@import "bootstrap/variables"
-@import "bootstrap/mixins"
-@import "bootstrap/grid"
+  &__row
+    display flex
+    flex-wrap wrap
+    margin 0 0 15px
+    box-sizing border-box
 
-// Some core CSS
-@import "bootstrap/scaffolding"
-@import "bootstrap/type"
-@import "bootstrap/code"
-@import "bootstrap/forms"
-@import "bootstrap/buttons"
+    &:last-child
+      margin-bottom 0
 
-// Components
-@import "bootstrap/component-animations"
-@import "bootstrap/dropdowns"
-@import "bootstrap/button-groups"
-@import "bootstrap/input-groups"
+  &__col
+    flex-shrink 0
+    flex-basis 50%
+    width 50%
+    min-width 400px
+    margin 0 0 6px
+    box-sizing border-box
+
+  &__text-input
+    position relative
+    z-index 2
+    flex-grow 1
+    width 100%
+    height 34px
+    margin 0 -1px 0 -1px
+    padding 6px 12px
+    font inherit
+    background-color #ffffff
+    background-image none
+    border 1px solid #cccccc
+    box-shadow inset 0 1px 1px rgba(0, 0, 0, .08)
+    transition border-color ease-in-out .15s,box-shadow ease-in-out .15s
+
+    // Override reset.styl
+    &[type=search]
+      box-sizing border-box
+
+    &:focus
+      border-color #66afe9
+      outline 0
+      box-shadow inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(102, 175, 233, 0.6)
+
+  &__button
+    flex-shrink 0
+    margin 0
+    padding 6px 12px
+    font inherit
+    text-align center
+    vertical-align middle
+    touch-action manipulation
+    cursor pointer
+    color #ffffff
+    border 1px solid #2d6da3
+    background-image none
+    background-color #337ab7
+    white-space nowrap
+    border-radius 4px
+    user-select none
+    box-sizing border-box
+
+    &:disabled
+      cursor not-allowed
+      opacity .65
+
+    &:not(:disabled)
+      &:hover
+      &:focus
+      &:active
+        background-color #285f8f
+        border-color #204d73
+
+  &__group
+    box-sizing border-box
+
+    @media screen and (min-width 480px)
+      & ^[0]__button
+        &:first-child
+          border-top-right-radius 0
+          border-bottom-right-radius 0
+
+        &:last-child
+          border-top-left-radius 0
+          border-bottom-left-radius 0
+
+        &:not(:first-child):not(:last-child)
+          border-radius 0
+
+    &_width
+      &_full
+        display flex
+        flex-basis 100%
+        width 100%
+
+        @media screen and (max-width 479px)
+          flex-wrap wrap
+
+          & > *
+            width 100%
+            margin 0 0 2px
+
+
+          & ^[0]__button
+            border-radius 0
+
+.search-radio
+  display inline-flex
+  flex-wrap wrap
+  min-height 30px
+  font-size 12px
+  white-space nowrap
+  box-sizing border-box
+
+  @media screen and (min-width 480px)
+    flex-wrap nowrap
+
+  &__title
+    width 100%
+    flex-shrink 0
+    padding 6px 0
+    color #555555
+    font-size 14px
+    font-family inherit
+    box-sizing border-box
+
+    @media screen and (min-width 480px)
+      width auto
+      padding 6px 12px
+      background-color #eeeeee
+      border-radius 4px 0 0 4px
+      border 1px solid #cccccc
+
+  &__button
+    flex-shrink 0
+    margin-left -1px
+    padding 5px 10px
+    color #333333
+    font inherit
+    background-color #ffffff
+    border 1px solid #cccccc
+    box-sizing border-box
+
+    &:nth-child(2)
+      border-top-left-radius 4px
+      border-bottom-left-radius 4px
+
+    &:last-child
+      border-top-right-radius 4px
+      border-bottom-right-radius 4px
+
+    &:hover
+    &:focus
+    &:active
+      background-color #e6e6e6
+      border-color #adadad
+      z-index 1
+
+    &_state
+      &_active
+        background-color #e6e6e6
+        border-color #adadad
+        box-shadow inset 0 3px 5px rgba(0, 0, 0, .13)
+        z-index 1
+
+        &:hover
+        &:focus
+        &:active
+          background-color #d4d4d4
+          border-color #8c8c8c
+
+    @media screen and (min-width 480px)
+      &:nth-child(2)
+        border-top-left-radius 0
+        border-bottom-left-radius 0

@@ -6,8 +6,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "@fortawesome/fontawesome-free": "^5.5.0",
     "bazooka": "^0.9.1",
-    "bootstrap-styl": "^5.0.8",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
     "immutable": "3.8.2",
@@ -18,8 +18,7 @@
     "react": "~15.3",
     "react-avatar-editor": "8.0.1",
     "react-dom": "~15.3",
-    "xhr": "^2.5.0",
-    "@fortawesome/fontawesome-free": "^5.5.0"
+    "xhr": "^2.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.5",
@@ -35,9 +34,6 @@
     "file-loader": "^2.0.0",
     "mini-css-extract-plugin": "^0.4.4",
     "po2json": "^0.4.5",
-    "postcss-selector-namespace": "^1.5.0",
-    "postcss-use": "^3.0.0",
-    "poststylus": "^1.0.0",
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
