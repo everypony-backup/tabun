@@ -6,19 +6,19 @@
   box-sizing border-box
 
   &__row
-    display flex
+    display grid
+    grid-template-columns 1fr
     flex-wrap wrap
     margin 0 0 15px
     box-sizing border-box
+
+    @media screen and (min-width 1200px)
+      grid-template-columns 1fr 1fr
 
     &:last-child
       margin-bottom 0
 
   &__col
-    flex-shrink 0
-    flex-basis 50%
-    width 50%
-    min-width 400px
     margin 0 0 6px
     box-sizing border-box
 
@@ -93,8 +93,7 @@
     &_width
       &_full
         display flex
-        flex-basis 100%
-        width 100%
+        grid-column 1 / -1
 
         @media screen and (max-width 479px)
           flex-wrap wrap
