@@ -7,8 +7,7 @@ export class NamedDropdown extends React.Component {
         selected: this.props.selected
     };
 
-    change = (event) => {
-        const val = event.target.getAttribute('data-name');
+    change = (val) => {
         this.setState({
             opened: false,
             selected: val
@@ -32,8 +31,7 @@ export class NamedDropdown extends React.Component {
                     <li className={className} key={name}>
                         <button
                             className="fancy-dropdown__option-button"
-                            data-name={name}
-                            onClick={this.change}
+                            onClick={() => this.change(name)}
                         >
                             {this.props.choices[name]}
                         </button>
