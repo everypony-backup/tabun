@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "webpack -p --color --progress",
-    "build-dev": "webpack --watch -p --color --progress"
+    "build-dev": "webpack --watch -p --color --progress --mode=development"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
