@@ -1,4 +1,10 @@
 {
+  "repositories": [
+    {
+      "url": "https://gitea.everypony.ru/everypony/zend-cache-redis.git",
+      "type": "git"
+    }
+  ],
   "require": {
     "agelxnash/jevix": "1.2.1",
     "smarty/smarty": "3.1.11",
