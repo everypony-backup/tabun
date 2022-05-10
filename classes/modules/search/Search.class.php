@@ -70,13 +70,24 @@ class ModuleSearch extends Module
             'from' => $this->iPerPage * $iPage,
             'body' => [
                 'query' => [
-                    'multi_match' => [
-                        'query' => $sQuery
+                    'bool' => [
+                        'must' => [
+                            'multi_match' => [
+                                'query' => $sQuery
+                            ]
+                        ],
+                        'filter' => []
                     ]
                 ]
             ]
         ];
 
+        if (is_array($aSearchParams['terms'])) {
+            $aParams['body']['query']['bool']['filter']['terms'] = $aSearchParams['terms'];
+        }
+
+        // TODO: Не работает "Сортировать по" / "Упорядочить по"
+        /*
         switch ($aSearchParams['sort_by']) {
             case 'date':
                 $aParams['body']['sort'] = [
@@ -86,15 +97,16 @@ class ModuleSearch extends Module
                 ];
                 break;
         }
+        */
 
         if ($aSearchParams['topic_type_title'] == true) {
-            $aParams['body']['query']['multi_match']['fields'][] = 'title';
+            $aParams['body']['query']['bool']['must']['multi_match']['fields'][] = 'title';
         }
         if ($aSearchParams['topic_type_text'] == true) {
-            $aParams['body']['query']['multi_match']['fields'][] = 'text';
+            $aParams['body']['query']['bool']['must']['multi_match']['fields'][] = 'text';
         }
         if ($aSearchParams['topic_type_tags'] == true) {
-            $aParams['body']['query']['multi_match']['fields'][] = 'tags';
+            $aParams['body']['query']['bool']['must']['multi_match']['fields'][] = 'tags';
         }
 
         try {

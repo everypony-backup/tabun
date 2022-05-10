@@ -800,6 +800,34 @@ class ModuleBlog extends Module
         return $aOpenBlogsUser;
     }
     /**
+     * Получает список блогов которые доступны для чтения пользователю
+     *
+     * @param ModuleUser_EntityUser $oUser	Объект пользователя
+     * @return array
+     */
+    public function GetBlogsAllowToReadByUser($oUser)
+    {
+        $personalBlogs = $this->oMapperBlog->GetBlogsPersonal();
+        if ($oUser && $oUser->isAdministrator()) {
+            return [
+                ...$personalBlogs,
+                ...$this->GetBlogs(true),
+            ];
+        } else {
+            $openedBlogs = $this->oMapperBlog->GetBlogsOpen();
+            $accessibleBlogsByUser = [];
+            // TODO: Среди блогов в $accessibleBlogsByUser есть пересечения с $personalBlogs и $openedBlogs
+            if ($oUser) {
+                $accessibleBlogsByUser = $this->GetAccessibleBlogsByUser($oUser);
+            }
+            return [
+                ...$personalBlogs,
+                ...$openedBlogs,
+                ...$accessibleBlogsByUser
+            ];
+        }
+    }
+    /**
      * Получаем массив идентификаторов блогов, которые являются закрытыми для пользователя
      *
      * @param  ModuleUser_EntityUser|null $oUser	Пользователь

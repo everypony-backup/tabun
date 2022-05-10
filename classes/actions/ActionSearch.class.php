@@ -114,6 +114,14 @@ class ActionSearch extends Action
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
+
+            $userCurrent=$this->User_GetUserCurrent();
+            $allowedToReadBlogs = $this->Blog_GetBlogsAllowToReadByUser($userCurrent);
+
+            $this->aCodedParams['terms'] = [
+                'blog_id' => $allowedToReadBlogs
+            ];
+
             $aResults = $this->Search_RunQuery(array_merge($this->aParams, $this->aCodedParams), $sQuery, $iPage - 1);
             if ($aResults === false) {
                 /**
