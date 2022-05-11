@@ -104,6 +104,7 @@ def comment_index(**kwargs):
     key = kwargs.get('key')
     comment_id = kwargs.get('comment_id')
     comment_target_id = kwargs.get('comment_target_id')
+    comment_blog_id = kwargs.get('comment_blog_id')
     comment_target_type = kwargs.get('comment_target_type')
     comment_user_id = kwargs.get('comment_user_id')
     comment_text = kwargs.get('comment_text')
@@ -112,6 +113,7 @@ def comment_index(**kwargs):
 
     doc = {
         'type': key,
+        'blog_id': int(comment_blog_id),
         'target_id': int(comment_target_id),
         'target_type': comment_target_type,
         'user_id': int(comment_user_id),
