@@ -271,6 +271,15 @@ class ModuleTopic extends Module
          * Если топик успешно удален, удаляем связанные данные
          */
         if ($bResult=$this->oMapperTopic->DeleteTopic($sTopicId)) {
+            // Удаление из ElasticSearch
+            $this->SearchIndexer_TopicDelete($sTopicId);
+            $aComments = $this->Comment_GetCommentsByTargetId($sTopicId, 'topic')['comments'];
+            foreach ($aComments as $oComment) {
+                if(!$oComment->getDelete()) {
+                    $this->SearchIndexer_CommentDelete($oComment->getId());
+                }
+            }
+            // Удаление прочих данных
             return $this->DeleteTopicAdditionalData($sTopicId);
         }
 
