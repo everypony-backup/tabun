@@ -85,18 +85,15 @@ class ModuleSearch extends Module
             $aParams['body']['query']['bool']['filter'][] = [ 'terms' => $aSearchParams['terms'] ];
         }
 
-        // TODO: Не работает "Сортировать по" / "Упорядочить по"
-        /*
         switch ($aSearchParams['sort_by']) {
-            case 'date':
+            default:
                 $aParams['body']['sort'] = [
-                    'date' => [
+                    '_score' => [
                         'order' => $aSearchParams['sort_dir']
                     ]
                 ];
                 break;
         }
-        */
 
         if ($aSearchParams['topic_type_title'] == true) {
             $aParams['body']['query']['bool']['must']['multi_match']['fields'][] = 'title';
