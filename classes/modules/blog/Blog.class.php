@@ -899,12 +899,6 @@ class ModuleBlog extends Module
          */
         $aTopicIds = $this->Topic_GetTopicsByBlogId($iBlogId);
         /**
-         * Если блог не удален, возвращаем false
-         */
-        if (!$this->oMapperBlog->DeleteBlog($iBlogId)) {
-            return false;
-        }
-        /**
          * Чистим кеш
          */
         $this->Cache_Clean(
@@ -925,23 +919,24 @@ class ModuleBlog extends Module
              */
             foreach ($aTopicIds as $iTopicId) {
                 $this->Cache_Delete("topic_{$iTopicId}");
-                if (Config::Get('db.tables.engine')=="InnoDB") {
-                    $this->Topic_DeleteTopicAdditionalData($iTopicId);
-                } else {
-                    $this->Topic_DeleteTopic($iTopicId);
-                }
+                $this->Topic_DeleteTopic($iTopicId);
+                $this->SearchIndexer_TopicDelete($iTopicId);
             }
         }
         /**
          * Удаляем связи пользователей блога.
          */
-        if (Config::Get('db.tables.engine')!="InnoDB") {
-            $this->oMapperBlog->DeleteBlogUsersByBlogId($iBlogId);
-        }
+        $this->oMapperBlog->DeleteBlogUsersByBlogId($iBlogId);
         /**
          * Удаляем голосование за блог
          */
         $this->Vote_DeleteVoteByTarget($iBlogId, 'blog');
+        /**
+         * Если блог не удален, возвращаем false
+         */
+        if (!$this->oMapperBlog->DeleteBlog($iBlogId)) {
+            return false;
+        }
         return true;
     }
     /**

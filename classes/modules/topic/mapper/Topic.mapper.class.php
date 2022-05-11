@@ -251,8 +251,8 @@ class ModuleTopic_MapperTopic extends Mapper
 						t.blog_id=b.blog_id										
 					ORDER BY ".
             implode(', ', $aFilter['order'])
-            ."
-					LIMIT ?d, ?d";
+            .($iPerPage != 0 ? "
+					LIMIT ?d, ?d" : "");
         $aTopics=array();
         if ($aRows=$this->oDb->selectPage($iCount, $sql, ($iCurrPage-1)*$iPerPage, $iPerPage)) {
             foreach ($aRows as $aTopic) {
