@@ -12,10 +12,15 @@ services:
     build:
       context: .
       dockerfile: docker/tabun/Dockerfile
-      target: production
+      target: development
     volumes:
       - static:/static
       - storage:/storage
+      - ./index.php:/app/index.php
+      - ./engine:/app/engine
+      - ./classes:/app/classes
+      - ./settings:/app/settings
+      - ./templates:/app/templates
     depends_on:
       - db
       - redis
@@ -28,6 +33,17 @@ services:
       default:
         aliases:
           - tabun
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/tabun/Dockerfile
+      target: frontend-development
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+      - static:/app/static
 
   gateway:
     image: nginx:alpine
@@ -54,6 +70,8 @@ services:
     volumes:
       - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
       - db:/var/lib/mysql
+    ports:
+      - '3307:3306'
 
   tasks:
     build:
@@ -74,14 +92,11 @@ services:
       default:
 
   elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.16
+    image: elasticsearch:8.2.0
     volumes:
       - elastic:/usr/share/elasticsearch/data
     environment:
-      - cluster.name=tabun
       - discovery.type=single-node
-      - path.repo=/usr/share/elasticsearch
-      - "ES_JAVA_OPTS=-Xms512m -Xmx2048m"
       - xpack.security.enabled=false
 
   mailcatcher:

@@ -9,4 +9,4 @@ RUN pip install --no-cache-dir \
 
 COPY docker/celery /app
 
-CMD ["celery" "worker" "--pool=solo"]
+ENTRYPOINT celery worker --pool=solo
