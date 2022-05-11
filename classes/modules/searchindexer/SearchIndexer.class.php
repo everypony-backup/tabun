@@ -91,6 +91,25 @@ class ModuleSearchIndexer extends Module
     }
 
     /**
+     * Изменяет блог топика
+     */
+    public function TopicBlogIndex($iTopicID, $iTopicBlog)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.topic_updateblog',
+            [
+                'index' => $this->sIndex,
+                'key' => $this->sComment,
+                'topic_id' => $iTopicID,
+                'topic_blog_id' => $iTopicBlog
+            ]
+        );
+    }
+
+    /**
      * Удаляет топик
      */
     public function TopicDelete($oTopicId)

@@ -88,6 +88,21 @@ def topic_index(**kwargs):
     }
     es.index(index=index, id=key+"-"+str(topic_id), document=doc)
 
+@task
+def topic_updateblog(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    topic_id = kwargs.get('topic_id')
+    topic_blog_id = kwargs.get('topic_blog_id')
+
+    doc = {
+        'doc': {
+            'blog_id': int(topic_blog_id)
+        }
+    }
+    es.update(index=index, id=key+"-"+str(topic_id), body=doc)
+
+
 
 @task
 def topic_delete(**kwargs):
