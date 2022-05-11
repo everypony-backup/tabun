@@ -125,6 +125,21 @@ def comment_index(**kwargs):
 
 
 @task
+def comment_updateblog(**kwargs):
+    index = kwargs.get('index')
+    key = kwargs.get('key')
+    comment_id = kwargs.get('comment_id')
+    comment_blog_id = kwargs.get('comment_blog_id')
+
+    doc = {
+        'doc': {
+            'blog_id': int(comment_blog_id)
+        }
+    }
+    es.update(index=index, id=key+"-"+str(comment_id), body=doc)
+
+
+@task
 def comment_delete(**kwargs):
     index = kwargs.get('index')
     key = kwargs.get('key')

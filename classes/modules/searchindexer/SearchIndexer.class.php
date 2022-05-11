@@ -138,6 +138,26 @@ class ModuleSearchIndexer extends Module
     }
 
     /**
+     * Изменяет блог комментария
+     */
+    public function CommentBlogIndex($iCommentID, $iCommentBlog)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.comment_updateblog',
+            [
+                'index' => $this->sIndex,
+                'key' => $this->sComment,
+                'comment_id' => $iCommentID,
+                'comment_blog_id' => $iCommentBlog
+            ]
+        );
+    }
+
+
+    /**
      * Удаляет комментарий
      *
      * @param ModuleComment_EntityComment $oComment сущность комментария с данными
