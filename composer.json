@@ -5,7 +5,7 @@
     "smarty-gettext/smarty-gettext": "1.4.0",
     "everypony/zend-cache-redis": "1.2.0",
     "massivescale/celery-php": "2.1.2",
-    "elasticsearch/elasticsearch": "6.0.1",
+    "elasticsearch/elasticsearch": "v8.2.0",
     "xxtea/xxtea": "1.0.1",
     "predis/predis": "^1.1"
   }

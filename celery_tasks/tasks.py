@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from celery.decorators import task
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch(['elastic'])
+es = Elasticsearch('http://elastic:9200')
 
 SMTP_HOST = environ.get("CELERY_MAILER_HOST")
 SMTP_PORT = environ.get("CELERY_MAILER_PORT")
@@ -75,7 +75,8 @@ def topic_index(**kwargs):
 
     topic_tags = topic_tags.split(',')
 
-    doc_body = {
+    doc = {
+        'type': key,
         'blog_id': int(topic_blog_id),
         'user_id': int(topic_user_id),
         'type': topic_type,
@@ -85,7 +86,7 @@ def topic_index(**kwargs):
         'date': topic_date,
         'publish': topic_publish
     }
-    es.index(index=index, doc_type=key, id=int(topic_id), body=doc_body)
+    es.index(index=index, id=key+"-"+str(topic_id), document=doc)
 
 
 @task
@@ -94,7 +95,7 @@ def topic_delete(**kwargs):
     key = kwargs.get('key')
     topic_id = kwargs.get('topic_id')
 
-    es.delete(index=index, doc_type=key, id=int(topic_id))
+    es.delete(index=index, id=key+"-"+str(topic_id))
 
 
 @task
@@ -109,7 +110,8 @@ def comment_index(**kwargs):
     comment_date = kwargs.get('comment_date')
     comment_publish = kwargs.get('comment_publish')
 
-    doc_body = {
+    doc = {
+        'type': key,
         'target_id': int(comment_target_id),
         'target_type': comment_target_type,
         'user_id': int(comment_user_id),
@@ -117,7 +119,7 @@ def comment_index(**kwargs):
         'date': comment_date,
         'publish': comment_publish
     }
-    es.index(index=index, doc_type=key, id=int(comment_id), body=doc_body)
+    es.index(index=index, id=key+"-"+str(comment_id), body=doc)
 
 
 @task
@@ -126,4 +128,4 @@ def comment_delete(**kwargs):
     key = kwargs.get('key')
     comment_id = kwargs.get('comment_id')
 
-    es.delete(index=index, doc_type=key, id=int(comment_id))
+    es.delete(index=index, id=key+"-"+str(comment_id))

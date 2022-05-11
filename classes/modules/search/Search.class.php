@@ -49,7 +49,7 @@ class ModuleSearch extends Module
         $this->sTopic = Config::Get('module.search.topic_key');
         $this->sComment = Config::Get('module.search.comment_key');
         $this->iPerPage = Config::Get('module.search.per_page');
-        $this->oElasticsearch = Elasticsearch\ClientBuilder::create()->setHosts($this->aHosts)->build();
+        $this->oElasticsearch = Elastic\Elasticsearch\ClientBuilder::create()->setHosts($this->aHosts)->build();
     }
 
     /**
@@ -65,25 +65,24 @@ class ModuleSearch extends Module
         // Выполняем его и сохраняем
         $aParams = [
             'index' => $this->sIndex,
-            'type' => $aSearchParams['type'],
             'size' => $this->iPerPage,
             'from' => $this->iPerPage * $iPage,
             'body' => [
                 'query' => [
                     'bool' => [
                         'must' => [
-                            'multi_match' => [
-                                'query' => $sQuery
-                            ]
+                            'multi_match' => [ 'query' => $sQuery ],
                         ],
-                        'filter' => []
+                        'filter' => [
+                            [ 'match' => [ 'type' => $aSearchParams['type'] ] ],
+                        ]
                     ]
                 ]
             ]
         ];
 
         if (is_array($aSearchParams['terms'])) {
-            $aParams['body']['query']['bool']['filter']['terms'] = $aSearchParams['terms'];
+            $aParams['body']['query']['bool']['filter'][] = [ 'terms' => $aSearchParams['terms'] ];
         }
 
         // TODO: Не работает "Сортировать по" / "Упорядочить по"
