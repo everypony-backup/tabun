@@ -92,11 +92,15 @@ class ModuleSearchIndexer extends Module
 
     /**
      * Удаляет топик
-     *
-     * @param ModuleTopic_EntityTopic $oTopic сущность топика с данными
      */
-    public function TopicDelete(ModuleTopic_EntityTopic $oTopic)
+    public function TopicDelete($oTopicId)
     {
+        if ($oTopicId instanceof ModuleTopic_EntityTopic) {
+            $sTopicId=$oTopicId->getId();
+        } else {
+            $sTopicId=$oTopicId;
+        }
+
         if ($this->oCeleryClient == null) {
             return;
         }
@@ -105,7 +109,7 @@ class ModuleSearchIndexer extends Module
             [
                 'index' => $this->sIndex,
                 'key' => $this->sTopic,
-                'topic_id' => $oTopic->getId()
+                'topic_id' => $sTopicId
             ]
         );
     }
@@ -159,11 +163,15 @@ class ModuleSearchIndexer extends Module
 
     /**
      * Удаляет комментарий
-     *
-     * @param ModuleComment_EntityComment $oComment сущность комментария с данными
      */
-    public function CommentDelete(ModuleComment_EntityComment $oComment)
+    public function CommentDelete($oCommentId)
     {
+        if ($oCommentId instanceof ModuleComment_EntityComment) {
+            $sCommentId=$oCommentId->getId();
+        } else {
+            $sCommentId=$oCommentId;
+        }
+
         if ($this->oCeleryClient == null) {
             return;
         }
@@ -172,7 +180,7 @@ class ModuleSearchIndexer extends Module
             [
                 'index' => $this->sIndex,
                 'key' => $this->sComment,
-                'comment_id' => $oComment->getId()
+                'comment_id' => $sCommentId
             ]
         );
     }
