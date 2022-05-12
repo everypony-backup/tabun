@@ -122,6 +122,7 @@
                 </div>
                 {/if}
                 <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
+                <a class="link-dotted comment-delete">{$aLang.comment_delete}</a>
                 <a class="link-dotted comment-edit-bw {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.edit.comment.limit_time'))} edit-timeout{/if}">{$aLang.comment_edit}</a>
                 {hook run='comment_action' comment=$oComment}
                 {include file='comment_modify_notice.tpl'}
