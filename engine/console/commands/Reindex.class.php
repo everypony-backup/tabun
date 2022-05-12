@@ -73,6 +73,7 @@ class Reindex extends LSC
             // TODO: Маппинг
             // Добавление постов в ElasticSearch
             foreach ($topics as $topic) {
+                echo "Pushing topic [".$topic['topic_id']."] from blog [".$topic['topic_blog_id']."]\n";
                 $this->celeryClient->PostTask(
                     'tasks.topic_index',
                     [
@@ -119,6 +120,7 @@ class Reindex extends LSC
             // TODO: Маппинг
             // Добавление комментариев в ElasticSearch
             foreach ($comments as $comment) {
+                echo "Pushing comment [".$comment['comment_id']."] from blog [".$comment['comment_blog_id']."]\n";
                 $this->celeryClient->PostTask(
                     'tasks.comment_index',
                     [
