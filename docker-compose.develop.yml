@@ -2,7 +2,6 @@ version: '3.7'
 
 volumes:
   db:
-  log:
   redis:
   static:
   storage:
@@ -13,11 +12,15 @@ services:
     build:
       context: .
       dockerfile: docker/tabun/Dockerfile
-      target: production
+      target: development
     volumes:
       - static:/static
       - storage:/storage
-      - log:/log
+      - ./index.php:/app/index.php
+      - ./engine:/app/engine
+      - ./classes:/app/classes
+      - ./settings:/app/settings
+      - ./templates:/app/templates
     depends_on:
       - db
       - redis
@@ -30,6 +33,17 @@ services:
       default:
         aliases:
           - tabun
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/tabun/Dockerfile
+      target: frontend-development
+    volumes:
+      - .:/frontend
+      - /frontend/node_modules
+      - /frontend/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+      - static:/frontend/static
 
   gateway:
     image: nginx:alpine
@@ -55,18 +69,20 @@ services:
     volumes:
       - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
       - db:/var/lib/mysql
+    ports:
+      - '3307:3306'
 
   tasks:
     build:
       context: .
       dockerfile: docker/celery/Dockerfile
+    volumes:
+      - ./docker/celery/tasks.py:/app/tasks.py
     depends_on:
       - redis
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     environment:
-      - CELERY_MAILER_HOST=host.docker.internal
-      - CELERY_MAILER_PORT=25
+      - CELERY_MAILER_HOST=mailcatcher
+      - CELERY_MAILER_PORT=1025
 
   redis:
     image: redis:alpine
@@ -79,5 +95,15 @@ services:
     volumes:
       - elastic:/usr/share/elasticsearch/data
     environment:
-      - cluster.name=tabun
+      - discovery.type=single-node
       - xpack.security.enabled=false
+
+  kibana:
+    image: kibana:8.2.0
+    ports:
+      - '5601:5601'
+
+  mailcatcher:
+    image: schickling/mailcatcher:latest
+    ports:
+      - '1080:1080'
