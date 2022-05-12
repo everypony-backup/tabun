@@ -40,10 +40,9 @@ services:
       dockerfile: docker/tabun/Dockerfile
       target: frontend-development
     volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
-      - static:/app/static
+      - /frontentd/node_modules
+      - /frontentd/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+      - static:/frontend/static
 
   gateway:
     image: nginx:alpine
@@ -54,7 +53,6 @@ services:
       - ./docker/gateway/nginx.conf:/etc/nginx/nginx.conf
       - static:/app/static
       - storage:/storage
-
     depends_on:
       - app
 
@@ -90,8 +88,6 @@ services:
     restart: always
     volumes:
       - redis:/data
-    networks:
-      default:
 
   elastic:
     image: elasticsearch:8.2.0
