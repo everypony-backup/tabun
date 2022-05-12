@@ -20,7 +20,9 @@
     {if $oUserCurrent and $oUserCurrent->isAdministrator()}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
             <a id="comment{$oCommentId}"></a>
-            <div class="text current">{$oComment->getText()}</div>
+            <div id="comment_content_id_{$oCommentId}" class="comment-content">
+                <div class="text current">{$oComment->getText()}</div>
+            </div>
             <div class="comment-info" data-id="{$oCommentId}">
                 <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
                     <img src="{$oCommentAuthor->getProfileAvatarPath(24)}" class="comment-avatar"/>
@@ -44,7 +46,9 @@
     {if $oUserCurrent and $oUserCurrent->isAdministrator()}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
             <a id="comment{$oCommentId}"></a>
-            <div class="text current">{$oComment->getText()}</div>
+            <div id="comment_content_id_{$oCommentId}" class="comment-content">
+                <div class="text current">{$oComment->getText()}</div>
+            </div>
             <div class="comment-info" data-id="{$oCommentId}">
                 <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
                     <img src="{$oCommentAuthor->getProfileAvatarPath(24)}" class="comment-avatar"/>
@@ -63,7 +67,9 @@
     {else}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted">
             <a id="comment{$oCommentId}"></a>
-            <div class="text current"><em>{$aLang.comment_was_delete}</em></div>
+            <div id="comment_content_id_{$oCommentId}" class="comment-content">
+                <div class="text current"><em>{$aLang.comment_was_delete}</em></div>
+            </div>
             <div class="comment-info" data-id="{$oCommentId}"></div>
     {/if}
 {else}
