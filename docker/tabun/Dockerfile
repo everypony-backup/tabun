@@ -62,8 +62,14 @@ RUN chown www-data:www-data /storage
 CMD ["php-fpm"]
 
 FROM backend AS production
+
+ENV CONFIG=/app/settings/app.conf.php
+
 COPY --from=frontend-production /frontend/static /static
 COPY ./docker/tabun/app.conf /usr/local/etc/php-fpm.d/www.conf
 
 FROM backend as development
+
+ENV CONFIG=/app/settings/dev.conf.php
+
 COPY ./docker/tabun/dev.conf /usr/local/etc/php-fpm.d/www.conf
