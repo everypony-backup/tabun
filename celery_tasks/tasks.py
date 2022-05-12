@@ -76,7 +76,6 @@ def topic_index(**kwargs):
     topic_tags = topic_tags.split(',')
 
     doc = {
-        'type': key,
         'blog_id': int(topic_blog_id),
         'user_id': int(topic_user_id),
         'type': topic_type,
@@ -86,7 +85,7 @@ def topic_index(**kwargs):
         'date': topic_date,
         'publish': topic_publish
     }
-    es.index(index=index, id=key+"-"+str(topic_id), document=doc)
+    es.index(index=index+"-"+key, id=int(topic_id), document=doc)
 
 @task
 def topic_updateblog(**kwargs):
@@ -100,7 +99,7 @@ def topic_updateblog(**kwargs):
             'blog_id': int(topic_blog_id)
         }
     }
-    es.update(index=index, id=key+"-"+str(topic_id), body=doc)
+    es.update(index=index+"-"+key, id=int(topic_id), body=doc)
 
 
 
@@ -110,7 +109,7 @@ def topic_delete(**kwargs):
     key = kwargs.get('key')
     topic_id = kwargs.get('topic_id')
 
-    es.delete(index=index, id=key+"-"+str(topic_id))
+    es.delete(index=index+"-"+key, id=int(topic_id))
 
 
 @task
@@ -127,7 +126,6 @@ def comment_index(**kwargs):
     comment_publish = kwargs.get('comment_publish')
 
     doc = {
-        'type': key,
         'blog_id': int(comment_blog_id),
         'target_id': int(comment_target_id),
         'target_type': comment_target_type,
@@ -136,7 +134,7 @@ def comment_index(**kwargs):
         'date': comment_date,
         'publish': comment_publish
     }
-    es.index(index=index, id=key+"-"+str(comment_id), body=doc)
+    es.index(index=index+"-"+key, id=int(comment_id), body=doc)
 
 
 @task
@@ -151,7 +149,7 @@ def comment_updateblog(**kwargs):
             'blog_id': int(comment_blog_id)
         }
     }
-    es.update(index=index, id=key+"-"+str(comment_id), body=doc)
+    es.update(index=index+"-"+key, id=int(comment_id), body=doc)
 
 
 @task
@@ -160,4 +158,4 @@ def comment_delete(**kwargs):
     key = kwargs.get('key')
     comment_id = kwargs.get('comment_id')
 
-    es.delete(index=index, id=key+"-"+str(comment_id))
+    es.delete(index=index+"-"+key, id=int(comment_id))

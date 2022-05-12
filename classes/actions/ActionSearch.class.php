@@ -142,21 +142,14 @@ class ActionSearch extends Action
                 */
                 $this->Text_LoadJevixConfig('search');
 
-                // Получение ID'шников
-                $ids = [];
-                foreach (array_column($aResults['hits'], '_id') as $id) {
-                    if (preg_match("/^{$this->aCodedParams['type']}-([0-9]+)$/", $id, $matches)) {
-                        $ids[] = intval($matches[1]);
-                    };
-                }
                 if ($this->aCodedParams['type'] == 'topic') {
-                    $aTopics = $this->Topic_GetTopicsAdditionalData($ids);
+                    $aTopics = $this->Topic_GetTopicsAdditionalData(array_column($aResults['hits'], '_id'));
                     foreach ($aTopics as $oTopic) {
                         $oTopic->setTextShort($this->Text_JevixParser($oTopic->getText()));
                     }
                     $this->Viewer_Assign('aTopics', $aTopics);
                 } else {
-                    $aComments = $this->Comment_GetCommentsAdditionalData($ids);
+                    $aComments = $this->Comment_GetCommentsAdditionalData(array_column($aResults['hits'], '_id'));
                     foreach ($aComments as $oComment) {
                         $oComment->setText($this->Text_JevixParser(htmlspecialchars($oComment->getText())));
                     }

@@ -64,7 +64,7 @@ class ModuleSearch extends Module
     {
         // Выполняем его и сохраняем
         $aParams = [
-            'index' => $this->sIndex,
+            'index' => $this->sIndex."-".$aSearchParams['type'],
             'size' => $this->iPerPage,
             'from' => $this->iPerPage * $iPage,
             'body' => [
@@ -74,7 +74,6 @@ class ModuleSearch extends Module
                             'multi_match' => [ 'query' => $sQuery ],
                         ],
                         'filter' => [
-                            [ 'match' => [ 'type' => $aSearchParams['type'] ] ],
                         ]
                     ]
                 ]
