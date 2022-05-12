@@ -299,8 +299,8 @@ $config['misc']['simplify_comments_pagination'] = false;
 $config['page']['show_block_structure'] = false;
 
 // Include configs
-foreach (glob("settings/parts.d/*") as $file) {
-    $name = explode('.', str_replace('settings/parts.d/', '', $file));
+foreach (glob(dirname(__FILE__).'/parts.d/*') as $file) {
+    $name = explode('.', str_replace(dirname(__FILE__).'/parts.d/', '', $file));
     array_pop($name); // Remove extension
 
     $conf = &$config;

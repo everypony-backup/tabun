@@ -58,6 +58,14 @@ php-fpm
 
     vagga _load_fixture my/patches/31337_info.sql
 
+ElasticSearch
+-------------
+
+```bash
+docker-compose exec app php /app/engine/console/ls.php reindex topics
+docker-compose exec app php /app/engine/console/ls.php reindex comments
+```
+
 Фикстуры
 --------
 
