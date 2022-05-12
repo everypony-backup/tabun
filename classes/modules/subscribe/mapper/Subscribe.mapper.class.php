@@ -74,6 +74,26 @@ class ModuleSubscribe_MapperSubscribe extends Mapper
         );
     }
     /**
+     * Обновление почты у подпискок пользователя
+     *
+     * @param string $oldMail	Старый Емайл
+     * @param string $newMail	Новый Емайл
+     * @return int
+     */
+    public function UpdateSubscribeMails($oldMail, $newMail)
+    {
+        $sql = "UPDATE ".Config::Get('db.table.subscribe')." 
+			SET 
+			 	mail = ?
+			WHERE mail = ?
+		";
+        return $this->oDb->query(
+            $sql,
+            $newMail,
+            $oldMail
+        );
+    }
+    /**
      * Возвращает список подписок по фильтру
      *
      * @param array $aFilter	Фильтр
