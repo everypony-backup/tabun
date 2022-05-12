@@ -1,26 +1,21 @@
 version: '3.7'
 
-volumes:
-  db:
-  redis:
-  static:
-  storage:
-  elastic:
-
 services:
   app:
     build:
       context: .
       dockerfile: docker/tabun/Dockerfile
-      target: development
+      target: backend
     volumes:
-      - static:/static
       - storage:/storage
       - ./index.php:/app/index.php
       - ./engine:/app/engine
       - ./classes:/app/classes
       - ./settings:/app/settings
       - ./templates:/app/templates
+      - static:/app/static
+      - ./docker/tabun/nginx.conf:/etc/nginx/sites-enabled/default
+      - ./docker/tabun/tabun-dev.conf:/usr/local/etc/php-fpm.d/www.conf
     depends_on:
       - db
       - redis
@@ -29,35 +24,19 @@ services:
       MARIADB_USER: ${MARIADB_USER:-tabun}
       MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
       MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
-    networks:
-      default:
-        aliases:
-          - tabun
+    ports:
+      - '8000:80'
 
   frontend:
     build:
       context: .
       dockerfile: docker/tabun/Dockerfile
-      target: frontend-development
+      target: frontend-dev
     volumes:
       - .:/app
       - /app/node_modules
       - /app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
       - static:/app/static
-
-  gateway:
-    image: nginx:alpine
-    ports:
-      - '8000:80'
-    restart: always
-    volumes:
-      - ./docker/gateway/nginx.conf:/etc/nginx/nginx.conf
-      - static:/app/static
-      - storage:/storage
-
-    depends_on:
-      - app
-
   db:
     build:
       context: .
@@ -68,30 +47,26 @@ services:
       MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD:-true}
     volumes:
-      - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
+      - ./docker/mariadb/conf.d:/etc/mysql/conf.d/conf.d
       - db:/var/lib/mysql
-    ports:
-      - '3307:3306'
 
   tasks:
     build:
       context: .
       dockerfile: docker/celery/Dockerfile
-    volumes:
-      - ./docker/celery/tasks.py:/app/tasks.py
     depends_on:
       - redis
     environment:
       - CELERY_MAILER_HOST=mailcatcher
       - CELERY_MAILER_PORT=1025
+    volumes:
+      - ./docker/celery/tasks.py:/app/tasks.py
 
   redis:
     image: redis:alpine
     restart: always
     volumes:
       - redis:/data
-    networks:
-      default:
 
   elastic:
     image: elasticsearch:8.2.0
@@ -110,3 +85,10 @@ services:
     image: schickling/mailcatcher:latest
     ports:
       - '1080:1080'
+
+volumes:
+  db: { }
+  redis: { }
+  storage: { }
+  elastic: { }
+  static: {}
