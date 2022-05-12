@@ -40,8 +40,9 @@ services:
       dockerfile: docker/tabun/Dockerfile
       target: frontend-development
     volumes:
-      - /frontentd/node_modules
-      - /frontentd/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+      - .:/frontend
+      - /frontend/node_modules
+      - /frontend/templates/skin/synio/locale/ru_RU/LC_MESSAGES
       - static:/frontend/static
 
   gateway:
