@@ -107,6 +107,8 @@ class Reindex extends LSC
             comment_publish
           FROM
             ls_comment
+          WHERE
+            comment_delete = 0 AND comment_publish = 1
         ";
 
         $comments = $this->oDb->select($sql);
