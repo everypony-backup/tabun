@@ -134,6 +134,7 @@ onGetVotes = (result) ->
       vl_box = document.createElement "div"
       vl_box.className = "vote-list-box hidden"
       vl_box.classList.add "for-"+this.targetType
+      vl_box.setAttribute('first-implemented-by', 'Morano')
       vl_closeButton = document.createElement "a"
       vl_closeButton.className = "close-button"
       vl_closeButton.href = "javascript://"
