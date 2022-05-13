@@ -97,7 +97,25 @@ def topic_updateblog(**kwargs):
     }
     es.update(index='topic', id=int(topic_id), body=doc)
 
-
+@task
+def topic_updateblogbulk(**kwargs):
+    old_blog_id = kwargs.get('old_blog_id')
+    new_blog_id = kwargs.get('new_blog_id')
+    doc = {
+        'script': {
+            'source': "ctx._source.blog_id = params.blog_id",
+            'lang': "painless",
+            'params' : {
+                'blog_id' : int(new_blog_id)
+            }
+        },
+        'query': {
+            'term': {
+                'blog_id': int(old_blog_id)
+            }
+        }
+    }
+    es.update_by_query(index='topic', body=doc)
 
 @task
 def topic_delete(**kwargs):
@@ -141,6 +159,26 @@ def comment_updateblog(**kwargs):
     }
     es.update(index='comment', id=int(comment_id), body=doc)
 
+@task
+def comment_updateblogbulk(**kwargs):
+    old_blog_id = kwargs.get('old_blog_id')
+    new_blog_id = kwargs.get('new_blog_id')
+
+    doc = {
+        'script': {
+            'source': "ctx._source.blog_id = params.blog_id",
+            'lang': "painless",
+            'params' : {
+                'blog_id' : int(new_blog_id)
+            }
+        },
+        'query': {
+            'term': {
+                'blog_id': int(old_blog_id)
+            }
+        }
+    }
+    es.update_by_query(index='comment', body=doc)
 
 @task
 def comment_delete(**kwargs):

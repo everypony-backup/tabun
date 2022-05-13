@@ -1665,6 +1665,8 @@ class ModuleTopic extends Module
             ]
         );
         if ($res=$this->oMapperTopic->MoveTopics($sBlogId, $sBlogIdNew)) {
+            // ElasticSearch
+            $this->SearchIndexer_TopicBlogBulkIndex($sBlogId, $sBlogIdNew);
             // перемещаем теги
             $this->oMapperTopic->MoveTopicsTags($sBlogId, $sBlogIdNew);
             // меняем target parent у комментов

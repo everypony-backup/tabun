@@ -973,7 +973,14 @@ class ModuleComment extends Module
                 "comment_new_{$sTargetType}"
             ]
         );
-        return $this->oMapper->MoveTargetParent($sParentId, $sTargetType, $sParentIdNew);
+        if ($result = $this->oMapper->MoveTargetParent($sParentId, $sTargetType, $sParentIdNew)) {
+            if ($sTargetType === 'topic') {
+                // ElasticSearch
+                $this->SearchIndexer_CommentBlogBulkIndex($sParentId, $sParentIdNew);
+            }
+            return $result;
+        };
+        return false;
     }
     /**
      * Меняет target parent на новый в прямом эфире

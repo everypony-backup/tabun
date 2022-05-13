@@ -102,6 +102,23 @@ class ModuleSearchIndexer extends Module
     }
 
     /**
+     * Изменяет блог топиков
+     */
+    public function TopicBlogBulkIndex($old_blog_id, $new_blog_id)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.topic_updateblogbulk',
+            [
+                'old_blog_id' => $old_blog_id,
+                'new_blog_id' => $new_blog_id
+            ]
+        );
+    }
+
+    /**
      * Удаляет топик
      */
     public function TopicDelete($oTopicId)
@@ -165,6 +182,22 @@ class ModuleSearchIndexer extends Module
         );
     }
 
+    /**
+     * Изменяет блог комментариев
+     */
+    public function CommentBlogBulkIndex($old_blog_id, $new_blog_id)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.comment_updateblogbulk',
+            [
+                'old_blog_id' => $old_blog_id,
+                'new_blog_id' => $new_blog_id
+            ]
+        );
+    }
 
     /**
      * Удаляет комментарий
