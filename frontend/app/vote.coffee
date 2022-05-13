@@ -17,6 +17,7 @@ voteTargets =
   topic: 'idTopic'
   blog: 'idBlog'
   user: 'idUser'
+month_lang = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 
 vote = (idTarget, objVote, value, type) ->
   unless voteTargets[type]
@@ -118,8 +119,7 @@ onGetVotes = (result) ->
         time = document.createElement "time"
         time.datetime = vote.date
         date = new Date(Date.parse(vote.date))
-        now = new Date()
-        timeString = if date.getDate() != now.getDate() or date.getMonth() != now.getMonth() or date.getFullYear() != now.getFullYear() then date.toLocaleString() else date.toLocaleTimeString()
+        timeString = date.getDate() + " " + month_lang[date.getMonth()] + " " + date.getFullYear() + ", " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2)
         time.className = "vote-list-item-component"
         time.appendChild document.createTextNode(timeString)
         line.appendChild time
@@ -128,7 +128,7 @@ onGetVotes = (result) ->
         voteValue.dataset.value = if vote.value == 0 then "0" else (if vote.value > 0 then "+" else "−") + Math.abs(vote.value).toString()
         voteValue.className = "vote-list-item-component vote"
         line.appendChild voteValue
-        
+
         vl.appendChild line
       
       vl_box = document.createElement "div"
