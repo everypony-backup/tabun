@@ -56,6 +56,11 @@ class ModuleSearch extends Module
                             'multi_match' => [ 'query' => $sQuery ],
                         ],
                         'filter' => [
+                            [
+                                'term' => [
+                                    'publish' => true
+                                ]
+                            ]
                         ]
                     ]
                 ]

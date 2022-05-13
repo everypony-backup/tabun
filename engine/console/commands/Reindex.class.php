@@ -50,15 +50,14 @@ class Reindex extends LSC
             topic_title,
             ls_topic_content.topic_text,
             topic_tags,
-            topic_date_add AS topic_date
+            topic_date_add AS topic_date,
+            topic_publish
           FROM
             ls_topic
           LEFT JOIN 
             ls_topic_content 
           ON 
             ls_topic.topic_id = ls_topic_content.topic_id
-          WHERE
-            topic_publish = 1
         ";
 
         $topics = $this->oDb->select($sql);
@@ -77,7 +76,8 @@ class Reindex extends LSC
                         'topic_title' => $topic['topic_title'],
                         'topic_text' => $topic['topic_text'],
                         'topic_tags' => $topic['topic_tags'],
-                        'topic_date' => $topic['topic_date']
+                        'topic_date' => $topic['topic_date'],
+                        'topic_publish' => $topic['topic_publish'] == 1
                     ]
                 );
             }
@@ -101,8 +101,6 @@ class Reindex extends LSC
             target_type = 'topic'
           AND
             comment_delete = 0
-          AND
-            comment_publish = 1
         ";
 
         $comments = $this->oDb->select($sql);
@@ -120,7 +118,8 @@ class Reindex extends LSC
                         'comment_target_id' => $comment['comment_target_id'],
                         'comment_user_id' => $comment['comment_user_id'],
                         'comment_text' => $comment['comment_text'],
-                        'comment_date' => $comment['comment_date']
+                        'comment_date' => $comment['comment_date'],
+                        'comment_publish' => $comment['comment_publish'] == 1
                     ]
                 );
             }

@@ -72,7 +72,8 @@ def topic_init(**kwargs):
                 'date': {
                     'type': 'date',
                     'format': 'yyyy-MM-dd HH:mm:ss'
-                }
+                },
+                'publish': { 'type': 'boolean' }
             }
         }
     }
@@ -87,6 +88,7 @@ def topic_index(**kwargs):
     topic_text = kwargs.get('topic_text')
     topic_tags = kwargs.get('topic_tags')
     topic_date = kwargs.get('topic_date')
+    topic_publish = kwargs.get('topic_publish')
 
     topic_tags = topic_tags.split(',')
 
@@ -97,6 +99,7 @@ def topic_index(**kwargs):
         'text': topic_text.strip(),
         'tags': topic_tags,
         'date': topic_date,
+        'publish': bool(topic_publish)
     }
     es.index(index='topic', id=int(topic_id), document=doc)
 
@@ -151,7 +154,8 @@ def comment_init(**kwargs):
                 'date': {
                     'type': 'date',
                     'format': 'yyyy-MM-dd HH:mm:ss'
-                }
+                },
+                'publish': { 'type': 'boolean' }
             }
         }
     }
@@ -162,7 +166,6 @@ def comment_index(**kwargs):
     comment_id = kwargs.get('comment_id')
     comment_target_id = kwargs.get('comment_target_id')
     comment_blog_id = kwargs.get('comment_blog_id')
-    comment_target_type = kwargs.get('comment_target_type')
     comment_user_id = kwargs.get('comment_user_id')
     comment_text = kwargs.get('comment_text')
     comment_date = kwargs.get('comment_date')
@@ -173,7 +176,8 @@ def comment_index(**kwargs):
         'target_id': int(comment_target_id),
         'user_id': int(comment_user_id),
         'text': comment_text.strip(),
-        'date': comment_date
+        'date': comment_date,
+        'publish': bool(comment_publish)
     }
     es.index(index='comment', id=int(comment_id), body=doc)
 

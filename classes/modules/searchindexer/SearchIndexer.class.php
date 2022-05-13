@@ -62,7 +62,8 @@ class ModuleSearchIndexer extends Module
                 'topic_title' => $oTopic->getTitle(),
                 'topic_text' => $oTopic->getText(),
                 'topic_tags' => $oTopic->getTags(),
-                'topic_date' => $oTopic->getDateAdd()
+                'topic_date' => $oTopic->getDateAdd(),
+                'topic_publish' => $oTopic->getPublish() == 1
             ]
         );
     }
@@ -141,7 +142,8 @@ class ModuleSearchIndexer extends Module
                 'comment_blog_id' => $oComment->getTargetParentId(),
                 'comment_user_id' => $oComment->getUserId(),
                 'comment_text' => $oComment->getText(),
-                'comment_date' => $oComment->getDate()
+                'comment_date' => $oComment->getDate(),
+                'comment_publish' => $oComment->getPublish() == 1
             ]
         );
     }
