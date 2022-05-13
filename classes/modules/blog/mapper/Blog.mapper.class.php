@@ -358,6 +358,50 @@ class ModuleBlog_MapperBlog extends Mapper
         return $aBlogs;
     }
     /**
+     * Возвращает список всех персональных блогов
+     *
+     * @return array
+     */
+    public function GetBlogsPersonal()
+    {
+        $sql = "SELECT 
+			b.blog_id			 
+			FROM 
+				".Config::Get('db.table.blog')." as b				
+			WHERE 				
+				b.blog_type='personal'				
+				";
+        $aBlogs=array();
+        if ($aRows=$this->oDb->select($sql)) {
+            foreach ($aRows as $aBlog) {
+                $aBlogs[]=$aBlog['blog_id'];
+            }
+        }
+        return $aBlogs;
+    }
+    /**
+     * Возвращает список всех открытых блогов
+     *
+     * @return array
+     */
+    public function GetBlogsOpen()
+    {
+        $sql = "SELECT 
+			b.blog_id			 
+			FROM 
+				".Config::Get('db.table.blog')." as b				
+			WHERE 				
+				b.blog_type='open'				
+				";
+        $aBlogs=array();
+        if ($aRows=$this->oDb->select($sql)) {
+            foreach ($aRows as $aBlog) {
+                $aBlogs[]=$aBlog['blog_id'];
+            }
+        }
+        return $aBlogs;
+    }
+    /**
      * Возвращает список не персональных блогов с сортировкой по рейтингу
      *
      * @param int $iCount Возвращает общее количество элементов

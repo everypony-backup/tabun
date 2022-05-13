@@ -1296,11 +1296,9 @@ class ActionAjax extends Action
         if ($bState=(bool)$oComment->getDelete()) {
             $sMsg=$this->Lang_Get('comment_delete_ok');
             $sTextToggle=$this->Lang_Get('comment_repair');
-            $this->SearchIndexer_CommentDelete($oComment);
         } else {
             $sMsg=$this->Lang_Get('comment_repair_ok');
             $sTextToggle=$this->Lang_Get('comment_delete');
-            $this->SearchIndexer_CommentIndex($oComment);
         }
 
         /**
@@ -1393,7 +1391,6 @@ class ActionAjax extends Action
                 }
 
                 if ($this->Comment_UpdateComment($oComment)) {
-                    $this->SearchIndexer_CommentIndex($oComment); // Переиндексируем комментарий в ElasticSearch
                     $this->Message_AddNoticeSingle($this->Lang_Get($noticeId));
                 } else {
                     $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));

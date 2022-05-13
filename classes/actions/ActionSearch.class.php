@@ -114,6 +114,13 @@ class ActionSearch extends Action
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
+            // Получение доступных пользователю блогов
+            $userCurrent=$this->User_GetUserCurrent();
+            $allowedToReadBlogs = $this->Blog_GetBlogsAllowToReadByUser($userCurrent);
+            $this->aCodedParams['terms'] = [
+                'blog_id' => $allowedToReadBlogs
+            ];
+
             $aResults = $this->Search_RunQuery(array_merge($this->aParams, $this->aCodedParams), $sQuery, $iPage - 1);
             if ($aResults === false) {
                 /**
@@ -126,9 +133,9 @@ class ActionSearch extends Action
             /*
              * Устанавливаем количество найденых результатов
              */
-            $this->Viewer_Assign('iResCount', $aResults['total']);
+            $this->Viewer_Assign('iResCount', $aResults['total']['value']);
 
-            if ($aResults['total'] > 0) {
+            if ($aResults['total']['value'] > 0) {
                 /*
                 * Конфигурируем парсер
                 */
@@ -152,7 +159,7 @@ class ActionSearch extends Action
                  * Конфигурируем пагинацию
                  */
                 $aPaging = $this->Viewer_MakePaging(
-                    $aResults['total'],
+                    $aResults['total']['value'],
                     $iPage,
                     Config::Get('module.search.per_page'),
                     Config::Get('pagination.pages.count'),

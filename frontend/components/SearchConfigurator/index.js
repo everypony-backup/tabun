@@ -89,14 +89,6 @@ export default class SearchConfigurator extends React.Component {
                 <div className="advanced-search__row">
                     <div className="advanced-search__col">
                         <NamedRadioGroup
-                            groupName={_('search_sort_by')}
-                            buttons={this.sortTypes}
-                            selected={this.state.params.sortType}
-                            onChange={this.handleSortType}
-                        />
-                    </div>
-                    <div className="advanced-search__col">
-                        <NamedRadioGroup
                             groupName={_('search_sort_dir')}
                             buttons={this.sortDirs}
                             selected={this.state.params.sortDir}

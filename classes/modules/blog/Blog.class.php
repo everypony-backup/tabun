@@ -800,6 +800,31 @@ class ModuleBlog extends Module
         return $aOpenBlogsUser;
     }
     /**
+     * Получает список блогов которые доступны для чтения пользователю
+     *
+     * @param ModuleUser_EntityUser $oUser	Объект пользователя
+     * @return array
+     */
+    public function GetBlogsAllowToReadByUser($oUser)
+    {
+        // Персональные блоги (доступны все)
+        $allowToReadBlogs = $this->oMapperBlog->GetBlogsPersonal();
+        if ($oUser && $oUser->isAdministrator()) {
+            // Все блоги
+            $allowToReadBlogs = array_merge($allowToReadBlogs, $this->GetBlogs(true));
+        } else {
+            // Открытые блоги
+            $allowToReadBlogs = array_merge($allowToReadBlogs, $this->oMapperBlog->GetBlogsOpen());
+            if ($oUser) {
+                // Блоги, в которые вошел сам пользователь
+                $allowToReadBlogs = array_merge($this->GetAccessibleBlogsByUser($oUser));
+            }
+        }
+        sort($allowToReadBlogs);
+        $allowToReadBlogs = array_unique($allowToReadBlogs);
+        return $allowToReadBlogs;
+    }
+    /**
      * Получаем массив идентификаторов блогов, которые являются закрытыми для пользователя
      *
      * @param  ModuleUser_EntityUser|null $oUser	Пользователь
@@ -871,12 +896,6 @@ class ModuleBlog extends Module
          */
         $aTopicIds = $this->Topic_GetTopicsByBlogId($iBlogId);
         /**
-         * Если блог не удален, возвращаем false
-         */
-        if (!$this->oMapperBlog->DeleteBlog($iBlogId)) {
-            return false;
-        }
-        /**
          * Чистим кеш
          */
         $this->Cache_Clean(
@@ -897,23 +916,23 @@ class ModuleBlog extends Module
              */
             foreach ($aTopicIds as $iTopicId) {
                 $this->Cache_Delete("topic_{$iTopicId}");
-                if (Config::Get('db.tables.engine')=="InnoDB") {
-                    $this->Topic_DeleteTopicAdditionalData($iTopicId);
-                } else {
-                    $this->Topic_DeleteTopic($iTopicId);
-                }
+                $this->Topic_DeleteTopic($iTopicId);
             }
         }
         /**
          * Удаляем связи пользователей блога.
          */
-        if (Config::Get('db.tables.engine')!="InnoDB") {
-            $this->oMapperBlog->DeleteBlogUsersByBlogId($iBlogId);
-        }
+        $this->oMapperBlog->DeleteBlogUsersByBlogId($iBlogId);
         /**
          * Удаляем голосование за блог
          */
         $this->Vote_DeleteVoteByTarget($iBlogId, 'blog');
+        /**
+         * Если блог не удален, возвращаем false
+         */
+        if (!$this->oMapperBlog->DeleteBlog($iBlogId)) {
+            return false;
+        }
         return true;
     }
     /**
