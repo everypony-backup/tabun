@@ -76,6 +76,7 @@ services:
 
   elastic:
     image: elasticsearch:8.2.0
+    restart: always
     volumes:
       - elastic:/usr/share/elasticsearch/data
     environment:
