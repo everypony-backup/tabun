@@ -976,7 +976,7 @@ class ModuleComment extends Module
         if ($result = $this->oMapper->MoveTargetParent($sParentId, $sTargetType, $sParentIdNew)) {
             if ($sTargetType === 'topic') {
                 // ElasticSearch
-                $this->SearchIndexer_CommentBlogBulkIndex($sParentId, $sParentIdNew);
+                $this->SearchIndexer_CommentMoveToBlog($sParentId, $sParentIdNew);
             }
             return $result;
         };

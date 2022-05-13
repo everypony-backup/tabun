@@ -72,7 +72,7 @@ class ModuleSearchIndexer extends Module
     /**
      * Изменяет блог топика
      */
-    public function TopicBlogIndex($iTopicID, $iTopicBlog)
+    public function TopicUpdateBlog($iTopicID, $iTopicBlog)
     {
         if ($this->oCeleryClient == null) {
             return;
@@ -89,13 +89,13 @@ class ModuleSearchIndexer extends Module
     /**
      * Изменяет блог топиков
      */
-    public function TopicBlogBulkIndex($old_blog_id, $new_blog_id)
+    public function TopicMoveToBlog($old_blog_id, $new_blog_id)
     {
         if ($this->oCeleryClient == null) {
             return;
         }
         $this->oCeleryClient->PostTask(
-            'tasks.topic_updateblogbulk',
+            'tasks.topic_movetoblog',
             [
                 'old_blog_id' => $old_blog_id,
                 'new_blog_id' => $new_blog_id
@@ -153,7 +153,7 @@ class ModuleSearchIndexer extends Module
     /**
      * Изменяет блог комментария
      */
-    public function CommentBlogIndex($iCommentID, $iCommentBlog)
+    public function CommentUpdateBlog($iCommentID, $iCommentBlog)
     {
         if ($this->oCeleryClient == null) {
             return;
@@ -170,13 +170,13 @@ class ModuleSearchIndexer extends Module
     /**
      * Изменяет блог комментариев
      */
-    public function CommentBlogBulkIndex($old_blog_id, $new_blog_id)
+    public function CommentMoveToBlog($old_blog_id, $new_blog_id)
     {
         if ($this->oCeleryClient == null) {
             return;
         }
         $this->oCeleryClient->PostTask(
-            'tasks.comment_updateblogbulk',
+            'tasks.comment_movetoblog',
             [
                 'old_blog_id' => $old_blog_id,
                 'new_blog_id' => $new_blog_id

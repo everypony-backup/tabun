@@ -513,7 +513,7 @@ class ActionTopic extends Action
                 $aComments = $this->Comment_GetCommentsByTargetId($oTopic->getId(), 'topic')['comments'];
                 foreach ($aComments as $oComment) {
                     if(!$oComment->getDelete()) {
-                        $this->SearchIndexer_CommentBlogIndex($oComment->getId(), $oTopic->getBlogId());
+                        $this->SearchIndexer_CommentUpdateBlog($oComment->getId(), $oTopic->getBlogId());
                     }
                 }
             }

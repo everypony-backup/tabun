@@ -98,7 +98,7 @@ def topic_updateblog(**kwargs):
     es.update(index='topic', id=int(topic_id), body=doc)
 
 @task
-def topic_updateblogbulk(**kwargs):
+def topic_movetoblog(**kwargs):
     old_blog_id = kwargs.get('old_blog_id')
     new_blog_id = kwargs.get('new_blog_id')
     doc = {
@@ -160,7 +160,7 @@ def comment_updateblog(**kwargs):
     es.update(index='comment', id=int(comment_id), body=doc)
 
 @task
-def comment_updateblogbulk(**kwargs):
+def comment_movetoblog(**kwargs):
     old_blog_id = kwargs.get('old_blog_id')
     new_blog_id = kwargs.get('new_blog_id')
 
