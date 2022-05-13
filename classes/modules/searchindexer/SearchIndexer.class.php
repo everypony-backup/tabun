@@ -17,21 +17,6 @@ class ModuleSearchIndexer extends Module
      */
     protected $oCeleryClient;
 
-    /**
-     * Название общего индекса в Elasticsearch
-     */
-    protected $sIndex;
-
-    /**
-     * Тип записи топика
-     */
-    protected $sTopic;
-
-    /**
-     * Тип записи комментария
-     */
-    protected $sComment;
-
 
     /**
      * Инициализация модуля
