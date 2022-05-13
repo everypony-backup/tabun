@@ -134,11 +134,9 @@ def comment_index(**kwargs):
     doc = {
         'blog_id': int(comment_blog_id),
         'target_id': int(comment_target_id),
-        'target_type': comment_target_type,
         'user_id': int(comment_user_id),
         'text': comment_text.strip(),
-        'date': comment_date,
-        'publish': comment_publish
+        'date': comment_date
     }
     es.index(index='comment', id=int(comment_id), body=doc)
 
