@@ -58,6 +58,25 @@ def send_mail(**kwargs):
     )
     server.quit()
 
+@task
+def topic_init(**kwargs):
+    es.indices.delete(index='topic', ignore=[400, 404])
+    body = {
+        'mappings': {
+            'properties': {
+                'blog_id': { 'type': 'integer' },
+                'user_id': { 'type': 'integer' },
+                'title': { 'type': 'text' },
+                'text': { 'type': 'text' },
+                'tags': { 'type': 'keyword' },
+                'date': {
+                    'type': 'date',
+                    'format': 'yyyy-MM-dd HH:mm:ss'
+                }
+            }
+        }
+    }
+    es.indices.create(index='topic', body=body)
 
 @task
 def topic_index(**kwargs):

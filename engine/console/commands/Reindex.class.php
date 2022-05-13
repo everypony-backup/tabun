@@ -63,10 +63,8 @@ class Reindex extends LSC
 
         $topics = $this->oDb->select($sql);
         if(is_array($topics) && count($topics)) {
-            // Очистка всех топиков в ElasticSearch
-            // TODO: Очистка всех топиков
-            // Маппинг
-            // TODO: Маппинг
+            // Инициализация
+            $this->celeryClient->PostTask('tasks.topic_init', []);
             // Добавление постов в ElasticSearch
             foreach ($topics as $topic) {
                 echo "Pushing topic [".$topic['topic_id']."] from blog [".$topic['topic_blog_id']."]\n";
