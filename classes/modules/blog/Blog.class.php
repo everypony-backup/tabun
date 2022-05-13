@@ -817,7 +817,7 @@ class ModuleBlog extends Module
             $allowToReadBlogs = array_merge($allowToReadBlogs, $this->oMapperBlog->GetBlogsOpen());
             if ($oUser) {
                 // Блоги, в которые вошел сам пользователь
-                $allowToReadBlogs = array_merge($this->GetAccessibleBlogsByUser($oUser));
+                $allowToReadBlogs = array_merge($allowToReadBlogs, $this->GetAccessibleBlogsByUser($oUser));
             }
         }
         sort($allowToReadBlogs);
