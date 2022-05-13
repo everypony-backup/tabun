@@ -138,6 +138,24 @@ def topic_delete(**kwargs):
 
     es.delete(index='topic', id=int(topic_id))
 
+@task
+def comment_init(**kwargs):
+    es.indices.delete(index='comment', ignore=[400, 404])
+    body = {
+        'mappings': {
+            'properties': {
+                'blog_id': { 'type': 'integer' },
+                'target_id': { 'type': 'integer' },
+                'user_id': { 'type': 'integer' },
+                'text': { 'type': 'text' },
+                'date': {
+                    'type': 'date',
+                    'format': 'yyyy-MM-dd HH:mm:ss'
+                }
+            }
+        }
+    }
+    es.indices.create(index='comment', body=body)
 
 @task
 def comment_index(**kwargs):

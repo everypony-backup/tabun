@@ -106,10 +106,8 @@ class Reindex extends LSC
 
         $comments = $this->oDb->select($sql);
         if(is_array($comments) && count($comments)) {
-            // Очистка всех комментариев в ElasticSearch
-            // TODO: Очистка всех комментариев
-            // Маппинг
-            // TODO: Маппинг
+            // Инициализация
+            $this->celeryClient->PostTask('tasks.comment_init', []);
             // Добавление комментариев в ElasticSearch
             foreach ($comments as $comment) {
                 echo "Pushing comment [".$comment['comment_id']."] from blog [".$comment['comment_blog_id']."]\n";
