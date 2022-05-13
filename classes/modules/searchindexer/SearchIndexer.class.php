@@ -56,10 +56,6 @@ class ModuleSearchIndexer extends Module
         } catch (ConnectionException $exc) {
             error_log($exc->getMessage());
         }
-
-        $this->sIndex = Config::Get('module.search.index');
-        $this->sTopic = Config::Get('module.search.topic_key');
-        $this->sComment = Config::Get('module.search.comment_key');
     }
 
     /**
@@ -75,8 +71,6 @@ class ModuleSearchIndexer extends Module
         $this->oCeleryClient->PostTask(
             'tasks.topic_index',
             [
-                'index' => $this->sIndex,
-                'key' => $this->sTopic,
                 'topic_id' => $oTopic->getId(),
                 'topic_blog_id' => $oTopic->getBlogId(),
                 'topic_user_id' => $oTopic->getUserId(),
@@ -101,8 +95,6 @@ class ModuleSearchIndexer extends Module
         $this->oCeleryClient->PostTask(
             'tasks.topic_updateblog',
             [
-                'index' => $this->sIndex,
-                'key' => $this->sComment,
                 'topic_id' => $iTopicID,
                 'topic_blog_id' => $iTopicBlog
             ]
@@ -126,8 +118,6 @@ class ModuleSearchIndexer extends Module
         $this->oCeleryClient->PostTask(
             'tasks.topic_delete',
             [
-                'index' => $this->sIndex,
-                'key' => $this->sTopic,
                 'topic_id' => $sTopicId
             ]
         );
@@ -146,8 +136,6 @@ class ModuleSearchIndexer extends Module
         $this->oCeleryClient->PostTask(
             'tasks.comment_index',
             [
-                'index' => $this->sIndex,
-                'key' => $this->sComment,
                 'comment_id' => $oComment->getId(),
                 'comment_target_id' => $oComment->getTargetId(),
                 'comment_blog_id' => $oComment->getTargetParentId(),
@@ -171,8 +159,6 @@ class ModuleSearchIndexer extends Module
         $this->oCeleryClient->PostTask(
             'tasks.comment_updateblog',
             [
-                'index' => $this->sIndex,
-                'key' => $this->sComment,
                 'comment_id' => $iCommentID,
                 'comment_blog_id' => $iCommentBlog
             ]
@@ -197,8 +183,6 @@ class ModuleSearchIndexer extends Module
         $this->oCeleryClient->PostTask(
             'tasks.comment_delete',
             [
-                'index' => $this->sIndex,
-                'key' => $this->sComment,
                 'comment_id' => $sCommentId
             ]
         );

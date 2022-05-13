@@ -33,10 +33,6 @@ class Reindex extends LSC
             echo $exc->getMessage();
             exit();
         }
-
-        $this->sIndex = Config::Get('module.search.index');
-        $this->sTopic = Config::Get('module.search.topic_key');
-        $this->sComment = Config::Get('module.search.comment_key');
     }
 
     public function getHelp()
@@ -77,8 +73,6 @@ class Reindex extends LSC
                 $this->celeryClient->PostTask(
                     'tasks.topic_index',
                     [
-                        'index' => $this->sIndex,
-                        'key' => $this->sTopic,
                         'topic_id' => $topic['topic_id'],
                         'topic_blog_id' => $topic['topic_blog_id'],
                         'topic_user_id' => $topic['topic_user_id'],
@@ -124,8 +118,6 @@ class Reindex extends LSC
                 $this->celeryClient->PostTask(
                     'tasks.comment_index',
                     [
-                        'index' => $this->sIndex,
-                        'key' => $this->sComment,
                         'comment_id' => $comment['comment_id'],
                         'comment_target_id' => $comment['comment_target_id'],
                         'comment_blog_id' => $comment['comment_blog_id'],
