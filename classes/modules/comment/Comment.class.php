@@ -470,6 +470,7 @@ class ModuleComment extends Module
         $sId=$this->oMapper->AddComment($oComment);
         if ($sId) {
             if ($oComment->getTargetType()=='topic') {
+                $this->SearchIndexer_CommentIndex($oComment);
                 $this->Topic_increaseTopicCountComment($oComment->getTargetId());
             }
             if ($oCommentParent !== null && !$oCommentParent->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER)) {
@@ -495,7 +496,6 @@ class ModuleComment extends Module
                 ]
             );
             $oComment->setId($sId);
-            $this->SearchIndexer_CommentIndex($oComment);
             return $oComment;
         }
         return false;
@@ -509,7 +509,9 @@ class ModuleComment extends Module
     public function UpdateComment(ModuleComment_EntityComment $oComment)
     {
         if ($this->oMapper->UpdateComment($oComment)) {
-            $this->SearchIndexer_CommentIndex($oComment);
+            if ($oComment->getTargetType()=='topic') {
+                $this->SearchIndexer_CommentIndex($oComment);
+            }
             //чистим зависимые кеши
             $this->Cache_Clean(
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
@@ -559,7 +561,7 @@ class ModuleComment extends Module
             if ($oComment->getDelete()) {
                 $this->SearchIndexer_CommentDelete($oComment);
                 $this->DeleteCommentOnlineByArrayId($oComment->getId(), $oComment->getTargetType());
-            }else{
+            }else if ($oComment->getTargetType()=='topic') {
                 $this->SearchIndexer_CommentIndex($oComment);
             }
             /**
