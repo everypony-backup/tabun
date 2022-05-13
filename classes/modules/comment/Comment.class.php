@@ -510,7 +510,7 @@ class ModuleComment extends Module
     {
         if ($this->oMapper->UpdateComment($oComment)) {
             if ($oComment->getTargetType()=='topic') {
-                $this->SearchIndexer_CommentIndex($oComment);
+                if(!$oComment->getDelete()) $this->SearchIndexer_CommentIndex($oComment);
             }
             //чистим зависимые кеши
             $this->Cache_Clean(
