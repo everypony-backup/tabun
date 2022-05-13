@@ -19,21 +19,6 @@ class ModuleSearch extends Module
     protected $aHosts;
 
     /**
-     * Название общего индекса в Elasticsearch
-     */
-    protected $sIndex;
-
-    /**
-     * Тип записи топика
-     */
-    protected $sTopic;
-
-    /**
-     * Тип записи комментария
-     */
-    protected $sComment;
-
-    /**
      * Количество элементов на странице
      */
     protected $iPerPage;
@@ -45,9 +30,6 @@ class ModuleSearch extends Module
     public function Init()
     {
         $this->aHosts = Config::Get('sys.elastic.hosts');
-        $this->sIndex = Config::Get('module.search.index');
-        $this->sTopic = Config::Get('module.search.topic_key');
-        $this->sComment = Config::Get('module.search.comment_key');
         $this->iPerPage = Config::Get('module.search.per_page');
         $this->oElasticsearch = Elastic\Elasticsearch\ClientBuilder::create()->setHosts($this->aHosts)->build();
     }
@@ -64,7 +46,7 @@ class ModuleSearch extends Module
     {
         // Выполняем его и сохраняем
         $aParams = [
-            'index' => $this->sIndex."-".$aSearchParams['type'],
+            'index' => $aSearchParams['type'],
             'size' => $this->iPerPage,
             'from' => $this->iPerPage * $iPage,
             'body' => [
