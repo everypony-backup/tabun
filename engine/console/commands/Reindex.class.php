@@ -58,8 +58,6 @@ class Reindex extends LSC
           ON 
             ls_topic.topic_id = ls_topic_content.topic_id
           WHERE
-            topic_type = 'topic'
-          AND
             topic_publish = 1
         ";
 
