@@ -61,6 +61,12 @@ export default class SearchConfigurator extends React.Component {
         document.location.replace(`${routes.search}?${io.encodeParams(params)}`);
     };
 
+    handleKeyPress = (event) => {
+        if(event.key === 'Enter'){
+            this.handleSubmit();
+        }
+    }
+
     render() {
         return (
             <div className="advanced-search">
@@ -77,6 +83,7 @@ export default class SearchConfigurator extends React.Component {
                             className="advanced-search__text-input"
                             placeholder={_('search_placeholder')}
                             value={this.state.query}
+                            onKeyPress={this.handleKeyPress}
                             onChange={this.handleQueryInput}
                         />
                         <button
