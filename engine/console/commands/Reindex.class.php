@@ -42,6 +42,9 @@ class Reindex extends LSC
 
     public function actionTopics()
     {
+        // Инициализация
+        $this->celeryClient->PostTask('tasks.topic_init', []);
+
         $sql = "
           SELECT
             ls_topic.topic_id,
@@ -62,8 +65,6 @@ class Reindex extends LSC
 
         $topics = $this->oDb->select($sql);
         if(is_array($topics) && count($topics)) {
-            // Инициализация
-            $this->celeryClient->PostTask('tasks.topic_init', []);
             // Добавление постов в ElasticSearch
             foreach ($topics as $topic) {
                 echo "Pushing topic [".$topic['topic_id']."] from blog [".$topic['topic_blog_id']."]\n";
@@ -86,6 +87,9 @@ class Reindex extends LSC
 
     public function actionComments()
     {
+        // Инициализация
+        $this->celeryClient->PostTask('tasks.comment_init', []);
+
         $sql = "
           SELECT
             comment_id,
@@ -105,8 +109,6 @@ class Reindex extends LSC
 
         $comments = $this->oDb->select($sql);
         if(is_array($comments) && count($comments)) {
-            // Инициализация
-            $this->celeryClient->PostTask('tasks.comment_init', []);
             // Добавление комментариев в ElasticSearch
             foreach ($comments as $comment) {
                 echo "Pushing comment [".$comment['comment_id']."] from blog [".$comment['comment_blog_id']."]\n";
