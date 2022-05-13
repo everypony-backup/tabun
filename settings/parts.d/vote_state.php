@@ -14,7 +14,7 @@ return [
         'date_sort' => SORT_ASC,
     ],
     'blog' => [
-        'as_date' => 0,
+        'as_date' => 1652133600,    // strtotime('2022-05-10') // 2022, May 10
         'oa_enable_level' => 6,
         'na_enable_level' => 6,     // Allow all allowed users to listen New Age
         'date_sort' => SORT_DESC,
