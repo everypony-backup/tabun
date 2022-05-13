@@ -59,12 +59,10 @@ class ModuleSearchIndexer extends Module
                 'topic_id' => $oTopic->getId(),
                 'topic_blog_id' => $oTopic->getBlogId(),
                 'topic_user_id' => $oTopic->getUserId(),
-                'topic_type' => $oTopic->getType(),
                 'topic_title' => $oTopic->getTitle(),
                 'topic_text' => $oTopic->getText(),
                 'topic_tags' => $oTopic->getTags(),
-                'topic_date' => $oTopic->getDateAdd(),
-                'topic_publish' => $oTopic->getPublish()
+                'topic_date' => $oTopic->getDateAdd()
             ]
         );
     }

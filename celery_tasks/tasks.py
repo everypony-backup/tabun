@@ -64,24 +64,20 @@ def topic_index(**kwargs):
     topic_id = kwargs.get('topic_id')
     topic_blog_id = kwargs.get('topic_blog_id')
     topic_user_id = kwargs.get('topic_user_id')
-    topic_type = kwargs.get('topic_type')
     topic_title = kwargs.get('topic_title')
     topic_text = kwargs.get('topic_text')
     topic_tags = kwargs.get('topic_tags')
     topic_date = kwargs.get('topic_date')
-    topic_publish = kwargs.get('topic_publish')
 
     topic_tags = topic_tags.split(',')
 
     doc = {
         'blog_id': int(topic_blog_id),
         'user_id': int(topic_user_id),
-        'type': topic_type,
         'title': topic_title.strip(),
         'text': topic_text.strip(),
         'tags': topic_tags,
         'date': topic_date,
-        'publish': topic_publish
     }
     es.index(index='topic', id=int(topic_id), document=doc)
 
