@@ -28,6 +28,7 @@
     "@babel/register": "^7.0.0",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.4",
     "coffee-loader": "^0.9.0",
     "coffeescript": "^2.3.2",
     "css-loader": "^1.0.1",

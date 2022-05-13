@@ -1,7 +1,7 @@
 <?php
 $config['path']['root']['web'] = 'http://' . $_SERVER['HTTP_HOST'];
 
-$config['db']['params']['host'] = 'mariadb';
+$config['db']['params']['host'] = 'db';
 $config['db']['params']['port'] = '3306';
 $config['db']['params']['user'] = $_ENV["MARIADB_USER"] ?? 'tabun';
 $config['db']['params']['pass'] = $_ENV["MARIADB_PASSWORD"] ?? 'tabun';
@@ -34,10 +34,10 @@ $config['sys']['mail']['from_name'] = 'Tabun [local]';
 
 $config['sys']['logs']['dir'] = '/log';
 
-$config['misc']['debug'] = true;
+$config['misc']['debug'] = false;
 
 $config['misc']['services']['twicher'] = 'http://127.0.0.1:5000/quotes/twitchy';
-$config['misc']['services']['donations'] = 'https://everypony.ru/donate_api/';
-$config['misc']['services']['banners'] = 'https://projects.everypony.ru/banners/';
+$config['misc']['services']['donations'] = 'https://everypony.ru/donate_api/index.json';
+$config['misc']['services']['banners'] = 'https://everypony.ru/donate_api/posters/poinc.json';
 
 return $config;
