@@ -6,9 +6,6 @@ class Reindex extends LSC
 {
     private $celeryClient;
     private $oDb;
-    private $sIndex;
-    private $sComment;
-    private $sTopic;
 
     public function __construct()
     {

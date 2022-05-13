@@ -17,7 +17,6 @@ class ModuleSearchIndexer extends Module
      */
     protected $oCeleryClient;
 
-
     /**
      * Инициализация модуля
      *

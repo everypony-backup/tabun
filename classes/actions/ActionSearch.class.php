@@ -114,10 +114,9 @@ class ActionSearch extends Action
             /**
              * Направляем запрос в ElasticSearch, получаем результаты
              */
-
+            // Получение доступных пользователю блогов
             $userCurrent=$this->User_GetUserCurrent();
             $allowedToReadBlogs = $this->Blog_GetBlogsAllowToReadByUser($userCurrent);
-
             $this->aCodedParams['terms'] = [
                 'blog_id' => $allowedToReadBlogs
             ];

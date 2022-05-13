@@ -510,6 +510,7 @@ class ModuleComment extends Module
     {
         if ($this->oMapper->UpdateComment($oComment)) {
             if ($oComment->getTargetType()=='topic') {
+                // Добавление комментария в ElasticSearch
                 if(!$oComment->getDelete()) $this->SearchIndexer_CommentIndex($oComment);
             }
             //чистим зависимые кеши
@@ -559,9 +560,11 @@ class ModuleComment extends Module
              * Если комментарий удаляется, удаляем его из прямого эфира
              */
             if ($oComment->getDelete()) {
+                // Удаление комментария, если тот удален в ElasticSearch
                 $this->SearchIndexer_CommentDelete($oComment);
                 $this->DeleteCommentOnlineByArrayId($oComment->getId(), $oComment->getTargetType());
             }else if ($oComment->getTargetType()=='topic') {
+                // Индексирование комментария в ElasticSearch
                 $this->SearchIndexer_CommentIndex($oComment);
             }
             /**
@@ -610,6 +613,7 @@ class ModuleComment extends Module
          * Если комментарии снимаются с публикации, удаляем их из прямого эфира.
          */
         if ($this->oMapper->SetCommentsPublish($sTargetId, $sTargetType, $iPublish)) {
+            // Установка статуса комментариев в ElasticSearch
             $this->SearchIndexer_CommentSetPublishByTopicId($iPublish, $sTargetId);
             $this->Favourite_SetFavouriteTargetPublish(array_keys($aComments['comments']), 'comment', $iPublish);
             if ($iPublish!=1) {
@@ -880,6 +884,7 @@ class ModuleComment extends Module
         }
 
         if ($this->oMapper->DeleteCommentByTargetId($aTargetId, $sTargetType)) {
+            // Удаление комментариев в ElasticSearch
             foreach ($aTargetId as $sTargetId) {
                 $this->SearchIndexer_CommentDeleteCommentByTopicId($sTargetId);
             }
@@ -944,6 +949,7 @@ class ModuleComment extends Module
         );
 
         if ($result = $this->oMapper->UpdateTargetParentByTargetId($sParentId, $sTargetType, $aTargetId)) {
+            // Перенос комментариев в ElasticSearch
             foreach ($aTargetId as $sTargetId) {
                 $this->SearchIndexer_CommentUpdateBlogIdByTopicId($sParentId, $sTargetId);
             }
@@ -991,6 +997,7 @@ class ModuleComment extends Module
             ]
         );
         if ($result = $this->oMapper->MoveTargetParent($sParentId, $sTargetType, $sParentIdNew)) {
+            // Перенос комментариев в ElasticSearch
             if ($sTargetType === 'topic') {
                 $this->SearchIndexer_CommentMoveToBlog($sParentId, $sParentIdNew);
             }

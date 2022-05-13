@@ -339,6 +339,7 @@ class ModuleTopic extends Module
         $oTopicOld=$this->GetTopicById($oTopic->getId());
         $oTopic->setDateEdit(date("Y-m-d H:i:s"));
         if ($this->oMapperTopic->UpdateTopic($oTopic)) {
+            // Переиндексирование топика в ElasticSearch
             $this->SearchIndexer_TopicIndex($oTopic);
             /**
              * Если топик изменил видимость(publish) или локацию (BlogId) или список тегов
@@ -1662,6 +1663,7 @@ class ModuleTopic extends Module
             ]
         );
         if ($res=$this->oMapperTopic->MoveTopics($sBlogId, $sBlogIdNew)) {
+            // Перемещаем посты в другой блог в ElasticSearch
             $this->SearchIndexer_TopicMoveToBlog($sBlogId, $sBlogIdNew);
             // перемещаем теги
             $this->oMapperTopic->MoveTopicsTags($sBlogId, $sBlogIdNew);
