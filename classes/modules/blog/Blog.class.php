@@ -807,25 +807,22 @@ class ModuleBlog extends Module
      */
     public function GetBlogsAllowToReadByUser($oUser)
     {
-        $personalBlogs = $this->oMapperBlog->GetBlogsPersonal();
+        // Персональные блоги (доступны все)
+        $allowToReadBlogs = $this->oMapperBlog->GetBlogsPersonal();
         if ($oUser && $oUser->isAdministrator()) {
-            return [
-                ...$personalBlogs,
-                ...$this->GetBlogs(true),
-            ];
+            // Все блоги
+            $allowToReadBlogs = array_merge($allowToReadBlogs, $this->GetBlogs(true));
         } else {
-            $openedBlogs = $this->oMapperBlog->GetBlogsOpen();
-            $accessibleBlogsByUser = [];
-            // TODO: Среди блогов в $accessibleBlogsByUser есть пересечения с $personalBlogs и $openedBlogs
+            // Открытые блоги
+            $allowToReadBlogs = array_merge($allowToReadBlogs, $this->oMapperBlog->GetBlogsOpen());
             if ($oUser) {
-                $accessibleBlogsByUser = $this->GetAccessibleBlogsByUser($oUser);
+                // Блоги, в которые вошел сам пользователь
+                $allowToReadBlogs = array_merge($this->GetAccessibleBlogsByUser($oUser));
             }
-            return [
-                ...$personalBlogs,
-                ...$openedBlogs,
-                ...$accessibleBlogsByUser
-            ];
         }
+        sort($allowToReadBlogs);
+        $allowToReadBlogs = array_unique($allowToReadBlogs);
+        return $allowToReadBlogs;
     }
     /**
      * Получаем массив идентификаторов блогов, которые являются закрытыми для пользователя
