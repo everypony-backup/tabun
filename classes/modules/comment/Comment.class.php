@@ -610,7 +610,7 @@ class ModuleComment extends Module
          * Если комментарии снимаются с публикации, удаляем их из прямого эфира.
          */
         if ($this->oMapper->SetCommentsPublish($sTargetId, $sTargetType, $iPublish)) {
-            // TODO: Индексирование/Удаление всех комментариев в посте если он опубликован/сохранен в черновики в ElasticSearch
+            $this->SearchIndexer_CommentSetPublishByTopicId($iPublish, $sTargetId);
             $this->Favourite_SetFavouriteTargetPublish(array_keys($aComments['comments']), 'comment', $iPublish);
             if ($iPublish!=1) {
                 $this->DeleteCommentOnlineByTargetId($sTargetId, $sTargetType);
@@ -880,7 +880,9 @@ class ModuleComment extends Module
         }
 
         if ($this->oMapper->DeleteCommentByTargetId($aTargetId, $sTargetType)) {
-            // TODO: Удаление всех комментариев при удалении поста в ElasticSearch
+            foreach ($aTargetId as $sTargetId) {
+                $this->SearchIndexer_CommentDeleteCommentByTopicId($sTargetId);
+            }
             /**
              * Удаляем комментарии из избранного
              */
@@ -942,7 +944,9 @@ class ModuleComment extends Module
         );
 
         if ($result = $this->oMapper->UpdateTargetParentByTargetId($sParentId, $sTargetType, $aTargetId)) {
-            // TODO: Перенос комментариев при переносе топика из блога в блог в ElasticSearch
+            foreach ($aTargetId as $sTargetId) {
+                $this->SearchIndexer_CommentUpdateBlogIdByTopicId($sParentId, $sTargetId);
+            }
             return $result;
         }
         return false;

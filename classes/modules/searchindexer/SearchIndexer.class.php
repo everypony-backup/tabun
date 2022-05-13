@@ -183,6 +183,56 @@ class ModuleSearchIndexer extends Module
     }
 
     /**
+     * Изменение статуса публикации по топику
+     */
+    public function CommentSetPublishByTopicId($comment_publish, $topic_id)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.comment_setpublishbytopicid',
+            [
+                'comment_publish' => $comment_publish == 1,
+                'topic_id' => $topic_id
+            ]
+        );
+    }
+
+    /**
+     * Удаление комментариев топика
+     */
+    public function CommentDeleteCommentByTopicId($topic_id)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.comment_deletecommentbytopicid',
+            [
+                'topic_id' => $topic_id
+            ]
+        );
+    }
+
+    /**
+     * Обновление блога по топику
+     */
+    public function CommentUpdateBlogIdByTopicId($blog_id, $topic_id)
+    {
+        if ($this->oCeleryClient == null) {
+            return;
+        }
+        $this->oCeleryClient->PostTask(
+            'tasks.comment_updateblogidbytopicid',
+            [
+                'blog_id' => $blog_id,
+                'topic_id' => $topic_id
+            ]
+        );
+    }
+
+    /**
      * Удаляет комментарий
      */
     public function CommentDelete($oCommentId)

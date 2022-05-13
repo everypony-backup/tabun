@@ -60,7 +60,7 @@ def send_mail(**kwargs):
 
 @task
 def topic_init(**kwargs):
-    es.indices.delete(index='topic', ignore=[400, 404])
+    es.indices.delete(index='topic', ignore=[404])
     body = {
         'mappings': {
             'properties': {
@@ -143,7 +143,7 @@ def topic_delete(**kwargs):
 
 @task
 def comment_init(**kwargs):
-    es.indices.delete(index='comment', ignore=[400, 404])
+    es.indices.delete(index='comment', ignore=[404])
     body = {
         'mappings': {
             'properties': {
@@ -214,6 +214,61 @@ def comment_movetoblog(**kwargs):
         }
     }
     es.update_by_query(index='comment', body=doc)
+
+@task
+def comment_setpublishbytopicid(**kwargs):
+    comment_publish = kwargs.get('comment_publish')
+    topic_id = kwargs.get('topic_id')
+
+    doc = {
+        'script': {
+            'source': "ctx._source.publish = params.publish",
+            'lang': "painless",
+            'params' : {
+                'publish' : bool(comment_publish)
+            }
+        },
+        'query': {
+            'term': {
+                'target_id': int(topic_id)
+            }
+        }
+    }
+    es.update_by_query(index='comment', body=doc)
+
+@task
+def comment_updateblogidbytopicid(**kwargs):
+    blog_id = kwargs.get('blog_id')
+    topic_id = kwargs.get('topic_id')
+
+    doc = {
+        'script': {
+            'source': "ctx._source.blog_id = params.blog_id",
+            'lang': "painless",
+            'params' : {
+                'blog_id' : int(blog_id)
+            }
+        },
+        'query': {
+            'term': {
+                'target_id': int(topic_id)
+            }
+        }
+    }
+    es.update_by_query(index='comment', body=doc)
+
+@task
+def comment_deletecommentbytopicid(**kwargs):
+    topic_id = kwargs.get('topic_id')
+
+    doc = {
+        'query': {
+            'term': {
+                'target_id': int(topic_id)
+            }
+        }
+    }
+    es.delete_by_query(index='comment', body=doc)
 
 @task
 def comment_delete(**kwargs):
