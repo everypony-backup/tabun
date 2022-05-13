@@ -192,8 +192,22 @@ function func_check($sValue, $sParam, $iMin=1, $iMax=100)
  */
 function func_getIp()
 {
+    /*
+    Временная правка для поддержки совместимости с ipv6
+    Поддержка ipv6 запланированна в рамках https://gitea.everypony.ru/everypony/tabun/issues/200
+
     // Если запускаем через консоль, то REMOTE_ADDR не определен
     return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+    */
+    if (isset($_SERVER['REMOTE_ADDR'])) {
+        if (strpos($_SERVER['REMOTE_ADDR'], ':') !== false) {
+            return substr($_SERVER['REMOTE_ADDR'], -15);
+        } else {
+            return $_SERVER['REMOTE_ADDR'];
+	}
+    } else {
+        return '127.0.0.1';
+    }
 }
 
 

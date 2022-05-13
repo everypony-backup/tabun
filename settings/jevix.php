@@ -13,7 +13,7 @@ return [
             [[
                 'strong', 'em', 'u', 's', 'sup', 'sub', 'small',
                 'h4', 'h5', 'h6', 'br', 'li', 'ol', 'ul',
-                'a', 'img', 'blockquote', 'cut', 'smile',
+                'a', 'img', 'video', 'blockquote', 'cut', 'smile',
                 'ls', 'pre', 'iframe', 'span', 'text', 'p', 'hr'
             ]],
 
@@ -25,7 +25,7 @@ return [
         // Преформатированные теги
         'cfgSetTagPreformatted' => [
             [
-                ['pre']
+                ['pre', 'video']
             ],
         ],
         // Разрешённые параметры тегов
@@ -87,6 +87,7 @@ return [
                             'giphy.com' => 'embed/',
                             'gfycat.com' => 'ifr/',
                             'vault.mle.party' => 'videos/embed/',
+                            'frontend.vh.yandex.ru' => 'player/[\w\d\-_]+\?autoplay=0$',
                         ],
                     ],
                     'data-src' => [
@@ -146,7 +147,16 @@ return [
             ],
         ],
         // Параметры тегов являющиеся обязательными
-        'cfgSetTagParamsRequired' => [],
+        'cfgSetTagParamsRequired' => [
+            [
+                'img',
+                'src'
+            ],
+            [
+                'iframe',
+                'src'
+            ],
+        ],
         // Теги которые необходимо вырезать из текста вместе с контентом
         'cfgSetTagCutWithContent' => [
             [
@@ -187,7 +197,7 @@ return [
         ],
         'cfgSetTagNoTypography' => [
             [
-                ['pre']
+                ['pre', 'video']
             ],
         ],
         // Теги, после которых необходимо пропускать одну пробельную строку
