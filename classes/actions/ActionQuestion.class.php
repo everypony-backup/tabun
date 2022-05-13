@@ -448,13 +448,6 @@ class ActionQuestion extends Action
             if ($sBlogIdOld!=$oTopic->getBlogId()) {
                 $this->Comment_UpdateTargetParentByTargetId($oTopic->getBlogId(), 'topic', $oTopic->getId());
                 $this->Comment_UpdateTargetParentByTargetIdOnline($oTopic->getBlogId(), 'topic', $oTopic->getId());
-                // ElasticSearch
-                $aComments = $this->Comment_GetCommentsByTargetId($oTopic->getId(), 'topic')['comments'];
-                foreach ($aComments as $oComment) {
-                    if(!$oComment->getDelete()) {
-                        $this->SearchIndexer_CommentUpdateBlog($oComment->getId(), $oTopic->getBlogId());
-                    }
-                }
             }
             /**
              * Обновляем количество топиков в блоге

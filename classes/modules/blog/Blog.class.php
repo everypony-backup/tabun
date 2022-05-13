@@ -917,7 +917,6 @@ class ModuleBlog extends Module
             foreach ($aTopicIds as $iTopicId) {
                 $this->Cache_Delete("topic_{$iTopicId}");
                 $this->Topic_DeleteTopic($iTopicId);
-                $this->SearchIndexer_TopicDelete($iTopicId);
             }
         }
         /**

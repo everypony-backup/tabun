@@ -384,11 +384,6 @@ class ActionTopic extends Action
             }
 
             /**
-             * Отправляем запрос на индексирование в ElasticSearch
-             */
-            $this->SearchIndexer_TopicIndex($oTopic);
-
-            /**
              * Добавляем событие в ленту
              */
             $this->Stream_write($oTopic->getUserId(), 'add_topic', $oTopic->getId(), $oTopic->getPublish() && $oBlog->getType()!='close');
@@ -509,13 +504,6 @@ class ActionTopic extends Action
             if ($sBlogIdOld!=$oTopic->getBlogId()) {
                 $this->Comment_UpdateTargetParentByTargetId($oTopic->getBlogId(), 'topic', $oTopic->getId());
                 $this->Comment_UpdateTargetParentByTargetIdOnline($oTopic->getBlogId(), 'topic', $oTopic->getId());
-                // ElasticSearch
-                $aComments = $this->Comment_GetCommentsByTargetId($oTopic->getId(), 'topic')['comments'];
-                foreach ($aComments as $oComment) {
-                    if(!$oComment->getDelete()) {
-                        $this->SearchIndexer_CommentUpdateBlog($oComment->getId(), $oTopic->getBlogId());
-                    }
-                }
             }
             /**
              * Обновляем количество топиков в блоге
@@ -524,11 +512,6 @@ class ActionTopic extends Action
                 $this->Blog_RecalculateCountTopicByBlogId($sBlogIdOld);
             }
             $this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
-
-            /**
-             * Отправляем запрос на переиндексирование в ElasticSearch
-             */
-            $this->SearchIndexer_TopicIndex($oTopic);
 
             /**
              * Добавляем событие в ленту

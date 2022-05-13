@@ -213,6 +213,7 @@ class ModuleTopic extends Module
                     "topic_new_blog_{$oTopic->getBlogId()}"
                 ]
             );
+            $this->SearchIndexer_TopicIndex($oTopic);
             return $oTopic;
         }
         return false;
@@ -273,12 +274,6 @@ class ModuleTopic extends Module
         if ($bResult=$this->oMapperTopic->DeleteTopic($sTopicId)) {
             // Удаление из ElasticSearch
             $this->SearchIndexer_TopicDelete($sTopicId);
-            $aComments = $this->Comment_GetCommentsByTargetId($sTopicId, 'topic')['comments'];
-            foreach ($aComments as $oComment) {
-                if(!$oComment->getDelete()) {
-                    $this->SearchIndexer_CommentDelete($oComment->getId());
-                }
-            }
             // Удаление прочих данных
             return $this->DeleteTopicAdditionalData($sTopicId);
         }
@@ -344,6 +339,7 @@ class ModuleTopic extends Module
         $oTopicOld=$this->GetTopicById($oTopic->getId());
         $oTopic->setDateEdit(date("Y-m-d H:i:s"));
         if ($this->oMapperTopic->UpdateTopic($oTopic)) {
+            $this->SearchIndexer_TopicIndex($oTopic);
             /**
              * Если топик изменил видимость(publish) или локацию (BlogId) или список тегов
              */
@@ -1636,6 +1632,7 @@ class ModuleTopic extends Module
                 "topic_new_blog_{$sBlogId}"
             ]
         );
+        // TODO: ElasticSearch, если вдруг будет использоваться (в данный момент метод не используется)
         if ($res=$this->oMapperTopic->MoveTopicsByArrayId($aTopics, $sBlogId)) {
             // перемещаем теги
             $this->oMapperTopic->MoveTopicsTagsByArrayId($aTopics, $sBlogId);
@@ -1665,7 +1662,6 @@ class ModuleTopic extends Module
             ]
         );
         if ($res=$this->oMapperTopic->MoveTopics($sBlogId, $sBlogIdNew)) {
-            // ElasticSearch
             $this->SearchIndexer_TopicMoveToBlog($sBlogId, $sBlogIdNew);
             // перемещаем теги
             $this->oMapperTopic->MoveTopicsTags($sBlogId, $sBlogIdNew);
