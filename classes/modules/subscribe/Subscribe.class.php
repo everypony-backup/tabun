@@ -186,6 +186,17 @@ class ModuleSubscribe extends Module
         return $this->oMapper->UpdateSubscribe($oSubscribe);
     }
     /**
+     * Обновление почты у подпискок пользователя
+     *
+     * @param string $oldMail	Старый Емайл
+     * @param string $newMail	Новый Емайл
+     * @return int
+     */
+    public function UpdateSubscribeMails($oldMail, $newMail)
+    {
+        return $this->oMapper->UpdateSubscribeMails($oldMail, $newMail);
+    }
+    /**
      * Возвращает список подписок по фильтру
      *
      * @param array $aFilter	Фильтр
