@@ -469,6 +469,7 @@ class ModuleComment extends Module
     {
         $sId=$this->oMapper->AddComment($oComment);
         if ($sId) {
+            $oComment->setId($sId);
             if ($oComment->getTargetType()=='topic') {
                 $this->SearchIndexer_CommentIndex($oComment);
                 $this->Topic_increaseTopicCountComment($oComment->getTargetId());
@@ -495,7 +496,6 @@ class ModuleComment extends Module
                     "comment_new_{$oComment->getTargetType()}_{$oComment->getTargetId()}"
                 ]
             );
-            $oComment->setId($sId);
             return $oComment;
         }
         return false;
