@@ -49,7 +49,11 @@ export default class ImageUploader extends React.Component {
     };
 
     handleSave = () => {
-        const croppedImg = this.editor.getCroppedCanvas().toDataURL();
+        const canvas = this.editor.getCroppedCanvas({
+           maxWidth: Limitations.processingImgMaxWidth,
+           maxHeight: Limitations.processingImgMaxHeight,
+        });
+        const croppedImg = canvas.toDataURL();
         const result = this.props.onUpload(utils.extractBase64(croppedImg));
 
         if (result instanceof Promise) {
