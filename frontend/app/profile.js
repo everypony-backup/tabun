@@ -1,18 +1,21 @@
 import routes from 'lib/routes';
 import io from 'lib/io';
-import {error, notice} from 'core/messages';
-
-
+import {notice} from 'core/messages';
 
 export function uploadAvatar(base64URI) {
-    io
+    return io
         .post(routes.image.uploadAvatar, {image: base64URI})
-        .then((result) => console.info)
-        .catch((result) => console.error);
+        .then((result) => {
+            notice(null, 'Аватар обновлён');
+            return result;
+        });
+}
 
-}export function uploadFoto(base64URI) {
-    io
+export function uploadFoto(base64URI) {
+    return io
         .post(routes.image.uploadFoto, {image: base64URI})
-        .then((result) => console.info)
-        .catch((result) => console.error);
+        .then((result) => {
+            notice(null, 'Картинка профиля обновлена');
+            return result;
+        });
 }

@@ -10,12 +10,13 @@ function initAvatarUploader(node) {
     ReactDOM.render(
         <ImageUploader
             defaultImg={node.dataset.avatarUrl}
-            width={200}
-            height={200}
+            width={600}
+            height={400}
             containerClass="avatar-change"
             previewClass="avatar"
             linkClass="link-dotted"
             border={50}
+            aspectRatio={1}
             title={gettext('upload_avatar')}
             onUpload={uploadAvatar}
         />,

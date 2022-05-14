@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AvatarEditor from 'react-avatar-editor'
+import Cropper from "react-cropper";
 
 import Modal from 'components/Modal';
 import FileInput from 'components/FileInput';
@@ -15,8 +15,6 @@ export default class ImageUploader extends React.Component {
         sourceImg: this.props.defaultImg,
         croppedImg: this.props.defaultImg,
         editorOpened: false,
-        scale: 1.2,
-        borderRadius: 0,
     };
     static propTypes = {
         width: React.PropTypes.number,
@@ -27,6 +25,7 @@ export default class ImageUploader extends React.Component {
         previewClass: React.PropTypes.string,
         linkClass: React.PropTypes.string,
         onUpload: React.PropTypes.func,
+        aspectRatio: React.PropTypes.number,
     };
 
     setEditorRef = (editor) => {
@@ -48,15 +47,20 @@ export default class ImageUploader extends React.Component {
         this.setState({editorOpened: false});
     };
 
-    handleScale = ({target:{value}}) => {
-        this.setState({scale: parseFloat(value)});
-    };
-
     handleSave = () => {
-        const croppedImg = this.editor.getImageScaledToCanvas().toDataURL();
-        this.setState({croppedImg: croppedImg});
-        this.props.onUpload(utils.extractBase64(croppedImg));
-        this.handleRequestClose()
+        const croppedImg = this.editor.getCroppedCanvas().toDataURL();
+        const result = this.props.onUpload(utils.extractBase64(croppedImg));
+
+        if (result instanceof Promise) {
+            result
+                .then(() => {
+                    this.setState({croppedImg: croppedImg});
+                })
+                .catch(console.error)
+        } else {
+            this.setState({croppedImg: croppedImg});
+        }
+        this.handleRequestClose();
     };
 
     render() {
@@ -77,30 +81,28 @@ export default class ImageUploader extends React.Component {
                 onRequestClose={this.handleRequestClose}
                 isOpen={this.state.editorOpened}
             >
-                <AvatarEditor
+                <Cropper
                     ref={this.setEditorRef}
-                    image={this.state.sourceImg}
-                    width={this.props.width}
-                    height={this.props.height}
-                    border={this.props.border}
-                    color={[255, 255, 255, 0.75]}
-                    rotate={0}
-                    scale={this.state.scale}
-                    onSave={this.handleSave}
+                    style={{ 'max-height': this.props.height, 'max-width': this.props.width }}
+                    src={this.state.sourceImg}
+                    viewMode={2}
+                    responsive={true}
+                    minCropBoxHeight={50}
+                    minCropBoxWidth={50}
+                    autoCropArea={1}
+                    guides={true}
+                    aspectRatio={this.props.aspectRatio}
+                    dragMode={'move'}
                 />
                 <br />
-                {gettext('image_uploader_zoom')}
-                <input
-                    name="scale"
-                    type="range"
-                    min="1"
-                    max="2"
-                    step="0.01"
-                    defaultValue={this.state.scale}
-                    onChange={this.handleScale}
-                />
-                <br />
-                <input type="button" onClick={this.handleSave} value={gettext('image_uploader_save')}/>
+                <div className="modal-actions">
+                    <input
+                        type="button"
+                        className={'button button-primary'}
+                        onClick={this.handleSave}
+                        value={gettext('image_uploader_save')}
+                    />
+                </div>
             </Modal>
         </div>
     }

@@ -106,7 +106,7 @@ class ActionSettings extends Action
         /**
          * Устанавливаем формат Ajax ответа
          */
-        $this->Viewer_SetResponseAjax('jsonIframe', false);
+        $this->Viewer_SetResponseAjax('json', false);
 
         $sFile = $this->CreateTempFileFromBase64($_POST["image"]);
         if($sFile && $sFileWeb = $this->User_UploadFoto($sFile, $this->oUserCurrent)){
@@ -155,7 +155,7 @@ class ActionSettings extends Action
         /**
          * Устанавливаем формат Ajax ответа
          */
-        $this->Viewer_SetResponseAjax('jsonIframe', false);
+        $this->Viewer_SetResponseAjax('json', false);
 
         $sFile = $this->CreateTempFileFromBase64($_POST["image"]);
         if($sFile && $sFileWeb = $this->User_UploadAvatar($sFile, $this->oUserCurrent)){
