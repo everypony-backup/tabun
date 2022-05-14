@@ -29,9 +29,17 @@ function post(route, data) {
             error(null, result.body);
             return Promise.reject(result);
         }
-        if (result.bStateError) {
-            return Promise.reject(result);
+
+        try {
+            const jsonBody = JSON.parse(result.body);
+            if (jsonBody.bStateError) {
+                error(jsonBody.sMsgTitle, jsonBody.sMsg);
+                return Promise.reject(result);
+            }
+        } catch {
+            // ignore json parse error
         }
+
         return Promise.resolve(result);
     })
 }
