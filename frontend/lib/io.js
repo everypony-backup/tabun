@@ -12,7 +12,7 @@ function encodeParams(payload) {
         .join('&');
 }
 
-function post(route, data) {
+function post(route, data = {}) {
     const body = encodeParams(merge(data, {security_ls_key: window.LIVESTREET_SECURITY_KEY}));
     const headers = {'Content-Type': 'application/x-www-form-urlencoded'};
     return new Promise((resolve, reject) => xhr.post(

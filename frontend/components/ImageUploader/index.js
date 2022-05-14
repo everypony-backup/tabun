@@ -25,6 +25,7 @@ export default class ImageUploader extends React.Component {
         previewClass: React.PropTypes.string,
         linkClass: React.PropTypes.string,
         onUpload: React.PropTypes.func,
+        onRemove: React.PropTypes.func,
         aspectRatio: React.PropTypes.number,
     };
 
@@ -63,6 +64,12 @@ export default class ImageUploader extends React.Component {
         this.handleRequestClose();
     };
 
+    handleRemove = () => {
+        if (this.props.onRemove) {
+            this.props.onRemove();
+        }
+    };
+
     render() {
         return <div className={this.props.containerClass}>
             {this.state.croppedImg && <img
@@ -76,6 +83,15 @@ export default class ImageUploader extends React.Component {
                 title={this.props.title}
                 className={this.props.linkClass}
             />
+            <div>
+                <a
+                    href="#"
+                    className={this.props.linkClass}
+                    onClick={this.handleRemove}
+                >
+                    Удалить
+                </a>
+            </div>
             <Modal
                 header={this.props.title}
                 onRequestClose={this.handleRequestClose}
