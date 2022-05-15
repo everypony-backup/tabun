@@ -89,12 +89,22 @@ onRegister = ({username, email, password, recaptcha}, callback) =>
 onRemind = ({email}, callback) =>
   reminderAjax email, callback
 
+validateUsernameTimeout = null
+validateEmailTimeout = null
+validateTimeoutMs = 500
+
 onValidate = (type, value, callback) =>
   switch type
     when 'username'
-      validateUsername value, callback
+      clearTimeout(validateUsernameTimeout)
+      run = () ->
+        validateUsername value, callback
+      validateUsernameTimeout = setTimeout(run, validateTimeoutMs)
     when 'email'
-      validateEmail value, callback
+      clearTimeout(validateUsernameTimeout)
+      run = () ->
+        validateEmail value, callback
+      validateEmailTimeout = setTimeout(run, validateTimeoutMs)
 
       
 # Initialization
