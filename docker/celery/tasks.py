@@ -113,7 +113,7 @@ def topic_updateblog(**kwargs):
             'blog_id': int(topic_blog_id)
         }
     }
-    es.update(index='topic', id=int(topic_id), body=doc)
+    es.update(index='topic', id=int(topic_id), body=doc, ignore=[404])
 
 @task
 def topic_movetoblog(**kwargs):
@@ -139,7 +139,7 @@ def topic_movetoblog(**kwargs):
 def topic_delete(**kwargs):
     topic_id = kwargs.get('topic_id')
 
-    es.delete(index='topic', id=int(topic_id))
+    es.delete(index='topic', id=int(topic_id), ignore=[404])
 
 @task
 def comment_init(**kwargs):
@@ -192,7 +192,7 @@ def comment_updateblog(**kwargs):
             'blog_id': int(comment_blog_id)
         }
     }
-    es.update(index='comment', id=int(comment_id), body=doc)
+    es.update(index='comment', id=int(comment_id), body=doc, ignore=[404])
 
 @task
 def comment_movetoblog(**kwargs):
@@ -274,4 +274,4 @@ def comment_deletecommentbytopicid(**kwargs):
 def comment_delete(**kwargs):
     comment_id = kwargs.get('comment_id')
 
-    es.delete(index='comment', id=int(comment_id))
+    es.delete(index='comment', id=int(comment_id), ignore=[404])
