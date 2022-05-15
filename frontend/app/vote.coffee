@@ -100,13 +100,11 @@ onGetVotes = (result) ->
   if result.bStateError
     error null, result.sMsg
   else
-    voteSum = 0
     if result.aVotes.length > 0
       vl = document.createElement "div"
       vl.className = "vote-list"
       for i in [0...result.aVotes.length]
         vote = result.aVotes[i]
-        voteSum += vote.value
         line = document.createElement "div"
         line.className = "vote-list-item"
         profileLink = __makeProfileLink(vote.voterName, {
@@ -158,22 +156,7 @@ onGetVotes = (result) ->
       context.eventTarget.addEventListener "click", context.callback
     else
       notice null, lang.gettext("no_votes_"+this.targetType)
-    
-    if parseInt(this.control.dataset.count) != result.aVotes.length
-      this.control.parentNode.classList.remove "vote-count-negative"
-      this.control.parentNode.classList.remove "vote-count-positive"
-      this.control.parentNode.classList.remove "vote-count-mixed"
-      if voteSum > 0
-        this.control.textContent = "+" + voteSum.toString()
-        this.control.parentNode.classList.add "vote-count-positive"
-      else
-        this.control.textContent = voteSum.toString()
-        if voteSum < 0
-          this.control.parentNode.classList.add "vote-count-negative"
-        else
-          this.control.parentNode.classList.add "vote-count-mixed"
-      
-      this.control.dataset.count = result.aVotes.length.toString()
+
   delete this.control.dataset.queryState
 
 onVotesListLeaved = (e) ->
