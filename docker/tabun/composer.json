@@ -6,13 +6,13 @@
     }
   ],
   "require": {
-    "agelxnash/jevix": "1.2.1",
-    "smarty/smarty": "3.1.11",
-    "smarty-gettext/smarty-gettext": "1.4.0",
-    "everypony/zend-cache-redis": "1.2.0",
-    "massivescale/celery-php": "2.1.2",
-    "elasticsearch/elasticsearch": "v8.2.0",
-    "xxtea/xxtea": "1.0.1",
+    "agelxnash/jevix": "^1.2",
+    "smarty/smarty": "^4.1",
+    "smarty-gettext/smarty-gettext": "^1.6",
+    "everypony/zend-cache-redis": "^1.3",
+    "massivescale/celery-php": "^2.1",
+    "elasticsearch/elasticsearch": "8.2.0",
+    "xxtea/xxtea": "^1.0",
     "predis/predis": "^1.1"
   }
 }
