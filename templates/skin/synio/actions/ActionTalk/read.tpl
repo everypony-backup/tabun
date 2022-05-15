@@ -7,8 +7,11 @@
 
 <article class="topic topic-type-talk">
 	<header class="topic-header">
-		<h1 class="topic-title">{$oTalk->getTitle()|escape:'html'}</h1>
-		
+		<h1 class="topic-title word-wrap">{$oTalk->getTitle()|escape:'html'}</h1>
+		<div class="topic-info">
+			<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(48)}"  class="avatar" /></a>
+			<a rel="author" href="{$oUser->getUserWebPath()}" data-user_id="{$oUser->getId()}">{$oUser->getLogin()}</a> в сообщениях
+		</div>
 	</header>
 
 
@@ -21,17 +24,13 @@
 
 	<footer class="topic-footer">
 		<ul class="topic-info">
-			<li class="topic-info-author">
-				<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(24)}"  class="avatar" /></a>
-				<a rel="author" href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
-			</li>
 			<li class="topic-info-date">
 				<time datetime="{date_format date=$oTalk->getDate() format='c'}" pubdate title="{date_format date=$oTalk->getDate() format='j F Y, H:i'}">
 					{date_format date=$oTalk->getDate() format="j F Y, H:i"}
 				</time>
 			</li>
 			<li class="topic-info-favourite">
-                <div class="favourite link-dotted{if $oTalk->getIsFavourite()} active{/if}" data-target_id="{$oTalkId}" data-target_type="talk">
+                <div class="favourite{if $oTalk->getIsFavourite()} active{/if}" data-target_id="{$oTalkId}" data-target_type="talk">
                     {if $oTalk->getIsFavourite()}
                         {t}favourite_in{/t}
                     {else}
