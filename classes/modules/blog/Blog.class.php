@@ -822,6 +822,7 @@ class ModuleBlog extends Module
         }
         sort($allowToReadBlogs);
         $allowToReadBlogs = array_unique($allowToReadBlogs);
+        $allowToReadBlogs = array_values($allowToReadBlogs);
         return $allowToReadBlogs;
     }
     /**
