@@ -560,8 +560,10 @@ class ModuleComment extends Module
              * Если комментарий удаляется, удаляем его из прямого эфира
              */
             if ($oComment->getDelete()) {
-                // Удаление комментария, если тот удален в ElasticSearch
-                $this->SearchIndexer_CommentDelete($oComment);
+                // Удаление комментария в ElasticSearch, если комментарий удален
+                if ($oComment->getTargetType()=='topic') {
+                    $this->SearchIndexer_CommentDelete($oComment);
+                }
                 $this->DeleteCommentOnlineByArrayId($oComment->getId(), $oComment->getTargetType());
             }else if ($oComment->getTargetType()=='topic') {
                 // Индексирование комментария в ElasticSearch
