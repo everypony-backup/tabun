@@ -39,6 +39,10 @@
     var Capabilities = {
         allowCommentsEditingLock: {if $oConfig->getValue('acl.edit.comment.enable_lock')}true{else}false{/if}
     }
+    var Limitations = {
+        processingImgMaxHeight: {$oConfig->getValue('view.processing.img_max_height')},
+        processingImgMaxWidth: {$oConfig->getValue('view.processing.img_max_width')}
+    }
 </script>
 <script src="{cfg name='path.static.url'}/vendor.{cfg name='misc.ver.front'}.js" type="text/javascript"></script>
 <script src="{cfg name='path.static.url'}/main.{cfg name='misc.ver.front'}.js" type="text/javascript"></script>

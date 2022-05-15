@@ -16,7 +16,7 @@
     "jquery.scrollto": "~2.1.1",
     "lodash": "~3.10.1",
     "react": "~15.3",
-    "react-avatar-editor": "8.0.1",
+    "react-cropper": "^1.3.0",
     "react-dom": "~15.3",
     "xhr": "^2.5.0"
   },
