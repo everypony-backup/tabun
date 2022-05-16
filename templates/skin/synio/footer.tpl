@@ -12,7 +12,7 @@
             {if {cfg name='misc.debug'} == true}
                 <div>Версия фронтенда: <strong>{cfg name='misc.ver.front'}</strong></div>
             {/if}
-            <div><a href="https://github.com/everypony/tabun/discussions" target="_blank">Обратная связь</a></div>
+            <div><a href="mailto:mail@everypony.ru" target="_blank">Обратная связь</a></div>
 		</div>
 		{hook run='footer_end'}
 	</footer>
