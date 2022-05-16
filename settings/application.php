@@ -298,6 +298,18 @@ $config['misc']['simplify_comments_pagination'] = false;
  */
 $config['page']['show_block_structure'] = false;
 
+/**
+ * CloudFlare
+ */
+$config['cloudflare'] = [];
+$config['cloudflare']['enabled'] = false;
+// https://dash.cloudflare.com/
+// <example.com> -> API (Sidebar) -> Zone ID
+$config['cloudflare']['zone'] = 'abcdefghijklmnopqrstuvwxyz012345';
+// https://dash.cloudflare.com/profile/api-tokens
+// API Tokens -> Create Token -> Custom token -> Permissions -> Zone | Cache Purge | Purge
+$config['cloudflare']['bearer_key'] = 'abcdefghijklmnopqrstuvwxyz0123456789ABCD';
+
 // Include configs
 foreach (glob(dirname(__FILE__).'/parts.d/*') as $file) {
     $name = explode('.', str_replace(dirname(__FILE__).'/parts.d/', '', $file));

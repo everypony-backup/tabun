@@ -90,6 +90,26 @@ class ActionSettings extends Action
      **********************************************************************************
      */
 
+    private function PurgeFilesInCloudflare($files){
+        $cfConfig = Config::Get('cloudflare');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://api.cloudflare.com/client/v4/zones/{$cfConfig['zone']}/purge_cache");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        // cURL Headers
+        $headers = [];
+        $headers[] = "Content-Type: application/json";
+        $headers[] = "Authorization: Bearer {$cfConfig['bearer_key']}";
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // cURL Data
+        $postData = ['files' => $files];
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+        // cURL Send
+        curl_exec($ch);
+        curl_close($ch);
+    }
+
     protected function CreateTempFileFromBase64($base64str=null){
         $fileData=base64_decode($base64str, true);
         $sFile = Config::Get('sys.cache.dir').func_generator();
@@ -120,6 +140,16 @@ class ActionSettings extends Action
 
             $this->Viewer_AssignAjax('sFile', $this->oUserCurrent->getProfileFoto());
             $this->Viewer_AssignAjax('sTitleUpload', $this->Lang_Get('settings_profile_photo_change'));
+
+            // Очистка кеша в Cloudflare
+            if (
+                Config::Get('cloudflare.enabled') &&
+                preg_match('/([a-zA-Z]+:\/\/)?([^\/]+[\s\S]+)/', $this->oUserCurrent->getProfileFoto(), $matches)
+            ) {
+                $file = 'https://'.$matches[2];
+                $this->PurgeFilesInCloudflare([$file]);
+            }
+
             return true;
         }
 
@@ -169,6 +199,28 @@ class ActionSettings extends Action
 
             $this->Viewer_AssignAjax('sFile', $this->oUserCurrent->getProfileAvatarPath(100));
             $this->Viewer_AssignAjax('sTitleUpload', $this->Lang_Get('settings_profile_avatar_change'));
+
+            // Очистка кеша в Cloudflare
+            if (
+                Config::Get('cloudflare.enabled') &&
+                preg_match('/([a-zA-Z]+:\/\/)?([^\/]+[\s\S]+)\/avatar_100x100.([a-zA-Z]+?)$/', $this->oUserCurrent->getProfileAvatar(), $matches)
+            ) {
+                $avatarFolder = 'https://'.$matches[2];
+                $ext = $matches[3];
+                $files = [];
+                $aSize=Config::Get('module.user.avatar_size');
+                $aSize[] = 100;
+                $aSize = array_unique($aSize);
+                foreach ($aSize as $iSize) {
+                    if ($iSize==0) {
+                        $name = 'avatar';
+                    } else {
+                        $name = "avatar_{$iSize}x{$iSize}";
+                    }
+                    $files[] = "{$avatarFolder}/{$name}.{$ext}";
+                }
+                $this->PurgeFilesInCloudflare($files);
+            }
             return true;
         }
 
