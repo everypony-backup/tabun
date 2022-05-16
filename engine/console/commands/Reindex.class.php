@@ -7,6 +7,7 @@ class Reindex extends LSC
     private $celeryClient;
     private $oDb;
     private $rowPerPage;
+    private $startFromPage;
 
     public function __construct()
     {
@@ -32,12 +33,14 @@ class Reindex extends LSC
             exit();
         }
 
-        $this->rowPerPage = 100;
+        $aArgs = $_SERVER['argv'];
+        $this->rowPerPage = $aArgs[3] ? intval($aArgs[3]) : 100;
+        $this->startFromPage = $aArgs[4] ? intval($aArgs[4]) : 0;
     }
 
     public function getHelp()
     {
-        return "Usage: reindex (topics | comments)";
+        return "Usage: reindex (topics | comments) <rowPerPage> <startFromPage>";
     }
 
     public function actionTopics()
@@ -45,7 +48,7 @@ class Reindex extends LSC
         // Инициализация
         $this->celeryClient->PostTask('tasks.topic_init', []);
 
-        $page = 0;
+        $page = $this->startFromPage;
         do {
             $sql = "
               SELECT
@@ -95,7 +98,7 @@ class Reindex extends LSC
         // Инициализация
         $this->celeryClient->PostTask('tasks.comment_init', []);
 
-        $page = 0;
+        $page = $this->startFromPage;
         do {
             $sql = "
               SELECT
