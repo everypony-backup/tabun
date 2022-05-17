@@ -1,0 +1,109 @@
+version: '3.7'
+
+volumes:
+  db:
+  redis:
+  static:
+  storage:
+  elastic:
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/tabun/Dockerfile
+      target: development
+    volumes:
+      - static:/static
+      - storage:/storage
+      - ./index.php:/app/index.php
+      - ./engine:/app/engine
+      - ./classes:/app/classes
+      - ./settings:/app/settings
+      - ./templates:/app/templates
+    depends_on:
+      - db
+      - redis
+      - tasks
+    environment:
+      MARIADB_USER: ${MARIADB_USER:-tabun}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
+    networks:
+      default:
+        aliases:
+          - tabun
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/tabun/Dockerfile
+      target: frontend-development
+    volumes:
+      - .:/frontend
+      - /frontend/node_modules
+      - /frontend/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+      - static:/frontend/static
+
+  gateway:
+    image: nginx:alpine
+    ports:
+      - '8000:80'
+    restart: always
+    volumes:
+      - ./docker/gateway/nginx.conf:/etc/nginx/nginx.conf
+      - static:/app/static
+      - storage:/storage
+    depends_on:
+      - app
+
+  db:
+    build:
+      context: .
+      dockerfile: docker/mariadb/Dockerfile
+    environment:
+      MARIADB_USER: ${MARIADB_USER:-tabun}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD:-true}
+    volumes:
+      - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
+      - db:/var/lib/mysql
+    ports:
+      - '3307:3306'
+
+  tasks:
+    build:
+      context: .
+      dockerfile: docker/celery/Dockerfile
+    volumes:
+      - ./docker/celery/tasks.py:/app/tasks.py
+    depends_on:
+      - redis
+    environment:
+      - CELERY_MAILER_HOST=mailcatcher
+      - CELERY_MAILER_PORT=1025
+
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - redis:/data
+
+  elastic:
+    image: elasticsearch:8.2.0
+    volumes:
+      - elastic:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+
+  kibana:
+    image: kibana:8.2.0
+    ports:
+      - '5601:5601'
+
+  mailcatcher:
+    image: schickling/mailcatcher:latest
+    ports:
+      - '1080:1080'

@@ -61,11 +61,17 @@ export default class SearchConfigurator extends React.Component {
         document.location.replace(`${routes.search}?${io.encodeParams(params)}`);
     };
 
+    handleKeyPress = (event) => {
+        if(event.key === 'Enter'){
+            this.handleSubmit();
+        }
+    }
+
     render() {
         return (
-            <div className="bs row">
-                <div className="form-group col-lg-12">
-                    <div className="input-group">
+            <div className="advanced-search">
+                <div className="advanced-search__row">
+                    <div className="advanced-search__group advanced-search__group_width_full">
                         <NamedDropdown
                             groupName={_('search_query_type')}
                             choices={this.queryTypes}
@@ -74,35 +80,28 @@ export default class SearchConfigurator extends React.Component {
                         />
                         <input
                             type="search"
-                            className="form-control"
+                            className="advanced-search__text-input"
                             placeholder={_('search_placeholder')}
                             value={this.state.query}
+                            onKeyPress={this.handleKeyPress}
                             onChange={this.handleQueryInput}
                         />
-                        <div className="input-group-btn">
-                            <button
-                                className="btn btn-primary btn-block"
-                                onClick={this.handleSubmit}
-                                disabled={this.state.query.length === 0}
-                            >Искать!</button>
-                        </div>
+                        <button
+                            className="advanced-search__button"
+                            onClick={this.handleSubmit}
+                            disabled={this.state.query.length === 0}
+                        >{_('search_submit')}</button>
                     </div>
                 </div>
-                <div className="form-group col-lg-6">
-                    <NamedRadioGroup
-                        groupName={_('search_sort_by')}
-                        buttons={this.sortTypes}
-                        selected={this.state.params.sortType}
-                        onChange={this.handleSortType}
-                    />
-                </div>
-                <div className="form-group col-lg-6">
-                    <NamedRadioGroup
-                        groupName={_('search_sort_dir')}
-                        buttons={this.sortDirs}
-                        selected={this.state.params.sortDir}
-                        onChange={this.handleSortDir}
-                    />
+                <div className="advanced-search__row">
+                    <div className="advanced-search__col">
+                        <NamedRadioGroup
+                            groupName={_('search_sort_dir')}
+                            buttons={this.sortDirs}
+                            selected={this.state.params.sortDir}
+                            onChange={this.handleSortDir}
+                        />
+                    </div>
                 </div>
             </div>
         )

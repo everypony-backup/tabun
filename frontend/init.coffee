@@ -17,6 +17,10 @@ ReactDOM = require 'react-dom'
 Login = require "core/login.coffee"
 
 init = ->
+  console.log("%cПрограммист?","font-size: 48px")
+  console.log("%cНам как раз такие и нужны!","font-size: 24px")
+  console.log("%cПочини Табун 🙂: https://gitea.everypony.ru/everypony/tabun","font-size: 24px")
+
   # Render React Login Component
   if el = document.getElementById 'window_login_form'
     loginComponent = ReactDOM.render Login(

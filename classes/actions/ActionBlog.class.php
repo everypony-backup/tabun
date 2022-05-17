@@ -1113,11 +1113,6 @@ class ActionBlog extends Action
                 $oCommentOnline->setCommentId($oCommentNew->getId());
 
                 $this->Comment_AddCommentOnline($oCommentOnline);
-
-                /**
-                 * Добавляем комментарий в поисковый индекс
-                 */
-                $this->SearchIndexer_CommentIndex($oCommentNew);
             }
             /**
              * Сохраняем дату последнего коммента для юзера

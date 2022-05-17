@@ -4,20 +4,22 @@ import Baz from 'bazooka';
 
 import ImageUploader from 'components/ImageUploader';
 import {gettext} from 'core/lang';
-import {uploadAvatar, uploadFoto} from 'app/profile';
+import {uploadAvatar, uploadFoto, removeAvatar, removeFoto} from 'app/profile';
 
 function initAvatarUploader(node) {
     ReactDOM.render(
         <ImageUploader
             defaultImg={node.dataset.avatarUrl}
-            width={200}
-            height={200}
+            width={600}
+            height={400}
             containerClass="avatar-change"
             previewClass="avatar"
             linkClass="link-dotted"
             border={50}
+            aspectRatio={1}
             title={gettext('upload_avatar')}
             onUpload={uploadAvatar}
+            onRemove={removeAvatar}
         />,
         node
     );
@@ -35,6 +37,7 @@ function initFotoUploader(node) {
             border={50}
             title={gettext('upload_foto')}
             onUpload={uploadFoto}
+            onRemove={removeFoto}
         />,
         node
     );

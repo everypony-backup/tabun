@@ -12,7 +12,7 @@ function encodeParams(payload) {
         .join('&');
 }
 
-function post(route, data) {
+function post(route, data = {}) {
     const body = encodeParams(merge(data, {security_ls_key: window.LIVESTREET_SECURITY_KEY}));
     const headers = {'Content-Type': 'application/x-www-form-urlencoded'};
     return new Promise((resolve, reject) => xhr.post(
@@ -29,9 +29,17 @@ function post(route, data) {
             error(null, result.body);
             return Promise.reject(result);
         }
-        if (result.bStateError) {
-            return Promise.reject(result);
+
+        try {
+            const jsonBody = JSON.parse(result.body);
+            if (jsonBody.bStateError) {
+                error(jsonBody.sMsgTitle, jsonBody.sMsg);
+                return Promise.reject(result);
+            }
+        } catch {
+            // ignore json parse error
         }
+
         return Promise.resolve(result);
     })
 }

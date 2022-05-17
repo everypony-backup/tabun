@@ -5,10 +5,9 @@ use Predis\Connection\ConnectionException;
 class Reindex extends LSC
 {
     private $celeryClient;
-    private $databaseHandler;
-    private $sIndex;
-    private $sComment;
-    private $sTopic;
+    private $oDb;
+    private $rowPerPage;
+    private $startFromPage;
 
     public function __construct()
     {
@@ -25,101 +24,120 @@ class Reindex extends LSC
             );
         } catch (ConnectionException $exc) {
             echo $exc->getMessage();
+            exit();
         }
         try {
-            $this->databaseHandler = new PDO(
-                sprintf(
-                    "%s:host=%s;port=%d;dbname=%s",
-                    Config::Get("db.params.type"),
-                    Config::Get("db.params.host"),
-                    Config::Get("db.params.port"),
-                    Config::Get("db.params.dbname")
-                ),
-                Config::Get("db.params.user"),
-                Config::Get("db.params.pass")
-            );
-        } catch (PDOException $exc) {
+            $this->oDb = Engine::getInstance()->Database_GetConnect();
+        } catch (Exception $exc) {
             echo $exc->getMessage();
+            exit();
         }
 
-        $this->sIndex = Config::Get('module.search.index');
-        $this->sTopic = Config::Get('module.search.topic_key');
-        $this->sComment = Config::Get('module.search.comment_key');
+        $aArgs = $_SERVER['argv'];
+        $this->rowPerPage = $aArgs[3] ? intval($aArgs[3]) : 100;
+        $this->startFromPage = $aArgs[4] ? intval($aArgs[4]) : 0;
     }
 
     public function getHelp()
     {
-        return "Usage: reindex (topics | comments)";
+        return "Usage: reindex (topics | comments) <rowPerPage> <startFromPage>";
     }
 
     public function actionTopics()
     {
-        $sql = "
-          SELECT
-            ls_topic.topic_id,
-            blog_id AS topic_blog_id,
-            user_id AS topic_user_id,
-            topic_type,
-            topic_title,
-            ls_topic_content.topic_text,
-            topic_tags,
-            topic_date_add AS topic_date,
-            topic_publish AS topic_publish
-          FROM
-            ls_topic
-          LEFT JOIN 
-            ls_topic_content 
-          ON 
-            ls_topic.topic_id = ls_topic_content.topic_id
-        ";
+        // Инициализация
+        $this->celeryClient->PostTask('tasks.topic_init', []);
 
-        $statement = $this->databaseHandler->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-        $statement->execute();
+        $page = $this->startFromPage;
+        do {
+            $sql = "
+              SELECT
+                ls_topic.topic_id,
+                blog_id AS topic_blog_id,
+                user_id AS topic_user_id,
+                topic_title,
+                ls_topic_content.topic_text,
+                topic_tags,
+                topic_date_add AS topic_date,
+                topic_publish
+              FROM
+                ls_topic
+              LEFT JOIN 
+                ls_topic_content 
+              ON 
+                ls_topic.topic_id = ls_topic_content.topic_id
+              LIMIT
+                " . ($page * $this->rowPerPage) . "," . $this->rowPerPage;
 
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
-            $this->celeryClient->PostTask(
-                'tasks.topic_index',
-                array_merge(
-                    [
-                        'index' => $this->sIndex,
-                        'key' => $this->sTopic
-                    ],
-                    $row
-                )
-            );
-        }
+            $topics = $this->oDb->select($sql);
+            if(is_array($topics) && count($topics)) {
+                // Добавление постов в ElasticSearch
+                foreach ($topics as $topic) {
+                    echo "Pushing topic [".$topic['topic_id']."] from blog [".$topic['topic_blog_id']."] on page ".$page."\n";
+                    $this->celeryClient->PostTask(
+                        'tasks.topic_index',
+                        [
+                            'topic_id' => $topic['topic_id'],
+                            'topic_blog_id' => $topic['topic_blog_id'],
+                            'topic_user_id' => $topic['topic_user_id'],
+                            'topic_title' => $topic['topic_title'],
+                            'topic_text' => $topic['topic_text'],
+                            'topic_tags' => $topic['topic_tags'],
+                            'topic_date' => $topic['topic_date'],
+                            'topic_publish' => $topic['topic_publish'] == 1
+                        ]
+                    );
+                }
+            }
+            $page++;
+        } while (is_array($topics) && count($topics));
     }
 
     public function actionComments()
     {
-        $sql = "
-          SELECT
-            comment_id,
-            target_id AS comment_target_id,
-            target_type AS comment_target_type,
-            user_id AS comment_user_id,
-            comment_text,
-            comment_date,
-            comment_publish
-          FROM
-            ls_comment
-        ";
+        // Инициализация
+        $this->celeryClient->PostTask('tasks.comment_init', []);
 
-        $statement = $this->databaseHandler->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-        $statement->execute();
+        $page = $this->startFromPage;
+        do {
+            $sql = "
+              SELECT
+                comment_id,
+                target_id AS comment_target_id,
+                target_parent_id AS comment_blog_id,
+                user_id AS comment_user_id,
+                comment_text,
+                comment_date,
+                comment_publish
+              FROM
+                ls_comment
+              WHERE
+                target_type = 'topic'
+              AND
+                comment_delete = 0
+              LIMIT
+                " . ($page * $this->rowPerPage) . "," . $this->rowPerPage;
 
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
-            $this->celeryClient->PostTask(
-                'tasks.comment_index',
-                array_merge(
-                    [
-                        'index' => $this->sIndex,
-                        'key' => $this->sTopic
-                    ],
-                    $row
-                )
-            );
-            var_dump($row);
-        }
+            $comments = $this->oDb->select($sql);
+            if(is_array($comments) && count($comments)) {
+                // Добавление комментариев в ElasticSearch
+                foreach ($comments as $comment) {
+                    echo "Pushing comment [".$comment['comment_id']."] from blog [".$comment['comment_blog_id']."] on page ".$page."\n";
+                    $this->celeryClient->PostTask(
+                        'tasks.comment_index',
+                        [
+                            'comment_id' => $comment['comment_id'],
+                            'comment_blog_id' => $comment['comment_blog_id'],
+                            'comment_target_id' => $comment['comment_target_id'],
+                            'comment_user_id' => $comment['comment_user_id'],
+                            'comment_text' => $comment['comment_text'],
+                            'comment_date' => $comment['comment_date'],
+                            'comment_publish' => $comment['comment_publish'] == 1
+                        ]
+                    );
+                }
+            }
+            $page++;
+        } while (is_array($comments) && count($comments));
     }
 }

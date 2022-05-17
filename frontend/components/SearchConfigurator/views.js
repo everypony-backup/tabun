@@ -1,5 +1,4 @@
 import React from 'react';
-import {map} from 'lodash';
 import classNames from 'classnames';
 
 export class NamedDropdown extends React.Component {
@@ -8,8 +7,7 @@ export class NamedDropdown extends React.Component {
         selected: this.props.selected
     };
 
-    change = (event) => {
-        const val = event.target.name;
+    change = (val) => {
         this.setState({
             opened: false,
             selected: val
@@ -25,29 +23,34 @@ export class NamedDropdown extends React.Component {
         const choices = Object
             .keys(this.props.choices)
             .map(name => {
-                const className = classNames({"active": this.state.selected == name});
+                const className = classNames(
+                    "fancy-dropdown__option",
+                    {"fancy-dropdown__option_state_active": this.state.selected == name}
+                );
                 return (
-                    <li className={className} key={name} onClick={this.change}>
-                        <a name={name}>{this.props.choices[name]}</a>
+                    <li className={className} key={name}>
+                        <button
+                            className="fancy-dropdown__option-button"
+                            onClick={() => this.change(name)}
+                        >
+                            {this.props.choices[name]}
+                        </button>
                     </li>
                 );
             });
 
         return (
-            <div className="input-group-btn">
-                <div className={classNames("btn-group", {"open": this.state.opened})}>
-                    <button
-                        className="btn btn-default dropdown-toggle"
-                        type="button"
-                        onClick={this.toggle}
-                    >
-                        <span>{this.props.groupName}&nbsp;{this.props.choices[this.state.selected]}&nbsp;</span>
-                        <span className="caret"/>
-                    </button>
-                    <ul className="dropdown-menu" role="menu">
-                        {choices}
-                    </ul>
-                </div>
+            <div className={classNames("fancy-dropdown", {"fancy-dropdown_state_open": this.state.opened})}>
+                <button
+                    className="fancy-dropdown__button"
+                    type="button"
+                    onClick={this.toggle}
+                >
+                    {this.props.groupName}&nbsp;{this.props.choices[this.state.selected]}&nbsp;
+                </button>
+                <ul className="fancy-dropdown__menu" role="menu">
+                    {choices}
+                </ul>
             </div>
         );
     }
@@ -69,7 +72,10 @@ export class NamedRadioGroup extends React.Component {
         const buttons = Object
             .keys(this.props.buttons)
             .map(name => {
-                const className = classNames("btn btn-default", {"active": this.state.selected == name});
+                const className = classNames(
+                    "search-radio__button",
+                    {"search-radio__button_state_active": this.state.selected == name}
+                );
                 return <button
                     type="button"
                     className={className}
@@ -80,8 +86,8 @@ export class NamedRadioGroup extends React.Component {
             });
 
         return (
-            <div className="btn-group btn-group-sm input-group" role="group">
-                <div className="input-group-addon">{this.props.groupName}</div>
+            <div className="search-radio" role="group">
+                <span className="search-radio__title">{this.props.groupName}</span>
                 {buttons}
             </div>
         );

@@ -17,6 +17,7 @@ voteTargets =
   topic: 'idTopic'
   blog: 'idBlog'
   user: 'idUser'
+month_lang = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
 
 vote = (idTarget, objVote, value, type) ->
   unless voteTargets[type]
@@ -68,7 +69,7 @@ onVoteUser = (idTarget, objVote, value, type, result) ->
   $("#user_skill_#{idTarget}").text result.iSkill
 
 getVotes = (targetId, targetType, el) ->
-  if el.dataset.target_type == "topic" && el.textContent.trim() == "?" && UI.voteNeutral
+  if el.dataset.target_type == "topic" && el.parentNode.classList.contains("not-voted") && el.parentNode.classList.contains("vote-enabled") && UI.voteNeutral
     return false
 
   params = {}
@@ -99,13 +100,11 @@ onGetVotes = (result) ->
   if result.bStateError
     error null, result.sMsg
   else
-    voteSum = 0
     if result.aVotes.length > 0
       vl = document.createElement "div"
       vl.className = "vote-list"
       for i in [0...result.aVotes.length]
         vote = result.aVotes[i]
-        voteSum += vote.value
         line = document.createElement "div"
         line.className = "vote-list-item"
         profileLink = __makeProfileLink(vote.voterName, {
@@ -118,8 +117,7 @@ onGetVotes = (result) ->
         time = document.createElement "time"
         time.datetime = vote.date
         date = new Date(Date.parse(vote.date))
-        now = new Date()
-        timeString = if date.getDate() != now.getDate() or date.getMonth() != now.getMonth() or date.getFullYear() != now.getFullYear() then date.toLocaleString() else date.toLocaleTimeString()
+        timeString = date.getDate() + " " + month_lang[date.getMonth()] + " " + date.getFullYear() + ", " + ('0' + date.getHours()).slice(-2) + ":" + ('0' + date.getMinutes()).slice(-2)
         time.className = "vote-list-item-component"
         time.appendChild document.createTextNode(timeString)
         line.appendChild time
@@ -128,12 +126,13 @@ onGetVotes = (result) ->
         voteValue.dataset.value = if vote.value == 0 then "0" else (if vote.value > 0 then "+" else "−") + Math.abs(vote.value).toString()
         voteValue.className = "vote-list-item-component vote"
         line.appendChild voteValue
-        
+
         vl.appendChild line
       
       vl_box = document.createElement "div"
       vl_box.className = "vote-list-box hidden"
       vl_box.classList.add "for-"+this.targetType
+      vl_box.setAttribute('first-implemented-by', 'Morano')
       vl_closeButton = document.createElement "a"
       vl_closeButton.className = "close-button"
       vl_closeButton.href = "javascript://"
@@ -157,22 +156,7 @@ onGetVotes = (result) ->
       context.eventTarget.addEventListener "click", context.callback
     else
       notice null, lang.gettext("no_votes_"+this.targetType)
-    
-    if parseInt(this.control.dataset.count) != result.aVotes.length
-      this.control.parentNode.classList.remove "vote-count-negative"
-      this.control.parentNode.classList.remove "vote-count-positive"
-      this.control.parentNode.classList.remove "vote-count-mixed"
-      if voteSum > 0
-        this.control.textContent = "+" + voteSum.toString()
-        this.control.parentNode.classList.add "vote-count-positive"
-      else
-        this.control.textContent = voteSum.toString()
-        if voteSum < 0
-          this.control.parentNode.classList.add "vote-count-negative"
-        else
-          this.control.parentNode.classList.add "vote-count-mixed"
-      
-      this.control.dataset.count = result.aVotes.length.toString()
+
   delete this.control.dataset.queryState
 
 onVotesListLeaved = (e) ->

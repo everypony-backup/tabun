@@ -49,3 +49,6 @@ msgstr "топиках"
 
 msgid "search_type_comment"
 msgstr "комментариях"
+
+msgid "search_submit"
+msgstr "Искать!"

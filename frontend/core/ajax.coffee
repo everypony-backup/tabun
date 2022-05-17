@@ -10,7 +10,10 @@ routes = require("lib/routes").default
 allowedUrls = Set flatten reduce(
   values routes
   (acc, x) ->
-    acc.push values x
+    if typeof x == "string"
+      acc.push x
+    else
+      acc.push values x
     acc
   []
 )
@@ -19,7 +22,7 @@ prefix = '' # debug env
 
 _error = -> return error gettext("network_error"), gettext("data_not_send")
 
-ajax = (url, params={}, callback, complete, error) ->
+ajax = (url, params={}, callback, complete, err) ->
   unless allowedUrls.contains url
     return error gettext("incorrect_url")
   params.security_ls_key = security_ls_key
@@ -34,7 +37,7 @@ ajax = (url, params={}, callback, complete, error) ->
     data: params
     dataType: 'json'
     success: callback or ->
-    error: error or _error
+    error: err or _error
     complete: complete or ->
 
 

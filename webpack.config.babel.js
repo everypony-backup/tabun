@@ -2,9 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
-import poststylus from 'poststylus';
-import postUse from 'postcss-use';
-import bootstrapStyl from 'bootstrap-styl';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const ENV = process.env.NODE_ENV || 'development';
 const isDev = ENV === 'development';
@@ -44,14 +42,6 @@ const cssLoaderOptions = {
 
 const stylusLoaderOptions = {
   preferPathResolver: 'webpack',
-  use: [
-    bootstrapStyl(),
-    poststylus([
-      postUse({
-        modules: ['postcss-selector-namespace']
-      })
-    ])
-  ],
   compress: !isDev,
   sourceMap: true
 };
@@ -66,6 +56,10 @@ const basePlugins = [
     filename: `[name].${devPrefix}.css`,
   }),
   new WriteVersionPlugin('frontend.version', isDev),
+  new CopyWebpackPlugin([{
+    from: path.join(__dirname, 'frontend', 'images', 'local'),
+    to: path.join(outputPath, 'local'),
+  }]),
 ];
 
 const plugins = isDev ? [

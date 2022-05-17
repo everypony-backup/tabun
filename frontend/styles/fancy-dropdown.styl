@@ -1,0 +1,96 @@
+.fancy-dropdown
+  position relative
+  display inline-block
+  min-height 2.5em
+  box-sizing border-box
+
+  &__button
+    overflow hidden
+    position relative
+    width 100%
+    height 100%
+    margin 0
+    padding 0 2em 0 1em
+    color #333333
+    line-height 2.5em
+    font inherit
+    background-color #ffffff
+    border-radius 0
+    border 1px solid #cccccc
+    cursor pointer
+    white-space nowrap
+    appearance none
+    box-sizing border-box
+
+    &:hover
+    &:active
+    &:focus
+      background-color #e6e6e6
+      border 1px solid #adadad
+      outline 0
+
+    &::after
+      content ''
+      position absolute
+      top calc(50% - 2px)
+      right 12px
+      width 0
+      height 0
+      border-top 4px solid #000000
+      border-left 4px solid transparent
+      border-right 4px solid transparent
+      pointer-events none
+      box-sizing border-box
+
+  &__menu
+    display none
+    position absolute
+    top calc(100% + 4px)
+    z-index 50
+    min-width 100%
+    padding 4px 0
+    color #333333
+    background-color #ffffff
+    border 1px solid #cccccc
+    border-radius 4px
+    box-shadow 0 6px 12px rgba(0, 0, 0, .18)
+    box-sizing border-box
+
+  &__option
+    &_state
+      &_active
+        & ^[0]__option-button
+          color #ffffff
+          background-color #337ab7
+
+          &:hover
+          &:focus
+          &:active
+            color #ffffff
+            background-color #285f8f
+
+  &__option-button
+    width 100%
+    padding .5em 1em
+    line-height 1.5
+    text-align left
+    font inherit
+    border none
+    border-bottom 1px solid #cccccc
+    background transparent
+    cursor pointer
+    box-sizing border-box
+
+    &:last-child
+      border-bottom none
+
+    &:hover
+    &:focus
+    &:active
+      color #262626
+      background-color #f5f5f5
+
+  &_state
+    &_open
+      & ^[0]__menu
+        display block

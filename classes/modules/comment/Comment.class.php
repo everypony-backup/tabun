@@ -427,7 +427,7 @@ class ModuleComment extends Module
 
         if (false === ($aCommentsRec = $this->Cache_Get($sCacheKey))) {
             $aCommentsRow=$this->oMapper->GetCommentsByTargetId($sId, $sTargetType);
-            if (!is_null($aCommentsRow) && count($aCommentsRow)) {
+            if ($aCommentsRow && count($aCommentsRow)) {
                 $aCommentsRec=$this->BuildCommentsRecursive($aCommentsRow);
             }
             
@@ -469,7 +469,9 @@ class ModuleComment extends Module
     {
         $sId=$this->oMapper->AddComment($oComment);
         if ($sId) {
+            $oComment->setId($sId);
             if ($oComment->getTargetType()=='topic') {
+                $this->SearchIndexer_CommentIndex($oComment);
                 $this->Topic_increaseTopicCountComment($oComment->getTargetId());
             }
             if ($oCommentParent !== null && !$oCommentParent->isFlagRaised(ModuleComment_EntityComment::FLAG_HAS_ANSWER)) {
@@ -494,7 +496,6 @@ class ModuleComment extends Module
                     "comment_new_{$oComment->getTargetType()}_{$oComment->getTargetId()}"
                 ]
             );
-            $oComment->setId($sId);
             return $oComment;
         }
         return false;
@@ -508,6 +509,10 @@ class ModuleComment extends Module
     public function UpdateComment(ModuleComment_EntityComment $oComment)
     {
         if ($this->oMapper->UpdateComment($oComment)) {
+            if ($oComment->getTargetType()=='topic') {
+                // Добавление комментария в ElasticSearch
+                if(!$oComment->getDelete()) $this->SearchIndexer_CommentIndex($oComment);
+            }
             //чистим зависимые кеши
             $this->Cache_Clean(
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
@@ -555,7 +560,14 @@ class ModuleComment extends Module
              * Если комментарий удаляется, удаляем его из прямого эфира
              */
             if ($oComment->getDelete()) {
+                // Удаление комментария в ElasticSearch, если комментарий удален
+                if ($oComment->getTargetType()=='topic') {
+                    $this->SearchIndexer_CommentDelete($oComment);
+                }
                 $this->DeleteCommentOnlineByArrayId($oComment->getId(), $oComment->getTargetType());
+            }else if ($oComment->getTargetType()=='topic') {
+                // Индексирование комментария в ElasticSearch
+                $this->SearchIndexer_CommentIndex($oComment);
             }
             /**
              * Обновляем избранное
@@ -603,6 +615,8 @@ class ModuleComment extends Module
          * Если комментарии снимаются с публикации, удаляем их из прямого эфира.
          */
         if ($this->oMapper->SetCommentsPublish($sTargetId, $sTargetType, $iPublish)) {
+            // Установка статуса комментариев в ElasticSearch
+            $this->SearchIndexer_CommentSetPublishByTopicId($iPublish, $sTargetId);
             $this->Favourite_SetFavouriteTargetPublish(array_keys($aComments['comments']), 'comment', $iPublish);
             if ($iPublish!=1) {
                 $this->DeleteCommentOnlineByTargetId($sTargetId, $sTargetType);
@@ -872,6 +886,10 @@ class ModuleComment extends Module
         }
 
         if ($this->oMapper->DeleteCommentByTargetId($aTargetId, $sTargetType)) {
+            // Удаление комментариев в ElasticSearch
+            foreach ($aTargetId as $sTargetId) {
+                $this->SearchIndexer_CommentDeleteCommentByTopicId($sTargetId);
+            }
             /**
              * Удаляем комментарии из избранного
              */
@@ -932,7 +950,14 @@ class ModuleComment extends Module
             ]
         );
 
-        return $this->oMapper->UpdateTargetParentByTargetId($sParentId, $sTargetType, $aTargetId);
+        if ($result = $this->oMapper->UpdateTargetParentByTargetId($sParentId, $sTargetType, $aTargetId)) {
+            // Перенос комментариев в ElasticSearch
+            foreach ($aTargetId as $sTargetId) {
+                $this->SearchIndexer_CommentUpdateBlogIdByTopicId($sParentId, $sTargetId);
+            }
+            return $result;
+        }
+        return false;
     }
     /**
      * Меняем target parent по массиву идентификаторов в таблице комментариев online
@@ -973,7 +998,14 @@ class ModuleComment extends Module
                 "comment_new_{$sTargetType}"
             ]
         );
-        return $this->oMapper->MoveTargetParent($sParentId, $sTargetType, $sParentIdNew);
+        if ($result = $this->oMapper->MoveTargetParent($sParentId, $sTargetType, $sParentIdNew)) {
+            // Перенос комментариев в ElasticSearch
+            if ($sTargetType === 'topic') {
+                $this->SearchIndexer_CommentMoveToBlog($sParentId, $sParentIdNew);
+            }
+            return $result;
+        };
+        return false;
     }
     /**
      * Меняет target parent на новый в прямом эфире
@@ -1039,6 +1071,7 @@ class ModuleComment extends Module
     public function UpdateCommentFlags(ModuleComment_EntityComment $oComment)
     {
         if ($this->oMapper->UpdateCommentFlags($oComment)) {
+            // TODO: ElasticSearch, если вдруг будет использоваться (в данный момент метод не используется)
             //чистим зависимые кеши
             $this->Cache_Clean(
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
