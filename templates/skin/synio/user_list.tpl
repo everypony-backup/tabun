@@ -29,15 +29,15 @@
 
 	<tbody>
 		{if $aUsersList}
-			{foreach from=$aUsersList item=oUserList}
-				{assign var="oSession" value=$oUserList->getSession()}
-				{assign var="oUserNote" value=$oUserList->getUserNote()}
+			{foreach from=$aUsersList item=oUser}
+				{assign var="oSession" value=$oUser->getSession()}
+				{assign var="oUserNote" value=$oUser->getUserNote()}
 				<tr>
 					<td class="cell-name">
-						<a href="{$oUserList->getUserWebPath()}"><img src="{$oUserList->getProfileAvatarPath(48)}"  class="avatar" /></a>
-						<div class="name {if !$oUserList->getProfileName()}no-realname{/if}">
-							<p class="username word-wrap"><a href="{$oUserList->getUserWebPath()}">{$oUserList->getLogin()}</a></p>
-							{if $oUserList->getProfileName()}<p class="realname">{$oUserList->getProfileName()}</p>{/if}
+						<a href="{$oUser->getUserWebPath()}"><img src="{$oUser->getProfileAvatarPath(48)}"  class="avatar" /></a>
+						<div class="name {if !$oUser->getProfileName()}no-realname{/if}">
+							<p class="username word-wrap"><a href="{$oUser->getUserWebPath()}" data-user_id="{$oUser->getId()}">{$oUser->getLogin()}</a></p>
+							{if $oUser->getProfileName()}<p class="realname">{$oUser->getProfileName()}</p>{/if}
 						</div>
 					</td>
 					<td>
@@ -45,11 +45,11 @@
 							{if $oUserNote}
 								<button type="button" class="button button-action button-action-note" title="{$oUserNote->getText()|escape:'html'}"><i class="icon-synio-comments-green"></i></button>
 							{/if}
-							<a href="{router page='talk'}add/?talk_users={$oUserList->getLogin()}"><button type="submit"  class="button button-action button-action-send-message" title="{$aLang.user_write_prvmsg}"><i class="icon-synio-send-message"></i></button></a>
+							<a href="{router page='talk'}add/?talk_users={$oUser->getLogin()}"><button type="submit"  class="button button-action button-action-send-message" title="{$aLang.user_write_prvmsg}"><i class="icon-synio-send-message"></i></button></a>
 						{/if}
 					</td>
-					<td class="cell-skill">{$oUserList->getSkill()}</td>
-					<td class="cell-rating {if $oUserList->getRating() < 0}negative{/if}"><strong>{$oUserList->getRating()}</strong></td>
+					<td class="cell-skill">{$oUser->getSkill()}</td>
+					<td class="cell-rating {if $oUser->getRating() < 0}negative{/if}"><strong>{$oUser->getRating()}</strong></td>
 				</tr>
 			{/foreach}
 		{else}

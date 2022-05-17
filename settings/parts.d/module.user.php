@@ -20,7 +20,7 @@ return [
     'profile_photo_width' => 250,
     'name_max' => 30,
     'about_max' => 3000,
-    'userfield_max_identical' => 9,
+    'userfield_max_identical' => 4,
     'captcha_use_registration' => false,
     'recaptcha_use_registration' => true,
     'bad_rating' => -10

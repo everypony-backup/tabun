@@ -19,6 +19,7 @@
 	bAllowSubscribe=true
 	bNoCommentFavourites=false
 	oSubscribeComment=$oTopic->getSubscribeNewComment()
+	oBlog=$oTopic->getBlog()
 }
 
 

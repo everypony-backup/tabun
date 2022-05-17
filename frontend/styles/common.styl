@@ -4,31 +4,48 @@
   display flex
   flex-flow row
   align-items center
-  .vote-item
-    cursor pointer
-    overflow hidden
-    display inline-block
 
-.vote-up,.vote-down
-  background transparent url(images/up.png) no-repeat
+.stream-voted
+  font-weight bold
+
+.vote-up,
+.vote-down,
+.stream-voted-up,
+.stream-voted-down
   height 15px
   width 12px
-  opacity 0.5
+  color transparent
+  display inline-block
 
-.vote-down
+.vote-up,
+.stream-voted-up
+  background transparent url(images/up.png) no-repeat
+  margin-bottom -2px
+
+.vote-down,
+.stream-voted-down
   background-image url(images/down.png)
   margin-bottom -2px
 
-.vote-up:hover, .vote-down:hover
-  opacity 1
-
 .vote-count
-  padding 0 5px 0 4px
+  color #949aa1
+  padding 0 4px
   line-height 18px
   font-size 18px
-  span
-    i
-      font-style normal
+
+.vote-info-enabled
+  .vote-count
+    &.vote-item
+      cursor help
+    &[data-count="0"]
+      cursor default
+    &[data-count]:not([data-count="0"]):not([data-query-state="query"]) 
+      cursor help
+    &[data-query-state="query"]
+      cursor progress
+  &.vote-count-mixed
+    .vote-count
+      color black
 
 .vote-count-positive
   .vote-count
@@ -38,29 +55,46 @@
   .vote-count
     color #da4242
 
-.voted-down .vote-up,.voted-up .vote-down
+.vote-up,
+.vote-down
   opacity 0.15
 
-.voted-up .vote-up,.voted-down .vote-down
+.voted-up .vote-up,
+.voted-down .vote-down,
+.stream-voted-up,
+.stream-voted-down
   opacity 1
+
+.vote-enabled
+  .vote-up,
+  .vote-down
+    opacity 0.5
+    &:hover
+      opacity 0.85
+  .vote-item
+    cursor pointer
 
 .text
   blockquote
     border 1px dashed #BBBBBB
 
-.favourite
+.link-dotted
   display inline-block
+  color #999
+  text-decoration none
+  border-bottom 1px dotted #999
   vertical-align text-top
   cursor pointer
-  &.active
-    background-position 0 -65px
+  font-style normal
+  text-decoration none
+  &:hover
+    color #2c82fc
+    border-color #2c82fc
+    text-decoration none
 
 .favourite-count
   margin-left 0.4em
-
-.table-talk
-  .favourite
-    color #999
+  color #2c82fc
 
 .follow
   display inline-block
@@ -137,11 +171,9 @@
         background-position -268px -73px
   .toolbar-update
     .update-comments
-      i
-        background url(images/update.gif) no-repeat
+      background url(images/update.gif) no-repeat
       &.active
-        i
-          background-position -25px 0
+        background-position -25px 0
     .new-comments
       padding 5px 0 3px
       font-size 11px
@@ -149,7 +181,7 @@
       text-align center
       text-decoration none
       width 25px
-      cursor: pointer
+      cursor pointer
   .toolbar-topic
     width 19px
     padding 11px
@@ -321,14 +353,10 @@
 .loader
   background #fafafa url(images/loader.gif) 50% 50% no-repeat
 
-.user, .ls-user
-  font-weight bold
-  color #333
-
 .ls-user
   display inline-block
 
-.user:before, .ls-user:before
+.user:not(.has-avatar):before, .ls-user:not(.has-avatar):before
   content ''
   display inline-block
   width 12px
@@ -338,6 +366,23 @@
   vertical-align middle
   position relative
   top -1px
+
+.user.has-avatar, .ls-user.has-avatar
+  img
+    vertical-align text-bottom
+    width 14px
+    height 14px
+    margin-right 4px
+
+.user.undefined:before, .ls-user.undefined:before
+  width 14px
+  height 14px
+
+.user.undefined, .ls-user.undefined
+  pointer-events none
+  font-weight normal
+  font-style italic
+  text-decoration none
 
 .user
   .icon-user
@@ -386,13 +431,6 @@
 .blog-list-info.active
   background-position -19px -107px
 
-.overlay
-  top 0
-  left 0
-  height 100%
-  width 100%
-  position fixed
-
 .donation-list
   li
     display inline-block
@@ -406,3 +444,88 @@
     img
       position absolute
       left 0
+
+.vote-list-box
+  padding 10px
+  z-index 5000
+  transition-duration 0.5s
+  transition-property opacity,filter
+  opacity 1
+  &.hidden
+    opacity 0
+  @media (min-width:568px)
+    display inline-block
+    position absolute
+    border-color #c0c4c6
+    border-style solid
+    border-width 1px
+    border-radius 5px
+    background-color #f4f4f4
+    &.for-comment
+      right -10px
+      bottom 24px
+    &.for-topic
+      left 20px
+      top 52px
+    &.for-blog
+      right -5px
+      top 30px
+    &.for-user
+      right -25px
+      top 40px
+    .close-button
+      display none
+  @media (max-width:567px)
+    position fixed
+    left 0
+    top 0
+    width 100%
+    height 100%
+    background-color white
+    .close-button
+      display block
+      text-align center
+      margin-bottom 8px
+      color #333
+      text-decoration none
+      font-weight bolder
+
+.vote-list-wrapper
+  overflow-y hidden
+  @media (min-width:568px)
+    max-height 320px
+  @media (max-width:567px)
+    height 100vh
+
+.vote-list
+  display table
+  color black
+  time,
+  .vote
+    text-align right
+  time>.fa
+    float left
+    margin-right 3px
+    padding-top 1.5pt
+  @media (max-width:567px)
+    &::after
+      display block
+      height 150px
+      content ""
+.vote-list-item
+  display table-row
+  &:not(:last-child)>.vote-list-item-component
+    padding-bottom 0.3em
+  .vote::before
+    content attr(data-value)
+    font-weight bolder
+  .vote[data-value="0"]::before
+    color black
+  .vote[data-value^="+"]::before
+    color #390
+  .vote[data-value^="−"]::before
+    color #f00
+.vote-list-item-component
+  display table-cell
+  &:not(:last-child)
+    padding-right 10px

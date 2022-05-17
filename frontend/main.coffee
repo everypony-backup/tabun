@@ -1,4 +1,3 @@
-require "./styles.styl"
 {assign} = require "lodash"
 
 window.ls = {}

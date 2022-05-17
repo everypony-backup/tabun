@@ -2,13 +2,14 @@
 {include file='header.tpl'}
 
 <script type="text/javascript">
-	jQuery(document).ready(function($){
-		$('#reactivation-form').bind('submit',function(){
-			ls.user.reactivation('reactivation-form');
-			return false;
-		});
-		$('#reactivation-form-submit').attr('disabled',false);
+document.addEventListener('DOMContentLoaded', () => {
+		document.getElementById('reactivation-form').addEventListener('submit', (e) => {
+		ls.user.reactivation('reactivation-form');
+		e.preventDefault();
+		return false;
 	});
+	document.getElementById('reactivation-form-submit').disabled = false;
+});
 </script>
 
 <h2 class="page-header">{$aLang.reactivation}</h2>

@@ -154,6 +154,17 @@ msgstr "Вы робот!"
 msgid "comment_lock_edit"
 msgstr "заблокировать дальнейшее изменение"
 
+msgid "no_votes_comment"
+msgstr "Никто не оценивал этот комментарий"
+
+msgid "no_votes_topic"
+msgstr "Никто не оценивал этот пост"
+
+msgid "no_votes_blog"
+msgstr "Никто не оценивал этот блог"
+
+msgid "no_votes_user"
+msgstr "Никто не оценивал этого пользователя"
 
 # Editor
 msgid "create"
@@ -183,3 +194,30 @@ msgstr "FAQ"
 
 msgid "rules"
 msgstr "Правила"
+
+msgid "user_follow"
+msgstr "Подписаться"
+
+msgid "user_unfollow"
+msgstr "Отписаться"
+
+msgid "blog_create_type_open_notice"
+msgstr "Открытый — к этому блогу может присоединиться любой желающий, посты видны всем"
+
+msgid "blog_create_type_close_notice"
+msgstr "Закрытый — присоединиться можно только по приглашению администрации блога, посты видят только подписчики"
+
+msgid "close"
+msgstr "Закрыть"
+
+msgid "upload_avatar"
+msgstr "Загрузить аватар"
+
+msgid "upload_foto"
+msgstr "Загрузить фото"
+
+msgid "image_uploader_zoom"
+msgstr "Масштаб"
+
+msgid "image_uploader_save"
+msgstr "Сохранить"

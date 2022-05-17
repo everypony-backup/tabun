@@ -1,0 +1,337 @@
+@media (min-width:1025px) and (max-width:1100px)
+  #running_ponies
+    img:nth-of-type(5)
+      display none
+
+@media (min-width:1025px)
+  #wrapper
+    padding 10px 16px 20px 26px
+  #content-wrapper
+    width 70%
+    margin-right 5%
+  #sidebar
+    width 25%
+  #comments
+    .comment-level-40 .comment-wrapper
+      padding-left 0
+
+@media (min-width:769px) and (max-width:1024px)
+  #wrapper
+    padding 10px 10px 20px 10px
+  #content-wrapper
+    width 70%
+    margin-right 2%
+  #sidebar
+    width 28%
+  #running_ponies
+    img:nth-of-type(5)
+      display none
+  #reply
+    margin-left 20px
+  #comments
+    .comment-level-30 .comment-wrapper
+      padding-left 0
+
+@media (min-width:769px)
+  body.widemode
+    #content-wrapper
+      width 100%
+    #sidebar
+      display none
+    #widemode
+      .switch-label.normalmode.big-screen
+        display inline-block
+      .switch-label.widemode.big-screen
+        display none
+  #widemode
+    .switch-label.widemode.big-screen
+      display inline-block
+
+@media (max-width:768px)
+  #reply
+    margin-left 0
+  #wrapper
+    margin 0
+  #comments
+    margin-bottom 0
+  #wrapper
+    .table
+      tr
+        td,.cell-tab-inner
+          padding 3px 0
+    &.no-sidebar
+      .faq-page
+        width 90%
+  #widemode
+    .switch-label.widemode.small-screen
+      display inline-block
+  body.widemode
+    #widemode
+      .switch-label.normalmode.small-screen
+        display inline-block
+      .switch-label.widemode.small-screen
+        display none
+
+@media (min-width:568px) and (max-width:768px)
+  #c-header
+    .main-menu
+      padding-top 5px
+      li:first-of-type
+        width 100%
+  #header
+    overflow visible
+    .auth,#dropdown-user
+      background #F4F4F6
+      display none
+      right 0
+      width 32%
+    .auth
+      width 44%
+      height 75px
+  #wrapper
+    width 140%
+    padding 10px 5px 20px 5px
+    &.no-sidebar
+      flex-flow row
+  #content-wrapper
+    width 70%!important
+  #sidebar
+    width 30%
+    position relative
+    top 0
+    left 100%
+    z-index 5
+    .block,.donate
+      border-radius 0
+      background #f4f4f6
+      padding-bottom 40px
+      margin 0
+    #running_ponies
+      background #f4f4f6
+      margin 0
+  #comments
+    .comment-wrapper
+      padding-left 10px
+    .comment-level-15 .comment-wrapper
+      padding-left 0
+  .comment-info
+    li
+      margin-right 10px
+  #modal_write,#window_upload_img
+    top 10px
+  body.widemode
+    #header
+      .auth
+        display flex
+      #dropdown-user
+        display inline-block
+    #sidebar
+      left -30%
+    #toolbar
+      display none!important
+
+@media (max-width:567px)
+  #wrapper
+    padding 10px 5px 20px 5px
+  #content-wrapper
+    width 100%
+    display block
+  #sidebar
+    width 100%
+    display none
+  #header
+    padding 0 5px
+    margin 0
+    ul
+      width 100%
+    .auth,#dropdown-user,.modal.modal-login
+      display none
+  #c-header
+    height 50px
+    padding 5px 5px 0 5px
+    .main-menu
+      padding 0
+      display flex
+      flex-flow row
+      flex-wrap wrap
+      justify-content space-between
+      li
+        display none
+        font-size 18px
+        line-height 18px
+        padding  0 2px 
+      #logolink
+        padding 0
+        display block
+        width 100%
+        padding 0
+        text-align center
+        line-height 36px
+    .rss,.twitter
+      top 5px
+      right 5px
+      width 16px
+      height 16px
+      background-size 16px 32px
+      &:hover
+        background-position 0 -16px
+    .twitter
+      top 21px
+  #footer
+    padding-bottom 40px
+  .topic
+    margin-bottom 20px!important
+  #comments
+    .comments-header
+      .subscribe
+        position static
+    .comment-wrapper
+      padding-left 10px
+    .comment-level-5 .comment-wrapper
+      padding-left 0
+    .comment-info
+      li
+        margin-right 5px
+  #widemode
+    width 100%
+    border-radius 0
+    text-align right
+    a
+      margin-right 5px
+  #toolbar
+    bottom 0
+    left 0
+    height 35px
+    right inherit
+    top inherit
+    z-index 101
+    .toolbar-topic
+      border 0 transparent solid
+      margin 0
+      display flex
+      flex-flow row
+      padding  6px 0 0 10px
+      width auto
+      height 25px
+      a
+        height 19px
+        width 32px
+        display inline-block
+        i
+          transform rotate(270deg)
+          position relative
+          top -8px
+          left 6px
+    .toolbar-update
+      border 0 transparent solid
+      padding 2px 0 0 5px
+      margin 0
+      width auto
+      display flex
+      flex-flow row
+      align-items center
+      #new_comments_counter
+        padding:0 10px
+  #wrapper
+    .profile
+      .user-login,.user-name
+        display block
+        margin-right 100px
+      .strength,.vote-profile,.button
+        margin-left 0px
+        float left
+    .profile-info-about
+      position static
+      padding 0 5px
+      .avatar
+        top -5px
+        left inherit
+        right 0
+    .profile-dotted-list
+      li
+        background-image none
+        display flex
+        flex-flow column
+        span
+          font-weight bold
+        strong
+          width 100%
+    .table.table-blogs
+      tr
+        .cell-join
+          width 20px
+        .cell-readers,.cell-rating
+          width 40px
+    .table.table-users
+      tr
+        .cell-name+th,.cell-name+td
+          width 20px
+        .cell-skill,.cell-rating
+          width 40px
+    .table.table-talk
+      .cell-date.ta-r
+        display none
+      .cell-title
+        width 70%
+      .wrapper-content.wrapper-content-dark
+        padding 10px 3px 20px 3px
+    select
+      max-width 100%!important
+  #modal_write,#window_upload_img
+    position fixed
+    width 100%
+    height auto
+    margin 0
+    left 0
+    .modal-content
+      padding 5px 5px 15px 5px!important
+  #modal_write
+    top 150px
+    .write-list
+      display flex
+      flex-flow row
+      flex-wrap wrap
+      justify-content space-between
+      align-items center
+      li
+        margin 0 5px!important
+        padding 0!important
+  #window_upload_img
+    top 50px
+    .modal-header
+      text-align center
+    .modal-content
+      .nav.nav-pills.nav-pills-tabs
+        justify-content center
+  #window_login_form
+    position static
+    z-index 0
+    .login.login-modal
+      position fixed
+      z-index 3000
+      left 0
+      top 50px
+      width 100%
+      .login-container
+        width 96%
+        padding 10px 5px
+  body.widemode
+    #sidebar
+      display block
+    #content-wrapper
+      display none
+    #c-header
+      .main-menu
+        li
+          display inline-block
+      #logolink,.rss,.twitter
+        display none
+    #header 
+      ul.auth
+        display flex
+      #dropdown-user
+        display inline-block
+        right 10px
+    #header
+      .nav,#nav
+        display none

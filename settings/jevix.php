@@ -2,6 +2,11 @@
 
 return [
     'default' => [
+        // Разрешенные протоколы в доменах: пустая строка позволяет
+        // указывать ссылки без явно прописанного протокола
+        'cfgSetAllowedProtocols' => [
+            [['', 'http', 'https'], false, '#domain'],
+        ],
         // Разрешённые теги
         'cfgAllowTags' => [
             // вызов метода с параметрами
@@ -33,6 +38,7 @@ return [
                 'img',
                 [
                     'src',
+                    'data-src',
                     'alt' => '#text',
                     'title' => '#text',
                     'width' => '#int',
@@ -66,10 +72,11 @@ return [
                 [
                     'src' => [
                         '#domain' => [
-                            'youtube.com' => '',
+                            'youtube.com' => 'embed/[\w\d\-_]+$',
                             'player.vimeo.com' => '',
                             'dailymotion.com' => '',
                             'coub.com' => '',
+                            'rutube.ru' => '',
                             'w.soundcloud.com' => '',
                             'vk.com' => "video_ext\.php",
                             'radio.everypony.ru' => '',
@@ -77,6 +84,29 @@ return [
                             'eqbeats.org' => '',
                             'imgur.com' => '',
                             'ponyvillelive.com' => '',
+                            'giphy.com' => 'embed/',
+                            'gfycat.com' => 'ifr/',
+                            'vault.mle.party' => 'videos/embed/',
+                            'frontend.vh.yandex.ru' => 'player/[\w\d\-_]+\?autoplay=0$',
+                        ],
+                    ],
+                    'data-src' => [
+                        '#domain' => [
+                            'youtube.com' => 'embed/[\w\d\-_]+$',
+                            'player.vimeo.com' => '',
+                            'dailymotion.com' => '',
+                            'coub.com' => '',
+                            'rutube.ru' => '',
+                            'w.soundcloud.com' => '',
+                            'vk.com' => "video_ext\.php",
+                            'radio.everypony.ru' => '',
+                            'pony.fm' => '',
+                            'eqbeats.org' => '',
+                            'imgur.com' => '',
+                            'ponyvillelive.com' => '',
+                            'giphy.com' => 'embed/',
+                            'gfycat.com' => 'ifr/',
+                            'vault.mle.party' => 'videos/embed/',
                         ],
                     ],
                     'allowscriptaccess' => '#text',
@@ -100,8 +130,9 @@ return [
                     'class' => [
                         'spoiler',
                         'spoiler-title',
-                        'spoiler-body', 
+                        'spoiler-body',
                         'spoiler-gray',
+                        'spoiler spoiler-media',
                         'h-top',
                         'h-bottom',
                         'h-right',
@@ -109,22 +140,14 @@ return [
                         'h-center',
                     ],
                     'onclick' => [
-                        'return true;'
+                        'return true;',
+                        ''
                     ]
                 ]
             ],
         ],
         // Параметры тегов являющиеся обязательными
-        'cfgSetTagParamsRequired' => [
-            [
-                'img',
-                'src'
-            ],
-            [
-                'iframe',
-                'src'
-            ],
-        ],
+        'cfgSetTagParamsRequired' => [],
         // Теги которые необходимо вырезать из текста вместе с контентом
         'cfgSetTagCutWithContent' => [
             [

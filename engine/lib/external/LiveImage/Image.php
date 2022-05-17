@@ -108,6 +108,18 @@ class LiveImage {
      * MIME database
      */
     private $fileInfo;
+    /**
+     * Разрешенные типы изображений
+     */
+    const aAllowedMimes = [
+        "image/gif" => "gif",
+        "image/png" => "png",
+        "image/x-png" => "png",
+        "image/jpg" => "jpg",
+        "image/jpeg" => "jpg",
+        "image/pjpeg" => "jpg",
+        "image/webp" => "webp"
+    ];
 
 	/**
 	 * Создает объект изображения из переданного файла
@@ -116,54 +128,45 @@ class LiveImage {
 	 * @return bool|mixed
 	 */
 	public function __construct($sFile) {
-        $this->magic = new Imagick();
         $this->fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+        $sMime = finfo_file($this->fileInfo, $sFile);
+        if (!array_key_exists($sMime, $this::aAllowedMimes)) {
+            $this->set_last_error(5);
+            return false;
+        }
+        $this->format = $this::aAllowedMimes[$sMime];
+
+        $img_max_width = Config::Get('view.processing.img_max_width');
+        $img_max_height = Config::Get('view.processing.img_max_height');
+        $imageInfo = getimagesize($sFile);
+        if (
+            (int)$imageInfo[0] > $img_max_width ||
+            (int)$imageInfo[1] > $img_max_height
+        ) {
+            $this->set_last_error(4);
+            return false;
+        }
+
+        $this->magic = new Imagick();
+		try {
+			$this->magic->readImage($sFile);
+		} catch (Exception $e) {
+			$this->set_last_error(4);
+			return false;
+		}
 
 		if(!$sFile) {
 			$this->set_last_error(3);
 			return false;
 		}
 
-        $this->magic->readImage($sFile);
-        $sMime = finfo_file($this->fileInfo, $sFile);
-
         $iFileLength = (int) $this->magic->getImageLength();
         if(!$iFileLength) {
             $this->set_last_error(3);
             return false;
         }
-		/**
-		 * Определяем тип файла изображения
-		 */
-		switch ($sMime) {
-			case 'image/png':
-			case "image/x-png":			
-				$tmp=imagecreatefrompng($sFile);
-				$this->format='png';
-				break;
-			case 'image/gif':
-				$tmp=imagecreatefromgif($sFile);
-				$this->format='gif';
-				break;
-		    case "image/pjpeg":
-			case "image/jpeg":
-			case "image/jpg":
-				$tmp=imagecreatefromjpeg($sFile);
-				$this->format='jpg';
-				break;
-			default:
-				$this->set_last_error(5);				
-				return false;
-		}		
-		/**
-		 * Если изображение не удалось создать
-		 */
-		if(!$tmp){
-			$this->set_last_error(4);
-			return false;
-		}
 
-		$this->image=$tmp;
+		$this->image=$this->magic;
 		$this->width=(int)$this->magic->getImageWidth();
 		$this->height=(int)$this->magic->getImageHeight();
 		$this->truecolor=true;
@@ -207,60 +210,7 @@ class LiveImage {
 			$height = round($this->height / $this->scale);
 		}
 
-		$tmp=($this->truecolor)
-			? imagecreatetruecolor($width,$height)
-			: imagecreate($width,$height);
-		/**
-		 * Если темп-изображение не создано, ставим отметку об ошикбе
-		 */
-		if(!$tmp) {
-			$this->set_last_error(1);
-			return false;
-		}
-									
-		if($this->format=='gif') { 
-			imagealphablending($this->image, false);
-			$ct = @imagecolortransparent($this->image);
-			$color_tran = @imagecolorsforindex($this->image, $ct);
-		
-			if($color_tran) {
-				$ct2 = imagecolorexact($tmp, $color_tran['red'], $color_tran['green'], $color_tran['blue']);
-				imagefill($tmp,0,0,$ct2);
-			}
-
-	
-			/**
-			 * Определяем функцию, которой будет выполнен ресайз изображения
-			 */
-			$sResizeFunction = 'imagecopyresampled';
-			if(!function_exists($sResizeFunction)) $sResizeFunction = 'imagecopyresized';
-			if(isset($ct) and $ct!=-1) $sResizeFunction = 'imagecopyresized';
-							 				
-			if(!@$sResizeFunction($tmp,$this->image,0,0,0,0,$width,$height,$this->width,$this->height)) {
-				imagedestroy($tmp);
-				return false;
-			}
-			
-		 	imagesavealpha($tmp, true);
-			if(isset($ct2)) imagecolortransparent($tmp, $ct2);
-		} else {
-			/**
-		     * Регулируем альфа-канал, если не указано обработное
-		     */
-			if($alfa) {
-				@imagesavealpha($tmp,true);
-				@imagealphablending($tmp,false);
-			}
-			
-			if(!@imagecopyresampled($tmp,$this->image,0,0,0,0,$width,$height,$this->width,$this->height)) {
-				imagedestroy($tmp);
-				return false;
-			}		
-		}
-		
-		imagedestroy($this->image);
-		$this->set_image($tmp);
-		
+		$this->image->resizeImage($width, $height, imagick::FILTER_LANCZOS, 1);
 		return true;
 	}
 
@@ -274,55 +224,7 @@ class LiveImage {
 	 * @return mixed
 	 */
 	public function crop($width, $height, $start_width, $start_height) {	
-		$tmp=($this->truecolor)
-			? imagecreatetruecolor($width,$height)
-			: imagecreate($width,$height);
-		/**
-		 * Если темп-изображение не создано, ставим отметку об ошикбе
-		 */
-		if(!$tmp) {
-			$this->set_last_error(1);
-			return false;
-		}
-									
-		if($this->format=='gif') { 
-			imagealphablending($this->image, false);
-			$ct = @imagecolortransparent($this->image);
-			$color_tran = @imagecolorsforindex($this->image, $ct);
-		
-			if($color_tran) {
-				$ct2 = imagecolorexact($tmp, $color_tran['red'], $color_tran['green'], $color_tran['blue']);
-				imagefill($tmp,0,0,$ct2);
-			}
-
-	
-			/**
-			 * Определяем функцию, которой будет выполнен ресайз изображения
-			 */
-			$sResizeFunction = 'imagecopyresampled';
-			if(!function_exists($sResizeFunction)) $sResizeFunction = 'imagecopyresized';
-			if(isset($ct) and $ct!=-1) $sResizeFunction = 'imagecopyresized';
-							 				
-			if(!@$sResizeFunction($tmp,$this->image,0,0,$start_width,$start_height,$width,$height,$width,$height)) {
-				imagedestroy($tmp);
-				return false;
-			}
-			
-		 	imagesavealpha($tmp, true);
-			if(isset($ct2)) imagecolortransparent($tmp, $ct2);
-		} else {
-			@imagesavealpha($tmp,true);
-			@imagealphablending($tmp,false);
-	
-			if(!imagecopyresampled($tmp,$this->image,0,0,$start_width,$start_height,$width,$height,$width,$height)) {
-				imagedestroy($tmp);
-				return false;
-			}
-		}
-
-		imagedestroy($this->image);
-		$this->set_image($tmp);
-
+		$this->image->cropImage($width, $height, $start_width, $start_height);
 		return true;		
 	}
 	
@@ -425,129 +327,6 @@ class LiveImage {
 	public function set_jpg_quality($quality=null) {
 		$this->jpg_quality = $quality;
 	}
-	
-	/**
-	 * Make true type font text label on image
-	 *
-	 * @param  string $text
-	 * @param  int    $x
-	 * @param  int    $y
-	 * @param  bool   $unicode
-	 * @param  int    $letter_space
-	 * @return bool
-	 */
-	public function ttf_text($text,$x=0,$y=0,$unicode=false,$letter_space=20) {
-		$this->clear_error();
-
-		if(!$this->font) {
-			$this->set_last_error(2);
-			return false;
-		}
-
-		if($unicode) {
-			$text=$this->to_unicode($text);				
-		}
-		return imagettftext($this->image,$this->font_size,$this->font_angle,$x,$y,$this->color['locate'],$this->font,$text);
-	}
-
-	/**
-	 * Create text watermark
-	 *
-	 * @param  string $text
-	 * @param  array  $position
-	 * @param  array  $font_color
-	 * @param  array  $bg_color
-	 * @param  int    $font_alpha
-	 * @param  int    $bg_alfa
-	 * @return bool
-	 */
-	public function watermark($text, $position=array(0,24), $font_color=array(255, 255, 255), $bg_color=array(0,0,0), $font_alpha=0, $bg_alfa=40 ){
-		$text = " ".$text." ";
-		list($r_font, $g_font, $b_font) = $font_color;
-		list($r_bg, $g_bg, $b_bg) = $bg_color;
-		list($x, $y) = $position;
-
-		/// Вычисляем размер надписи
-		/// Наносим фон надписи согласно расчетам размера и позиции
-		$box  = imagettfbbox($this->font_size, 0, $this->font, $text);
-		/// Производим замену отрицательных кодов в позиции
-		/// и кодов вида 1/2 - центрирование относительно оси
-		if(substr_count($x, '-')==1) {
-			$x = $this->width-abs($box[4])-10-substr_replace($x, '', 0, 1);
-		} elseif($x=='1/2') {
-			$x=round(($this->width-abs($box[4]))/2)-5;
-		}
-		if(substr_count($y, '-')==1) {
-			$y = $this->height-abs($box[5])-10-substr_replace($y, '', 0, 1);
-		} elseif($y=='1/2') {
-			$y=round(($this->height-abs($box[5]))/2)-5;
-		}
-		/// Наносим фон для будущей надписи
-		$this->set_color($r_bg, $g_bg, $b_bg, $bg_alfa);
-		imagefilledrectangle($this->image,$x,$y,$x+abs($box[4])+10,$y+abs($box[5])+10,$this->color['locate']);
-
-		/// Наносим надпись водянного знака
-		$this->set_color($r_font, $g_font, $b_font, $font_alpha);
-		imagettftext($this->image, $this->font_size, 0, $x+5, $y+abs($box[5])+5, $this->color['locate'], $this->font, $text);
-		return true;
-	}
-
-	/**
-	 * Make rounded corners
-	 *
-	 * @param  int  $radius
-	 * @param  int  $rate
-	 * @return bool
-	 */
-	public function round_corners($radius=5, $rate=5) {
-		imagealphablending($this->image, false);
-		imagesavealpha($this->image, true);
-
-		$rs_radius = $radius * $rate;
-		$rs_size = $rs_radius * 2;
-
-		$corner = imagecreatetruecolor($rs_size, $rs_size);
-		imagealphablending($corner, false);
-
-		$trans = imagecolorallocatealpha($corner, 255, 255, 255, 0);
-		imagefill($corner, 0, 0, $trans);
-
-		$positions = array(
-			array(0, 0, 0, 0),
-			array($rs_radius, 0, $this->width - $radius, 0),
-			array($rs_radius, $rs_radius, $this->width - $radius, $this->height - $radius),
-			array(0, $rs_radius, 0, $this->height - $radius),
-		);
-
-		foreach ($positions as $pos) {
-			imagecopyresampled($corner, $this->image, $pos[0], $pos[1], $pos[2], $pos[3], $rs_radius, $rs_radius, $radius, $radius);
-		}
-
-		$lx = $ly = 0;
-		$i = -$rs_radius;
-		$y2 = -$i;
-		$r_2 = $rs_radius * $rs_radius;
-
-		for (; $i <= $y2; $i++) {
-			$y = $i;
-			$x = sqrt($r_2 - $y * $y);
-
-			$y += $rs_radius;
-			$x += $rs_radius;
-
-			imageline($corner, $x, $y, $rs_size, $y, $trans);
-			imageline($corner, 0, $y, $rs_size - $x, $y, $trans);
-
-			$lx = $x;
-			$ly = $y;
-		}
-
-		foreach ($positions as $i => $pos) {
-			imagecopyresampled($this->image, $corner, $pos[2], $pos[3], $pos[0], $pos[1], $radius, $radius, $rs_radius, $rs_radius);
-		}
-		imagedestroy($corner);
-		return true;
-	}
 
 	/**
 	 * Make image output in file or in browser.
@@ -571,108 +350,44 @@ class LiveImage {
 		switch($format) {
 			default:
 			case 'png':
-				@imagesavealpha($this->image,true);
+				$this->image->setFormat("png");
 				if(!$file) {
 					header("Content-type: image/png");
-					imagepng($this->image);
-				} else {
-					imagepng($this->image,$file);
 				}
 				break;
 			
 			case 'jpg':
+				$this->image->setFormat("jpg");
 				if(!$file) {
 					header("Content-type: image/jpeg");
-					imagejpeg($this->image);
-				} else {
-					imagejpeg($this->image,$file,$this->jpg_quality);
 				}
 				break;
 			
 			case 'gif':
+				$this->image->setFormat("gif");
 				if(!$file) {
 					header("Content-type: image/gif");
-					imagegif($this->image);
-				} else {
-					imagegif($this->image,$file);
 				}
 				break;
-		}
 
-	}
+            case 'webp':
+                $this->image->setFormat("webp");
+                if(!$file) {
+                    header("Content-type: image/webp");
+                }
+                break;
+        }
 
-	public function paste_image($file,$copyresized=false,$position=array(0,0),$src_x=0,$src_y=0,$src_w=-1,$src_h=-1,$dst_w=-1,$dst_h=-1) {
-		$this->clear_error();
-
-		if(!$file || !($size=getimagesize($file))) {
-			$this->set_last_error(3);
-			return false;
-		}
-
-		/**
-		 * Определяем тип файла изображения
-		 */
-		switch ($size['mime']) {
-			case 'image/png':
-			case "image/x-png":			
-				$tmp=imagecreatefrompng($file);
-				break;
-			case 'image/gif':
-				$tmp=imagecreatefromgif($file);
-				break;
-		    case "image/pjpeg":
-			case "image/jpeg":
-			case "image/jpg":
-				$tmp=imagecreatefromjpeg($file);
-				break;
-			default:
-				$this->set_last_error(5);				
-				return false;
-		}				
-
-		if(!$tmp) {
-			$this->set_last_error(4);
-			return false;
-		}
-
-		if($copyresized) {
-			$dst_w = round(imagesx($tmp)/$this->scale);
-			$dst_h = round(imagesy($tmp)/$this->scale);
-		} 
-		
-		$dst_w=$dst_w<0 ? imagesx($tmp) : $dst_w;
-		$dst_h=$dst_h<0 ? imagesy($tmp) : $dst_h;
-		
-		$src_w=$src_w<0 ? imagesx($tmp) : $src_w;
-		$src_h=$src_h<0 ? imagesy($tmp) : $src_h;
-
-		list($dst_x, $dst_y) = $position;
-
-		/// Производим замену отрицательных кодов в позиции
-		/// и кодов вида 1/2 - центрирование относительно оси
-		if(substr_count($dst_x, '-')==1) {
-			$dst_x = $this->width-$dst_w-substr_replace($dst_x, '', 0, 1);
-		} elseif($dst_x=='1/2') {
-			$dst_x=round(($this->width-$dst_w)/2);
-		}
-		if(substr_count($dst_y, '-')==1) {
-			$dst_y = $this->height-$dst_h-substr_replace($dst_y, '', 0, 1);
-		} elseif($dst_y=='1/2') {
-			$dst_y=round(($this->height-$dst_h)/2);
-		}
-
-		if($copyresized) {
-			$ret=imagecopyresampled($this->image,$tmp,$dst_x,$dst_y,$src_x,$src_y,$dst_w,$dst_h,$src_w,$src_h);
+		if(!$file) {
+			echo $this->image->getImageBlob();
 		} else {
-			$ret=imagecopy($this->image,$tmp,$dst_x,$dst_y,$src_x,$src_y,$src_w,$src_h);
+			file_put_contents($file, $this->image->getImageBlob());
 		}
-		imagedestroy($tmp);
-		return $ret;
 
 	}
 
 	public function rgb($r=255,$g=255,$b=255) {
-		return imagecolorallocate($this->image,$r,$g,$b);
+		return $this->setImageBackgroundColor(new \ImagickPixel("rgb($r, $g, $b)"));
 	}
 
 	public function set_last_error($id) {
@@ -711,7 +426,6 @@ class LiveImage {
 	}
 
 	public function destroy_all() {
-		if(imagedestroy($this->image))
 		$this->image=null;
 
 		return true;

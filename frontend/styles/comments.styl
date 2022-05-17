@@ -13,23 +13,14 @@
     input
       top 2px
 
-.comments
-  margin-bottom 30px
-  &.comment-list
-    .comment
-      margin-bottom 12px
-    .comment-path
-      font-size 11px
-      color #a2b6cd
-      .comment-path-topic
-        color #275ec2
-
 .comment-wrapper
   position relative
   .comment-wrapper
     padding-left 14px
   .reply
     margin-left 40px
+  &.comment-folded
+    display none
 
 .comment-preview
   padding 5px 10px 16px
@@ -43,6 +34,17 @@
 #form_comment
   margin-bottom 16px
 
+.folding
+  width 13px
+  height 13px
+  position absolute
+  top 8px
+  left -16px
+  background url(images/icons-synio.png) 0 -94px no-repeat
+  cursor pointer
+  &.folded
+    background-position -13px -94px
+
 .comment
   min-height 48px
   padding 0 0 10px
@@ -54,28 +56,13 @@
     background #f4f4f4
   .comment-avatar
     position absolute
-    top -5px
+    top -3px
     left 0
     width 18px
     height 18px
-  .folding
-    width 13px
-    height 13px
-    position absolute
-    top 8px
-    left -16px
-    background url(images/icons-synio.png) 0 -94px no-repeat
-    cursor pointer
-    &.folded
-      background-position -13px -94px
   &.comment-deleted
-    .comment-content
-      background #c5c5c5
-      border-color #C8A8A8
-      &:after
-        border-color #C8A8A8 transparent transparent
-      &:before
-        border-color #c5c5c5 transparent transparent
+    em
+      color #8b0000
   &.comment-self
     .comment-content
       background #fff
@@ -92,133 +79,122 @@
         border-color #fff transparent transparent
   &.comment-current
     .comment-content
-      background #ffebeb
-      border-color #B17979
+      background #eff3f9
+      border-color #58b
       &:after
         border-color #bae48e transparent transparent
       &:before
         border-color #cdf5a6 transparent transparent
-  .comment-info
-    li
-      &.comment-hide
-        a
-          color #CCC
-          cursor pointer
   &.comment-hidden
-    .comment-info
-      .edit
-        display none
+    em
+      color #8b0000
   .comment-actions
     li
       display inline
       margin-right 10px
 
-.comments.comment-list .comment-path .blog-name,
-.comments.comment-list .comment-path .comment-path-comments
-  color #000
-
-  .comment
-    &.comment-hidden
-      .comment-info
-        li
-          &.comment-hide
-            display none
-
-.ls-user-role-not-admin
-  .comment
-    &.comment-deleted
-      display none
+.comments
+  margin-bottom 30px
+  &.comment-list
+    .comment
+      margin-bottom 12px
+    .comment-info
+      .blog-name
+        color #000
+      .comment-path-topic
+        color #275ec2
+      .comment-path-comments
+        color #000
 
 .comment-info
   display flex
   flex-flow row
   flex-wrap wrap
   align-items flex-end
-  padding 0 50px 0 25px
+  padding 0 50px 0 13px
   line-height 13px
   position relative
   overflow visible
   font-size 11px
-  li
-    height 18px
-    margin-right 15px
-    &.comment-author
-      a
-        font-weight bold
-        color #444
-      &.comment-topic-author
-        a
-          color #4b5468
-    a
-      &.delete
-        color #ccc
-      &.link-dotted
-        color #09f
-        text-decoration none
-        border-bottom 1px dotted #09f
-        &:hover
-          color #f00
-          border-color #f00
-    &.comment-date
-      color #999
-    &.goto
-      a
-        color #a2b6cd
-        text-decoration none
-        display inline-block
-        width 14px
-        height 14px
-        text-indent 20px
-        overflow hidden
-        background transparent url(images/jquery-ui/ui-icons_888888_256x240.png) no-repeat
-      &.goto-comment-parent
-        a
-          background-position -161px -193px
-      &.goto-comment-child
-        a 
-          background-position -129px -193px
-      &:hover
-        a
-          background-image url(images/jquery-ui/ui-icons_2e83ff_256x240.png)
-    .favourite-count
-      color #a2b6cd
-    &.vote
-      position absolute
-      top 0
-      right 0
-      margin 0
-      display flex
-      flex-flow row
-      align-items center
-      .vote-up,.vote-down
-        cursor pointer
-      .vote-count
-        cursor default
-        color #949aa1
-        font-weight bold
-        font-size 12px
-        margin 0
-        padding 0 3px
-        line-height 18px
-      &.vote-count-positive
-        .vote-count
-          color #51983c
-      &.vote-count-negative
-        .vote-count
-          color #da4242
-    &.goto-comment-child
-      display none
-
-div
-  &.favourite
-    text-decoration underline
-    color #999
+  .comment-author
+    font-weight bold
+    color #444
     &:hover
-      text-decoration none
+      color #2c82fc
+    &.comment-topic-author
+      color #4b5468
+  a
+    &.delete
+      color #ccc
+  .comment-date
+    color #999
+  .comment-link
+    background transparent url(images/icons-comment.png) no-repeat -14px 0
+    height 14px
+    width 17px
+    &:hover
+      background-position -14px -14px
+  .goto.goto-comment-parent
+    display inline-block
+    color transparent
+    text-decoration none
+    width 14px
+    height 14px
+    overflow hidden
+    background transparent url(images/icons-comment.png) no-repeat 0 0
+    &:hover
+      cursor pointer
+      background-position 0 -14px
+  .vote
+    position absolute
+    top 0
+    right 0
+    margin 0
+    display flex
+    flex-flow row
+    align-items center
+    .vote-count
+      font-size 12px
+      margin 0
+      font-weight bold
+      min-width 14px
+      text-align center
+
+.comment-info>a
+.comment-info>div
+.comment-info>time
+.comment-info>span
+  margin-right 10px
+
+a.comment-edit-bw
+a.comment-edit-bw.edit-timeout
+a.comment-delete
+a.reply-link
+.lock-edit
+  display none
+
+.comments-allowed
+  .reply-link
+    display inline-block
+
+.is-admin
+  .comment-delete
+    display inline-block
+
+.is-admin
+.is-moder
+  .comment-edit-bw
+  .comment-edit-bw.edit-timeout
+  .lock-edit
+    display inline-block
+
+.comment-self
+  .comment-edit-bw
+    display inline-block
 
 .comment-content
   background-color #f7f7f7
-  margin-bottom 10px
+  margin-bottom 7px
   border 1px solid #e7ebed
   padding 5px 10px
   border-radius 5px
@@ -270,11 +246,11 @@ div
 .modify-notice
   font-size 10px
   font-style italic
-  .self-modified
+  &.self-modified
     color #69b55b
-  .adm-modified
+  &.adm-modified
     color #aaaa00
-  .hard-modified
+  &.hard-modified
     color #d5883c
 
 .comment:not(.editable)
@@ -293,8 +269,10 @@ div
     .edit-form,
     .edit-form>label
       display block
-    .text.current
+    .text
       display none
+      &.preview
+        display block
   .comment-edit-bw
       display none
 
@@ -342,3 +320,10 @@ div
   width 16px
 #quote>b
   transform rotate(180deg)
+
+#hidden-message
+  margin 5px 0 10px
+  a
+    float right
+    border-bottom 1px dotted #09f
+    cursor pointer

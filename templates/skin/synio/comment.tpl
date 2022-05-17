@@ -1,116 +1,146 @@
-{assign var="oUser" value=$oComment->getUser()}
-{assign var="oVote" value=$oComment->getVote()}
-{assign var="editAccessMask" value=$oComment->getEditAccessMask($oUserCurrent)}
+{strip}
+{assign var="oCommentAuthor" value=$oComment->getUser()}
+{assign var="oCommentAuthorLogin" value=$oCommentAuthor->getLogin()}
+{assign var="oCommentAuthorId" value=$oComment->getUserId()}
+{assign var="oCommentId" value=$oComment->getId()}
+{assign var="oCommentRating" value=$oComment->getRating()}
+{assign var="oCommentDate" value=$oComment->getDate()}
+{if $oUserCurrent}
+    {assign var="oCommentVote" value=$oComment->getVote()}
+    {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
+    {if $oCommentAuthorId == $oUserCurrent->getId()}
+        {assign var="oCommentSelf" value="comment-self"}
+    {/if}
+    {if $sDateReadLast <= $oCommentDate}
+        {assign var="oCommentNew" value="comment-new"}
+    {/if}
+{/if}
 
-<section data-id="{$oComment->getId()}" id="comment_id_{$oComment->getId()}" class="comment {if $oComment->isBad()}comment-bad{/if} {if $oComment->getDelete()}comment-deleted{elseif $oUserCurrent and $oComment->getUserId() == $oUserCurrent->getId()} comment-self{elseif $sDateReadLast <= $oComment->getDate()} comment-new{/if}">
-    {if $oComment->getRating() < $oConfig->GetValue('module.user.bad_rating')}
-        <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
-            <div class="text"><em>{$aLang.comment_was_hidden}</em></div>
-        </div>
-    {elseif !$oComment->getDelete() or $bOneComment or ($oUserCurrent and $oComment->testAllowDelete($oUserCurrent))}
-        <a name="comment{$oComment->getId()}"></a>
-        <div data-id="{$oComment->getId()}" class="folding"></div>
-        <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
+{if $oCommentRating <= $oConfig->GetValue('module.user.bad_rating')}
+    {if $oUserCurrent and $oComment->testAllowDelete($oUserCurrent)}
+        <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
+            <a id="comment{$oCommentId}"></a>
+            <div id="comment_content_id_{$oCommentId}" class="comment-content">
+                <div class="text current">{$oComment->getText()}</div>
+            </div>
+            <div class="comment-info" data-id="{$oCommentId}">
+                <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
+                    <img src="{$oCommentAuthor->getProfileAvatarPath(24)}" class="comment-avatar"/>
+                </a>
+                <a class="comment-author" href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
+                <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}" title="{$oCommentDate}">
+                    {date_format date=$oCommentDate format="j F Y, H:i"}
+                </time>
+                <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
+                {if $oComment->getPid()}
+                    <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {/if}
+                <span>{$aLang.comment_was_hidden}</span>
+            </div>
+    {else}
+        <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted">
+            <div class="text current"><em>{$aLang.comment_was_hidden}</em></div>
+            <div class="comment-info" data-id="{$oCommentId}"></div>
+    {/if}
+{elseif $oComment->getDelete()}
+    {if $oUserCurrent and $oComment->testAllowDelete($oUserCurrent)}
+        <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
+            <a id="comment{$oCommentId}"></a>
+            <div id="comment_content_id_{$oCommentId}" class="comment-content">
+                <div class="text current">{$oComment->getText()}</div>
+            </div>
+            <div class="comment-info" data-id="{$oCommentId}">
+                <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
+                    <img src="{$oCommentAuthor->getProfileAvatarPath(24)}" class="comment-avatar"/>
+                </a>
+                <a class="comment-author" href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
+                <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}" title="{$oCommentDate}">
+                    {date_format date=$oCommentDate format="j F Y, H:i"}
+                </time>
+                <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
+                {if $oComment->getPid()}
+                    <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
+                {/if}
+                {if $oComment->testAllowDelete($oUserCurrent)}
+                    <a class="comment-repair link-dotted">{$aLang.comment_repair}</a>
+                {/if}
+                <span>{$aLang.comment_was_delete}</span>
+            </div>
+    {else}
+        <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted">
+            <a id="comment{$oCommentId}"></a>
+            <div id="comment_content_id_{$oCommentId}" class="comment-content">
+                <div class="text current"><em>{$aLang.comment_was_delete}</em></div>
+            </div>
+            <div class="comment-info" data-id="{$oCommentId}"></div>
+    {/if}
+{else}
+    <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment {if $oComment->isBad()}comment-bad{/if} {$oCommentSelf} {$oCommentNew}">
+        <a id="comment{$oCommentId}"></a>
+        <div id="comment_content_id_{$oCommentId}" class="comment-content">
             <div class="text current">{$oComment->getText()}</div>
         </div>
-        <ul class="comment-info">
-            <li class="comment-author {if $iAuthorId == $oUser->getId()}comment-topic-author{/if}"
-                title="{if $iAuthorId == $oUser->getId() and $sAuthorNotice}{$sAuthorNotice}{/if}">
-                <a href="{$oUser->getUserWebPath()}">
-                    <img src="{$oUser->getProfileAvatarPath(24)}"  class="comment-avatar"/>
-                </a>
-                <a href="{$oUser->getUserWebPath()}">{$oUser->getLogin()}</a>
-            </li>
-            <li class="comment-date">
-                <time datetime="{date_format date=$oComment->getDate() format='c'}"
-                      title="{date_format date=$oComment->getDate() hours_back="12" minutes_back="60" now="60" day="day H:i" format="j F Y, H:i"}">
-                    {date_format date=$oComment->getDate() format="j F Y, H:i"}
-                </time>
-            </li>
-            {if $oComment->getTargetType() != 'talk'}
-                <li id="vote_area_comment_{$oComment->getId()}"
-                    class="vote
-                    {if $oComment->getRating() > 0}
-                        vote-count-positive
-                        {elseif $oComment->getRating() < 0}
-                        vote-count-negative
-                    {/if}
-                    {if (strtotime($oComment->getDate()) < $smarty.now - $oConfig->GetValue('acl.vote.comment.limit_time') && !$oVote) || ($oUserCurrent && $oUserCurrent->getId() == $oUser->getId())}vote-expired{/if}
-                    {if $oVote}
-                        voted
-                            {if $oVote->getDirection() > 0}
-                                voted-up
-                            {else}
-                                voted-down
-                            {/if}
-                     {/if}
-                 ">
-                    <div class="vote-up" onclick="return ls.vote.vote({$oComment->getId()},this,1,'comment');"></div>
-                    <span class="vote-count" id="vote_total_comment_{$oComment->getId()}">{if $oComment->getRating() > 0}+{/if}{$oComment->getRating()}</span>
-                    <div class="vote-down" onclick="return ls.vote.vote({$oComment->getId()},this,-1,'comment');"></div>
-                </li>
+        <div class="comment-info" data-id="{$oCommentId}">
+            <a href="/profile/{$oCommentAuthorLogin}" data-user_id="{$oCommentAuthorId}">
+                <img src="{$oCommentAuthor->getProfileAvatarPath(24)}" class="comment-avatar"/>
+            </a>
+            <a class="comment-author {if $iAuthorId == $oCommentAuthorId}comment-topic-author {if $sAuthorNotice}" title="{$sAuthorNotice}{/if}{/if}" href="/profile/{$oCommentAuthorLogin}">{$oCommentAuthorLogin}</a>
+            <time class="comment-date" datetime="{date_format date=$oCommentDate format='c'}" title="{$oCommentDate}">
+                {date_format date=$oCommentDate format="j F Y, H:i"}
+            </time>
+            <a class="comment-link" href="#comment{$oCommentId}" title="{$aLang.comment_url_notice}"></a>
+            {if $oComment->getPid()}
+                <a href="#comment{$oComment->getPid()}" class="goto goto-comment-parent" title="{$aLang.comment_goto_parent}">↑</a>
             {/if}
-            {if $oUserCurrent and !$bNoCommentFavourites}
-                <li class="comment-favourite">
-                    <div onclick="return ls.favourite.toggle({$oComment->getId()},this,'comment');"
-                         class="favourite {if $oComment->getIsFavourite()}active{/if}">
-                        {if $oComment->getIsFavourite()}
-                            {t}favourite_in{/t}
+            {if $oUserCurrent}
+                {if !$bNoCommentFavourites}
+                    <div class="comment-favourite">
+                        {if $oComment->getCountFavourite() > 0}
+                            <div class="favourite link-dotted{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                                {if $oComment->getIsFavourite()}
+                                    {$aLang.comment_favourite_add_already}
+                                {else}
+                                    {$aLang.comment_favourite_add}
+                                {/if}
+                            </div>
+                            <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
                         {else}
-                            {t}favourite_add{/t}
+                            <div class="favourite link-dotted" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
+                            <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                         {/if}
                     </div>
-                    <span class="favourite-count" id="fav_count_comment_{$oComment->getId()}" {if $oComment->getCountFavourite() == 0}hidden{/if}>{if $oComment->getCountFavourite() > 0}{$oComment->getCountFavourite()}{/if}</span>
-                </li>
-            {/if}
-            <li class="comment-link">
-                <a href="#comment{$oComment->getId()}" title="{$aLang.comment_url_notice}">
-                    <i class="icon-synio-link"></i>
-                </a>
-            </li>
-            {if $oComment->getPid()}
-                <li class="goto goto-comment-parent">
-                    <a href="{router page='comments'}{$oComment->getPid()}"
-                        onclick="ls.comments.goToParentComment({$oComment->getId()},{$oComment->getPid()}); return false;"
-                        title="{$aLang.comment_goto_parent}">↑</a>
-                </li>
-            {/if}
-            <li class="goto goto-comment-child">
-                <a href="#" title="{$aLang.comment_goto_child}">↓</a>
-            </li>
-            {if $oUserCurrent}
-                {if !$oComment->getDelete() and !$bAllowNewComment and $bAddCommentPermission}
-                    <li>
-                        <a href="#" onclick="ls.comments.toggleCommentForm({$oComment->getId()}); return false;" class="reply-link link-dotted">{$aLang.comment_answer}</a>
-                    </li>
+                    <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
+                    {if $oCommentVoteCount > 0}
+                        {if $oCommentRating > 0} vote-count-positive
+                        {elseif $oCommentRating < 0} vote-count-negative
+                        {else} vote-count-mixed
+                        {/if}
+                    {/if}
+                    {if $oCommentVote} voted
+                        {if $oCommentVote->getDirection() > 0} voted-up
+                        {else} voted-down
+                        {/if}
+                    {elseif !isset($oCommentSelf)}
+                        {if (strtotime($oCommentDate)>=time()-$oConfig->GetValue('acl.vote.comment.limit_time'))} vote-enabled{/if}
+                    {/if}
+                    ">
+                        <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
+                        <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
+                        <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
+                    </div>
                 {/if}
-
-                {if !$oComment->getDelete() and $oComment->testAllowDelete($oUserCurrent)}
-                    <li>
-                        <a href="#" class="comment-delete link-dotted" onclick="ls.comments.toggle(this,{$oComment->getId()}); return false;">{$aLang.comment_delete}</a>
-                    </li>
+                {if !$bAllowNewComment and $bAddCommentPermission}
+                    <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
                 {/if}
-
-                {if $oComment->getDelete() and $oComment->testAllowDelete($oUserCurrent)}
-                    <li>
-                        <a href="#" class="comment-repair link-dotted" onclick="ls.comments.toggle(this,{$oComment->getId()}); return false;">{$aLang.comment_repair}</a>
-                    </li>
+                {if $oComment->testAllowDelete($oUserCurrent)}
+                    <a class="link-dotted comment-delete">{$aLang.comment_delete}</a>
                 {/if}
-
-                {if $oComment->testAllowEdit($editAccessMask)}
-                    <li class="comment-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.toggleEditForm({$oComment->getId()}, true, {if $oComment->testAllowLock($editAccessMask)}true{else}false{/if});">{$aLang.comment_edit}</a></li>
-                    <li class="comment-save-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.saveEdit({$oComment->getId()});">{$aLang.comment_save_edit}</a></li>
-                    <li class="comment-preview-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.previewEdit({$oComment->getId()});">{$aLang.comment_preview_edit}</a></li>
-                    <li class="comment-cancel-edit-bw"><a href="#" class="link-dotted" onclick="return ls.comments.toggleEditForm({$oComment->getId()}, false);">{$aLang.comment_cancel_edit}</a></li>
-                {/if}
-
+                <a class="link-dotted comment-edit-bw {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.edit.comment.limit_time'))} edit-timeout{/if}">{$aLang.comment_edit}</a>
                 {hook run='comment_action' comment=$oComment}
+                {include file='comment_modify_notice.tpl'}
             {/if}
-            {include file='comment_modify_notice.tpl'}
-        </ul>
-    {else}
-        <div id="comment_content_id_{$oComment->getId()}" class="comment-content">
-            <div class="text"><em>{$aLang.comment_was_delete}</em></div>
         </div>
-    {/if}
-</section>
+{/if}
+    </section>
+    <div class="folding"></div>
+{/strip}

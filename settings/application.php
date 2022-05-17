@@ -23,9 +23,11 @@ $config['view']['name'] = 'Табун - место, где пасутся бро
 $config['view']['description'] = 'Блогосфера фандома My Little Pony: Friendship is Magic';
 $config['view']['keywords'] = 'пони, брони, my little pony, friendship is magic';
 $config['view']['noindex'] = false;             // "прятать" или нет ссылки от поисковиков, оборачивая их в тег <noindex> и добавляя rel="nofollow"
-$config['view']['img_resize_width'] = 570;      // до какого размера в пикселях ужимать картинку по щирине при загрузки её в топики и комменты
+$config['view']['img_resize_width'] = 570;      // до какого размера в пикселях ужимать картинку по ширине при её загрузке в топики и комменты
 $config['view']['img_max_width'] = 10000;       // максимальная ширина загружаемых изображений в пикселях
 $config['view']['img_max_height'] = 10000;      // максимальная высота загружаемых изображений в пикселях
+$config['view']['processing']['img_max_width'] = 2048;       // максимальная ширина обрабатываемых изображений в пикселях
+$config['view']['processing']['img_max_height'] = 2048;      // максимальная высота обрабатываемых изображений в пикселях
 
 /**
  * Настройки СЕО для вывода топиков
@@ -50,6 +52,10 @@ $config['path']['static']['url'] = '/static';                               // u
 $config['path']['uploads']['url'] = '/storage';                             // url для отдачи загруженых файлов
 $config['path']['uploads']['storage'] = '___path.root.server___/storage';   // путь для хранения загруженых файлов
 $config['path']['offset_request_url'] = 0;                                  // иногда помогает если сервер использует внутренние реврайты
+/**
+ * Настройка загрузок
+ */
+$config['uploads']['file_permission'] = 0644;
 /**
  * Настройки шаблонизатора Smarty
  */
@@ -186,7 +192,7 @@ $config['db']['params']['host'] = 'localhost';
 $config['db']['params']['port'] = '3306';
 $config['db']['params']['user'] = '';
 $config['db']['params']['pass'] = '';
-$config['db']['params']['type'] = 'mysql';
+$config['db']['params']['type'] = 'mysqli';
 $config['db']['params']['dbname'] = '';
 /**
  * Настройка таблиц базы данных
@@ -242,7 +248,7 @@ $config['db']['tables']['engine'] = 'InnoDB';
  * Установка локали
  */
 $config['locale']['path'] = 'locale';                // файлы l10n
-$config['locale']['lang'] = 'ru_RU';
+$config['locale']['lang'] = 'ru_RU.UTF-8';
 $config['locale']['timezone'] = 'Europe/Moscow';
 
 /**
@@ -278,8 +284,8 @@ $config['sys']['elastic']['hosts'] = [
  * Разное
  */
 $config['misc']['ga'] = '';
-$config['misc']['ver']['front'] = file_get_contents(dirname(dirname(__FILE__)) . "/frontend.version");
-$config['misc']['ver']['code'] = file_get_contents(dirname(dirname(__FILE__)) . "/backend.version");
+$config['misc']['ver']['front'] = file_get_contents("/static/frontend.version");
+$config['misc']['ver']['code'] = file_get_contents("/static/backend.version") ?: "dev"; // Just for convenience
 $config['misc']['debug'] = false;
 
 // Отключение подсчёта числа страниц для первых страниц ленты комментариев для их ускорения.
@@ -292,9 +298,21 @@ $config['misc']['simplify_comments_pagination'] = false;
  */
 $config['page']['show_block_structure'] = false;
 
+/**
+ * CloudFlare
+ */
+$config['cloudflare'] = [];
+$config['cloudflare']['enabled'] = false;
+// https://dash.cloudflare.com/
+// <example.com> -> API (Sidebar) -> Zone ID
+$config['cloudflare']['zone'] = 'abcdefghijklmnopqrstuvwxyz012345';
+// https://dash.cloudflare.com/profile/api-tokens
+// API Tokens -> Create Token -> Custom token -> Permissions -> Zone | Cache Purge | Purge
+$config['cloudflare']['bearer_key'] = 'abcdefghijklmnopqrstuvwxyz0123456789ABCD';
+
 // Include configs
-foreach (glob("settings/parts.d/*") as $file) {
-    $name = explode('.', str_replace('settings/parts.d/', '', $file));
+foreach (glob(dirname(__FILE__).'/parts.d/*') as $file) {
+    $name = explode('.', str_replace(dirname(__FILE__).'/parts.d/', '', $file));
     array_pop($name); // Remove extension
 
     $conf = &$config;
