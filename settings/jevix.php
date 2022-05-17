@@ -147,16 +147,7 @@ return [
             ],
         ],
         // Параметры тегов являющиеся обязательными
-        'cfgSetTagParamsRequired' => [
-            [
-                'img',
-                'src'
-            ],
-            [
-                'iframe',
-                'src'
-            ],
-        ],
+        'cfgSetTagParamsRequired' => [],
         // Теги которые необходимо вырезать из текста вместе с контентом
         'cfgSetTagCutWithContent' => [
             [
