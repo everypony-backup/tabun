@@ -160,16 +160,22 @@ class ModuleComment_EntityComment extends Entity
         return $this->_getDataOne('comment_level');
     }
     /**
-     * Проверяет является ли комментарий плохим
+     * Проверяет, считается ли комментарий плохим, основываясь на его рейтинге
      *
      * @return bool
      */
     public function isBad()
     {
-        if ($this->getRating()<=Config::Get('module.comment.bad')) {
-            return true;
-        }
-        return false;
+        return $this->getRating() <= Config::Get('module.comment.bad_rating');
+    }
+    /**
+     * Проверяет, нужно ли скрывать комментарий, основываясь на его рейтинге
+     *
+     * @return bool
+     */
+    public function isHidden()
+    {
+        return $this->getRating() <= Config::Get('module.comment.hidden_rating');
     }
     /**
      * Возвращает объект пользователя
