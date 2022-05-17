@@ -44,7 +44,11 @@
 
 		<div class="comment-wrapper comment-level-{$cmtlevel}" id="comment_wrapper_id_{$oComment->getId()}">
 
-		{include file='comment.tpl'}
+		{include
+			file='comment.tpl'
+			bShort=false
+			bAuthorNotice=$iAuthorId == $oComment->getUserId()
+		}
 		{assign var="nesting" value=$cmtlevel}
 		{if $smarty.foreach.rublist.last}
 			{section name=closelist2 loop=$nesting+1}</div>{/section}
