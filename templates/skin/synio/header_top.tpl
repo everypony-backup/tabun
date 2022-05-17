@@ -7,7 +7,7 @@
         <li><a href="//forum.everypony.ru">{$aLang.menu_forum}</a></li>
         <li><a href="//ponyfiction.org">{$aLang.menu_stories}</a></li>
         <li><a href="//everhoof.ru">{$aLang.menu_radio}</a></li>
-        <li><a href="//ru.mlp.wikia.com">{$aLang.menu_wiki}</a></li>
+        <li><a href="//mlp.fandom.com/ru">{$aLang.menu_wiki}</a></li>
         <li><a href="//blog.mc4ep.org">{$aLang.menu_minecraft}</a></li>
     </ul>
     <ul>

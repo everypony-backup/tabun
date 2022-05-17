@@ -51,7 +51,7 @@
 		<input type="checkbox" class="UI-checkbox" data-name="newCommentsInTitle"/>
 		Отображать количество новых комментариев в заголовке
 	</label>
-	<label title="В фоновых вкладках комментарии будут автоматически обнавляться раз в минуту">
+	<label title="В фоновых вкладках комментарии будут автоматически обновляться раз в минуту">
 		<input type="checkbox" class="UI-checkbox" data-name="autoUpdateComments"/>
 		Автообновление комментариев
 	</label>
