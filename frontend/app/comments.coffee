@@ -383,7 +383,9 @@ initEvent = ->
       ls.comments.showComment this.parentNode.dataset.id, true
       event.preventDefault())
     .on('click', ".folding", () ->
-      $(this).nextAll().toggleClass 'h-hidden')
+      $(this).toggleClass 'folded'
+      $(this).nextAll().toggleClass 'h-hidden'
+    )
 
   if updateButton
     $(updateButton).on 'click', () ->
