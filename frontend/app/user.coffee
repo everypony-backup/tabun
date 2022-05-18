@@ -25,14 +25,18 @@ addFriend = (obj, idUser, sAction) ->
     forEach $('#add_friend_form').children(), (node) -> node.removeAttribute 'disabled'
 
     unless result
-      return error 'Error', 'Please try again later'
-    if result.bStateError
-      return error null, result.sMsg
-    notice null, result.sMsg
+      error 'Error', 'Please try again later'
+    else
+      if result.bStateError
+        error null, result.sMsg
+      else
+        notice null, result.sMsg
 
-    $('#add_friend_form').jqmHide()
-    $('#add_friend_item').remove()
-    $('#profile_actions').prepend $(result.sToggleText)
+        $('#add_friend_form').jqmHide()
+        $('#add_friend_item').remove()
+        $('#profile_actions').prepend $(result.sToggleText)
+
+  false
 
 removeFriend = (obj, idUser, sAction) ->
   url = routes.profile.removeFriend
@@ -42,10 +46,12 @@ removeFriend = (obj, idUser, sAction) ->
 
   ajax url, params, (result) ->
     if result.bStateError
-      return error null, result.sMsg
-    notice null, result.sMsg
-    $('#delete_friend_item').remove()
-    $('#profile_actions').prepend $(result.sToggleText)
+      error null, result.sMsg
+    else
+      notice null, result.sMsg
+      $('#delete_friend_item').remove()
+      $('#profile_actions').prepend $(result.sToggleText)
+
   false
 
 
