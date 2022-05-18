@@ -1182,11 +1182,8 @@ class ActionBlog extends Action
             $this->Message_AddErrorSingle($this->Lang_Get('blog_close_show'), $this->Lang_Get('not_access'));
             return;
         }
-        /**
-         * Пользователь состоит в блоге?
-         */
+
         $idCommentLast=getRequestStr('idCommentLast', null, 'post');
-        $aComments=[];
         $comments=[];
 
         $aReturn=$this->Comment_GetCommentsNewByTargetId($oTopic->getId(), 'topic', $idCommentLast);
@@ -1205,11 +1202,6 @@ class ActionBlog extends Action
             foreach ($aCmts as $aCmt) {
                 $_id = $aCmt['obj']->getId();
                 $_pid = $aCmt['obj']->getPid();
-                $aComments[]=array(
-                    'html' => $aCmt['html'],
-                    'idParent' => $_pid,
-                    'id' => $_id,
-                );
                 $comments[$_id] = [
                     'id' => $_id,
                     'pid' => $_pid,
@@ -1220,7 +1212,6 @@ class ActionBlog extends Action
 
         $this->Viewer_AssignAjax('iMaxIdComment', $iMaxIdComment);
         $this->Viewer_AssignAjax('comments', $comments);
-        $this->Viewer_AssignAjax('aComments', $aComments);
     }
     /**
      * Обработка ajax запроса на отправку
