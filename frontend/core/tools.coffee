@@ -81,17 +81,19 @@ spoilerHandler = (target, action) ->
     style = 'none'
   i = target.length
   while i--
-    unless target[i].children[1] then continue
+    spoilerBody = target[i].querySelector('.spoiler-body')
+
+    unless spoilerBody then continue
     if action == 'toggle'
-      if target[i].children[1].style.display == 'block'
+      if spoilerBody.style.display == 'block'
         style = 'none'
       else
         style = 'block'
     if style == 'block'
       if target[i].classList.contains "spoiler-media"
-        target[i].children[1].innerHTML = target[i].children[1].innerHTML.replace /data-src="/gi, 'src="'
+        spoilerBody.innerHTML = spoilerBody.innerHTML.replace /data-src="/gi, 'src="'
         target[i].classList.remove "spoiler-media"
-    target[i].children[1].style.display = style
+    spoilerBody.style.display = style
   return false
 
 contentRemoveBadChars = (oldText) ->
