@@ -690,6 +690,9 @@ class ModuleComment extends Module
         if ($sTargetType!='topic') {
             $oViewerLocal->Assign('bNoCommentFavourites', true);
         }
+        $oViewerLocal->Assign('bShort', false);
+        // Скрипт на фронтенде сам добавит уведомление об авторстве
+        $oViewerLocal->Assign('bAuthorNotice', false);
         $aCmt=array();
         foreach ($aCmts as $oComment) {
             $oViewerLocal->Assign('oComment', $oComment);
