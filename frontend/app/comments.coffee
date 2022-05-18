@@ -434,7 +434,7 @@ init = ->
         if $(parents).filter("textarea").length then return
         if !$(parents).filter(".comment-content,.topic-content").length then return
         #ищем родительский комментарий
-        parentID = $(parents).filter(".comment")[0].dataset.id || 0;
+        parentID = $(parents).filter(".comment")[0]?.dataset.id || 0;
         contentRect = document.getElementById("content").getBoundingClientRect()
         x = e.clientX - contentRect.left + 10;
         y = e.clientY - contentRect.top - 9;
@@ -459,7 +459,7 @@ init = ->
             iCurrentShowFormComment = this.dataset.parent_id
             toggleCommentForm iCurrentShowFormComment, false
           else
-            iCurrentShowFormComment = $("#reply").siblings(".comment").dataset.id || 0
+            iCurrentShowFormComment = $("#reply").siblings(".comment")[0]?.dataset.id || 0
         else
           iCurrentShowFormComment = $(targetForm).id.replace "comment_edit_input_", ""
         #ищем каретку в форме редактирования
