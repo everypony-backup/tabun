@@ -640,6 +640,25 @@ class ActionAjax extends Action
             return;
         }
         /**
+         * Топик не в черновиках?
+         */
+        if (!$oTopic->getPublish() and $this->oUserCurrent->getId() != $oTopic->getUserId()) {
+            $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+            return;
+        }
+        /**
+         * Определяем права на отображение записи из закрытого блога
+         */
+        if ($oTopic->getBlog()->getType() == 'close'
+            and !in_array(
+                $oTopic->getBlog()->getId(),
+                $this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent)
+            )
+        ) {
+            $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+            return;
+        }
+        /**
          * Уже голосовал?
          */
         if ($oTopicQuestionVote=$this->Topic_GetTopicQuestionVote($oTopic->getId(), $this->oUserCurrent->getId())) {
