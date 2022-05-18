@@ -169,7 +169,7 @@ load = (idTarget, typeTarget, bFlushNew=true) ->
     setCountNewComment()
     setCountAllComment()
 
-    if keys(result.comments) > 0
+    if keys(result.comments).length > 0
       curItemBlock = blocks.getCurrentItem 'stream'
       if curItemBlock?.dataset.type == 'comment'
         blocks.load curItemBlock, 'stream'
