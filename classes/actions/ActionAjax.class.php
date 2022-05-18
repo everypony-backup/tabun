@@ -1469,11 +1469,12 @@ class ActionAjax extends Action
         foreach ($aVotes as $oVote) {
             $oUser = $this->User_GetUserById($oVote->getVoterId());
             $bShowUser = $oUser && (strtotime($oVote->getDate()) > $ageSwitchDate || $this->ACL_CheckSimpleAccessLevel($oldAgeEnableLevel, $this->oUserCurrent, $oTarget, $targetType));
+            $voteDate = str_replace(' ', 'T', $oVote->getDate()).'+03:00';
             $aResult[] = array(
                 'voterName' => $bShowUser ? $oUser->getLogin() : null,
                 'voterAvatar' => $bShowUser ? $oUser->getProfileAvatarPath() : null,
                 'value' => (float) $oVote->getValue(),
-                'date' => (string) $oVote->getDate().'+03:00',
+                'date' => $voteDate,
             );
         }
         usort($aResult, $dateSort==SORT_ASC?'_gov_s_date_asc':'_gov_s_date_desc');
