@@ -1169,6 +1169,13 @@ class ActionBlog extends Action
             return;
         }
         /**
+         * Топик не в черновиках?
+         */
+        if (!$oTopic->getPublish() and (!$this->oUserCurrent or ($this->oUserCurrent->getId()!=$oTopic->getUserId() and !$this->oUserCurrent->isAdministrator()))) {
+            $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+            return;
+        }
+        /**
          * Определяем права на отображение записи из закрытого блога
          */
         if ($oTopic->getBlog()->getType()=='close'
