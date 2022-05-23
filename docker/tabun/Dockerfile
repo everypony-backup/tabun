@@ -58,6 +58,8 @@ RUN composer update && composer install --no-dev --no-interaction --optimize-aut
 # Создание папки для файлов пользователей
 RUN mkdir -p /storage
 RUN chown www-data:www-data /storage
+
+RUN mkdir -p /log && chown www-data:www-data /log
 	
 CMD ["php-fpm"]
 
