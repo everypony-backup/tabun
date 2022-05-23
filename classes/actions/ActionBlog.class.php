@@ -575,10 +575,20 @@ class ActionBlog extends Action
         }
         /**
          * Преобразуем ограничение по рейтингу в число
+         * Проверяем не выходит ли число за дозволенные рамки
          */
         if (!func_check(getRequestStr('blog_limit_rating_topic'), 'float')) {
             $this->Message_AddError($this->Lang_Get('blog_create_rating_error'), $this->Lang_Get('error'));
             $bOk=false;
+        } else {
+            $floatLimit = floatval(getRequestStr('blog_limit_rating_topic'));
+            if ($floatLimit >= 1000000) {
+                $this->Message_AddError($this->Lang_Get('blog_create_rating_error_limit_max'), $this->Lang_Get('error'));
+                $bOk = false;
+            } else if ($floatLimit <= -1000000) {
+                $this->Message_AddError($this->Lang_Get('blog_create_rating_error_limit_min'), $this->Lang_Get('error'));
+                $bOk = false;
+            }
         }
         /**
          * Выполнение хуков
