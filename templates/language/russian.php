@@ -146,6 +146,8 @@ return array(
 	'blog_create_rating' => 'Ограничение по рейтингу',
 	'blog_create_rating_notice' => 'Рейтинг, который необходим пользователю, чтобы написать в этот блог',
 	'blog_create_rating_error' => 'Значение ограничения рейтинга должно быть числом',
+    'blog_create_rating_error_limit_max' => 'Значение ограничения рейтинга должно быть меньше 1000000.000',
+    'blog_create_rating_error_limit_min' => 'Значение ограничения рейтинга должно быть больше -1000000.000',
 	'blog_create_avatar' => 'Аватар',
 	'blog_create_avatar_error' => 'Не удалось загрузить аватар',
 	'blog_create_avatar_delete' => 'удалить',
