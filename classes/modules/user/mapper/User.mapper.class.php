@@ -138,6 +138,40 @@ class ModuleUser_MapperUser extends Mapper
         return null;
     }
     /**
+     * Получить ключ аутентификации по юзеру
+     *
+     * @param string $iUserId  ID пользователя
+     * @return string|null
+     */
+    public function GetSessionKeyByUser($iUserId)
+    {
+        $sql = "SELECT
+                    s.session_key
+                FROM
+                    ".Config::Get('db.table.session')." as s
+                WHERE
+                    s.user_id = ?d
+                ";
+        if ($aRow=$this->oDb->selectRow($sql, $iUserId)) {
+            return $aRow['session_key'];
+        }
+        return null;
+    }
+    /**
+     * Удаляет все сессии указанного пользователя
+     *
+     * @param string $iUserId  ID пользователя
+     * @return bool
+     */
+    public function DeleteAllUserSessions($iUserId)
+    {
+        $sql = "DELETE FROM ".Config::Get('db.table.session')." WHERE user_id = ?d";
+        if ($this->oDb->query($sql, $iUserId)) {
+            return true;
+        }
+        return false;
+    }
+    /**
      * Создание пользовательской сессии
      *
      * @param ModuleUser_EntitySession $oSession

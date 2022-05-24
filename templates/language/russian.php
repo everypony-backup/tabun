@@ -640,7 +640,7 @@ return array(
 	'settings_tuning_submit_ok' => 'Настройки успешно сохранены',
 	'settings_account' => 'Настройки акаунта',
 	'settings_account_password' => 'Пароль',
-	'settings_account_password_notice' => 'Оставьте поля пустыми если не хотите изменять пароль.',
+	'settings_account_password_notice' => 'Оставьте поля пустыми, если не хотите изменять пароль. После смены пароля вы будете разлогинены на всех устройствах, кроме текущего.',
 	'settings_account_submit' => 'Сохранить изменения',
 	'settings_account_submit_ok' => 'Аккаунт сохранен',
 	/**

@@ -178,6 +178,10 @@ $config['module']['notify']['per_process'] = 1000;      // Количество 
 // Модуль Security
 $config['module']['security']['hash'] = "";             // "примесь" к строке, хешируемой в качестве security-кода
 
+// Длина случайного ключа аутентификации пользователя
+// (в байтах; в base64-кодировании будет на 25% длиннее)
+$config['module']['security']['user_key_length_bytes'] = 24;
+
 // Модуль Stream
 $config['module']['userfeed']['count_default'] = 20;    // Число топиков в ленте по умолчанию
 $config['module']['stream']['count_default'] = 20;      // Число топиков в ленте по умолчанию
