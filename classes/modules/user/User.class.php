@@ -592,9 +592,37 @@ class ModuleUser extends Module
          * Ставим куку
          */
         if ($bRemember) {
-            setcookie('key', $sKey, time()+Config::Get('sys.cookie.time'), Config::Get('sys.cookie.path'), Config::Get('sys.cookie.host'), false, true);
+            $this->SetUserKeyCookie($sKey);
         }
         return true;
+    }
+    /**
+     * Установка куки с ключом аутентификации
+     *
+     * @param string $sKey  Ключ аутентификации
+     * @param int|null $iExpires  Время жизни куки
+     */
+    protected function SetUserKeyCookie($sKey, $iExpires=null) {
+        if (is_null($iExpires)) {
+            $iExpires = time() + Config::Get('sys.cookie.time');
+        }
+        setcookie(
+            'key',
+            $sKey,
+            [
+                'expires' => $iExpires,
+                'path' => Config::Get('sys.cookie.path'),
+                'domain' => Config::Get('sys.cookie.host'),
+                'secure' => Config::Get('sys.cookie.secure'),
+                'httponly' => true,
+                'samesite' => Config::Get('sys.cookie.samesite'),
+            ]
+        );
+        /**
+         * Чтобы сохранять сессию живой, кука периодически ставится заново;
+         * здесь хранится время последней установки
+         */
+        $this->Session_Set('last_cookie_ping', time());
     }
     /**
      * Залогинивание по ключу аутентификации
@@ -602,13 +630,14 @@ class ModuleUser extends Module
      */
     protected function AutoLogin()
     {
+        $sKeyFromCookies = getRequestStr('key', null, 'cookie');
         /**
          * Если есть живая php-сессия - информация из неё более приоритетна.
          * Если нет - попробуем залогиниться по ключу аутентификации из кук
          */
         $sKey = $this->Session_Get('key');
         if (empty($sKey)) {
-            $sKey = getRequestStr('key', null, 'cookie');
+            $sKey = $sKeyFromCookies;
         }
         if (empty($sKey)) {
             return;
@@ -621,6 +650,18 @@ class ModuleUser extends Module
         if ($this->oUserCurrent) {
             if (!$this->ValidateUserKey($this->oUserCurrent, $sKey)) {
                 $this->Logout();
+                return;
+            }
+            /**
+             * Если есть кука - периодически ставим её заново, чтобы сессия
+             * не слетала при активном посещении сайта
+             */
+            $iPingInterval = Config::Get('sys.cookie.ping_interval');
+            if ($iPingInterval > 0 && !empty($sKeyFromCookies)) {
+                $iLastPing = $this->Session_Get('last_cookie_ping');
+                if (!$iLastPing || time() - $iLastPing >= $iPingInterval) {
+                    $this->SetUserKeyCookie($sKeyFromCookies);
+                }
             }
             return;
         }
@@ -665,14 +706,15 @@ class ModuleUser extends Module
         $this->oUserCurrent=null;
         $this->oSession=null;
         /**
+         * Дропаем куку
+         */
+        $this->SetUserKeyCookie('', 1);
+        /**
          * Дропаем из сессии
          */
         $this->Session_Drop('user_id');
         $this->Session_Drop('key');
-        /**
-         * Дропаем куку
-         */
-        setcookie('key', '', 1, Config::Get('sys.cookie.path'), Config::Get('sys.cookie.host'));
+        $this->Session_Drop('last_cookie_ping');
     }
     /**
      * Обновление данных сессии

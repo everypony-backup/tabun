@@ -54,11 +54,13 @@ class ModuleSession extends Module
     protected function Start()
     {
         session_name(Config::Get('sys.session.name'));
-        session_set_cookie_params(
-            Config::Get('sys.session.timeout'),
-            Config::Get('sys.session.path'),
-            Config::Get('sys.session.host')
-        );
+        session_set_cookie_params([
+            'lifetime' => Config::Get('sys.session.timeout'),
+            'path' => Config::Get('sys.session.path'),
+            'domain' => Config::Get('sys.session.host'),
+            'secure' => Config::Get('sys.session.secure'),
+            'samesite' => Config::Get('sys.session.samesite'),
+        ]);
         if (!session_id()) {
             /**
              * Попытка подменить идентификатор имени сессии через куку
@@ -98,9 +100,13 @@ class ModuleSession extends Module
             setcookie(
                 Config::Get('sys.session.name'),
                 $this->sId,
-                time()+Config::Get('sys.session.timeout'),
-                Config::Get('sys.session.path'),
-                Config::Get('sys.session.host')
+                [
+                    'expires' => time() + Config::Get('sys.session.timeout'),
+                    'path' => Config::Get('sys.session.path'),
+                    'domain' => Config::Get('sys.session.host'),
+                    'secure' => Config::Get('sys.session.secure'),
+                    'samesite' => Config::Get('sys.session.samesite'),
+                ]
             );
         }
     }
