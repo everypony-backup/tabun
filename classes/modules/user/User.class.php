@@ -488,21 +488,40 @@ class ModuleUser extends Module
         return $this->oMapper->Update($oUser);
     }
     /**
-     * Генерирует ключ для куков
+     * Генерирует случайный ключ для аутентификации, используется для работы
+     * галочки "Запомнить меня" и для выхода из всех сессий после смены пароля.
+     * В текущей реализации этот ключ общий для всех устройств (сбросить его
+     * можно через смену пароля).
      *
      * @param ModuleUser_EntityUser $oUser	Объект пользователя
      * @return string
      */
     public function GenerateUserKey(ModuleUser_EntityUser $oUser)
     {
-        return base64_encode(pbkdf2(
-            PBKDF2_HASH_ALGORITHM,
-            $oUser->getLogin(),
-            Config::Get('module.security.hash'),
-            PBKDF2_ITERATIONS,
-            PBKDF2_HASH_BYTE_SIZE,
-            true
-        ));
+        return base64_encode(random_bytes(Config::Get('module.security.user_key_length_bytes')));
+    }
+
+    /**
+     * Считывает из базы ключ аутентификации пользователя или генерирует новый,
+     * если в базе его нет.
+     *
+     * @param ModuleUser_EntityUser $oUser  Объект пользователя
+     * @return string
+     */
+    protected function GetOrCreateUserKey(ModuleUser_EntityUser $oUser)
+    {
+        $sCacheKey = "user_key_{$oUser->getId()}";
+        if ($sKey = $this->Cache_Get($sCacheKey)) {
+            return $sKey;
+        }
+
+        $sKey = $this->oMapper->GetSessionKeyByUser($oUser->getId());
+        if (empty($sKey)) {
+            $sKey = $this->GenerateUserKey($oUser);
+        }
+
+        $this->Cache_Set($sKey, $sCacheKey);
+        return $sKey;
     }
 
     /**
@@ -512,9 +531,24 @@ class ModuleUser extends Module
      * @param string $sKey Ключ сессии из cookies
      * @return bool
      */
-    public function ValidateUserKey(ModuleUser_EntityUser $oUser, $sKey)
+    protected function ValidateUserKey(ModuleUser_EntityUser $oUser, $sKey)
     {
-        return slow_equals($this->GenerateUserKey($oUser), $sKey);
+        $sDbKey = $this->GetOrCreateUserKey($oUser);
+        if (empty($sDbKey)) {
+            return false;
+        }
+        return slow_equals($sDbKey, $sKey);
+    }
+    /**
+     * Проверяет, считается ли текущая сессия постоянной (поставил ли юзер
+     * галочку "Запомнить меня"). Проверка выполняется по наличию ключа
+     * аутентификации в куках.
+     *
+     * @return bool
+     */
+    public function IsPersistentSession()
+    {
+        return !empty(getRequestStr('key', null, 'cookie'));
     }
     /**
      * Авторизовывает юзера
@@ -530,10 +564,11 @@ class ModuleUser extends Module
             return false;
         }
         /**
-         * Генерим новый ключ авторизаии для куков
+         * Создаём новый ключ аутентификации для куков или читаем существующий
+         * из базы (это необходимо для работы входа на нескольких устройствах)
          */
-        if (is_null($sKey)) {
-            $sKey=$this->GenerateUserKey($oUser);
+        if (empty($sKey)) {
+            $sKey=$this->GetOrCreateUserKey($oUser);
         }
         /**
          * Создаём новую сессию
@@ -542,10 +577,17 @@ class ModuleUser extends Module
             return false;
         }
         /**
-         * Запоминаем в сесси юзера
+         * Запоминаем юзера в php-сессии
          */
         $this->Session_Set('user_id', $oUser->getId());
         $this->oUserCurrent=$oUser;
+        /**
+         * Ключ аутентификации тоже запоминаем в php-сессии - таким образом
+         * мы сможем разлогинить пользователя из php-сессии, если ключ
+         * аутентификации сменится (например, после сброса пароля)
+         */
+        $this->Session_Set('key', $sKey);
+
         /**
          * Ставим куку
          */
@@ -555,24 +597,41 @@ class ModuleUser extends Module
         return true;
     }
     /**
-     * Автоматическое заллогинивание по ключу из куков
+     * Залогинивание по ключу аутентификации
      *
      */
     protected function AutoLogin()
     {
-        $sKeyFromCookies = getRequestStr('key', null, 'cookie');
-
-        if ($this->oUserCurrent && !empty($sKeyFromCookies) && !$this->ValidateUserKey($this->oUserCurrent, $sKeyFromCookies)) {
-            $this->Logout();
+        /**
+         * Если есть живая php-сессия - информация из неё более приоритетна.
+         * Если нет - попробуем залогиниться по ключу аутентификации из кук
+         */
+        $sKey = $this->Session_Get('key');
+        if (empty($sKey)) {
+            $sKey = getRequestStr('key', null, 'cookie');
+        }
+        if (empty($sKey)) {
             return;
         }
-        if ($sKeyFromCookies) {
-            $oUser=$this->GetUserBySessionKey($sKeyFromCookies);
-            if ($oUser && $this->ValidateUserKey($oUser, $sKeyFromCookies)) {
-                $this->Authorization($oUser);
-            } else {
+        /**
+         * Если юзер залогинен, то нужно лишь проверить правильность ключа.
+         * Если совпадает с ключом из базы, то всё хорошо, а если нет - значит,
+         * пользователь сбросил пароль и нужно разлогинить все сеансы
+         */
+        if ($this->oUserCurrent) {
+            if (!$this->ValidateUserKey($this->oUserCurrent, $sKey)) {
                 $this->Logout();
             }
+            return;
+        }
+        /**
+         * Если пользователь не залогинен - логиним по ключу из кук
+         */
+        $oUser = $this->GetUserBySessionKey($sKey);
+        if ($oUser) {
+            $this->Authorization($oUser, true, $sKey);
+        } else {
+            $this->Logout();
         }
     }
     /**
@@ -609,6 +668,7 @@ class ModuleUser extends Module
          * Дропаем из сессии
          */
         $this->Session_Drop('user_id');
+        $this->Session_Drop('key');
         /**
          * Дропаем куку
          */
@@ -675,6 +735,23 @@ class ModuleUser extends Module
             return true;
         }
         return false;
+    }
+    /**
+     * Удаляет все активные сессии пользователя путём полного удаления ключа
+     * аутентификации.
+     *
+     * @param ModuleUser_EntityUser $oUser  Объект пользователя
+     */
+    public function DeleteAllUserSessions(ModuleUser_EntityUser $oUser)
+    {
+        $this->oMapper->DeleteAllUserSessions($oUser->getId());
+        $this->Cache_Delete("user_key_{$oUser->getId()}");
+        $this->Cache_Clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            [
+                'user_session_update'
+            ]
+        );
     }
     /**
      * Получить список юзеров по дате последнего визита

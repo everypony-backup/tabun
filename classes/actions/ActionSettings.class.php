@@ -386,10 +386,15 @@ class ActionSettings extends Action
                         if (validate_password(getRequestStr('password_now'), $this->oUserCurrent->getPassword())) {
                             $this->oUserCurrent->setPassword(create_hash(getRequestStr('password')));
                             /**
-                             * Авторизируем для обновления ключа сессии, который зависит от пароля.
-                             *
+                             * Удаляем все активные сессии на всех устройствах
                              */
-                            $this->ModuleUser_Authorization($this->oUserCurrent);
+                            $this->ModuleUser_DeleteAllUserSessions($this->oUserCurrent);
+                            /**
+                             * И после удаления авторизуем текущую сессию заново, генерируя новый ключ аутентификации
+                             * (не забываем сохранить правильное состояние галочки "Запомнить меня")
+                             */
+                            $bRemember = $this->ModuleUser_IsPersistentSession();
+                            $this->ModuleUser_Authorization($this->oUserCurrent, $bRemember);
                         } else {
                             $bError=true;
                             $this->Message_AddError($this->Lang_Get('settings_profile_password_current_error'), $this->Lang_Get('error'));
