@@ -252,6 +252,7 @@ class ActionLogin extends Action
                         $oReminder->setIsUsed(1);
                         $this->User_UpdateReminder($oReminder);
                         $this->Notify_SendReminderPassword($oUser, $sNewPassword);
+                        $this->ModuleUser_DeleteAllUserSessions($oUser);
                         $this->SetTemplateAction('reminder_confirm');
                         return ;
                     }
