@@ -165,6 +165,7 @@ $config['module']['blog']['encrypt'] = '';              // Ключ XXTEA шиф
 $config['module']['blog']['avatar_size'] = [48, 24, 0]; // Список размеров аватаров у блога. 0 - исходный размер
 $config['module']['blog']['index_comment_good'] = -10;  // Рейтинг топика выше которого(включительно) комментарии из него попадают в "Прямой эфир"
 $config['module']['blog']['index_display_good'] = -30;  // Рейтинг топика НИЖЕ которого(включительно) он попадает в спецблог
+$config['module']['blog']['bad_topics_blog_id'] = 5036;  // Спецблог для типиков с рейтингом ниже "index_display_good"
 $config['module']['blog']['semi_closed_id'] = [];       // Список полузакрытых блогов
 $config['module']['blog']['selective_filter'] = [];     // Поблоговое выставление фильтра рейтинга
 
