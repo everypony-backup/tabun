@@ -204,6 +204,10 @@ class ModuleTopic extends Module
                     $this->AddTopicTag($oTag);
                 }
             }
+            /**
+             * Обновляем количество топиков в блоге
+             */
+            $this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
             //чистим зависимые кеши
             $this->Cache_Clean(
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
@@ -339,6 +343,16 @@ class ModuleTopic extends Module
         $oTopicOld=$this->GetTopicById($oTopic->getId());
         $oTopic->setDateEdit(date("Y-m-d H:i:s"));
         if ($this->oMapperTopic->UpdateTopic($oTopic)) {
+            /**
+             * Обновляем данные в комментариях, если топик был перенесен в новый блог
+             * Обновляем количество топиков в блоге
+             */
+            if ($oTopicOld->getBlogId() != $oTopic->getBlogId()) {
+                $this->Comment_UpdateTargetParentByTargetId($oTopic->getBlogId(), 'topic', $oTopic->getId());
+                $this->Comment_UpdateTargetParentByTargetIdOnline($oTopic->getBlogId(), 'topic', $oTopic->getId());
+                $this->Blog_RecalculateCountTopicByBlogId($oTopicOld->getBlogId());
+                $this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
+            }
             // Переиндексирование топика в ElasticSearch
             $this->SearchIndexer_TopicIndex($oTopic);
             /**

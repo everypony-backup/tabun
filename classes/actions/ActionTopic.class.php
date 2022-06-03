@@ -368,10 +368,6 @@ class ActionTopic extends Action
              */
             $oTopic=$this->Topic_GetTopicById($oTopic->getId());
             /**
-             * Обновляем количество топиков в блоге
-             */
-            $this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
-            /**
              * Добавляем автора топика в подписчики на новые комментарии к этому топику
              */
             $this->Subscribe_AddSubscribeSimple('topic_new_comment', $oTopic->getId(), $this->oUserCurrent->getMail());
@@ -496,20 +492,6 @@ class ActionTopic extends Action
          */
         if ($this->Topic_UpdateTopic($oTopic)) {
             $this->Hook_Run('topic_edit_after', array('oTopic'=>$oTopic,'oBlog'=>$oBlog,'bSendNotify'=>&$bSendNotify));
-            /**
-             * Обновляем данные в комментариях, если топик был перенесен в новый блог
-             */
-            if ($sBlogIdOld!=$oTopic->getBlogId()) {
-                $this->Comment_UpdateTargetParentByTargetId($oTopic->getBlogId(), 'topic', $oTopic->getId());
-                $this->Comment_UpdateTargetParentByTargetIdOnline($oTopic->getBlogId(), 'topic', $oTopic->getId());
-            }
-            /**
-             * Обновляем количество топиков в блоге
-             */
-            if ($sBlogIdOld!=$oTopic->getBlogId()) {
-                $this->Blog_RecalculateCountTopicByBlogId($sBlogIdOld);
-            }
-            $this->Blog_RecalculateCountTopicByBlogId($oTopic->getBlogId());
             /**
              * Добавляем событие в ленту
              */
