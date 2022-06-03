@@ -163,13 +163,13 @@ init = ->
       ls.usernote.showForm()
     $('#follow_user').on 'click', ->
       ls.user.followToggle(this, this.dataset.user_id)
+    $('#stream_get_more_by_user').on 'click', ->
+      ls.stream.getMoreByUser(this.dataset.user_id)
   else if window.location.pathname.match "stream"
     $('#stream_get_more_all').on 'click', ->
       ls.stream.getMoreAll()
     $('#stream_get_more').on 'click', ->
       ls.stream.getMore()
-    $('#stream_get_more_by_user').on 'click', ->
-      ls.stream.getMoreByUser(this.dataset.user_id)
     $('.streamEventTypeCheckbox').on 'click', ->
       ls.stream.switchEventType this.dataset.target_type
     $('#stream_users_complete').on 'keydown', (e) ->
