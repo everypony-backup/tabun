@@ -412,7 +412,7 @@ class ActionAjax extends Action
          * Если рейтинг поста меньше определённого значения, он автоматически переносится в специальный блог
          */
         if ($oTopic->getRating() < Config::Get('module.blog.index_display_good')) {
-            $oTopic->setBlogId('5036');
+            $oTopic->setBlogId(Config::Get('module.blog.bad_topics_blog_id'));
         }
         if ($this->Vote_AddVote($oTopicVote) and $this->Topic_UpdateTopic($oTopic)) {
             if ($iValue) {
