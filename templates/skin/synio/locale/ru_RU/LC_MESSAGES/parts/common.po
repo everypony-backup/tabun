@@ -154,6 +154,12 @@ msgstr "Вы робот!"
 msgid "comment_lock_edit"
 msgstr "заблокировать дальнейшее изменение"
 
+msgid "comment_delete_confirm"
+msgstr "Вы действительно хотите удалить комментарий?"
+
+msgid "comment_repair_confirm"
+msgstr "Вы действительно хотите восстановить комментарий?"
+
 msgid "no_votes_comment"
 msgstr "Никто не оценивал этот комментарий"
 
