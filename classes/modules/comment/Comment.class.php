@@ -317,7 +317,7 @@ class ModuleComment extends Module
          */
         $aCloseBlogs = ($this->oUserCurrent && $sId==$this->oUserCurrent->getId())
             ? array()
-            : $this->Blog_GetInaccessibleBlogsByUser();
+            : $this->Blog_GetInaccessibleBlogsByUser($this->oUserCurrent);
         $s=serialize($aCloseBlogs);
         $sCacheKey = "comment_user_{$sId}_{$sTargetType}_{$iPage}_{$iPerPage}_{$s}";
 
@@ -361,7 +361,7 @@ class ModuleComment extends Module
          */
         $aCloseBlogs = ($this->oUserCurrent && $sId==$this->oUserCurrent->getId())
             ? array()
-            : $this->Blog_GetInaccessibleBlogsByUser();
+            : $this->Blog_GetInaccessibleBlogsByUser($this->oUserCurrent);
         $s=serialize($aCloseBlogs);
 
         $sCacheKey = "comment_count_user_{$sId}_{$sTargetType}_{$s}";
