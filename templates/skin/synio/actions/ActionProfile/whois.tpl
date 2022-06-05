@@ -2,7 +2,6 @@
 {include file='header.tpl' menu='people'}
 
 {assign var="oSession" value=$oUserProfile->getSession()}
-{assign var="oVote" value=$oUserProfile->getVote()}
 {assign var="oGeoTarget" value=$oUserProfile->getGeoTarget()}
 
 
