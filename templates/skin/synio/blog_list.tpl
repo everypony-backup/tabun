@@ -21,7 +21,6 @@
 	{else}
 		<thead>
 			<tr>
-				<th class="cell-info">&nbsp;</th>
 				<th class="cell-name cell-tab"><div class="cell-tab-inner"><span>{$aLang.blogs_title}</span></div></th>
 
 				{if $oUserCurrent}
