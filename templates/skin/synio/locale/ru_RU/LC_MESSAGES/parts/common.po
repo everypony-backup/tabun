@@ -68,7 +68,7 @@ msgid "keep_me_logged_in"
 msgstr "Запомнить меня"
 
 msgid "trials_exceed_limit"
-msgstr "Превышен лимит попыток входа. Обновите страницу чтобы продолжить."
+msgstr "Превышен лимит попыток входа. Обновите страницу для продолжения."
 
 msgid "sign_in"
 msgstr "Войти"
@@ -116,7 +116,7 @@ msgid "empty_username"
 msgstr "Необходимо ввести логин"
 
 msgid "invalid_username"
-msgstr "Логин может состоять только из латинских букв, дефиса и знака подчеркивания"
+msgstr "Логин может состоять только из латинских букв, дефиса и знака подчёркивания"
 
 msgid "username_too_short"
 msgstr "Слишком короткий логин"
@@ -125,7 +125,7 @@ msgid "username_too_long"
 msgstr "Слишком длинный логин"
 
 msgid "valid_email"
-msgstr "Эл. почта введена верно, на нее будет отправлено письмо"
+msgstr "Эл. почта введена верно, на неё будет отправлено письмо"
 
 msgid "invalid_email"
 msgstr "Эл. почта не соответствует формату name@email.ru"

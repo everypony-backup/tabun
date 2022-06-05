@@ -356,7 +356,7 @@ class ActionSettings extends Action
         /**
          * Устанавливаем title страницы
          */
-        $this->Viewer_AddHtmlTitle($this->Lang_Get('settings_menu_profile'));
+        $this->Viewer_AddHtmlTitle($this->Lang_Get('settings_menu_account'));
         $this->sMenuSubItemSelect='account';
         /**
          * Если нажали кнопку "Сохранить"
