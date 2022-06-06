@@ -90,68 +90,68 @@
                 <span>{$aLang.comment_was_hidden}</span>
             {/if}
 
-            {if $oUserCurrent}
-                {if !$bNoCommentFavourites}
-                    {if not $oComment->getDelete()}
-                        <div class="comment-favourite">
-                            {if $oComment->getCountFavourite() > 0}
-                                <div class="favourite link-dotted{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
-                                    {if $oComment->getIsFavourite()}
-                                        {$aLang.comment_favourite_add_already}
-                                    {else}
-                                        {$aLang.comment_favourite_add}
-                                    {/if}
-                                </div>
-                                <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
+            {if $oUserCurrent and !$bNoCommentFavourites and not $oComment->getDelete()}
+                <div class="comment-favourite">
+                    {if $oComment->getCountFavourite() > 0}
+                        <div class="favourite link-dotted{if $oComment->getIsFavourite()} active{/if}" data-target_id="{$oCommentId}" data-target_type="comment">
+                            {if $oComment->getIsFavourite()}
+                                {$aLang.comment_favourite_add_already}
                             {else}
-                                <div class="favourite link-dotted" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
-                                <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
+                                {$aLang.comment_favourite_add}
                             {/if}
                         </div>
-                    {/if}
-
-                    {if not $bShort}
-                        <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                            {if $oCommentVoteCount > 0}
-                                {if $oCommentRating > 0} vote-count-positive
-                                {elseif $oCommentRating < 0} vote-count-negative
-                                {else} vote-count-mixed
-                                {/if}
-                            {/if}
-                            {if $oCommentVote} voted
-                                {if $oCommentVote->getDirection() > 0} voted-up
-                                {else} voted-down
-                                {/if}
-                            {elseif !isset($oCommentSelf)}
-                                {if (strtotime($oCommentDate)>=time()-$oConfig->GetValue('acl.vote.comment.limit_time'))} vote-enabled{/if}
-                            {/if}
-                            ">
-                            <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                            <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
-                            <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
-                        </div>
+                        <span class="favourite-count" id="fav_count_comment_{$oCommentId}">{$oComment->getCountFavourite()}</span>
                     {else}
-                        {assign var="bVoteInfoEnabled" value=$oUserCurrent and $LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
-                        <div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
-                            {if $oCommentVoteCount > 0}
-                                {if $oCommentRating > 0} vote-count-positive
-                                {elseif $oCommentRating < 0} vote-count-negative
-                                {else} vote-count-mixed
-                                {/if}
-                            {/if}
-                            {if $bVoteInfoEnabled} vote-info-enabled{/if}">
-                            <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
-                        </div>
+                        <div class="favourite link-dotted" data-target_id="{$oCommentId}" data-target_type="comment">{$aLang.comment_favourite_add}</div>
+                        <span class="favourite-count" id="fav_count_comment_{$oCommentId}"></span>
                     {/if}
-                {/if}
-
-                {if not $bShort and not $oComment->getDelete()}
-                    <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
-                    <a class="link-dotted comment-delete">{$aLang.comment_delete}</a>
-                    <a class="link-dotted comment-edit-bw {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.edit.comment.limit_time'))} edit-timeout{/if}">{$aLang.comment_edit}</a>
-                    {hook run='comment_action' comment=$oComment}
-                {/if}
+                </div>
             {/if}
+
+            {if !$bNoCommentFavourites}
+                {*
+                    На странице поста ($bShort=false) класс vote-info-enabled добавляется
+                    ко всему посту целиком, поэтому здесь его добавлять не надо.
+                    В списках комментариев ($bShort=true) приходится проверять индивидуально
+                    для каждого комментария
+                *}
+                {assign var="bVoteInfoEnabled" value=$bShort and $oUserCurrent and $LS->ACL_CheckSimpleAccessLevel($oConfig->GetValue('vote_state.comment.na_enable_level'), $oUserCurrent, $oComment, 'comment')}
+
+                {strip}<div id="vote_area_comment_{$oCommentId}" class="vote comment-vote
+                    {if $oCommentVoteCount > 0}
+                        {if $oCommentRating > 0} vote-count-positive
+                        {elseif $oCommentRating < 0} vote-count-negative
+                        {else} vote-count-mixed
+                        {/if}
+                    {/if}
+                    {if $bVoteInfoEnabled} vote-info-enabled{/if}
+                    {if not $bShort}
+                        {if $oCommentVote} voted
+                            {if $oCommentVote->getDirection() > 0} voted-up
+                            {else} voted-down
+                            {/if}
+                        {elseif !isset($oCommentSelf)}
+                            {if $oUserCurrent and (strtotime($oCommentDate)>=time()-$oConfig->GetValue('acl.vote.comment.limit_time'))} vote-enabled{/if}
+                        {/if}
+                    {/if}
+                    ">
+                    {if not $bShort and $oUserCurrent}
+                        <div class="vote-item vote-up" data-direction="1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
+                    {/if}
+                    <span class="vote-count" id="vote_total_comment_{$oCommentId}" data-target_id="{$oCommentId}" data-target_type="comment" data-count="{$oCommentVoteCount}">{if $oCommentRating > 0}+{/if}{$oCommentRating}</span>
+                    {if not $bShort and $oUserCurrent}
+                        <div class="vote-item vote-down" data-direction="-1" data-target_id="{$oCommentId}" data-target_type="comment"></div>
+                    {/if}
+                </div>{/strip}
+            {/if}
+
+            {if $oUserCurrent and not $bShort and not $oComment->getDelete()}
+                <a class="reply-link link-dotted">{$aLang.comment_answer}</a>
+                <a class="link-dotted comment-delete">{$aLang.comment_delete}</a>
+                <a class="link-dotted comment-edit-bw {if (strtotime($oCommentDate)<=time()-$oConfig->GetValue('acl.edit.comment.limit_time'))} edit-timeout{/if}">{$aLang.comment_edit}</a>
+                {hook run='comment_action' comment=$oComment}
+            {/if}
+
             {include file='comment_modify_notice.tpl' bGetShort=$bShort}
             {if $bShort and $oTopic}
                 {assign var="oBlog" value=$oTopic->getBlog()}
