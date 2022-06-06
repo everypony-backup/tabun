@@ -1,4 +1,5 @@
 {assign var="oUserProfileId" value=$oUserProfile->getId()}
+{assign var="oVote" value=$oUserProfile->getVote()}
 <div class="profile">
 	{hook run='profile_top_begin' oUserProfile=$oUserProfile}
 	
