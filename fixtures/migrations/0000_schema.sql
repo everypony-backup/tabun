@@ -12,7 +12,7 @@
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
@@ -544,7 +544,7 @@ CREATE TABLE `ls_reminder` (
   `reminder_code` varchar(32) NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `reminder_date_add` datetime NOT NULL,
-  `reminder_date_used` datetime DEFAULT '0000-00-00 00:00:00',
+  `reminder_date_used` datetime DEFAULT NULL,
   `reminder_date_expire` datetime NOT NULL,
   `reminde_is_used` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`reminder_code`),
@@ -568,8 +568,8 @@ CREATE TABLE `ls_role` (
   `role_rating` float(9,3) NOT NULL DEFAULT '0.000',
   `role_rating_use` tinyint(1) NOT NULL DEFAULT '0',
   `role_reg` tinyint(1) NOT NULL DEFAULT '0',
-  `role_date_add` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `role_date_edit` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `role_date_add` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
+  `role_date_edit` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   `role_avatar` varchar(255) DEFAULT NULL,
   `role_place` text,
   PRIMARY KEY (`role_id`)
@@ -588,7 +588,7 @@ CREATE TABLE `ls_role_avatar` (
   `avatar_id` int(11) unsigned NOT NULL,
   `avatar_key` varchar(32) NOT NULL,
   `avatar_ip` varchar(15) NOT NULL,
-  `avatar_date_create` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `avatar_date_create` datetime NOT NULL DEFAULT '1970-01-01 00:00:00',
   PRIMARY KEY (`avatar_key`),
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -651,7 +651,7 @@ CREATE TABLE `ls_session` (
   `user_id` int(11) unsigned NOT NULL,
   `session_ip_create` varchar(15) NOT NULL,
   `session_ip_last` varchar(15) NOT NULL,
-  `session_date_create` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `session_date_create` datetime NOT NULL,
   `session_date_last` datetime NOT NULL,
   PRIMARY KEY (`session_key`),
   UNIQUE KEY `user_id` (`user_id`),
