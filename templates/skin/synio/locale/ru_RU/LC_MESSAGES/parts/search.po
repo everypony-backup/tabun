@@ -45,7 +45,7 @@ msgid "search_placeholder"
 msgstr "Что ищем?"
 
 msgid "search_type_topic"
-msgstr "топиках"
+msgstr "постах"
 
 msgid "search_type_comment"
 msgstr "комментариях"
