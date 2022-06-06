@@ -903,10 +903,17 @@ class ModuleTopic extends Module
         );
         /**
          * Если пользователь смотрит свой профиль, то добавляем в выдачу
-         * закрытые блоги в которых он состоит
+         * его посты из закрытых блогов.
+         * Если пользователь смотрит чужой профиль, то добавляем в выдачу
+         * посты из тех закрытых блогов, в которых он состоит
          */
         if ($this->oUserCurrent && $this->oUserCurrent->getId()==$sUserId) {
             $aFilter['blog_type'][]='close';
+        } else if ($this->oUserCurrent) {
+            $aOpenBlogs = $this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent);
+            if (count($aOpenBlogs)) {
+                $aFilter['blog_type']['close'] = $aOpenBlogs;
+            }
         }
         return $this->GetTopicsByFilter($aFilter, $iPage, $iPerPage);
     }
@@ -926,10 +933,17 @@ class ModuleTopic extends Module
         );
         /**
          * Если пользователь смотрит свой профиль, то добавляем в выдачу
-         * закрытые блоги в которых он состоит
+         * его посты из закрытых блогов.
+         * Если пользователь смотрит чужой профиль, то добавляем в выдачу
+         * посты из тех закрытых блогов, в которых он состоит
          */
         if ($this->oUserCurrent && $this->oUserCurrent->getId()==$sUserId) {
             $aFilter['blog_type'][]='close';
+        } else if ($this->oUserCurrent) {
+            $aOpenBlogs = $this->Blog_GetAccessibleBlogsByUser($this->oUserCurrent);
+            if (count($aOpenBlogs)) {
+                $aFilter['blog_type']['close'] = $aOpenBlogs;
+            }
         }
         $s=serialize($aFilter);
         $sCacheKey = "topic_count_user_{$s}";
