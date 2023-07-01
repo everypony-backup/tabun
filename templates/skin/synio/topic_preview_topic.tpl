@@ -12,6 +12,7 @@
 			<time datetime="{date_format date=$oTopic->getDateAdd() format='c'}" pubdate title="{date_format date=$oTopic->getDateAdd() format='j F Y, H:i'}">
 			{date_format date=$oTopic->getDateAdd() format="j F Y, H:i"}
 			</time>
+			<img src="{$oUser->getProfileAvatarPath(48)}"  class="avatar" />
 		</div>
 	</header>
 
