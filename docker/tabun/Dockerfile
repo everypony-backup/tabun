@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
         libcurl4-openssl-dev \
         imagemagick libmagickwand-dev libmagickcore-dev \
         locales \
-    && pecl install imagick redis xdebug && docker-php-ext-enable imagick redis xdebug \
+    && pecl install imagick redis xdebug-3.1.6 && docker-php-ext-enable imagick redis xdebug \
     && docker-php-ext-install mysqli gettext json curl bcmath mbstring zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /var/lib/apt/lists/* \
