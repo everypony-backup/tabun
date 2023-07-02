@@ -543,16 +543,20 @@ class ModuleFavourite_MapperFavourite extends Mapper
         }
 
         $sql = "SELECT
-					*
+					t.*
 				FROM
-					".Config::Get('db.table.favourite_tag')."
+					".Config::Get('db.table.favourite_tag')." AS t,
+					".Config::Get('db.table.favourite')." AS f
 				WHERE
 					1 = 1
-					{ AND user_id = ?d }
-					{ AND target_type = ? }
-					{ AND target_id = ?d }
-					{ AND is_user = ?d }
-					{ AND text = ? }
+					{ AND t.user_id = ?d }
+					{ AND t.target_type = ? }
+					{ AND t.target_id = ?d }
+					{ AND t.is_user = ?d }
+					{ AND t.text = ? }
+					{ AND f.target_publish = 1 }
+					{ AND f.target_type = t.target_type }
+					{ AND f.target_id = t.target_id }
 				ORDER by {$sOrder}
 				LIMIT ?d, ?d ;
 					";
