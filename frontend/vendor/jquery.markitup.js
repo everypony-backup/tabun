@@ -230,8 +230,9 @@
                             }).bind('click.markItUp', function(e) {
                                 e.preventDefault();
                             }).bind("focusin.markItUp", function(){
-                                $$.focus();
+                                //pass
                             }).bind('mouseup', function(e) {
+                                $$.focus();
                                 if (button.call) {
                                     eval(button.call)(e); // Pass the mouseup event to custom delegate
                                 }
