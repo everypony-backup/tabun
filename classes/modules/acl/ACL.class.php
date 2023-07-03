@@ -318,8 +318,15 @@ class ModuleACL extends Module
             return true;
         }
         /**
+         * Если автор(смотритель) блога
+         */
+        if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+            return true;
+        }
+        /**
          * Разрешаем если это автора поста...
          */
+
         if ($oTopic->getUserId() == $oUser->getId()) {
             /**
              * ... но запрещаем, если пост в закрытом блоге, в котором автор забанен или не состоит
@@ -329,12 +336,6 @@ class ModuleACL extends Module
                 $oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(), $oUser->getId());
                 if (!$oBlogUser or $oBlogUser->getUserRole() == ModuleBlog::BLOG_USER_ROLE_BAN) return false;
             }
-            return true;
-        }
-        /**
-         * Если автор(смотритель) блога
-         */
-        if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
             return true;
         }
         /**
@@ -375,6 +376,12 @@ class ModuleACL extends Module
             return true;
         }
         /**
+         * Если автор(смотритель) блога
+         */
+        if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+            return true;
+        }
+        /**
          * Разрешаем если это автора поста...
          */
         if ($oTopic->getUserId() == $oUser->getId()) {
@@ -386,12 +393,6 @@ class ModuleACL extends Module
                 $oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(), $oUser->getId());
                 if (!$oBlogUser or $oBlogUser->getUserRole() == ModuleBlog::BLOG_USER_ROLE_BAN) return false;
             }
-            return true;
-        }
-        /**
-         * Если автор(смотритель) блога
-         */
-        if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
             return true;
         }
         /**
