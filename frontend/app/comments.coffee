@@ -138,6 +138,10 @@ toggleEditForm = (idComment, bOpen) ->
     contentWrapper.appendChild editForm
     commentFor edit
     edit.focus()
+    $(edit).on 'keyup', ({keyCode, which, ctrlKey}) ->
+      key = keyCode or which
+      if ctrlKey and key == 13
+        document.querySelector("#comment_id_#{idComment} > .comment-info > .comment-save-edit-bw").click()
   else
     closeEditForm idComment, contentWrapper
   false
