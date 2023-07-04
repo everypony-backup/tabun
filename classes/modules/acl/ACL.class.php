@@ -324,7 +324,7 @@ class ModuleACL extends Module
             return true;
         }
         /**
-         * Разрешаем если это автора поста...
+         * Разрешаем если это автор поста...
          */
 
         if ($oTopic->getUserId() == $oUser->getId()) {
@@ -382,7 +382,7 @@ class ModuleACL extends Module
             return true;
         }
         /**
-         * Разрешаем если это автора поста...
+         * Разрешаем если это автор поста...
          */
         if ($oTopic->getUserId() == $oUser->getId()) {
             /**
