@@ -22,14 +22,14 @@
 {assign var="oCommentVoteCount" value=$oComment->getCountVote()}
 {assign var="oCommentDate" value=$oComment->getDate()}
 
-{if $oUserCurrent and not $bShort}
-    {assign var="oCommentVote" value=$oComment->getVote()}
-    {if $sDateReadLast <= $oCommentDate}
-        {assign var="oCommentNew" value="comment-new"}
-    {/if}
-{/if}
 {if $oUserCurrent and $oCommentAuthorId == $oUserCurrent->getId()}
     {assign var="oCommentSelf" value="comment-self"}
+{/if}
+{if $oUserCurrent and not $bShort}
+    {assign var="oCommentVote" value=$oComment->getVote()}
+    {if $sDateReadLast <= $oCommentDate and not $oCommentSelf}
+        {assign var="oCommentNew" value="comment-new"}
+    {/if}
 {/if}
 
 {if $oUserCurrent and $oUserCurrent->isAdministrator()}
