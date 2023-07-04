@@ -334,7 +334,7 @@ class ModuleACL extends Module
              */
             if ($oTopic->getBlog()->getType() == 'close') {
                 $oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(), $oUser->getId());
-                if (!$oBlogUser or $oBlogUser->getUserRole() == ModuleBlog::BLOG_USER_ROLE_BAN) return false;
+                if (!$oBlogUser or $oBlogUser->getUserRole() < ModuleBlog::BLOG_USER_ROLE_GUEST) return false;
             }
             return true;
         }
@@ -391,7 +391,7 @@ class ModuleACL extends Module
              */
             if ($oTopic->getBlog()->getType() == 'close') {
                 $oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(), $oUser->getId());
-                if (!$oBlogUser or $oBlogUser->getUserRole() == ModuleBlog::BLOG_USER_ROLE_BAN) return false;
+                if (!$oBlogUser or $oBlogUser->getUserRole() < ModuleBlog::BLOG_USER_ROLE_GUEST) return false;
             }
             return true;
         }

@@ -236,7 +236,7 @@ class ModuleFavourite_MapperFavourite extends Mapper
                 (
                     b.blog_type IN ('open', 'personal')
                 OR
-                    u.user_role > -1
+                    u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
                 OR
                     b.user_owner_id = f.user_id
                 )
@@ -264,7 +264,7 @@ class ModuleFavourite_MapperFavourite extends Mapper
                 (
                     b.blog_type IN ('open', 'personal')
                 OR
-                    u.user_role > -1
+                    u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
                 OR
                     b.user_owner_id = f.user_id
                 )
@@ -338,7 +338,7 @@ class ModuleFavourite_MapperFavourite extends Mapper
                 (
                     b.blog_type IN ('open', 'personal')
                 OR
-                    u.user_role > -1
+                    u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
                 OR
                     b.user_owner_id = f.user_id
                 )
@@ -364,7 +364,7 @@ class ModuleFavourite_MapperFavourite extends Mapper
                 (
                     b.blog_type IN ('open', 'personal')	
                 OR
-                    u.user_role > -1
+                    u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
                 OR
                     b.user_owner_id = f.user_id
                 )
