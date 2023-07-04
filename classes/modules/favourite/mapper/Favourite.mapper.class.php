@@ -214,7 +214,7 @@ class ModuleFavourite_MapperFavourite extends Mapper
     {
         if ($sTargetType == "comment") {
             $sql = "
-			SELECT f.target_id
+            SELECT f.target_id
             FROM ".Config::Get('db.table.favourite')." AS f
                 LEFT JOIN ".Config::Get('db.table.comment')." AS c
                     ON f.target_id = c.comment_id
@@ -224,29 +224,29 @@ class ModuleFavourite_MapperFavourite extends Mapper
                     ON b.blog_id = t.blog_id
                 LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
                     ON u.blog_id = b.blog_id AND u.user_id = f.user_id
-			WHERE
-					f.user_id = ?
-				AND
-					f.target_publish = 1
-				AND
-					f.target_type = ? 
+            WHERE
+                    f.user_id = ?
+                AND
+                    f.target_publish = 1
+                AND
+                    f.target_type = ? 
                 AND 
                     c.target_type = 'topic'
-				AND 
+                AND 
                 (
-					b.blog_type IN ('open', 'personal')
+                    b.blog_type IN ('open', 'personal')
                 OR
                     u.user_role > -1
                 OR
                     b.user_owner_id = f.user_id
                 )
-				{ AND target_id NOT IN (?a) }
+                { AND target_id NOT IN (?a) }
             ORDER BY target_id DESC
             LIMIT ?d, ?d ";
         } elseif ($sTargetType == 'topic')
         {
             $sql = "
-			SELECT f.target_id
+            SELECT f.target_id
             FROM ".Config::Get('db.table.favourite')." AS f
                 LEFT JOIN ".Config::Get('db.table.topic')." AS t
                     ON f.target_id = t.topic_id
@@ -254,21 +254,21 @@ class ModuleFavourite_MapperFavourite extends Mapper
                     ON b.blog_id = t.blog_id
                 LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
                     ON u.blog_id = b.blog_id AND u.user_id = f.user_id
-			WHERE 
-					f.user_id = ?
-				AND
-					f.target_publish = 1
-				AND
-					f.target_type = ?
-				AND
+            WHERE 
+                    f.user_id = ?
+                AND
+                    f.target_publish = 1
+                AND
+                    f.target_type = ?
+                AND
                 (
-					b.blog_type IN ('open', 'personal')
+                    b.blog_type IN ('open', 'personal')
                 OR
                     u.user_role > -1
                 OR
                     b.user_owner_id = f.user_id
                 )
-				{ AND target_id NOT IN (?a) }
+                { AND target_id NOT IN (?a) }
             ORDER BY target_id DESC
             LIMIT ?d, ?d ";
         }
@@ -305,7 +305,7 @@ class ModuleFavourite_MapperFavourite extends Mapper
     }
     /**
      * Возвращает число таргетов определенного типа в избранном по ID пользователя,
-     * вычитая те таргеты, которые находятся в блогах, в которых пользователь не забанен или не состоит
+     * вычитая те таргеты, которые находятся в блогах, в которых юзер забанен или не состоит
      *
      * @param  int $sUserId	ID пользователя
      * @param  string $sTargetType	Тип владельца
@@ -314,9 +314,9 @@ class ModuleFavourite_MapperFavourite extends Mapper
      */
     public function GetCountFavouritesByUserId($sUserId, $sTargetType, $aExcludeTarget)
     {
-        if ($sTargetType == "comment") {
+		if ($sTargetType == "comment") {
             $sql = "
-			SELECT count(f.target_id) as count
+            SELECT count(f.target_id) as count
             FROM ".Config::Get('db.table.favourite')." AS f
                 LEFT JOIN ".Config::Get('db.table.comment')." AS c
                     ON f.target_id = c.comment_id
@@ -326,27 +326,27 @@ class ModuleFavourite_MapperFavourite extends Mapper
                     ON b.blog_id = t.blog_id
                 LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
                     ON u.blog_id = b.blog_id AND u.user_id = f.user_id
-			WHERE
-					f.user_id = ?
-				AND
-					f.target_publish = 1
-				AND
-					f.target_type = ? 
+            WHERE
+                    f.user_id = ?
+                AND
+                    f.target_publish = 1
+                AND
+                    f.target_type = ? 
                 AND 
                     c.target_type = 'topic'
-				AND
+                AND
                 (
-					b.blog_type IN ('open', 'personal')
+                    b.blog_type IN ('open', 'personal')
                 OR
                     u.user_role > -1
                 OR
                     b.user_owner_id = f.user_id
                 )
-				{ AND target_id NOT IN (?a) } ";
+                { AND target_id NOT IN (?a) } ";
         } elseif ($sTargetType == 'topic')
         {
             $sql = "
-			SELECT count(f.target_id) as count
+            SELECT count(f.target_id) as count
             FROM ".Config::Get('db.table.favourite')." AS f
                 LEFT JOIN ".Config::Get('db.table.topic')." AS t
                     ON f.target_id = t.topic_id
@@ -354,34 +354,33 @@ class ModuleFavourite_MapperFavourite extends Mapper
                     ON b.blog_id = t.blog_id
                 LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
                     ON u.blog_id = b.blog_id AND u.user_id = f.user_id
-			WHERE
-					f.user_id = ?
-				AND
-					f.target_publish = 1
-				AND
-					f.target_type = ? 
-				AND 
+            WHERE
+                    f.user_id = ?
+                AND
+                    f.target_publish = 1
+                AND
+                    f.target_type = ? 
+                AND 
                 (
-					b.blog_type IN ('open', 'personal')	
+                    b.blog_type IN ('open', 'personal')	
                 OR
                     u.user_role > -1
                 OR
                     b.user_owner_id = f.user_id
                 )
-				{ AND target_id NOT IN (?a) } ";
+                { AND target_id NOT IN (?a) } ";
         }
-
         else {
             $sql = "
-			SELECT count(target_id) as count
-			FROM " . Config::Get('db.table.favourite') . "
-			WHERE
-					user_id = ?
-				AND
-					target_publish = 1
-				AND
-					target_type = ?
-				{ AND target_id NOT IN (?a) } ";
+            SELECT count(target_id) as count
+            FROM " . Config::Get('db.table.favourite') . "
+            WHERE
+                    user_id = ?
+                AND
+                    target_publish = 1
+                AND
+                    target_type = ?
+                { AND target_id NOT IN (?a) } ";
         }
         return ($aRow=$this->oDb->selectRow(
             $sql,
