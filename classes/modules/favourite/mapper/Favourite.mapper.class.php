@@ -688,7 +688,6 @@ class ModuleFavourite_MapperFavourite extends Mapper
                     OR
                         b.user_owner_id = f.user_id
                     ) }
-                    
                 ORDER by {$sOrder}
                 LIMIT ?d, ?d ;
                     ";
