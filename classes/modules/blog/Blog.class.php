@@ -372,7 +372,9 @@ class ModuleBlog extends Module
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 [
                     "blog_relation_change_{$oBlogUser->getUserId()}",
-                    "blog_relation_change_blog_{$oBlogUser->getBlogId()}"
+                    "blog_relation_change_blog_{$oBlogUser->getBlogId()}",
+                    "favourite_comment_change_user_{$oBlogUser->getUserId()}",
+                    "favourite_topic_change_user_{$oBlogUser->getUserId()}"
                 ]
             );
             $this->Cache_Delete("blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}");
@@ -393,7 +395,9 @@ class ModuleBlog extends Module
                 Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 [
                     "blog_relation_change_{$oBlogUser->getUserId()}",
-                    "blog_relation_change_blog_{$oBlogUser->getBlogId()}"
+                    "blog_relation_change_blog_{$oBlogUser->getBlogId()}",
+                    "favourite_comment_change_user_{$oBlogUser->getUserId()}",
+                    "favourite_topic_change_user_{$oBlogUser->getUserId()}"
                 ]
             );
             $this->Cache_Delete("blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}");
@@ -652,7 +656,7 @@ class ModuleBlog extends Module
     /**
      * Обновляет отношения пользователя с блогом
      *
-     * @param ModuleBlog_EntityBlogUser $oBlogUser	Объект отновшения
+     * @param ModuleBlog_EntityBlogUser $oBlogUser	Объект отношения
      * @return bool
      */
     public function UpdateRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser)
@@ -661,7 +665,9 @@ class ModuleBlog extends Module
             Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             [
                 "blog_relation_change_{$oBlogUser->getUserId()}",
-                "blog_relation_change_blog_{$oBlogUser->getBlogId()}"
+                "blog_relation_change_blog_{$oBlogUser->getBlogId()}",
+                "favourite_comment_change_user_{$oBlogUser->getUserId()}",
+                "favourite_topic_change_user_{$oBlogUser->getUserId()}"
             ]
         );
         $this->Cache_Delete("blog_relation_user_{$oBlogUser->getBlogId()}_{$oBlogUser->getUserId()}");
