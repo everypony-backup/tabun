@@ -662,23 +662,36 @@ class ModuleFavourite_MapperFavourite extends Mapper
         }
 
         $sql = "SELECT
-					t.*
-				FROM
-					".Config::Get('db.table.favourite_tag')." AS t,
-					".Config::Get('db.table.favourite')." AS f
-				WHERE
-					1 = 1
-					{ AND t.user_id = ?d }
-					{ AND t.target_type = ? }
-					{ AND t.target_id = ?d }
-					{ AND t.is_user = ?d }
-					{ AND t.text = ? }
-					{ AND f.target_publish = 1 }
-					{ AND f.target_type = t.target_type }
-					{ AND f.target_id = t.target_id }
-				ORDER by {$sOrder}
-				LIMIT ?d, ?d ;
-					";
+                    tag.*
+                FROM ".Config::Get('db.table.favourite_tag')." AS tag
+                    LEFT JOIN ".Config::Get('db.table.favourite')." AS f
+                        ON tag.target_type = f.target_type AND tag.target_id = f.target_id AND tag.user_id = f.user_id
+                    LEFT JOIN ".Config::Get('db.table.topic')." AS t
+                        ON f.target_id = t.topic_id
+                    LEFT JOIN ".Config::Get('db.table.blog')." AS b
+                        ON b.blog_id = t.blog_id
+                    LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
+                        ON u.blog_id = b.blog_id AND u.user_id = f.user_id
+                WHERE
+                    1 = 1
+                    { AND tag.user_id = ?d }
+                    { AND tag.target_type = ? }
+                    { AND tag.target_id = ?d }
+                    { AND tag.is_user = ?d }
+                    { AND tag.text = ? }
+                    { AND f.target_publish = 1 }
+                    { AND
+                    (
+                        b.blog_type IN ('open', 'personal')
+                    OR
+                        u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
+                    OR
+                        b.user_owner_id = f.user_id
+                    ) }
+                    
+                ORDER by {$sOrder}
+                LIMIT ?d, ?d ;
+                    ";
         $aResult=array();
         if ($aRows=$this->oDb->selectPage(
             $iCount,
