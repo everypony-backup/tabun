@@ -215,23 +215,24 @@ class ModuleFavourite_MapperFavourite extends Mapper
         if ($sTargetType == "comment") {
             $sql = "
             SELECT f.target_id
-            FROM ".Config::Get('db.table.favourite')." AS f
-                LEFT JOIN ".Config::Get('db.table.comment')." AS c
-                    ON f.target_id = c.comment_id
-                LEFT JOIN ".Config::Get('db.table.topic')." AS t
-                    ON c.target_id = t.topic_id
-                LEFT JOIN ".Config::Get('db.table.blog')." AS b
-                    ON b.blog_id = t.blog_id
-                LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
-                    ON u.blog_id = b.blog_id AND u.user_id = f.user_id
+            FROM (".Config::Get('db.table.favourite')." AS f,
+                 ".Config::Get('db.table.comment')." AS c,
+                 ".Config::Get('db.table.topic')." AS t,
+                 ".Config::Get('db.table.blog')." AS b)
+            LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
+                ON u.blog_id = b.blog_id AND u.user_id = f.user_id
             WHERE
                     f.user_id = ?
                 AND
                     f.target_publish = 1
                 AND
-                    f.target_type = ? 
+                    f.target_type = ?
+                AND
+                    f.target_id = c.comment_id
                 AND 
-                    c.target_type = 'topic'
+                    c.target_id = t.topic_id
+                AND 
+                    t.blog_id = b.blog_id  
                 AND 
                 (
                     b.blog_type IN ('open', 'personal')
@@ -247,11 +248,9 @@ class ModuleFavourite_MapperFavourite extends Mapper
         {
             $sql = "
             SELECT f.target_id
-            FROM ".Config::Get('db.table.favourite')." AS f
-                LEFT JOIN ".Config::Get('db.table.topic')." AS t
-                    ON f.target_id = t.topic_id
-                LEFT JOIN ".Config::Get('db.table.blog')." AS b
-                    ON b.blog_id = t.blog_id
+            FROM (".Config::Get('db.table.favourite')." AS f,
+                 ".Config::Get('db.table.topic')." AS t,
+                 ".Config::Get('db.table.blog')." AS b)
                 LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
                     ON u.blog_id = b.blog_id AND u.user_id = f.user_id
             WHERE 
@@ -260,6 +259,10 @@ class ModuleFavourite_MapperFavourite extends Mapper
                     f.target_publish = 1
                 AND
                     f.target_type = ?
+                AND
+                    f.target_id = t.topic_id
+                AND 
+                    t.blog_id = b.blog_id
                 AND
                 (
                     b.blog_type IN ('open', 'personal')
