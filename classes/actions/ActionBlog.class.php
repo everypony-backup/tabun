@@ -420,6 +420,14 @@ class ActionBlog extends Action
                     break;
                 }
                 /**
+                 * Нельзя приглашать юзеров против их воли
+                 */
+                $oUserRole = $oBlogUser->getUserRole();
+                if ($oUserRole==ModuleBlog::BLOG_USER_ROLE_REJECT or $oUserRole==ModuleBlog::BLOG_USER_ROLE_INVITE) {
+                    $this->Message_AddError($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+                    break;
+                }
+                /**
                  * Увеличиваем число читателей блога
                  */
                 if (in_array($sRank, array('administrator','moderator','reader')) and $oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_BAN) {
