@@ -200,10 +200,10 @@ class ModuleFavourite_MapperFavourite extends Mapper
         return $this->oDb->query($sql, $iPublish, $aTargetId, $sTargetType);
     }
     /**
-     * Получает список таргетов из избранного
+     * Получает список таргетов из избранного, исключая те таргеты, в блогах которых юзер забанен или не состоит
      *
      * @param  int $sUserId	ID пользователя
-     * @param  string $sTargetType	Тип владельца
+     * @param  string $sTargetType	Тип владельца: topic, comment, talk
      * @param  int $iCount	Возвращает количество элементов
      * @param  int $iCurrPage	Номер страницы
      * @param  int $iPerPage	Количество элементов на страницу
@@ -212,18 +212,83 @@ class ModuleFavourite_MapperFavourite extends Mapper
      */
     public function GetFavouritesByUserId($sUserId, $sTargetType, &$iCount, $iCurrPage, $iPerPage, $aExcludeTarget=array())
     {
-        $sql = "			
-			SELECT target_id										
-			FROM ".Config::Get('db.table.favourite')."								
-			WHERE 
+        if ($sTargetType == "comment") {
+            $sql = "
+            SELECT f.target_id
+            FROM (".Config::Get('db.table.favourite')." AS f,
+                 ".Config::Get('db.table.comment')." AS c,
+                 ".Config::Get('db.table.topic')." AS t,
+                 ".Config::Get('db.table.blog')." AS b)
+            LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
+                ON u.blog_id = b.blog_id AND u.user_id = f.user_id
+            WHERE
+                    f.user_id = ?
+                AND
+                    f.target_publish = 1
+                AND
+                    f.target_type = ?
+                AND
+                    f.target_id = c.comment_id
+                AND 
+                    c.target_id = t.topic_id
+                AND 
+                    t.blog_id = b.blog_id  
+                AND 
+                (
+                    b.blog_type IN ('open', 'personal')
+                OR
+                    u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
+                OR
+                    b.user_owner_id = f.user_id
+                )
+                { AND target_id NOT IN (?a) }
+            ORDER BY target_id DESC
+            LIMIT ?d, ?d ";
+        } elseif ($sTargetType == 'topic')
+        {
+            $sql = "
+            SELECT f.target_id
+            FROM (".Config::Get('db.table.favourite')." AS f,
+                 ".Config::Get('db.table.topic')." AS t,
+                 ".Config::Get('db.table.blog')." AS b)
+                LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
+                    ON u.blog_id = b.blog_id AND u.user_id = f.user_id
+            WHERE 
+                    f.user_id = ?
+                AND
+                    f.target_publish = 1
+                AND
+                    f.target_type = ?
+                AND
+                    f.target_id = t.topic_id
+                AND 
+                    t.blog_id = b.blog_id
+                AND
+                (
+                    b.blog_type IN ('open', 'personal')
+                OR
+                    u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
+                OR
+                    b.user_owner_id = f.user_id
+                )
+                { AND target_id NOT IN (?a) }
+            ORDER BY target_id DESC
+            LIMIT ?d, ?d ";
+        }
+        else {
+            $sql = "
+			SELECT target_id
+			FROM " . Config::Get('db.table.favourite') . "
+			WHERE
 					user_id = ?
 				AND
 					target_publish = 1
 				AND
-					target_type = ? 
-				{ AND target_id NOT IN (?a) }		
-            ORDER BY target_id DESC	
+					target_type = ?
+				{ AND target_id NOT IN (?a) }
+            ORDER BY target_id DESC
             LIMIT ?d, ?d ";
+        }
 
         $aFavourites=array();
         if ($aRows=$this->oDb->selectPage(
@@ -242,7 +307,8 @@ class ModuleFavourite_MapperFavourite extends Mapper
         return $aFavourites;
     }
     /**
-     * Возвращает число таргетов определенного типа в избранном по ID пользователя
+     * Возвращает число таргетов определенного типа в избранном по ID пользователя,
+     * вычитая те таргеты, которые находятся в блогах, в которых юзер забанен или не состоит
      *
      * @param  int $sUserId	ID пользователя
      * @param  string $sTargetType	Тип владельца
@@ -543,19 +609,35 @@ class ModuleFavourite_MapperFavourite extends Mapper
         }
 
         $sql = "SELECT
-					*
-				FROM
-					".Config::Get('db.table.favourite_tag')."
-				WHERE
-					1 = 1
-					{ AND user_id = ?d }
-					{ AND target_type = ? }
-					{ AND target_id = ?d }
-					{ AND is_user = ?d }
-					{ AND text = ? }
-				ORDER by {$sOrder}
-				LIMIT ?d, ?d ;
-					";
+                    tag.*
+                FROM ".Config::Get('db.table.favourite_tag')." AS tag
+                    LEFT JOIN ".Config::Get('db.table.favourite')." AS f
+                        ON tag.target_type = f.target_type AND tag.target_id = f.target_id AND tag.user_id = f.user_id
+                    LEFT JOIN ".Config::Get('db.table.topic')." AS t
+                        ON f.target_id = t.topic_id
+                    LEFT JOIN ".Config::Get('db.table.blog')." AS b
+                        ON b.blog_id = t.blog_id
+                    LEFT JOIN ".Config::Get('db.table.blog_user')." AS u
+                        ON u.blog_id = b.blog_id AND u.user_id = f.user_id
+                WHERE
+                    1 = 1
+                    { AND tag.user_id = ?d }
+                    { AND tag.target_type = ? }
+                    { AND tag.target_id = ?d }
+                    { AND tag.is_user = ?d }
+                    { AND tag.text = ? }
+                    { AND f.target_publish = 1 }
+                    { AND
+                    (
+                        b.blog_type IN ('open', 'personal')
+                    OR
+                        u.user_role >= ".ModuleBlog::BLOG_USER_ROLE_GUEST."
+                    OR
+                        b.user_owner_id = f.user_id
+                    ) }
+                ORDER by {$sOrder}
+                LIMIT ?d, ?d ;
+                    ";
         $aResult=array();
         if ($aRows=$this->oDb->selectPage(
             $iCount,

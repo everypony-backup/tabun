@@ -312,15 +312,30 @@ class ModuleACL extends Module
             return false;
         }
         /**
-         * Разрешаем если это админ сайта или автор топика
+         * Разрешаем если это админ сайта
          */
-        if ($oTopic->getUserId()==$oUser->getId() or $oUser->isAdministrator()) {
+        if ($oUser->isAdministrator()) {
             return true;
         }
         /**
          * Если автор(смотритель) блога
          */
         if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+            return true;
+        }
+        /**
+         * Разрешаем если это автор поста...
+         */
+
+        if ($oTopic->getUserId() == $oUser->getId()) {
+            /**
+             * ... но запрещаем, если пост в закрытом блоге, в котором автор забанен или не состоит
+             * (если изменение не понравится - достаточно просто закомментить/удалить весь блок if)
+             */
+            if ($oTopic->getBlog()->getType() == 'close') {
+                $oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(), $oUser->getId());
+                if (!$oBlogUser or $oBlogUser->getUserRole() < ModuleBlog::BLOG_USER_ROLE_GUEST) return false;
+            }
             return true;
         }
         /**
@@ -355,15 +370,29 @@ class ModuleACL extends Module
             return false;
         }
         /**
-         * Разрешаем если это админ сайта или автор топика
+         * Разрешаем если это админ сайта
          */
-        if ($oTopic->getUserId()==$oUser->getId() or $oUser->isAdministrator()) {
+        if ($oUser->isAdministrator()) {
             return true;
         }
         /**
          * Если автор(смотритель) блога
          */
         if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+            return true;
+        }
+        /**
+         * Разрешаем если это автор поста...
+         */
+        if ($oTopic->getUserId() == $oUser->getId()) {
+            /**
+             * ... но запрещаем, если пост в закрытом блоге, в котором автор забанен или не состоит
+             * (если изменение не понравится - достаточно просто закомментить/удалить весь блок if)
+             */
+            if ($oTopic->getBlog()->getType() == 'close') {
+                $oBlogUser = $this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(), $oUser->getId());
+                if (!$oBlogUser or $oBlogUser->getUserRole() < ModuleBlog::BLOG_USER_ROLE_GUEST) return false;
+            }
             return true;
         }
         /**
