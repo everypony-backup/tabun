@@ -34,7 +34,9 @@
         autoDespoil: window.localStorage.getItem('UI-autoDespoil') === "true",
         despoilOnlyArticle: window.localStorage.getItem('UI-despoilOnlyArticle') === "true",
         showPinkie: window.localStorage.getItem('UI-showPinkie') !== "false",
-        voteNeutral: window.localStorage.getItem('UI-voteNeutral') !== "false"
+        voteNeutral: window.localStorage.getItem('UI-voteNeutral') !== "false",
+        autoFocusOnSend: window.localStorage.getItem('UI-autoFocusOnSend') !== "false",
+        autoFocusSmartQuote: window.localStorage.getItem('UI-autoFocusSmartQuote') !== "false"
     }
     var Capabilities = {
         allowCommentsEditingLock: {if $oConfig->getValue('acl.edit.comment.enable_lock')}true{else}false{/if}
