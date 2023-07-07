@@ -60,7 +60,7 @@ formLoader = (form, bHide) ->
     $(node).toggleClass 'loader', bHide
 
 reactivation = () ->
-  form = document.getElementById "reactivation-form"
+  form = $ "#reactivation-form"
 
   ajaxSubmit routes.profile.reactivate, form, (result) ->
 
