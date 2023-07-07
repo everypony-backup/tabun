@@ -71,6 +71,14 @@
 		<input type="checkbox" class="UI-checkbox" data-name="voteNeutral"/>
 		Нейтрально голосовать за топики по *?*
 	</label>
+	<label title="Отключите, если не хотите, чтобы страница скроллилась к вашему комменту, когда вы его отправили">
+		<input type="checkbox" class="UI-checkbox" data-name="autoFocusOnSend"/>
+		Фокусироваться на отправленном вами комментарии, и его выделение
+	</label>
+	<label title="Отключите, если не хотите, чтобы во время умного цитирования, страница скроллилась к вводимому тексту">
+		<input type="checkbox" class="UI-checkbox" data-name="autoFocusSmartQuote"/>
+		Фокусироваться на отправляемом комментарии во время умного цитирования
+	</label>
 	<label>Задержите курсор мышки над опцией чтобы увидеть более подробное описание</label>
 
 	{hook run='form_settings_tuning_end'}

@@ -99,7 +99,10 @@ toggleCommentForm = (idComment, bNoFocus) ->
   document.getElementById("form_comment_reply").value = idComment
   iCurrentShowFormComment = idComment
   unless bNoFocus
-    commentForm.focus()
+    if UI.smothScroll
+      $.scrollTo(commentForm, 300, {offset: -250})
+    else
+      commentForm.focus()
 
 
 toggleEditForm = (idComment, bOpen) ->
@@ -138,7 +141,7 @@ toggleEditForm = (idComment, bOpen) ->
     contentWrapper.appendChild editForm
     commentFor edit
     edit.focus()
-    $(edit).on 'keyup', ({keyCode, which, ctrlKey}) ->
+    $(edit).on 'keydown', ({keyCode, which, ctrlKey}) ->
       key = keyCode or which
       if ctrlKey and key == 13
         document.querySelector("#comment_id_#{idComment} > .comment-info > .comment-save-edit-bw").click()
@@ -206,7 +209,8 @@ inject = ({pid, id, html}) ->
     commentAuthor.classList.add "comment-topic-author"
     commentAuthor.setAttribute "title", "Автор"
   if newComment.getElementsByClassName(classes.self).length
-    showComment id
+    if UI.autoFocusOnSend
+      showComment id
 
 toggle = (obj, commentId) ->
   url = routes.comment.delete
@@ -347,7 +351,7 @@ showComment = (commentId, highlightParent) ->
 
 initEvent = ->
   if commentForm
-    $(commentForm).on 'keyup', ({keyCode, which, ctrlKey}) ->
+    $(commentForm).on 'keydown', ({keyCode, which, ctrlKey}) ->
       key = keyCode or which
       if ctrlKey and key == 13
         $('#comment-button-submit').click()
@@ -467,7 +471,7 @@ init = ->
           targetForm = commentForm
           if $("#reply").hasClass "h-hidden"
             iCurrentShowFormComment = this.dataset.parent_id
-            toggleCommentForm iCurrentShowFormComment, false
+            toggleCommentForm iCurrentShowFormComment, !UI.autoFocusSmartQuote
           else
             iCurrentShowFormComment = $("#reply").siblings(".comment")[0]?.dataset.id || 0
         else
@@ -485,11 +489,12 @@ init = ->
         #если форма редактирования не видна, мотаем
         targetFormPosition = $(targetForm).offset().top
         windowPosition = $(window).scrollTop()
-        if (targetFormPosition + targetForm.getClientRects()[0].height < windowPosition) || (targetFormPosition > (windowPosition + $(window).height()))
-          if iCurrentShowFormComment
-            scrollTo document.getElementById "comment_id_"+iCurrentShowFormComment, 300, {offset: -250}
+        if UI.autoFocusSmartQuote && ((targetFormPosition + targetForm.getClientRects()[0].height < windowPosition) || (targetFormPosition > (windowPosition + $(window).height())))
+          comment = document.querySelector("#form_comment_text")
+          if UI.smothScroll
+            $.scrollTo(comment, 300, {offset: -250})
           else
-            scrollTo targetForm, 300, {offset: -250}
+            comment.focus()
       )
       .on('mousedown','#quote', (e) ->
         if e.which != 1
