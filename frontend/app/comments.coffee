@@ -210,7 +210,6 @@ inject = ({pid, id, html}) ->
     commentAuthor.setAttribute "title", "Автор"
   if newComment.getElementsByClassName(classes.self).length
     if UI.autoFocusOnSend
-      console.log("focus!")
       showComment id
 
 toggle = (obj, commentId) ->
