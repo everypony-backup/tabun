@@ -170,7 +170,7 @@ return [
         // Не нужна авто-расстановка <br>
         'cfgSetTagNoAutoBr' => [
             [
-                ['ul', 'ol', 'blockquote', 'text', 'hr']
+                ['ul', 'ol', 'text', 'hr']
             ]
         ],
         // Теги с обязательными параметрами
