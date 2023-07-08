@@ -443,7 +443,13 @@ class ActionBlog extends Action
                         $oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_BAN);
                         break;
                     default:
-                        $oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_GUEST);
+                        /**
+                         * если default, то значит юзер модифицировал POST-запрос ненужными данными.
+                         * Роль гостя на Табуне не предусмотрена
+                         */
+                        $this->Message_AddError($this->Lang_Get('system_error'), $this->Lang_Get('error'));
+                        break;
+                        //$oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_GUEST);
                 }
                 $this->Blog_UpdateRelationBlogUser($oBlogUser);
                 $this->Message_AddNoticeSingle($this->Lang_Get('blog_admin_users_submit_ok'));
@@ -1803,7 +1809,7 @@ class ActionBlog extends Action
                 return;
             }
         }
-        if ($oBlogUser && $oBlogUser->getUserRole()>ModuleBlog::BLOG_USER_ROLE_GUEST) {
+        if ($oBlogUser && $oBlogUser->getUserRole()>=ModuleBlog::BLOG_USER_ROLE_GUEST) {
             /**
              * Покидаем блог
              */
