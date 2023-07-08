@@ -99,10 +99,7 @@ toggleCommentForm = (idComment, bNoFocus) ->
   document.getElementById("form_comment_reply").value = idComment
   iCurrentShowFormComment = idComment
   unless bNoFocus
-    if UI.smothScroll
-      $.scrollTo(commentForm, 300, {offset: -250})
-    else
-      commentForm.focus()
+    commentForm.focus()
 
 
 toggleEditForm = (idComment, bOpen) ->
