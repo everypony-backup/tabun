@@ -11,9 +11,15 @@ export default class FileUpload extends React.PureComponent {
         handleUpload: React.PropTypes.func,
     };
 
-    onLoad = (image) => {
-        this.inputField.value = '';
-        this.props.handleChange(image.target.result);
+    onLoad = (data) => {
+        const image = new Image();
+
+        image.src = data.target.result;
+
+        image.onload = () => {
+            this.inputField.value = '';
+            this.props.handleChange(data.target.result, image.width, image.height);
+        }
     };
 
     setRef = (inputField) => {

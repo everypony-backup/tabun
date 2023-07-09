@@ -33,7 +33,9 @@ export default class ImageUploader extends React.Component {
         if (editor) this.editor = editor;
     };
 
-    handleFileChange = (dataURI) => {
+    handleFileChange = (dataURI, width, height) => {
+        this.imageWidth = width
+        this.imageHeight = height
         this.setState({
             sourceImg: dataURI,
             editorOpened: true
@@ -103,7 +105,7 @@ export default class ImageUploader extends React.Component {
             >
                 <Cropper
                     ref={this.setEditorRef}
-                    style={{ 'max-height': this.props.height, 'max-width': this.props.width }}
+                    style={{ 'height': '50vh', 'width': (this.imageWidth/this.imageHeight) * 50 + 'vh', 'max-width': '90vw'}}
                     src={this.state.sourceImg}
                     viewMode={2}
                     responsive={true}

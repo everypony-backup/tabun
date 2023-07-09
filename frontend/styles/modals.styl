@@ -1,7 +1,6 @@
 .modal
   display none
   position fixed
-  top 25%
   left 50%
   margin-left -150px
   color #333
@@ -10,6 +9,11 @@
   -webkit-box-shadow 0 0 15px rgba(0,0,0,.5)
   box-shadow 0 0 15px rgba(0,0,0,.5)
   overflow hidden
+  @media screen and (min-height: 500px)
+    top: 25%
+  @media screen and (max-height: 500px)
+    top: 0
+  padding 20px
   .close
     position absolute
     top 7px
