@@ -72,7 +72,7 @@ return [
                 [
                     'src' => [
                         '#domain' => [
-                            'youtube.com' => 'embed/[\w\d\-_]+$',
+                            'youtube.com' => 'embed/[\w\d\-_]+(\?start=\d*)$',
                             'player.vimeo.com' => '',
                             'dailymotion.com' => '',
                             'coub.com' => '',
