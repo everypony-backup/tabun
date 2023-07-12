@@ -115,6 +115,7 @@ youtube = (str) ->
   shortcode = /youtube:\/\/|https?:\/\/youtu\.be\//g
   if shortcode.test str
     shortcodeid = str.split(shortcode)[1]
+    shortcodeid = shortcodeid.replace("?t=", "?start=")
     return shortcodeid
 
   inlinev = /\/v\/|\/vi\//g
