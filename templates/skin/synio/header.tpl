@@ -77,8 +77,6 @@
     {/if}
     {include file='header_top.tpl'}
     <div id="wrapper" class="{if $noSidebar}no-sidebar{/if}{hook run='wrapper_class'}">
-        <div id ="invisible" style="width: 1px; opacity: 0">
-        </div>
         {if !$noSidebar}
             {include file='sidebar.tpl'}
         {/if}
