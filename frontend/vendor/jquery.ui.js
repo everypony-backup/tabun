@@ -2247,11 +2247,13 @@ $.widget( "ui.autocomplete", {
 				}
 
 				// Announce the value in the liveRegion
+				/*
 				label = ui.item.attr( "aria-label" ) || item.value;
 				if ( label && $.trim( label ).length ) {
 					this.liveRegion.children().hide();
 					$( "<div>" ).text( label ).appendTo( this.liveRegion );
 				}
+				 */
 			},
 			menuselect: function( event, ui ) {
 				var item = ui.item.data( "ui-autocomplete-item" ),
@@ -2282,6 +2284,7 @@ $.widget( "ui.autocomplete", {
 			}
 		});
 
+		/*
 		this.liveRegion = $( "<span>", {
 				role: "status",
 				"aria-live": "assertive",
@@ -2289,7 +2292,7 @@ $.widget( "ui.autocomplete", {
 			})
 			.addClass( "ui-helper-hidden-accessible" )
 			.appendTo( this.document[ 0 ].body );
-
+		*/
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
@@ -2306,7 +2309,7 @@ $.widget( "ui.autocomplete", {
 			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" );
 		this.menu.element.remove();
-		this.liveRegion.remove();
+		//this.liveRegion.remove();
 	},
 
 	_setOption: function( key, value ) {
@@ -2598,8 +2601,8 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		} else {
 			message = this.options.messages.noResults;
 		}
-		this.liveRegion.children().hide();
-		$( "<div>" ).text( message ).appendTo( this.liveRegion );
+		//this.liveRegion.children().hide();
+		//$( "<div>" ).text( message ).appendTo( this.liveRegion );
 	}
 });
 
