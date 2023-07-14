@@ -9,9 +9,4 @@
 
 {$oPage->getText()}
 
-{if $oUserCurrent and $oUserCurrent->isAdministrator() and false}
-    <br />
-    <a href="{$oPage->getAdminEditWebUrl()}">Редактировать</a>
-{/if}
-
 {include file='footer.tpl'}
