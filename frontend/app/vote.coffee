@@ -65,6 +65,15 @@ onVote = (idTarget, objVote, value, type, result) ->
   if has(@, method) && isFunction @[method]
     @[method] idTarget, objVote, value, type, result
 
+  if type == 'user'
+    voteLabel = document.querySelector(".vote-profile > .vote-label")
+    text = voteLabel.textContent
+    newVoteCounter = text.match(/\d+/g)[0]
+    newVoteCounter = +newVoteCounter+1
+    voteLabel.textContent = text.replace(/\d+/g, newVoteCounter)
+
+
+
 onVoteUser = (idTarget, objVote, value, type, result) ->
   $("#user_skill_#{idTarget}").text result.iSkill
 
