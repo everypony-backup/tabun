@@ -67,10 +67,7 @@ onVote = (idTarget, objVote, value, type, result) ->
 
   if type == 'user'
     voteLabel = document.querySelector(".vote-profile > .vote-label")
-    text = voteLabel.textContent
-    newVoteCounter = text.match(/\d+/g)[0]
-    newVoteCounter = +newVoteCounter+1
-    voteLabel.textContent = text.replace(/\d+/g, newVoteCounter)
+    voteLabel.textContent = voteLabel.textContent.replace(/\d+/g, result.iCountVote)
 
 onVoteUser = (idTarget, objVote, value, type, result) ->
   $("#user_skill_#{idTarget}").text result.iSkill
