@@ -72,8 +72,6 @@ onVote = (idTarget, objVote, value, type, result) ->
     newVoteCounter = +newVoteCounter+1
     voteLabel.textContent = text.replace(/\d+/g, newVoteCounter)
 
-
-
 onVoteUser = (idTarget, objVote, value, type, result) ->
   $("#user_skill_#{idTarget}").text result.iSkill
 
