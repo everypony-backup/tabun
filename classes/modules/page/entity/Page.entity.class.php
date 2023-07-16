@@ -186,6 +186,6 @@ class ModulePage_EntityPage extends EntityORM
      */
     public function getAdminEditWebUrl()
     {
-        return Router::GetPath('admin/plugin') . Plugin::GetPluginCode($this) . "/update/{$this->getId()}/";
+        return Router::GetPath('page') . "edit/" . $this->getUrlFull() . '/';
     }
 }

@@ -35,7 +35,8 @@ class ActionPage extends Action
      */
     protected function RegisterEvent()
     {
-        $this->AddEventPreg('/^[\w\-\_]*$/i', 'EventShowPage');
+        $this->AddEventPreg('/^edit$/i', '/^.+$/i', 'EventEditPage');
+        $this->AddEventPreg('/^.+$/i', 'EventShowPage');
     }
 
     /**
@@ -85,5 +86,104 @@ class ActionPage extends Action
          * Устанавливаем шаблон для вывода
          */
         $this->SetTemplateAction('view');
+    }
+
+    /**
+     * Проверка полей формы
+     *
+     * @return bool
+     */
+    protected function checkPageFields($oPage)
+    {
+        $this->Security_ValidateSendForm();
+
+        $bOk=true;
+        /**
+         * Валидируем страницу
+         */
+        if (!$oPage->_Validate()) {
+            $this->Message_AddError($oPage->_getValidateError(), $this->Lang_Get('error'));
+            $bOk=false;
+        }
+
+        return $bOk;
+    }
+    /**
+     * Обработка редактирования страницы
+     *
+     * @param ModulePage_EntityPage $oPage
+     * @return mixed
+     */
+    protected function SubmitEdit($oPage)
+    {
+        $oPage->setTitle(strip_tags(getRequestStr('page_title')));
+        $oPage->setText(getRequestStr('page_text'));
+        /**
+         * Проверка корректности полей формы
+         */
+        if (!$this->checkPageFields($oPage)) {
+            return false;
+        }
+        /**
+         * Получаемый и устанавливаем разрезанный текст по тегу <cut>
+         */
+        list($sTextShort, $sTextNew, $sTextCut) = $this->Text_Cut($oPage->getText());
+        $oPage->setText($this->Text_Parser($sTextNew, ModuleText::ACT_UPDATE));
+        /**
+         * Сохраняем страницу
+         */
+        if ($this->Page_UpdatePage($oPage)) {
+            Router::Location($oPage->getWebUrl());
+        } else {
+            $this->Message_AddErrorSingle($this->Lang_Get('system_error'));
+            return Router::Action('error');
+        }
+    }
+    /**
+     * Редактирование страницы
+     */
+    protected function EventEditPage()
+    {
+        /**
+         * Составляем полный URL страницы для поиска по нему в БД
+         */
+        $sUrlFull=$this->GetParam(0);
+        /**
+         * Ищем страничку в БД
+         */
+        if (!($oPage = $this->Page_GetPageByFilter(array('url_full' => $sUrlFull, 'active' => 1)))) {
+            return $this->EventNotFound();
+        }
+        /**
+         * Если нет прав доступа - перекидываем на 404 страницу
+         */
+        if (!$this->User_IsAuthorization() or !$oUserCurrent=$this->User_GetUserCurrent() or !$oUserCurrent->isAdministrator()) {
+            return parent::EventNotFound();
+        }
+
+        /**
+         * Заполняем HTML теги
+         */
+        $this->Viewer_Assign('oPage', $oPage);
+        /**
+         * Устанавливаем шаблон для вывода
+         */
+        $this->SetTemplateAction('edit');
+        /**
+         * Проверяем отправлена ли форма с данными
+         */
+        if (isset($_REQUEST['submit_page_publish'])) {
+            /**
+             * Обрабатываем отправку формы
+             */
+            return $this->SubmitEdit($oPage);
+        } else {
+            /**
+             * Заполняем поля формы для редактирования
+             * Только перед отправкой формы!
+             */
+            $_REQUEST['page_title']=$oPage->getTitle();
+            $_REQUEST['page_text']=$oPage->getText();
+        }
     }
 }

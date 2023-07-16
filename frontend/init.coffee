@@ -208,6 +208,25 @@ init = ->
         textPreview 'talk_text', false
       else
         document.getElementById('submit_talk_add').click()
+  else if window.location.pathname.match "page" || window.location.pathname.match("edit") || window.location.pathname.match("add")
+    $('.js-tags-help-link').on 'click', () ->
+      str = if this.dataset.insert? then this.dataset.insert else this.textContent
+      targetForm = document.getElementsByTagName("textarea")[0]
+      caret = targetForm.selectionStart
+      if isNaN caret
+        targetForm.value += str
+      else
+        targetForm.value = targetForm.value.substring(0,caret) + str + targetForm.value.substring(caret)
+    $('#tags-help-toggle').on 'click', ->
+      $('#tags-help').toggle()
+    $('#fake_save, #fake_publish, .submit-preview'). on 'click', (e) ->
+      e.preventDefault()
+      document.getElementById('page_title').value = contentRemoveBadChars document.getElementById('page_title').value
+      document.getElementById('page_text').value = contentRemoveBadChars contentMediaParser document.getElementById('page_text').value
+      if this.dataset.target
+        document.getElementById(this.dataset.target).click()
+      else
+        ls.page.preview 'form-page-add', 'text_preview'
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value

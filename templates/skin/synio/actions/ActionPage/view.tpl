@@ -5,13 +5,13 @@
 	{$layoutNoSidebar = !Config::Get('page.show_block_structure')}
 {/block}
 
+{if $oUserCurrent and $oUserCurrent->isAdministrator()}
+	<span class="edit"><i class="icon-synio-actions-edit"></i><a href="{$oPage->getAdminEditWebUrl()}" class="actions-edit">Редактировать</a></span>
+	<br />
+{/if}
+
 <h2 class="page-header">{$oPage->getTitle()|escape}</h2>
 
 {$oPage->getText()}
-
-{if $oUserCurrent and $oUserCurrent->isAdministrator() and false}
-    <br />
-    <a href="{$oPage->getAdminEditWebUrl()}">Редактировать</a>
-{/if}
 
 {include file='footer.tpl'}
