@@ -1,5 +1,6 @@
 {assign var="noSidebar" value=true}
 {include file='header.tpl'}
+{assign var="scripts" value=['editor']}
 
 {block name='layout_options' prepend}
     {$layoutNoSidebar = !Config::Get('page.show_block_structure')}
