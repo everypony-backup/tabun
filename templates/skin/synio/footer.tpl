@@ -29,6 +29,7 @@
         hotkeys: window.localStorage.getItem('UI-hotkeys') !== "false",
         smartQuote: window.localStorage.getItem('UI-smartQuote') !== "false",
         autoFold: window.localStorage.getItem('UI-autoFold') !== "false",
+        autoFoldGoTo: window.localStorage.getItem('UI-autoFoldGoTo') !== "false",
         newCommentsInTitle: window.localStorage.getItem('UI-newCommentsInTitle') !== "false",
         autoUpdateComments: window.localStorage.getItem('UI-autoUpdateComments') === "true",
         autoDespoil: window.localStorage.getItem('UI-autoDespoil') === "true",

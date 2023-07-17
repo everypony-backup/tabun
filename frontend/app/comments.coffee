@@ -306,7 +306,7 @@ showComment = (commentId, highlightParent) ->
   parentComment = parentWrapper.children[0]
   if UI.autoDespoil && !highlightParent
     spoilerHandler $(comment).find(".spoiler"), 'despoil'
-  if UI.autoFold || highlightParent
+  if (UI.autoFold && !highlightParent) || (UI.autoFoldGoTo && highlightParent)
     toFold = null
     if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
     hiddenCount = $(toFold).find(".comment").length
