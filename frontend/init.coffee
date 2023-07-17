@@ -135,7 +135,22 @@ init = ->
     $("#reactivation-form-submit").on 'click', ->
       ls.user.reactivation()
 
-  if window.location.pathname.match "settings/profile"
+  pathnameSplitted = window.location.pathname.split("/")
+  pathnameSplitted.includesPath = (path) ->
+    path = path.split("/")
+    index = pathnameSplitted.indexOf(path[0])
+    if index != -1
+      if path.length == 1
+        return true
+      for _, val of path
+        if pathnameSplitted[index] == val
+          index++
+          continue
+        return false
+      return true
+    return false
+
+  if pathnameSplitted.includesPath("settings/profile")
     $(document).ready () ->
       ls.geo.initSelect()
     $('#form-field-add').on 'click', ->
@@ -144,13 +159,13 @@ init = ->
       ls.userfield.changeFormField this
     $(document).on 'click', '#user-field-contact-contener .icon-synio-remove', ->
       ls.userfield.removeFormField this
-  else if window.location.pathname.match "settings/tuning"
+  else if pathnameSplitted.includesPath("settings/tuning")
     forEach $('.UI-checkbox'), (checkbox) ->
       if UI[checkbox.dataset.name]
         checkbox.checked = UI[checkbox.dataset.name]
     $('.UI-checkbox').on 'click', () ->
       window.localStorage.setItem("UI-"+this.dataset.name, this.checked)
-  else if window.location.pathname.match "profile"
+  else if pathnameSplitted.includesPath("profile")
     $('#usernote_edit').on 'click', ->
       ls.usernote.showForm()
     $('#usernote_delete').on 'click', ->
@@ -165,7 +180,7 @@ init = ->
       ls.user.followToggle(this, this.dataset.user_id)
     $('#stream_get_more_by_user').on 'click', ->
       ls.stream.getMoreByUser(this.dataset.user_id)
-  else if window.location.pathname.match "stream"
+  else if pathnameSplitted.includesPath("stream")
     $('#stream_get_more_all').on 'click', ->
       ls.stream.getMoreAll()
     $('#stream_get_more').on 'click', ->
@@ -182,7 +197,7 @@ init = ->
         ls.stream.subscribe this.dataset.user_id
       else
         ls.stream.unsubscribe this.dataset.user_id
-  else if window.location.pathname.match "feed"
+  else if pathnameSplitted.includesPath("feed")
     $('#userfeed_users_complete').on 'keydown', (e) ->
       if e.which == 13
         ls.userfeed.appendUser()
@@ -198,7 +213,7 @@ init = ->
       ls.blog.loadInfoType document.getElementById('blog_type').value
     $('#blog_type').on 'change', () ->
       ls.blog.loadInfoType this.value
-  else if window.location.pathname.match "talk/add"
+  else if pathnameSplitted.includesPath("talk/add")
     $('#fake_talk_add, #talk_preview').on 'click', (e) ->
       e.preventDefault()
       document.getElementById('talk_title').value = contentRemoveBadChars document.getElementById('talk_title').value
@@ -208,7 +223,7 @@ init = ->
         textPreview 'talk_text', false
       else
         document.getElementById('submit_talk_add').click()
-  else if window.location.pathname.match("edit") || window.location.pathname.match("add")
+  else if pathnameSplitted.includesPath("edit") || pathnameSplitted.includesPath("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value
     $('#blog_id').on 'change', () ->
