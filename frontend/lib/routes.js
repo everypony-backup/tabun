@@ -50,7 +50,8 @@ export default {
     },
     preview: {
         text: '/ajax/preview/text/',
-        topic: '/ajax/preview/topic/'
+        topic: '/ajax/preview/topic/',
+        page: '/ajax/preview/page/'
     },
     vote: {
         comment: '/ajax/vote/comment/',

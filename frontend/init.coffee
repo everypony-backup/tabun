@@ -226,7 +226,7 @@ init = ->
       if this.dataset.target
         document.getElementById(this.dataset.target).click()
       else
-        ls.page.preview 'form-page-add', 'text_preview'
+        ls.page.preview 'form-page-edit', 'text_preview'
   else if window.location.pathname.match("edit") || window.location.pathname.match("add")
     $(document).ready () ->
       ls.blog.loadInfo document.getElementById("blog_id").value

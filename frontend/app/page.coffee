@@ -8,7 +8,7 @@ routes = require("lib/routes").default
 preview = (form, preview) ->
   form = $ "##{form}"
   preview = $ "##{preview}"
-  url = routes.preview.topic
+  url = routes.preview.page
 
   ajaxSubmit url, form, (result) ->
     if result.bStateError
