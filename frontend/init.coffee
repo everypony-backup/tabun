@@ -208,7 +208,7 @@ init = ->
         textPreview 'talk_text', false
       else
         document.getElementById('submit_talk_add').click()
-  else if window.location.pathname.match "page" || window.location.pathname.match("edit") || window.location.pathname.match("add")
+  else if window.location.pathname.split("/").includes("page") && (window.location.pathname.split("/").includes("edit") || window.location.pathname.split("/").includes("add"))
     $('.js-tags-help-link').on 'click', () ->
       str = if this.dataset.insert? then this.dataset.insert else this.textContent
       targetForm = document.getElementsByTagName("textarea")[0]
