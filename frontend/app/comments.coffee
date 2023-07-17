@@ -472,7 +472,7 @@ init = ->
           else
             iCurrentShowFormComment = $("#reply").siblings(".comment")[0]?.dataset.id || 0
         else
-          iCurrentShowFormComment = $(targetForm).id.replace "comment_edit_input_", ""
+          iCurrentShowFormComment = targetForm.id.replace "comment_edit_input_", ""
         #ищем каретку в форме редактирования
         caret = targetForm.selectionStart
         if isNaN caret
