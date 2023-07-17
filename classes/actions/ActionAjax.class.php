@@ -73,6 +73,7 @@ class ActionAjax extends Action
 
         $this->AddEventPreg('/^preview$/i', '/^text$/', 'EventPreviewText');
         $this->AddEventPreg('/^preview$/i', '/^topic/', 'EventPreviewTopic');
+        $this->AddEventPreg('/^preview$/i', '/^page/', 'EventPreviewPage');
 
         $this->AddEventPreg('/^upload$/i', '/^image$/', 'EventUploadImage');
 
@@ -1134,6 +1135,52 @@ class ActionAjax extends Action
         if (!$this->Viewer_TemplateExists($sTemplate)) {
             $sTemplate='topic_preview_topic.tpl';
         }
+        $sTextResult=$oViewer->Fetch($sTemplate);
+        /**
+         * Передаем результат в ajax ответ
+         */
+        $this->Viewer_AssignAjax('sText', $sTextResult);
+        return true;
+    }
+    /**
+     * Предпросмотр страницы
+     *
+     */
+    protected function EventPreviewPage()
+    {
+        /**
+         * Т.к. используется обработка отправки формы, то устанавливаем тип ответа 'jsonIframe' (тот же JSON только обернутый в textarea)
+         * Это позволяет избежать ошибок в некоторых браузерах, например, Opera
+         */
+        $this->Viewer_SetResponseAjax('jsonIframe', false);
+        /**
+         * Пользователь авторизован?
+         */
+        if (!$this->oUserCurrent) {
+            $this->Message_AddErrorSingle($this->Lang_Get('need_authorization'), $this->Lang_Get('error'));
+            return;
+        }
+        /**
+         * Создаем объект страницы для валидации данных
+         */
+        $oPage=Engine::GetEntity('ModulePage_EntityPage');
+
+        $oPage->setTitle(strip_tags(getRequestStr('page_title')));
+        $oPage->setText(getRequestStr('page_text'));
+        /**
+         * Валидируем необходимые поля страницы
+         */
+        $oPage->_Validate(array('page_title','page_text'), false);
+        if ($oPage->_hasValidateErrors()) {
+            $this->Message_AddErrorSingle($oTopic->_getValidateError());
+            return false;
+        }
+        /**
+         * Рендерим шаблон для предпросмотра страницы
+         */
+        $oViewer=$this->Viewer_GetLocalViewer();
+        $oViewer->Assign('oPage', $oPage);
+        $sTemplate="page_preview.tpl";
         $sTextResult=$oViewer->Fetch($sTemplate);
         /**
          * Передаем результат в ajax ответ
