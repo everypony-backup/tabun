@@ -5,6 +5,7 @@ module.exports =
   usernote: require "./usernote.coffee"
   userfeed: require "./userfeed.coffee"
   userfield: require "./userfield.coffee"
+  page: require "./page.coffee"
   poll: require "./poll.coffee"
   geo: require "./geo.coffee"
   vote: require "./vote.coffee"
