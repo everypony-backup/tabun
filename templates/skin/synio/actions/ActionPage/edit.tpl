@@ -2,10 +2,6 @@
 {include file='header.tpl'}
 {assign var="scripts" value=['editor']}
 
-{block name='layout_options' prepend}
-    {$layoutNoSidebar = !Config::Get('page.show_block_structure')}
-{/block}
-
 {include file='editor.tpl'}
 
 <form action="" method="POST" enctype="multipart/form-data" id="form-page-edit" class="wrapper-content">

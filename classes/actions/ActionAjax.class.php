@@ -1172,7 +1172,7 @@ class ActionAjax extends Action
          */
         $oPage->_Validate(array('page_title','page_text'), false);
         if ($oPage->_hasValidateErrors()) {
-            $this->Message_AddErrorSingle($oTopic->_getValidateError());
+            $this->Message_AddErrorSingle($oPage->_getValidateError());
             return false;
         }
         /**
