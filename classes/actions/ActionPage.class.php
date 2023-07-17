@@ -125,11 +125,6 @@ class ActionPage extends Action
             return false;
         }
         /**
-         * Получаемый и устанавливаем разрезанный текст по тегу <cut>
-         */
-        list($sTextShort, $sTextNew, $sTextCut) = $this->Text_Cut($oPage->getText());
-        $oPage->setText($this->Text_Parser($sTextNew, ModuleText::ACT_UPDATE));
-        /**
          * Сохраняем страницу
          */
         if ($this->Page_UpdatePage($oPage)) {
