@@ -43,9 +43,13 @@
 		<input type="checkbox" class="UI-checkbox" data-name="smartQuote"/>
 		Умное цитирование
 	</label>
-	<label title="Будут сворачиваться все комменты между активным комментарием и его родителем">
+	<label title="Будут сворачиваться все комменты между новым комментарием и его родителем">
 		<input type="checkbox" class="UI-checkbox" data-name="autoFold"/>
-		Автосворачивание промежуточных комментариев
+		Автосворачивание промежуточных комментариев при просмотре новых комментариев
+	</label>
+	<label title="Будут сворачиваться все комменты между активным комментарием ответом">
+		<input type="checkbox" class="UI-checkbox" data-name="autoFoldGoTo"/>
+		Автосворачивание промежуточных комментариев при нажатии "ответ на"
 	</label>
 	<label title="Отображать количество новых комментариев в заголовке">
 		<input type="checkbox" class="UI-checkbox" data-name="newCommentsInTitle"/>
