@@ -73,9 +73,9 @@ add = (formId, targetId, targetType) ->
       commentForm.value = ""
       load targetId, targetType, false
 
-  _complete = ({responseJSON:{bStateError}}) ->
+  _complete = (res) ->
     toggleCommentFormState true
-    unless bStateError
+    if res.responseJSON? && res.responseJSON.bStateError?
       toggleCommentForm iCurrentShowFormComment, true
 
   ajax types[targetType].url_add, prepareJSON(document.getElementById(formId)), _success, _complete
