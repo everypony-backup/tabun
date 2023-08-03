@@ -71,6 +71,7 @@ add = (formId, targetId, targetType) ->
       return error gettext("common_error"), result.sMsg
     else
       commentForm.value = ""
+      ls.comments.savedCommentForms[iCurrentShowFormComment] = "" # Если комментарий отправился успешно - нам больше не нужно бекапить его форму
       load targetId, targetType, false
 
   _complete = (res) ->
@@ -87,6 +88,8 @@ toggleCommentForm = (idComment, bNoFocus) ->
   preview = document.getElementById "comment_preview_#{iCurrentShowFormComment}"
   preview?.parentNode?.removeChild preview
 
+  ls.comments.savedCommentForms[iCurrentShowFormComment] = commentForm.value
+
   if iCurrentShowFormComment == idComment and 'h-hidden' not in reply.classList
     reply.classList.add 'h-hidden'
     return
@@ -95,7 +98,7 @@ toggleCommentForm = (idComment, bNoFocus) ->
   commentNode.parentNode.insertBefore reply, commentNode.nextSibling
   reply.classList.remove 'h-hidden'
 
-  commentForm.value = ""
+  commentForm.value = ls.comments.savedCommentForms[idComment] || ""
   document.getElementById("form_comment_reply").value = idComment
   iCurrentShowFormComment = idComment
   unless bNoFocus
@@ -348,6 +351,7 @@ showComment = (commentId, highlightParent) ->
 
 initEvent = ->
   if commentForm
+    ls.comments.savedCommentForms = {}
     $(commentForm).on 'keydown', ({keyCode, which, ctrlKey}) ->
       key = keyCode or which
       if ctrlKey and key == 13
