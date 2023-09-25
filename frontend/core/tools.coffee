@@ -111,11 +111,15 @@ contentRemoveBadChars = (oldText) ->
 
 youtube = (str) ->
   unless str then return
+  removeSignature1 = /(si=)(.+)(?<=&)/
+  removeSignature2 = /(\?si=)(.+)/
+  str = str.replace(removeSignature1, "").replace(removeSignature2, "")
 
   shortcode = /youtube:\/\/|https?:\/\/youtu\.be\//g
   if shortcode.test str
     shortcodeid = str.split(shortcode)[1]
     shortcodeid = shortcodeid.replace("?t=", "?start=")
+    shortcodeid = shortcodeid.replace("&t=", "&start=")
     return shortcodeid
 
   inlinev = /\/v\/|\/vi\//g
@@ -226,6 +230,7 @@ contentMediaParser = (oldText) ->
         if !url
           continue
         src = ''
+        shorts = false
         if /youtube|youtu\.be/.test url
           parsedUrl = youtube url
           if parsedUrl
