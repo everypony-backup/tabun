@@ -28,6 +28,7 @@ classes =
   folded: 'folded'
   comment: 'comment'
   comment_goto_parent: 'goto-comment-parent'
+  comment_go_back: 'comment-go-back'
   comment_hidden: 'comment-hidden'
   comment_folded: 'comment-folded'
   level: 'comment-level-'
@@ -313,14 +314,9 @@ showComment = (commentId, highlightParent) ->
     toFold = null
     if parentWrapper.id != "comments" then toFold = $(commentWrapper).prevAll(".comment-wrapper")
     hiddenCount = $(toFold).find(".comment").length
-    if highlightParent
-      oldPos = comment.getClientRects()[0].top
-      while foldedComments.length
-        foldedComments[0].classList.remove classes.comment_folded
-    else
-      while foldedComments.length
-        foldedComments[0].classList.remove classes.comment_folded
-      oldPos = comment.getClientRects()[0].top
+    oldPos = comment.getClientRects()[0].top
+    while foldedComments.length
+      foldedComments[0].classList.remove classes.comment_folded
     forEach toFold, (wrapper) ->
       wrapper.classList.add classes.comment_folded
     if hiddenCount
@@ -334,19 +330,27 @@ showComment = (commentId, highlightParent) ->
       message.children[1].textContent = ngettext "comment", "comments", hiddenCount
   if currentViewedComment != null
     currentViewedComment.classList.remove classes.current
+  focusComment = comment
   if highlightParent
     parentComment.classList.add classes.current
     currentViewedComment = parentComment
+    focusComment = parentComment
+    parentComment.querySelector(".go-back")?.remove()
+    goBack = document.createElement 'a'
+    goBack.classList.add "go-back"
+    goBack.dataset.id = commentId
+    goBack.title = "Вернуться"
+    parentComment.querySelector(".comment-info").insertBefore(goBack, parentComment.querySelector(".comment-favourite"))
   else
-    shift = (window.innerHeight - comment.getClientRects()[0].height) / 2
-    if shift < 0 then shift = 0
-    if UI.smothScroll
-      $.scrollTo comment, 300, {offset: -shift}
-    else
-      window.scrollBy 0, comment.getClientRects()[0].top - shift
     comment.classList.remove classes["new"]
     comment.classList.add classes.current
     currentViewedComment = comment
+  shift = (window.innerHeight - focusComment.getClientRects()[0].height) / 2
+  if shift < 0 then shift = 0
+  if UI.smothScroll
+    $.scrollTo focusComment, 300, {offset: -shift}
+  else
+    window.scrollBy 0, focusComment.getClientRects()[0].top - shift
   setCountNewComment()
 
 initEvent = ->
@@ -394,6 +398,10 @@ initEvent = ->
   $(document)
     .on('click', ".comment-level-1 .goto-comment-parent", (event) ->
       ls.comments.showComment this.parentNode.dataset.id, true
+      event.preventDefault())
+    .on('click', ".go-back", (event) ->
+      ls.comments.showComment this.dataset.id, false
+      this.remove()
       event.preventDefault())
     .on('click', ".folding", () ->
       $(this).toggleClass 'folded'

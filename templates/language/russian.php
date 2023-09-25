@@ -330,6 +330,7 @@ return array(
 	'comment_collapse' => 'свернуть',
 	'comment_expand' => 'развернуть',
 	'comment_goto_parent' => 'Ответ на',
+	'comment_go_back' => 'Вернуться',
 	'comment_goto_child' => 'Обратно к ответу',
 	'comment_bad_open' => 'раскрыть комментарий',
 	'comment_answer' => 'Ответить',
