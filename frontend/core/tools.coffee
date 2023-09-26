@@ -115,7 +115,6 @@ youtube = (str) ->
   shortcode = /youtube:\/\/|https?:\/\/youtu\.be\//g
   if shortcode.test str
     shortcodeid = str.split(shortcode)[1]
-    shortcodeid = shortcodeid.replace("?t=", "?start=")
     return shortcodeid
 
   inlinev = /\/v\/|\/vi\//g
@@ -226,10 +225,25 @@ contentMediaParser = (oldText) ->
         if !url
           continue
         src = ''
+        shorts = false
         if /youtube|youtu\.be/.test url
+          removeSignature1 = /(si=)(.+)(?<=&)/
+          removeSignature2 = /(\?si=)(.+)/
+          url = url.replace(removeSignature1, "")
+            .replace(removeSignature2, "")
+            .replace("feature=shared&", "")
+            .replace("?feature=shared", "")
+            .replace("?t=", "?start=")
+            .replace("&t=", "&start=")
           parsedUrl = youtube url
           if parsedUrl
             src = '//www.youtube.com/embed/' + parsedUrl
+          else
+            if /\/shorts\//.test url
+              shorts = true
+              src = url.replace(/\/shorts\//, "/embed/")
+            else if /\/live\//.test url
+              src = url.replace(/\/live\//, "/embed/")
         else if /vimeo/.test url
           parsedUrl = vimeo url
           if parsedUrl
@@ -261,7 +275,10 @@ contentMediaParser = (oldText) ->
         else if video[i].nodeName == "IFRAME"
           continue
         if src
-          video[i].outerHTML = '<iframe width="560" height="310" src="'+src+'" frameborder="0" allowfullscreen="1"></iframe>'
+          if shorts
+            video[i].outerHTML = '<iframe width="315" height="560" src="'+src+'" frameborder="0" allowfullscreen="1"></iframe>'
+          else
+            video[i].outerHTML = '<iframe width="560" height="310" src="'+src+'" frameborder="0" allowfullscreen="1"></iframe>'
           changed = true
         else
           continue
