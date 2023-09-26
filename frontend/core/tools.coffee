@@ -231,6 +231,8 @@ contentMediaParser = (oldText) ->
           removeSignature2 = /(\?si=)(.+)/
           url = url.replace(removeSignature1, "")
             .replace(removeSignature2, "")
+            .replace("feature=shared&", "")
+            .replace("?feature=shared", "")
             .replace("?t=", "?start=")
             .replace("&t=", "&start=")
           parsedUrl = youtube url
